@@ -1,21 +1,24 @@
 options
 {
- LOOKAHEAD=2;
+ LOOKAHEAD=1;
 }
 
 PARSER_BEGIN(Exemplo)
+import java.io.FileInputStream;
+import java.io.IOException;
 
 //código Java que invoca o parser 
 public class Exemplo 
 { 
-	public static void main(String args[]) throws ParseException 
-	{ 
-		//criação do objecto utilizando o constructor com argumento para 
-		//ler do standard input (teclado) 
-		Exemplo parser = new Exemplo(System.in); 
-		//parser.Aritm();
+        public static void main(String args[]) throws ParseException, IOException
+        {
+                //criação do objecto utilizando o constructor com argumento para 
+                //ler do standard input (teclado) 
+                Exemplo parser = new Exemplo(new FileInputStream("src/test.yal"));
+                parser.Module();
 
-	}
+                //Scanner TokenManager;
+        }
 }
 
 PARSER_END(Exemplo)
@@ -51,6 +54,7 @@ PARSER_END(Exemplo)
 | <FUNCTION: "function">
 | <MODULE: "module">
 | <SIZE: "size">
+| <EMPTY: "" >
 }
 
 <DEFAULT> TOKEN : {
@@ -71,19 +75,25 @@ void Module(): { }
 /* Declaration ::= ( ArrayElement | ScalarElement ) ( <ASSIGN> ( ( "[" ArraySize "]" ) | (<ADDSUB_OP> )? <INTEGER> ) )? <PVIRG> */
 void Declaration(): { }
 {
-	( ArrayElement() | ScalarElement() ) ( < ASSIGN > (( "[" ArraySize() "]" ) | (< ADDSUB_OP >)? < INTEGER > ))? < PVIRG >
+	< ID > ( "[" "]" | < EMPTY > ) ( < ASSIGN > (( "[" ArraySize() "]" ) | (< ADDSUB_OP >)? < INTEGER > ))? < PVIRG >
+}
+
+void Function(): { }
+{
+	< FUNCTION > < ID > FunctionA()
 }
 
 /* Function ::= ( ( <FUNCTION> ( ArrayElement | ScalarElement ) <ASSIGN> <ID> <LPAR> (Varlist )? <RPAR> ) | ( <FUNCTION> <ID> <LPAR> ( Varlist )? <RPAR> ) )<LCHAVETA> Stmtlst <RCHAVETA> */
-void Function(): { }
+void FunctionA(): { }
 {
-	(( < FUNCTION > ( ArrayElement() | ScalarElement() ) < ASSIGN > < ID > < LPAR > (Varlist())? < RPAR > ) | ( < FUNCTION > < ID > < LPAR > ( Varlist() )? < RPAR > )) < LCHAVETA > Stmtlst() < RCHAVETA >
+	(( ( "[" "]" | < EMPTY > ) < ASSIGN > < ID > < LPAR > (Varlist())? < RPAR > ) |
+	 (< LPAR > ( Varlist() )? < RPAR > )) < LCHAVETA > Stmtlst() < RCHAVETA >
 }
 
 /* Varlist ::= ( ArrayElement | ScalarElement ) ( <VIRG> ( ArrayElement | ScalarElement ))* */
 void Varlist(): { }
 {
-	( ArrayElement() | ScalarElement() ) (< VIRG > ( ArrayElement() | ScalarElement() ))*
+	< ID > ( "[" "]" | < EMPTY > ) (< VIRG > < ID > ( "[" "]" | < EMPTY > ))*
 }
 
 /* ArrayElement ::= <ID> "[" "]" */
@@ -108,7 +118,8 @@ void Stmtlst(): { }
 /* Stmt ::= While | If | Assign | Call <PVIRG> */
 void Stmt(): { }
 {
-	While() | If() | Assign() | Call() < PVIRG >
+    
+	While() | If() | LOOKAHEAD(3) Assign() | Call() < PVIRG >
 }
 
 
@@ -121,7 +132,7 @@ void Assign(): { }
 /* Lhs ::= ArrayAccess | ScalarAccess */
 void Lhs(): { }
 {
-	ArrayAccess() | ScalarAccess()
+	LOOKAHEAD(2) ArrayAccess() | ScalarAccess()
 }
 
 /* Rhs ::= ( Term ( ( <ARITH_OP> | <BITWISE_OP> | <ADDSUB_OP> ) Term )? ) | "[" ArraySize "]" */
@@ -139,7 +150,7 @@ void ArraySize(): { }
 /* Term ::= ( <ADDSUB_OP> )? ( <INTEGER> | Call | ArrayAccess | ScalarAccess ) */
 void Term(): { }
 {
-	( < ADDSUB_OP > )? (< INTEGER > | Call() | ArrayAccess() | ScalarAccess())
+	( < ADDSUB_OP > )? (< INTEGER > | LOOKAHEAD(3) Call() | LOOKAHEAD(2) ArrayAccess() | ScalarAccess())
 }
 
 
