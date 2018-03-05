@@ -54,7 +54,6 @@ PARSER_END(Exemplo)
 | <FUNCTION: "function">
 | <MODULE: "module">
 | <SIZE: "size">
-| <EMPTY: "" >
 }
 
 <DEFAULT> TOKEN : {
@@ -75,25 +74,20 @@ void Module(): { }
 /* Declaration ::= ( ArrayElement | ScalarElement ) ( <ASSIGN> ( ( "[" ArraySize "]" ) | (<ADDSUB_OP> )? <INTEGER> ) )? <PVIRG> */
 void Declaration(): { }
 {
-	< ID > ( "[" "]" | < EMPTY > ) ( < ASSIGN > (( "[" ArraySize() "]" ) | (< ADDSUB_OP >)? < INTEGER > ))? < PVIRG >
-}
-
-void Function(): { }
-{
-	< FUNCTION > < ID > FunctionA()
+	(LOOKAHEAD(2) ArrayElement() | ScalarElement() ) ( < ASSIGN > (( "[" ArraySize() "]" ) | (< ADDSUB_OP >)? < INTEGER > ))? < PVIRG >
 }
 
 /* Function ::= ( ( <FUNCTION> ( ArrayElement | ScalarElement ) <ASSIGN> <ID> <LPAR> (Varlist )? <RPAR> ) | ( <FUNCTION> <ID> <LPAR> ( Varlist )? <RPAR> ) )<LCHAVETA> Stmtlst <RCHAVETA> */
-void FunctionA(): { }
+void Function(): { }
 {
-	(( ( "[" "]" | < EMPTY > ) < ASSIGN > < ID > < LPAR > (Varlist())? < RPAR > ) |
-	 (< LPAR > ( Varlist() )? < RPAR > )) < LCHAVETA > Stmtlst() < RCHAVETA >
+	(LOOKAHEAD(3) ( < FUNCTION > (LOOKAHEAD(2) ArrayElement() | ScalarElement() ) < ASSIGN > < ID > < LPAR > (Varlist())? < RPAR > )
+	| ( < FUNCTION > < ID > < LPAR > ( Varlist() )? < RPAR > )) < LCHAVETA > Stmtlst() < RCHAVETA >
 }
 
 /* Varlist ::= ( ArrayElement | ScalarElement ) ( <VIRG> ( ArrayElement | ScalarElement ))* */
 void Varlist(): { }
 {
-	< ID > ( "[" "]" | < EMPTY > ) (< VIRG > < ID > ( "[" "]" | < EMPTY > ))*
+	( LOOKAHEAD(2) ArrayElement() | ScalarElement() ) (< VIRG > < ID > ( LOOKAHEAD(2) ArrayElement() | ScalarElement() ))*
 }
 
 /* ArrayElement ::= <ID> "[" "]" */
