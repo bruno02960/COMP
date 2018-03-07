@@ -1,0 +1,600 @@
+options
+{
+  LOOKAHEAD= 1;
+}
+
+PARSER_BEGIN(Exemplo)
+import java.io.FileInputStream;
+import java.io.IOException;
+
+//código Java que invoca o parser 
+public class Exemplo
+{
+  public static void main(String args []) throws ParseException, IOException
+  {
+    //criação do objecto utilizando o constructor com argumento para 
+    //ler do standard input (teclado) 
+    Exemplo parser = new Exemplo(new FileInputStream("src/test.yal"));
+    SimpleNode root = parser.Module();
+    root.dump("");
+    //Scanner TokenManager;
+  }
+}
+
+PARSER_END(Exemplo)
+
+// definição dos tokens (símbolos terminais) 
+< DEFAULT >
+SKIP :
+{
+  " "
+| "\t"
+| "\n"
+| "\r"
+| < "//" (~[ "\n", "\r" ])*
+    (
+      "\n"
+    | "\r"
+    | "\r\n"
+    ) >
+| < "/*" (~[ "*" ])* "*"
+    (
+      "*"
+    | ~[ "*", "/" ] (~[ "*" ])* "*"
+    )*
+    "/" >
+}
+
+/* reserved words */
+< DEFAULT >
+TOKEN :
+{
+  < RELA_OP :
+    ">"
+  | "<"
+  | "<="
+  | ">="
+  | "=="
+  | "!=" >
+| < ADDSUB_OP :
+    "+"
+  | "-" >
+| < ARITH_OP :
+    "*"
+  | "/"
+  | "<<"
+  | ">>"
+  | ">>>" >
+| < BITWISE_OP :
+    "&"
+  | "|"
+  | "^" >
+| < NOT_OP : "!" >
+| < WHILE : "while" >
+| < IF : "if" >
+| < ELSE : "else" >
+| < ASSIGN : "=" >
+| < ASPA : "\"" >
+| < LPAR : "(" >
+| < RPAR : ")" >
+| < VIRG : "," >
+| < PVIRG : ";" >
+| < LCHAVETA : "{" >
+| < RCHAVETA : "}" >
+| < FUNCTION : "function" >
+| < MODULE : "module" >
+| < SIZE : "size" >
+}
+
+< DEFAULT >
+TOKEN :
+{
+  < INTEGER : (< DIGIT >)+ >
+| < ID :
+    < LETTER >
+    (
+      < LETTER >
+    | < DIGIT >
+    )* >
+| < #LETTER : [ "$", "A"-"Z", "_", "a"-"z" ] >
+| < #DIGIT : [ "0"-"9" ] >
+| < STRING : "\"" ([ "a"-"z", "A"-"Z", "0"-"9", ":", " ", "=" ])+ "\"" >
+}
+
+//Non-terminals
+/* Module ::= <MODULE> <ID> <LCHAVETA> ( Declaration )* ( Function )* <RCHAVETA> */
+SimpleNode Module() #MODULE :
+{}
+{
+  try
+  {
+    < MODULE > < ID > < LCHAVETA > (Declaration()) * (Function()) * < RCHAVETA >
+  }
+  catch (ParseException e)
+  {
+    System.out.println(e.toString());
+    Token t;
+    do
+    {
+      t = getNextToken();
+    }
+    while (t.kind != PVIRG);
+  }
+
+  {return jjtThis;}
+}
+
+/* Declaration ::= ( ArrayElement | ScalarElement ) ( <ASSIGN> ( ( "[" ArraySize "]" ) | (<ADDSUB_OP> )? <INTEGER> ) )? <PVIRG> */
+void Declaration() #DECLARATION() :
+{}
+{
+  try
+  {
+    (LOOKAHEAD(2)
+    ArrayElement()
+  | ScalarElement()) (< ASSIGN > (("[" ArraySize() "]")
+  | (< ADDSUB_OP >) ? < INTEGER >)) ? < PVIRG >
+  }
+  catch (ParseException e)
+  {
+    System.out.println(e.toString());
+    Token t;
+    do
+    {
+      t = getNextToken();
+    }
+    while (t.kind != PVIRG);
+  }
+}
+
+/* Function ::= ( ( <FUNCTION> ( ArrayElement | ScalarElement ) <ASSIGN> <ID> <LPAR> (Varlist )? <RPAR> ) | ( <FUNCTION> <ID> <LPAR> ( Varlist )? <RPAR> ) )<LCHAVETA> Stmtlst <RCHAVETA> */
+void Function() #FUNCTION :
+{}
+{
+  try
+  {
+    (LOOKAHEAD(3)
+    (< FUNCTION > (LOOKAHEAD(2)
+    ArrayElement()
+  | ScalarElement()) < ASSIGN > < ID > < LPAR > (Varlist()) ? < RPAR >)
+  | (< FUNCTION > < ID > < LPAR > (Varlist()) ? < RPAR >)) < LCHAVETA > Stmtlst() < RCHAVETA >
+  }
+  catch (ParseException e)
+  {
+    System.out.println(e.toString());
+    Token t;
+    do
+    {
+      t = getNextToken();
+    }
+    while (t.kind != PVIRG);
+  }
+}
+
+/* Varlist ::= ( ArrayElement | ScalarElement ) ( <VIRG> ( ArrayElement | ScalarElement ))* */
+void Varlist() #VARLIST :
+{}
+{
+  try
+  {
+    (LOOKAHEAD(2)
+    ArrayElement()
+  | ScalarElement()) (< VIRG > < ID > (LOOKAHEAD(2)
+    ArrayElement()
+  | ScalarElement())) *
+  }
+  catch (ParseException e)
+  {
+    System.out.println(e.toString());
+    Token t;
+    do
+    {
+      t = getNextToken();
+    }
+    while (t.kind != PVIRG);
+  }
+}
+
+/* ArrayElement ::= <ID> "[" "]" */
+void ArrayElement() #ARRAYELEMENT :
+{}
+{
+  try
+  {
+    < ID > "[" "]"
+  }
+  catch (ParseException e)
+  {
+    System.out.println(e.toString());
+    Token t;
+    do
+    {
+      t = getNextToken();
+    }
+    while (t.kind != PVIRG);
+  }
+}
+
+/*ScalarElement ::= <ID>*/
+void ScalarElement() #SCALARELEMENT :
+{}
+{
+  try
+  {
+    < ID >
+  }
+  catch (ParseException e)
+  {
+    System.out.println(e.toString());
+    Token t;
+    do
+    {
+      t = getNextToken();
+    }
+    while (t.kind != PVIRG);
+  }
+}
+
+/* Stmtlst ::= ( Stmt )* */
+void Stmtlst() #void :
+{}
+{
+  try
+  {
+    (Stmt()) *
+  }
+  catch (ParseException e)
+  {
+    System.out.println(e.toString());
+    Token t;
+    do
+    {
+      t = getNextToken();
+    }
+    while (t.kind != PVIRG);
+  }
+}
+
+/* Stmt ::= While | If | Assign | Call <PVIRG> */
+void Stmt() #STMT :
+{}
+{
+  try
+  {
+    While()
+  | If()
+  | LOOKAHEAD(3)
+    Assign()
+  | Call() < PVIRG >
+  }
+  catch (ParseException e)
+  {
+    System.out.println(e.toString());
+    Token t;
+    do
+    {
+      t = getNextToken();
+    }
+    while (t.kind != PVIRG);
+  }
+}
+
+/* Assign ::= Lhs <ASSIGN> Rhs <PVIRG> */
+void Assign() #ASSIGN :
+{}
+{
+    try
+  {
+   Lhs() < ASSIGN > Rhs() < PVIRG >
+  }
+  catch (ParseException e)
+  {
+    System.out.println(e.toString());
+    Token t;
+    do
+    {
+      t = getNextToken();
+    }
+    while (t.kind != PVIRG);
+  }
+}
+
+/* Lhs ::= ArrayAccess | ScalarAccess */
+void Lhs() #void :
+{}
+{
+      try
+  {
+     LOOKAHEAD(2)
+  ArrayAccess()
+| ScalarAccess()
+  }
+  catch (ParseException e)
+  {
+    System.out.println(e.toString());
+    Token t;
+    do
+    {
+      t = getNextToken();
+    }
+    while (t.kind != PVIRG);
+  }
+}
+
+/* Rhs ::= ( Term ( ( <ARITH_OP> | <BITWISE_OP> | <ADDSUB_OP> ) Term )? ) | "[" ArraySize "]" */
+void Rhs() #RHS :
+{}
+{
+        try
+  {
+   (
+    Term()
+    (
+      (
+        < ARITH_OP >
+      | < BITWISE_OP >
+      | < ADDSUB_OP >
+      )
+      Term()
+    )?
+  )
+| "[" ArraySize() "]"
+  }
+  catch (ParseException e)
+  {
+    System.out.println(e.toString());
+    Token t;
+    do
+    {
+      t = getNextToken();
+    }
+    while (t.kind != PVIRG);
+  }
+}
+
+/* ArraySize ::= ScalarAccess | <INTEGER> */
+void ArraySize() #ARRAYSIZE :
+{}
+{
+      try
+  {
+  	  ScalarAccess()
+| < INTEGER >
+  }
+  catch (ParseException e)
+  {
+    System.out.println(e.toString());
+    Token t;
+    do
+    {
+      t = getNextToken();
+    }
+    while (t.kind != PVIRG);
+  }
+}
+
+/* Term ::= ( <ADDSUB_OP> )? ( <INTEGER> | Call | ArrayAccess | ScalarAccess ) */
+void Term() #TERM :
+{}
+ {
+       try
+      { 
+  (< ADDSUB_OP >)?
+  (
+    < INTEGER >
+  | LOOKAHEAD(3)
+    Call()
+  | LOOKAHEAD(2)
+    ArrayAccess()
+  | ScalarAccess()
+  )
+  }
+  catch (ParseException e)
+  {
+    System.out.println(e.toString());
+    Token t;
+    do
+    {
+      t = getNextToken();
+    }
+    while (t.kind != PVIRG);
+  }
+}
+
+
+/* Exprtest ::= <LPAR> Lhs <RELA_OP> Rhs <RPAR> */
+void Exprtest() #EXPRTEST :
+{}
+{
+         try
+  {
+  	< LPAR > Lhs() < RELA_OP > Rhs() < RPAR >
+  }
+  catch (ParseException e)
+  {
+    System.out.println(e.toString());
+    Token t;
+    do
+    {
+      t = getNextToken();
+    }
+    while (t.kind != PVIRG);
+  }
+}
+
+/*While ::= <WHILE> Exprtest <LCHAVETA> Stmtlst <RCHAVETA> */
+void While() #WHILE :
+{}
+{
+           try
+  {
+  	  < WHILE > Exprtest() < LCHAVETA > Stmtlst() < RCHAVETA >
+  }
+  catch (ParseException e)
+  {
+    System.out.println(e.toString());
+    Token t;
+    do
+    {
+      t = getNextToken();
+    }
+    while (t.kind != PVIRG);
+  }
+}
+
+/*If ::= <IF> Exprtest <LCHAVETA> Stmtlst <RCHAVETA> ( <ELSE> <LCHAVETA> Stmtlst <RCHAVETA> )? */
+void If() #ID :
+{}
+{
+             try
+  {
+  	 < IF > Exprtest() < LCHAVETA > Stmtlst() < RCHAVETA >
+  (
+    < ELSE > < LCHAVETA > Stmtlst() < RCHAVETA >
+  )?
+  }
+  catch (ParseException e)
+  {
+    System.out.println(e.toString());
+    Token t;
+    do
+    {
+      t = getNextToken();
+    }
+    while (t.kind != PVIRG);
+  }
+}
+
+/*Call ::= <ID> ( "." <ID> )? <LPAR> ( ArgumentList )? <RPAR> */
+void Call() #CALL :
+{}
+{
+               try
+  {
+  	  < ID > ("." < ID >)? < LPAR >
+  (
+    ArgumentList()
+  )?
+  < RPAR >
+  }
+  catch (ParseException e)
+  {
+    System.out.println(e.toString());
+    Token t;
+    do
+    {
+      t = getNextToken();
+    }
+    while (t.kind != PVIRG);
+  }
+}
+
+/* ArgumentList ::= Argument ( <VIRG> Argument )* */
+void ArgumentList() #ARGUMENTLIST :
+{}
+{
+                 try
+  {
+    Argument()
+  (
+    < VIRG > Argument()
+  )*
+  }
+  catch (ParseException e)
+  {
+    System.out.println(e.toString());
+    Token t;
+    do
+    {
+      t = getNextToken();
+    }
+    while (t.kind != PVIRG);
+  }
+}
+
+/* Argument ::= ( <ID> | <STRING> | <INTEGER> ) */
+void Argument() #ARGUMENT :
+{Token t;}
+{
+                  try
+  {
+    (
+    t=< ID >
+  | t=< STRING >
+  | t=< INTEGER >	
+  )
+
+    { jjtThis.value = t.image; }
+  }
+  catch (ParseException e)
+  {
+    System.out.println(e.toString());
+    Token t2;
+    do
+    {
+      t2 = getNextToken();
+    }
+    while (t2.kind != PVIRG);
+  }
+}
+
+/* ArrayAccess ::= <ID> "[" Index "]"*/
+void ArrayAccess() #ARRAYACCESS :
+{}
+{
+                    try
+  {
+  < ID > "[" Index() "]"
+  }
+  catch (ParseException e)
+  {
+    System.out.println(e.toString());
+    Token t;
+    do
+    {
+      t = getNextToken();
+    }
+    while (t.kind != PVIRG);
+  }
+}
+
+/* ScalarAccess ::= <ID> ( "." <SIZE> )? */
+void ScalarAccess() #SCALARACCESS :
+{}
+{
+                      try
+  {
+    < ID > ("." < SIZE >)?
+  }
+  catch (ParseException e)
+  {
+    System.out.println(e.toString());
+    Token t;
+    do
+    {
+      t = getNextToken();
+    }
+    while (t.kind != PVIRG);
+  }
+}
+
+/*Index ::= <ID> | <INTEGER>*/
+void Index() #INDEX :
+{}
+{
+                        try
+  {
+      < ID >
+| < INTEGER >
+  }
+  catch (ParseException e)
+  {
+    System.out.println(e.toString());
+    Token t;
+    do
+    {
+      t = getNextToken();
+    }
+    while (t.kind != PVIRG);
+  }
+}

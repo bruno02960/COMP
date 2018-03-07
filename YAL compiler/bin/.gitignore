@@ -5,6 +5,8 @@
 /SimpleCharStream.java
 /Token.java
 /TokenMgrError.java
-/.gitignore
 /Exemplo.jj
-/test.yal
+/ExemploTreeConstants.java
+/JJTExemploState.java
+/Node.java
+/SimpleNode.java
