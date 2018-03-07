@@ -311,26 +311,30 @@ void Varlist()          :
 /* ArrayElement ::= <ID> "[" "]" */
 void ArrayElement()               :
 {/*@bgen(jjtree) ARRAYELEMENT */
-  SimpleNode jjtn000 = new SimpleNode(JJTARRAYELEMENT);
-  boolean jjtc000 = true;
-  jjtree.openNodeScope(jjtn000);
-/*@egen*/}
+ SimpleNode jjtn000 = new SimpleNode(JJTARRAYELEMENT);
+ boolean jjtc000 = true;
+ jjtree.openNodeScope(jjtn000);
+/*@egen*/Token t;}
 {/*@bgen(jjtree) ARRAYELEMENT */
   try {
 /*@egen*/
   try
   {
-    < ID > "[" "]"
+    t=< ID > "[" "]"
+
+    {
+      jjtn000.value = t.image;
+    }
   }
   catch (ParseException e)
   {
     System.out.println(e.toString());
-    Token t;
+    Token t2;
     do
     {
-      t = getNextToken();
+      t2 = getNextToken();
     }
-    while (t.kind != PVIRG);
+    while (t2.kind != PVIRG);
   }/*@bgen(jjtree)*/
   } finally {
     if (jjtc000) {
@@ -343,26 +347,30 @@ void ArrayElement()               :
 /*ScalarElement ::= <ID>*/
 void ScalarElement()                :
 {/*@bgen(jjtree) SCALARELEMENT */
-  SimpleNode jjtn000 = new SimpleNode(JJTSCALARELEMENT);
-  boolean jjtc000 = true;
-  jjtree.openNodeScope(jjtn000);
-/*@egen*/}
+ SimpleNode jjtn000 = new SimpleNode(JJTSCALARELEMENT);
+ boolean jjtc000 = true;
+ jjtree.openNodeScope(jjtn000);
+/*@egen*/Token t;}
 {/*@bgen(jjtree) SCALARELEMENT */
   try {
 /*@egen*/
   try
   {
-    < ID >
+    t=< ID >
+
+    {
+      jjtn000.value = t.image;
+    }
   }
   catch (ParseException e)
   {
     System.out.println(e.toString());
-    Token t;
+    Token t2;
     do
     {
-      t = getNextToken();
+      t2 = getNextToken();
     }
-    while (t.kind != PVIRG);
+    while (t2.kind != PVIRG);
   }/*@bgen(jjtree)*/
   } finally {
     if (jjtc000) {
@@ -570,27 +578,31 @@ void Rhs()      :
 /* ArraySize ::= ScalarAccess | <INTEGER> */
 void ArraySize()            :
 {/*@bgen(jjtree) ARRAYSIZE */
-  SimpleNode jjtn000 = new SimpleNode(JJTARRAYSIZE);
-  boolean jjtc000 = true;
-  jjtree.openNodeScope(jjtn000);
-/*@egen*/}
+ SimpleNode jjtn000 = new SimpleNode(JJTARRAYSIZE);
+ boolean jjtc000 = true;
+ jjtree.openNodeScope(jjtn000);
+/*@egen*/Token t;}
 {/*@bgen(jjtree) ARRAYSIZE */
       try {
 /*@egen*/
       try
   {
   	  ScalarAccess()
-| < INTEGER >
+| t=< INTEGER >
+
+{
+  jjtn000.value = t.image;
+}
   }
   catch (ParseException e)
   {
     System.out.println(e.toString());
-    Token t;
+    Token t2;
     do
     {
-      t = getNextToken();
+      t2 = getNextToken();
     }
-    while (t.kind != PVIRG);
+    while (t2.kind != PVIRG);
   }/*@bgen(jjtree)*/
       } catch (Throwable jjte000) {
         if (jjtc000) {
@@ -617,18 +629,18 @@ void ArraySize()            :
 /* Term ::= ( <ADDSUB_OP> )? ( <INTEGER> | Call | ArrayAccess | ScalarAccess ) */
 void Term()       :
 {/*@bgen(jjtree) TERM */
-  SimpleNode jjtn000 = new SimpleNode(JJTTERM);
-  boolean jjtc000 = true;
-  jjtree.openNodeScope(jjtn000);
-/*@egen*/}
+ SimpleNode jjtn000 = new SimpleNode(JJTTERM);
+ boolean jjtc000 = true;
+ jjtree.openNodeScope(jjtn000);
+/*@egen*/Token t;}
  {/*@bgen(jjtree) TERM */
        try {
 /*@egen*/
        try
       { 
-  (< ADDSUB_OP >)?
+  (t=< ADDSUB_OP > { jjtn000.value = t.image; })?
   (
-    < INTEGER >
+    t=< INTEGER > { jjtn000.value = t.image; }
   | LOOKAHEAD(3)
     Call()
   | LOOKAHEAD(2)
@@ -639,12 +651,12 @@ void Term()       :
   catch (ParseException e)
   {
     System.out.println(e.toString());
-    Token t;
+    Token t2;
     do
     {
-      t = getNextToken();
+      t2 = getNextToken();
     }
-    while (t.kind != PVIRG);
+    while (t2.kind != PVIRG);
   }/*@bgen(jjtree)*/
        } catch (Throwable jjte000) {
          if (jjtc000) {
@@ -996,26 +1008,30 @@ void ArrayAccess()              :
 /* ScalarAccess ::= <ID> ( "." <SIZE> )? */
 void ScalarAccess()               :
 {/*@bgen(jjtree) SCALARACCESS */
-  SimpleNode jjtn000 = new SimpleNode(JJTSCALARACCESS);
-  boolean jjtc000 = true;
-  jjtree.openNodeScope(jjtn000);
-/*@egen*/}
+ SimpleNode jjtn000 = new SimpleNode(JJTSCALARACCESS);
+ boolean jjtc000 = true;
+ jjtree.openNodeScope(jjtn000);
+/*@egen*/Token t;}
 {/*@bgen(jjtree) SCALARACCESS */
                       try {
 /*@egen*/
                       try
   {
-    < ID > ("." < SIZE >)?
+    t=< ID > ("." < SIZE >)?
+
+    {
+      jjtn000.value = t.image;
+    }
   }
   catch (ParseException e)
   {
     System.out.println(e.toString());
-    Token t;
+    Token t2;
     do
     {
-      t = getNextToken();
+      t2 = getNextToken();
     }
-    while (t.kind != PVIRG);
+    while (t2.kind != PVIRG);
   }/*@bgen(jjtree)*/
                       } finally {
                         if (jjtc000) {
@@ -1028,27 +1044,30 @@ void ScalarAccess()               :
 /*Index ::= <ID> | <INTEGER>*/
 void Index()        :
 {/*@bgen(jjtree) INDEX */
-  SimpleNode jjtn000 = new SimpleNode(JJTINDEX);
-  boolean jjtc000 = true;
-  jjtree.openNodeScope(jjtn000);
-/*@egen*/}
+ SimpleNode jjtn000 = new SimpleNode(JJTINDEX);
+ boolean jjtc000 = true;
+ jjtree.openNodeScope(jjtn000);
+/*@egen*/Token t;}
 {/*@bgen(jjtree) INDEX */
                         try {
 /*@egen*/
                         try
   {
-      < ID >
-| < INTEGER >
+      t=< ID > { 
+	jjtn000.value = t.image; }
+| t=< INTEGER > { 
+	jjtn000.value = t.image; }
+
   }
   catch (ParseException e)
   {
     System.out.println(e.toString());
-    Token t;
+    Token t2;
     do
     {
-      t = getNextToken();
+      t2 = getNextToken();
     }
-    while (t.kind != PVIRG);
+    while (t2.kind != PVIRG);
   }/*@bgen(jjtree)*/
                         } finally {
                           if (jjtc000) {

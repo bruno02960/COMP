@@ -197,41 +197,49 @@ void Varlist() #VARLIST :
 
 /* ArrayElement ::= <ID> "[" "]" */
 void ArrayElement() #ARRAYELEMENT :
-{}
+{Token t;}
 {
   try
   {
-    < ID > "[" "]"
+    t=< ID > "[" "]"
+
+    {
+      jjtThis.value = t.image;
+    }
   }
   catch (ParseException e)
   {
     System.out.println(e.toString());
-    Token t;
+    Token t2;
     do
     {
-      t = getNextToken();
+      t2 = getNextToken();
     }
-    while (t.kind != PVIRG);
+    while (t2.kind != PVIRG);
   }
 }
 
 /*ScalarElement ::= <ID>*/
 void ScalarElement() #SCALARELEMENT :
-{}
+{Token t;}
 {
   try
   {
-    < ID >
+    t=< ID >
+
+    {
+      jjtThis.value = t.image;
+    }
   }
   catch (ParseException e)
   {
     System.out.println(e.toString());
-    Token t;
+    Token t2;
     do
     {
-      t = getNextToken();
+      t2 = getNextToken();
     }
-    while (t.kind != PVIRG);
+    while (t2.kind != PVIRG);
   }
 }
 
@@ -354,34 +362,38 @@ void Rhs() #RHS :
 
 /* ArraySize ::= ScalarAccess | <INTEGER> */
 void ArraySize() #ARRAYSIZE :
-{}
+{Token t;}
 {
       try
   {
   	  ScalarAccess()
-| < INTEGER >
+| t=< INTEGER >
+
+{
+  jjtThis.value = t.image;
+}
   }
   catch (ParseException e)
   {
     System.out.println(e.toString());
-    Token t;
+    Token t2;
     do
     {
-      t = getNextToken();
+      t2 = getNextToken();
     }
-    while (t.kind != PVIRG);
+    while (t2.kind != PVIRG);
   }
 }
 
 /* Term ::= ( <ADDSUB_OP> )? ( <INTEGER> | Call | ArrayAccess | ScalarAccess ) */
 void Term() #TERM :
-{}
+{Token t;}
  {
        try
       { 
-  (< ADDSUB_OP >)?
+  (t=< ADDSUB_OP > { jjtThis.value = t.image; })?
   (
-    < INTEGER >
+    t=< INTEGER > { jjtThis.value = t.image; }
   | LOOKAHEAD(3)
     Call()
   | LOOKAHEAD(2)
@@ -392,12 +404,12 @@ void Term() #TERM :
   catch (ParseException e)
   {
     System.out.println(e.toString());
-    Token t;
+    Token t2;
     do
     {
-      t = getNextToken();
+      t2 = getNextToken();
     }
-    while (t.kind != PVIRG);
+    while (t2.kind != PVIRG);
   }
 }
 
@@ -560,41 +572,48 @@ void ArrayAccess() #ARRAYACCESS :
 
 /* ScalarAccess ::= <ID> ( "." <SIZE> )? */
 void ScalarAccess() #SCALARACCESS :
-{}
+{Token t;}
 {
                       try
   {
-    < ID > ("." < SIZE >)?
+    t=< ID > ("." < SIZE >)?
+
+    {
+      jjtThis.value = t.image;
+    }
   }
   catch (ParseException e)
   {
     System.out.println(e.toString());
-    Token t;
+    Token t2;
     do
     {
-      t = getNextToken();
+      t2 = getNextToken();
     }
-    while (t.kind != PVIRG);
+    while (t2.kind != PVIRG);
   }
 }
 
 /*Index ::= <ID> | <INTEGER>*/
 void Index() #INDEX :
-{}
+{Token t;}
 {
                         try
   {
-      < ID >
-| < INTEGER >
+      t=< ID > { 
+	jjtThis.value = t.image; }
+| t=< INTEGER > { 
+	jjtThis.value = t.image; }
+
   }
   catch (ParseException e)
   {
     System.out.println(e.toString());
-    Token t;
+    Token t2;
     do
     {
-      t = getNextToken();
+      t2 = getNextToken();
     }
-    while (t.kind != PVIRG);
+    while (t2.kind != PVIRG);
   }
 }
