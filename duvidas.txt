@@ -1,0 +1,2 @@
+Ficheiros .yal dos exemplo do moodle como estão distribuidos? Os que têm _err têm erros? E os outros não?
+E quanto aos .j?
