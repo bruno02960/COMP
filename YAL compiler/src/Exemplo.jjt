@@ -1,29 +1,28 @@
 options
 {
   LOOKAHEAD= 1;
+
 }
 
 PARSER_BEGIN(Exemplo)
 import java.io.FileInputStream;
 import java.io.IOException;
 
-//cÃ³digo Java que invoca o parser 
+//código Java que invoca o parser 
 public class Exemplo
 {
   public static void main(String args []) throws ParseException, IOException
   {
-    //criaÃ§Ã£o do objecto utilizando o constructor com argumento para 
-    //ler do standard input (teclado) 
+    //criação do objecto
     Exemplo parser = new Exemplo(new FileInputStream("src/test.yal"));
     SimpleNode root = parser.Module();
     root.dump("");
-    //Scanner TokenManager;
   }
 }
 
 PARSER_END(Exemplo)
 
-// definiÃ§Ã£o dos tokens (sÃ­mbolos terminais) 
+// definição dos tokens (símbolos terminais) 
 < DEFAULT >
 SKIP :
 {
@@ -120,8 +119,9 @@ SimpleNode Module() #MODULE :
     }
     while (t.kind != PVIRG);
   }
-
-  {return jjtThis;}
+  {
+    return jjtThis;
+  }
 }
 
 /* Declaration ::= ( ArrayElement | ScalarElement ) ( <ASSIGN> ( ( "[" ArraySize "]" ) | (<ADDSUB_OP> )? <INTEGER> ) )? <PVIRG> */
@@ -132,7 +132,8 @@ void Declaration() #DECLARATION() :
   {
     (LOOKAHEAD(2)
     ArrayElement()
-  | ScalarElement()) (< ASSIGN > (("[" ArraySize() "]")
+  | ScalarElement()) (< ASSIGN >
+    (("[" ArraySize() "]")
   | (< ADDSUB_OP >) ? < INTEGER >)) ? < PVIRG >
   }
   catch (ParseException e)
@@ -197,12 +198,13 @@ void Varlist() #VARLIST :
 
 /* ArrayElement ::= <ID> "[" "]" */
 void ArrayElement() #ARRAYELEMENT :
-{Token t;}
+{
+  Token t;
+}
 {
   try
   {
-    t=< ID > "[" "]"
-
+    t = < ID > "[" "]"
     {
       jjtThis.value = t.image;
     }
@@ -221,12 +223,13 @@ void ArrayElement() #ARRAYELEMENT :
 
 /*ScalarElement ::= <ID>*/
 void ScalarElement() #SCALARELEMENT :
-{Token t;}
+{
+  Token t;
+}
 {
   try
   {
-    t=< ID >
-
+    t = < ID >
     {
       jjtThis.value = t.image;
     }
@@ -291,9 +294,9 @@ void Stmt() #STMT :
 void Assign() #ASSIGN :
 {}
 {
-    try
+  try
   {
-   Lhs() < ASSIGN > Rhs() < PVIRG >
+    Lhs() < ASSIGN > Rhs() < PVIRG >
   }
   catch (ParseException e)
   {
@@ -311,11 +314,11 @@ void Assign() #ASSIGN :
 void Lhs() #void :
 {}
 {
-      try
+  try
   {
-     LOOKAHEAD(2)
-  ArrayAccess()
-| ScalarAccess()
+    LOOKAHEAD(2)
+    ArrayAccess()
+  | ScalarAccess()
   }
   catch (ParseException e)
   {
@@ -333,20 +336,20 @@ void Lhs() #void :
 void Rhs() #RHS :
 {}
 {
-        try
+  try
   {
-   (
-    Term()
     (
-      (
-        < ARITH_OP >
-      | < BITWISE_OP >
-      | < ADDSUB_OP >
-      )
-      Term()
-    )?
-  )
-| "[" ArraySize() "]"
+    Term() 
+    (
+    (
+    < ARITH_OP >
+  | < BITWISE_OP >
+  | < ADDSUB_OP >
+    ) 
+    Term()
+    ) ?
+    )
+  | "[" ArraySize() "]"
   }
   catch (ParseException e)
   {
@@ -362,16 +365,17 @@ void Rhs() #RHS :
 
 /* ArraySize ::= ScalarAccess | <INTEGER> */
 void ArraySize() #ARRAYSIZE :
-{Token t;}
 {
-      try
-  {
-  	  ScalarAccess()
-| t=< INTEGER >
-
-{
-  jjtThis.value = t.image;
+  Token t;
 }
+{
+  try
+  {
+    ScalarAccess()
+  | t = < INTEGER >
+    {
+      jjtThis.value = t.image;
+    }
   }
   catch (ParseException e)
   {
@@ -387,19 +391,28 @@ void ArraySize() #ARRAYSIZE :
 
 /* Term ::= ( <ADDSUB_OP> )? ( <INTEGER> | Call | ArrayAccess | ScalarAccess ) */
 void Term() #TERM :
-{Token t;}
- {
-       try
-      { 
-  (t=< ADDSUB_OP > { jjtThis.value = t.image; })?
-  (
-    t=< INTEGER > { jjtThis.value = t.image; }
+{
+  Token t;
+}
+{
+  try
+  {
+    (t = < ADDSUB_OP >
+    {
+      jjtThis.value = t.image;
+    }
+    ) ? 
+    (
+    t = < INTEGER >
+    {
+      jjtThis.value = t.image;
+    }
   | LOOKAHEAD(3)
     Call()
   | LOOKAHEAD(2)
     ArrayAccess()
   | ScalarAccess()
-  )
+    )
   }
   catch (ParseException e)
   {
@@ -413,14 +426,13 @@ void Term() #TERM :
   }
 }
 
-
 /* Exprtest ::= <LPAR> Lhs <RELA_OP> Rhs <RPAR> */
 void Exprtest() #EXPRTEST :
 {}
 {
-         try
+  try
   {
-  	< LPAR > Lhs() < RELA_OP > Rhs() < RPAR >
+    < LPAR > Lhs() < RELA_OP > Rhs() < RPAR >
   }
   catch (ParseException e)
   {
@@ -438,9 +450,9 @@ void Exprtest() #EXPRTEST :
 void While() #WHILE :
 {}
 {
-           try
+  try
   {
-  	  < WHILE > Exprtest() < LCHAVETA > Stmtlst() < RCHAVETA >
+    < WHILE > Exprtest() < LCHAVETA > Stmtlst() < RCHAVETA >
   }
   catch (ParseException e)
   {
@@ -458,12 +470,12 @@ void While() #WHILE :
 void If() #ID :
 {}
 {
-             try
+  try
   {
-  	 < IF > Exprtest() < LCHAVETA > Stmtlst() < RCHAVETA >
-  (
+    < IF > Exprtest() < LCHAVETA > Stmtlst() < RCHAVETA > 
+    (
     < ELSE > < LCHAVETA > Stmtlst() < RCHAVETA >
-  )?
+    ) ?
   }
   catch (ParseException e)
   {
@@ -481,13 +493,13 @@ void If() #ID :
 void Call() #CALL :
 {}
 {
-               try
+  try
   {
-  	  < ID > ("." < ID >)? < LPAR >
-  (
+    < ID > ("." < ID >) ? < LPAR > 
+    (
     ArgumentList()
-  )?
-  < RPAR >
+    ) ? 
+    < RPAR >
   }
   catch (ParseException e)
   {
@@ -505,12 +517,12 @@ void Call() #CALL :
 void ArgumentList() #ARGUMENTLIST :
 {}
 {
-                 try
+  try
   {
-    Argument()
-  (
+    Argument() 
+    (
     < VIRG > Argument()
-  )*
+    ) *
   }
   catch (ParseException e)
   {
@@ -526,17 +538,20 @@ void ArgumentList() #ARGUMENTLIST :
 
 /* Argument ::= ( <ID> | <STRING> | <INTEGER> ) */
 void Argument() #ARGUMENT :
-{Token t;}
 {
-                  try
+  Token t;
+}
+{
+  try
   {
     (
-    t=< ID >
-  | t=< STRING >
-  | t=< INTEGER >	
-  )
-
-    { jjtThis.value = t.image; }
+    t = < ID >
+  | t = < STRING >
+  | t = < INTEGER >	
+    )
+    {
+      jjtThis.value = t.image;
+    }
   }
   catch (ParseException e)
   {
@@ -554,9 +569,9 @@ void Argument() #ARGUMENT :
 void ArrayAccess() #ARRAYACCESS :
 {}
 {
-                    try
+  try
   {
-  < ID > "[" Index() "]"
+    < ID > "[" Index() "]"
   }
   catch (ParseException e)
   {
@@ -572,12 +587,13 @@ void ArrayAccess() #ARRAYACCESS :
 
 /* ScalarAccess ::= <ID> ( "." <SIZE> )? */
 void ScalarAccess() #SCALARACCESS :
-{Token t;}
 {
-                      try
+  Token t;
+}
+{
+  try
   {
-    t=< ID > ("." < SIZE >)?
-
+    t = < ID > ("." < SIZE >) ?
     {
       jjtThis.value = t.image;
     }
@@ -596,15 +612,20 @@ void ScalarAccess() #SCALARACCESS :
 
 /*Index ::= <ID> | <INTEGER>*/
 void Index() #INDEX :
-{Token t;}
 {
-                        try
+  Token t;
+}
+{
+  try
   {
-      t=< ID > { 
-	jjtThis.value = t.image; }
-| t=< INTEGER > { 
-	jjtThis.value = t.image; }
-
+    t = < ID >
+    {
+      jjtThis.value = t.image;
+    }
+  | t = < INTEGER >
+    {
+      jjtThis.value = t.image;
+    }
   }
   catch (ParseException e)
   {
