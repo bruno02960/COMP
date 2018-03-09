@@ -6,7 +6,7 @@ class SimpleNode implements Node {
   protected Node parent;
   protected Node[] children;
   protected int id;
-  protected Object value;
+  protected Object value = "";
   protected Exemplo parser;
 
   public SimpleNode(int i) {
@@ -67,6 +67,8 @@ class SimpleNode implements Node {
     	System.out.println("\t[" + this.value +"]");
     }
     if (children != null) {
+    	if(this.value != "")
+    		System.out.println("\t[" + this.value +"]");
       for (int i = 0; i < children.length; ++i) {
         SimpleNode n = (SimpleNode)children[i];
         if (n != null) {

@@ -85,6 +85,7 @@ TOKEN :
 | < SIZE : "size" >
 | < LPARRETO : "[" >
 | < RPARRETO : "]" >
+| < PONTO : "." >
 }
 
 < DEFAULT >
@@ -105,21 +106,33 @@ TOKEN :
 //Non-terminals
 /* Module ::= <MODULE> <ID> <LCHAVETA> ( Declaration )* ( Function )* <RCHAVETA> */
 SimpleNode Module() #MODULE :
-{}
+{Token t;}
 {
   try
   {
-    < MODULE > < ID > < LCHAVETA > (Declaration()) * (Function()) * < RCHAVETA >
+    t = < MODULE >
+    {
+      if(jjtThis.value != "")   jjtThis.value += " " + t.image;   else   jjtThis.value += t.image;
+    } t = < ID >
+    {
+      if(jjtThis.value != "")   jjtThis.value += " " + t.image;   else   jjtThis.value += t.image;
+    } t = < LCHAVETA >
+    {
+      if(jjtThis.value != "")   jjtThis.value += " " + t.image;   else   jjtThis.value += t.image;
+    } (Declaration()) * (Function()) * t = < RCHAVETA >
+    {
+      if(jjtThis.value != "")   jjtThis.value += " " + t.image;   else   jjtThis.value += t.image;
+    }
   }
   catch (ParseException e)
   {
     System.out.println(e.toString());
-    Token t;
+    Token t2;
     do
     {
-      t = getNextToken();
+      t2 = getNextToken();
     }
-    while (t.kind != RCHAVETA);
+    while (t2.kind != RCHAVETA);
   }
   {
     return jjtThis;
@@ -133,73 +146,130 @@ SimpleNode Module() #MODULE :
 							| (<ADDSUB_OP> )? <INTEGER> )
 															)? <PVIRG> */
 void Declaration() #DECLARATION() :
-{}
+{Token t;}
 {
   try
   {
     (LOOKAHEAD(2)
     ArrayElement()
-  | ScalarElement()) (< ASSIGN >
-    ((< LPARRETO > ArraySize() < RPARRETO >)
-  | (< ADDSUB_OP >) ? < INTEGER >)) ? < PVIRG >
+  | ScalarElement()) (t = < ASSIGN >
+    {
+      if(jjtThis.value != "")   jjtThis.value += " " + t.image;   else   jjtThis.value += t.image;
+    }
+    ((t = < LPARRETO >
+    {
+      if(jjtThis.value != "")   jjtThis.value += " " + t.image;   else   jjtThis.value += t.image;
+    } ArraySize() t = < RPARRETO >
+    {
+      if(jjtThis.value != "")   jjtThis.value += " " + t.image;   else   jjtThis.value += t.image;
+    })
+  | (t = < ADDSUB_OP >
+    {
+      if(jjtThis.value != "")   jjtThis.value += " " + t.image;   else   jjtThis.value += t.image;
+    }) ? t = < INTEGER >
+    {
+      if(jjtThis.value != "")   jjtThis.value += " " + t.image;   else   jjtThis.value += t.image;
+    })) ? t = < PVIRG >
+    {
+      if(jjtThis.value != "")   jjtThis.value += " " + t.image;   else   jjtThis.value += t.image;
+    }
   }
   catch (ParseException e)
   {
     System.out.println(e.toString());
-    Token t;
+    Token t2;
     do
     {
-      t = getNextToken();
+      t2 = getNextToken();
     }
-    while (t.kind != PVIRG);
+    while (t2.kind != PVIRG);
   }
 }
 
 /* Function ::= ( ( <FUNCTION> ( ArrayElement | ScalarElement ) <ASSIGN> <ID> <LPAR> (Varlist )? <RPAR> ) | ( <FUNCTION> <ID> <LPAR> ( Varlist )? <RPAR> ) )<LCHAVETA> Stmtlst <RCHAVETA> */
 void Function() #FUNCTION :
-{}
+{Token t;}
 {
   try
   {
     (LOOKAHEAD(3)
-    (< FUNCTION > (LOOKAHEAD(2)
+    (t = < FUNCTION >
+    {
+      if(jjtThis.value != "")   jjtThis.value += " " + t.image;   else   jjtThis.value += t.image;
+    } (LOOKAHEAD(2)
     ArrayElement()
-  | ScalarElement()) < ASSIGN > < ID > < LPAR > (Varlist()) ? < RPAR >)
-  | (< FUNCTION > < ID > < LPAR > (Varlist()) ? < RPAR >)) < LCHAVETA > Stmtlst() < RCHAVETA >
+  | ScalarElement()) t = < ASSIGN >
+    {
+      if(jjtThis.value != "")   jjtThis.value += " " + t.image;   else   jjtThis.value += t.image;
+    } t = < ID >
+    {
+      if(jjtThis.value != "")   jjtThis.value += " " + t.image;   else   jjtThis.value += t.image;
+    } t = < LPAR >
+    {
+      if(jjtThis.value != "")   jjtThis.value += " " + t.image;   else   jjtThis.value += t.image;
+    } (Varlist()) ? t = < RPAR >
+    {
+      if(jjtThis.value != "")   jjtThis.value += " " + t.image;   else   jjtThis.value += t.image;
+    })
+  | (t = < FUNCTION >
+    {
+      if(jjtThis.value != "")   jjtThis.value += " " + t.image;   else   jjtThis.value += t.image;
+    } t = < ID >
+    {
+      if(jjtThis.value != "")   jjtThis.value += " " + t.image;   else   jjtThis.value += t.image;
+    } t = < LPAR >
+    {
+      if(jjtThis.value != "")   jjtThis.value += " " + t.image;   else   jjtThis.value += t.image;
+    } (Varlist()) ? t = < RPAR >
+    {
+      if(jjtThis.value != "")   jjtThis.value += " " + t.image;   else   jjtThis.value += t.image;
+    })) t = < LCHAVETA >
+    {
+      if(jjtThis.value != "")   jjtThis.value += " " + t.image;   else   jjtThis.value += t.image;
+    } Stmtlst() t = < RCHAVETA >
+    {
+      if(jjtThis.value != "")   jjtThis.value += " " + t.image;   else   jjtThis.value += t.image;
+    }
   }
   catch (ParseException e)
   {
     System.out.println(e.toString());
-    Token t;
+    Token t2;
     do
     {
-      t = getNextToken();
+      t2 = getNextToken();
     }
-    while (t.kind != RCHAVETA);
+    while (t2.kind != RCHAVETA);
   }
 }
 
 /* Varlist ::= ( ArrayElement | ScalarElement ) ( <VIRG> ( ArrayElement | ScalarElement ))* */
 void Varlist() #VARLIST :
-{}
+{Token t;}
 {
   try
   {
     (LOOKAHEAD(2)
     ArrayElement()
-  | ScalarElement()) (< VIRG > < ID > (LOOKAHEAD(2)
+  | ScalarElement()) (t = < VIRG >
+    {
+      if(jjtThis.value != "")   jjtThis.value += " " + t.image;   else   jjtThis.value += t.image;
+    } t = < ID >
+    {
+      if(jjtThis.value != "")   jjtThis.value += " " + t.image;   else   jjtThis.value += t.image;
+    } (LOOKAHEAD(2)
     ArrayElement()
   | ScalarElement())) *
   }
   catch (ParseException e)
   {
     System.out.println(e.toString());
-    Token t;
+    Token t2;
     do
     {
-      t = getNextToken();
+      t2 = getNextToken();
     }
-    while (t.kind != PVIRG);
+    while (t2.kind != PVIRG);
   }
 }
 
@@ -211,9 +281,15 @@ void ArrayElement() #ARRAYELEMENT :
 {
   try
   {
-    t = < ID > < LPARRETO > < RPARRETO >
+    t = < ID >
     {
-      jjtThis.value = t.image;
+      if(jjtThis.value != "")   jjtThis.value += " " + t.image;   else   jjtThis.value += t.image;
+    } t = < LPARRETO >
+    {
+      if(jjtThis.value != "")   jjtThis.value += " " + t.image;   else   jjtThis.value += t.image;
+    } t = < RPARRETO >
+    {
+      if(jjtThis.value != "")   jjtThis.value += " " + t.image;   else   jjtThis.value += t.image;
     }
   }
   catch (ParseException e)
@@ -238,7 +314,7 @@ void ScalarElement() #SCALARELEMENT :
   {
     t = < ID >
     {
-      jjtThis.value = t.image;
+      if(jjtThis.value != "")   jjtThis.value += " " + t.image;   else   jjtThis.value += t.image;
     }
   }
   catch (ParseException e)
@@ -254,7 +330,7 @@ void ScalarElement() #SCALARELEMENT :
 }
 
 /* Stmtlst ::= ( Stmt )* */
-void Stmtlst() #void :
+void Stmtlst() #STMTLST :
 {}
 {
   try
@@ -275,7 +351,7 @@ void Stmtlst() #void :
 
 /* Stmt ::= While | If | Assign | Call <PVIRG> */
 void Stmt() #STMT :
-{}
+{Token t;}
 {
   try
   {
@@ -283,42 +359,51 @@ void Stmt() #STMT :
   | If()
   | LOOKAHEAD(3)
     Assign()
-  | Call() < PVIRG >
+  | Call() t = < PVIRG >
+    {
+      if(jjtThis.value != "")   jjtThis.value += " " + t.image;   else   jjtThis.value += t.image;
+    }
   }
   catch (ParseException e)
   {
     System.out.println(e.toString());
-    Token t;
+    Token t2;
     do
     {
-      t = getNextToken();
+      t2 = getNextToken();
     }
-    while (t.kind != PVIRG);
+    while (t2.kind != PVIRG);
   }
 }
 
 /* Assign ::= Lhs <ASSIGN> Rhs <PVIRG> */
 void Assign() #ASSIGN :
-{}
+{Token t;}
 {
   try
   {
-    Lhs() < ASSIGN > Rhs() < PVIRG >
+    Lhs() t = < ASSIGN >
+    {
+      if(jjtThis.value != "")   jjtThis.value += " " + t.image;   else   jjtThis.value += t.image;
+    } Rhs() t = < PVIRG >
+    {
+      if(jjtThis.value != "")   jjtThis.value += " " + t.image;   else   jjtThis.value += t.image;
+    }
   }
   catch (ParseException e)
   {
     System.out.println(e.toString());
-    Token t;
+    Token t2;
     do
     {
-      t = getNextToken();
+      t2 = getNextToken();
     }
-    while (t.kind != PVIRG);
+    while (t2.kind != PVIRG);
   }
 }
 
 /* Lhs ::= ArrayAccess | ScalarAccess */
-void Lhs() #void :
+void Lhs() #LHS :
 {}
 {
   try
@@ -341,7 +426,7 @@ void Lhs() #void :
 
 /* Rhs ::= ( Term ( ( <ARITH_OP> | <BITWISE_OP> | <ADDSUB_OP> ) Term )? ) | "[" ArraySize "]" */
 void Rhs() #RHS :
-{}
+{ Token t; }
 {
   try
   {
@@ -349,24 +434,39 @@ void Rhs() #RHS :
     Term() 
     (
     (
-    < ARITH_OP >
-  | < BITWISE_OP >
-  | < ADDSUB_OP >
+    t = < ARITH_OP >
+    {
+      if(jjtThis.value != "")   jjtThis.value += " " + t.image;   else   jjtThis.value += t.image;
+    }
+  | t = < BITWISE_OP >
+    {
+      if(jjtThis.value != "")   jjtThis.value += " " + t.image;   else   jjtThis.value += t.image;
+    }
+  | t = < ADDSUB_OP >
+    {
+      if(jjtThis.value != "")   jjtThis.value += " " + t.image;   else   jjtThis.value += t.image;
+    }
     ) 
     Term()
     ) ?
     )
-  | < LPARRETO > ArraySize() < RPARRETO >
+  | t = < LPARRETO >
+    {
+      if(jjtThis.value != "")   jjtThis.value += " " + t.image;   else   jjtThis.value += t.image;
+    } ArraySize() t = < RPARRETO >
+    {
+      if(jjtThis.value != "")   jjtThis.value += " " + t.image;   else   jjtThis.value += t.image;
+    }
   }
   catch (ParseException e)
   {
     System.out.println(e.toString());
-    Token t;
+    Token t2;
     do
     {
-      t = getNextToken();
+      t2 = getNextToken();
     }
-    while (t.kind != RPARRETO);
+    while (t2.kind != RPARRETO);
   }
 }
 
@@ -381,7 +481,7 @@ void ArraySize() #ARRAYSIZE :
     ScalarAccess()
   | t = < INTEGER >
     {
-      jjtThis.value = t.image;
+      if(jjtThis.value != "")   jjtThis.value += " " + t.image;   else   jjtThis.value += t.image;
     }
   }
   catch (ParseException e)
@@ -406,13 +506,13 @@ void Term() #TERM :
   {
     (t = < ADDSUB_OP >
     {
-      jjtThis.value = t.image;
+      if(jjtThis.value != "")   jjtThis.value += " " + t.image;   else   jjtThis.value += t.image;
     }
     ) ? 
     (
     t = < INTEGER >
     {
-      jjtThis.value = t.image;
+      if(jjtThis.value != "")   jjtThis.value += " " + t.image;   else   jjtThis.value += t.image;
     }
   | LOOKAHEAD(3)
     Call()
@@ -435,111 +535,165 @@ void Term() #TERM :
 
 /* Exprtest ::= <LPAR> Lhs <RELA_OP> Rhs <RPAR> */
 void Exprtest() #EXPRTEST :
-{}
+{ Token t; }
 {
   try
   {
-    < LPAR > Lhs() < RELA_OP > Rhs() < RPAR >
+    t = < LPAR >
+    {
+      if(jjtThis.value != "")   jjtThis.value += " " + t.image;   else   jjtThis.value += t.image;
+    } Lhs() t = < RELA_OP >
+    {
+      if(jjtThis.value != "")   jjtThis.value += " " + t.image;   else   jjtThis.value += t.image;
+    } Rhs() t = < RPAR >
+    {
+      if(jjtThis.value != "")   jjtThis.value += " " + t.image;   else   jjtThis.value += t.image;
+    }
   }
   catch (ParseException e)
   {
     System.out.println(e.toString());
-    Token t;
+    Token t2;
     do
     {
-      t = getNextToken();
+      t2 = getNextToken();
     }
-    while (t.kind != RPAR);
+    while (t2.kind != RPAR);
   }
 }
 
 /*While ::= <WHILE> Exprtest <LCHAVETA> Stmtlst <RCHAVETA> */
 void While() #WHILE :
-{}
+{Token t;}
 {
   try
   {
-    < WHILE > Exprtest() < LCHAVETA > Stmtlst() < RCHAVETA >
+    t = < WHILE >
+    {
+      if(jjtThis.value != "")   jjtThis.value += " " + t.image;   else   jjtThis.value += t.image;
+    } Exprtest() t = < LCHAVETA >
+    {
+      if(jjtThis.value != "")   jjtThis.value += " " + t.image;   else   jjtThis.value += t.image;
+    } Stmtlst() t = < RCHAVETA >
+    {
+      if(jjtThis.value != "")   jjtThis.value += " " + t.image;   else   jjtThis.value += t.image;
+    }
   }
   catch (ParseException e)
   {
     System.out.println(e.toString());
-    Token t;
+    Token t2;
     do
     {
-      t = getNextToken();
+      t2 = getNextToken();
     }
-    while (t.kind != RCHAVETA);
+    while (t2.kind != RCHAVETA);
   }
 }
 
 /*If ::= <IF> Exprtest <LCHAVETA> Stmtlst <RCHAVETA> ( <ELSE> <LCHAVETA> Stmtlst <RCHAVETA> )? */
 void If() #ID :
-{}
+{ Token t;}
 {
   try
   {
-    < IF > Exprtest() < LCHAVETA > Stmtlst() < RCHAVETA > 
+    t = < IF >
+    {
+      if(jjtThis.value != "")   jjtThis.value += " " + t.image;   else   jjtThis.value += t.image;
+    } Exprtest() t = < LCHAVETA >
+    {
+      if(jjtThis.value != "")   jjtThis.value += " " + t.image;   else   jjtThis.value += t.image;
+    } Stmtlst() t = < RCHAVETA > 
+    {
+      if(jjtThis.value != "")   jjtThis.value += " " + t.image;   else   jjtThis.value += t.image;
+    }
     (
-    < ELSE > < LCHAVETA > Stmtlst() < RCHAVETA >
+    t = < ELSE >
+    {
+      if(jjtThis.value != "")   jjtThis.value += " " + t.image;   else   jjtThis.value += t.image;
+    } t = < LCHAVETA >
+    {
+      if(jjtThis.value != "")   jjtThis.value += " " + t.image;   else   jjtThis.value += t.image;
+    } Stmtlst() t = < RCHAVETA >
+    {
+      if(jjtThis.value != "")   jjtThis.value += " " + t.image;   else   jjtThis.value += t.image;
+    }
     ) ?
   }
   catch (ParseException e)
   {
     System.out.println(e.toString());
-    Token t;
+    Token t2;
     do
     {
-      t = getNextToken();
+      t2 = getNextToken();
     }
-    while (t.kind != RCHAVETA);
+    while (t2.kind != RCHAVETA);
   }
 }
 
 /*Call ::= <ID> ( "." <ID> )? <LPAR> ( ArgumentList )? <RPAR> */
 void Call() #CALL :
-{}
+{ Token t;}
 {
   try
   {
-    < ID > ("." < ID >) ? < LPAR > 
+    t = < ID >
+    {
+      if(jjtThis.value != "")   jjtThis.value += " " + t.image;   else   jjtThis.value += t.image;
+    } (t = < PONTO >
+    {
+      if(jjtThis.value != "")   jjtThis.value += " " + t.image;   else   jjtThis.value += t.image;
+    } t = < ID >
+    {
+      if(jjtThis.value != "")   jjtThis.value += " " + t.image;   else   jjtThis.value += t.image;
+    }) ? t = < LPAR > 
+    {
+      if(jjtThis.value != "")   jjtThis.value += " " + t.image;   else   jjtThis.value += t.image;
+    }
     (
     ArgumentList()
     ) ? 
-    < RPAR >
+    t = < RPAR >
+    {
+      if(jjtThis.value != "")   jjtThis.value += " " + t.image;   else   jjtThis.value += t.image;
+    }
   }
   catch (ParseException e)
   {
     System.out.println(e.toString());
-    Token t;
+    Token t2;
     do
     {
-      t = getNextToken();
+      t2 = getNextToken();
     }
-    while (t.kind != RPAR);
+    while (t2.kind != RPAR);
   }
 }
 
 /* ArgumentList ::= Argument ( <VIRG> Argument )* */
 void ArgumentList() #ARGUMENTLIST :
-{}
+{Token t;}
 {
   try
   {
     Argument() 
     (
-    < VIRG > Argument()
+    t = < VIRG >
+    {
+      if(jjtThis.value != "")   jjtThis.value += " " + t.image;   else   jjtThis.value += t.image;
+    } Argument()
     ) *
   }
   catch (ParseException e)
   {
     System.out.println(e.toString());
-    Token t;
+    Token t2;
     do
     {
-      t = getNextToken();
+      t2 = getNextToken();
     }
-    while (t.kind != PVIRG);
+    while (t2.kind != PVIRG);
   }
 }
 
@@ -553,12 +707,18 @@ void Argument() #ARGUMENT :
   {
     (
     t = < ID >
-  | t = < STRING >
-  | t = < INTEGER >	
-    )
     {
-      jjtThis.value = t.image;
+      if(jjtThis.value != "")   jjtThis.value += " " + t.image;   else   jjtThis.value += t.image;
     }
+  | t = < STRING >
+    {
+      if(jjtThis.value != "")   jjtThis.value += " " + t.image;   else   jjtThis.value += t.image;
+    }
+  | t = < INTEGER >	
+    {
+      if(jjtThis.value != "")   jjtThis.value += " " + t.image;   else   jjtThis.value += t.image;
+    }
+    )
   }
   catch (ParseException e)
   {
@@ -574,21 +734,30 @@ void Argument() #ARGUMENT :
 
 /* ArrayAccess ::= <ID> "[" Index "]"*/
 void ArrayAccess() #ARRAYACCESS :
-{}
+{Token t;}
 {
   try
   {
-    < ID > < LPARRETO > Index() < RPARRETO >
+    t = < ID >
+    {
+      if(jjtThis.value != "")   jjtThis.value += " " + t.image;   else   jjtThis.value += t.image;
+    } t = < LPARRETO >
+    {
+      if(jjtThis.value != "")   jjtThis.value += " " + t.image;   else   jjtThis.value += t.image;
+    } Index() t = < RPARRETO >
+    {
+      if(jjtThis.value != "")   jjtThis.value += " " + t.image;   else   jjtThis.value += t.image;
+    }
   }
   catch (ParseException e)
   {
     System.out.println(e.toString());
-    Token t;
+    Token t2;
     do
     {
-      t = getNextToken();
+      t2 = getNextToken();
     }
-    while (t.kind != RPARRETO);
+    while (t2.kind != RPARRETO);
   }
 }
 
@@ -600,10 +769,16 @@ void ScalarAccess() #SCALARACCESS :
 {
   try
   {
-    t = < ID > ("." < SIZE >) ?
+    t = < ID >
     {
-      jjtThis.value = t.image;
-    }
+      if(jjtThis.value != "")   jjtThis.value += " " + t.image;   else   jjtThis.value += t.image;
+    } (t = < PONTO >
+    {
+      if(jjtThis.value != "")   jjtThis.value += " " + t.image;   else   jjtThis.value += t.image;
+    } t = < SIZE >
+    {
+      if(jjtThis.value != "")   jjtThis.value += " " + t.image;   else   jjtThis.value += t.image;
+    }) ?
   }
   catch (ParseException e)
   {
@@ -627,11 +802,11 @@ void Index() #INDEX :
   {
     t = < ID >
     {
-      jjtThis.value = t.image;
+      if(jjtThis.value != "")   jjtThis.value += " " + t.image;   else   jjtThis.value += t.image;
     }
   | t = < INTEGER >
     {
-      jjtThis.value = t.image;
+      if(jjtThis.value != "")   jjtThis.value += " " + t.image;   else   jjtThis.value += t.image;
     }
   }
   catch (ParseException e)
