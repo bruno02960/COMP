@@ -254,10 +254,8 @@ void Varlist() #VARLIST :
   | ScalarElement()) (t = < VIRG >
     {
       if(jjtThis.value != "")   jjtThis.value += " " + t.image;   else   jjtThis.value += t.image;
-    } t = < ID >
-    {
-      if(jjtThis.value != "")   jjtThis.value += " " + t.image;   else   jjtThis.value += t.image;
-    } (LOOKAHEAD(2)
+    }
+     (LOOKAHEAD(2)
     ArrayElement()
   | ScalarElement())) *
   }
