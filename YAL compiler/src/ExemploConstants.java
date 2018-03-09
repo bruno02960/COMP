@@ -47,15 +47,19 @@ public interface ExemploConstants {
   /** RegularExpression Id. */
   int SIZE = 25;
   /** RegularExpression Id. */
-  int INTEGER = 26;
+  int LPARRETO = 26;
   /** RegularExpression Id. */
-  int ID = 27;
+  int RPARRETO = 27;
   /** RegularExpression Id. */
-  int LETTER = 28;
+  int INTEGER = 28;
   /** RegularExpression Id. */
-  int DIGIT = 29;
+  int ID = 29;
   /** RegularExpression Id. */
-  int STRING = 30;
+  int LETTER = 30;
+  /** RegularExpression Id. */
+  int DIGIT = 31;
+  /** RegularExpression Id. */
+  int STRING = 32;
 
   /** Lexical state. */
   int DEFAULT = 0;
@@ -88,13 +92,13 @@ public interface ExemploConstants {
     "\"function\"",
     "\"module\"",
     "\"size\"",
+    "\"[\"",
+    "\"]\"",
     "<INTEGER>",
     "<ID>",
     "<LETTER>",
     "<DIGIT>",
     "<STRING>",
-    "\"[\"",
-    "\"]\"",
     "\".\"",
   };
 

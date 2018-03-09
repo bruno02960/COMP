@@ -83,6 +83,8 @@ TOKEN :
 | < FUNCTION : "function" >
 | < MODULE : "module" >
 | < SIZE : "size" >
+| < LPARRETO : "[" >
+| < RPARRETO : "]" >
 }
 
 < DEFAULT >
@@ -117,14 +119,19 @@ SimpleNode Module() #MODULE :
     {
       t = getNextToken();
     }
-    while (t.kind != PVIRG);
+    while (t.kind != RCHAVETA);
   }
   {
     return jjtThis;
   }
 }
 
-/* Declaration ::= ( ArrayElement | ScalarElement ) ( <ASSIGN> ( ( "[" ArraySize "]" ) | (<ADDSUB_OP> )? <INTEGER> ) )? <PVIRG> */
+/* Declaration ::= 	( ArrayElement | ScalarElement )
+					(
+					  		<ASSIGN>
+							( 	( "[" ArraySize "]" )
+							| (<ADDSUB_OP> )? <INTEGER> )
+															)? <PVIRG> */
 void Declaration() #DECLARATION() :
 {}
 {
@@ -133,7 +140,7 @@ void Declaration() #DECLARATION() :
     (LOOKAHEAD(2)
     ArrayElement()
   | ScalarElement()) (< ASSIGN >
-    (("[" ArraySize() "]")
+    ((< LPARRETO > ArraySize() < RPARRETO >)
   | (< ADDSUB_OP >) ? < INTEGER >)) ? < PVIRG >
   }
   catch (ParseException e)
@@ -168,7 +175,7 @@ void Function() #FUNCTION :
     {
       t = getNextToken();
     }
-    while (t.kind != PVIRG);
+    while (t.kind != RCHAVETA);
   }
 }
 
@@ -204,7 +211,7 @@ void ArrayElement() #ARRAYELEMENT :
 {
   try
   {
-    t = < ID > "[" "]"
+    t = < ID > < LPARRETO > < RPARRETO >
     {
       jjtThis.value = t.image;
     }
@@ -217,7 +224,7 @@ void ArrayElement() #ARRAYELEMENT :
     {
       t2 = getNextToken();
     }
-    while (t2.kind != PVIRG);
+    while (t2.kind != RPARRETO);
   }
 }
 
@@ -242,7 +249,7 @@ void ScalarElement() #SCALARELEMENT :
     {
       t2 = getNextToken();
     }
-    while (t2.kind != PVIRG);
+    while (t2.kind != ID);
   }
 }
 
@@ -349,7 +356,7 @@ void Rhs() #RHS :
     Term()
     ) ?
     )
-  | "[" ArraySize() "]"
+  | < LPARRETO > ArraySize() < RPARRETO >
   }
   catch (ParseException e)
   {
@@ -359,7 +366,7 @@ void Rhs() #RHS :
     {
       t = getNextToken();
     }
-    while (t.kind != PVIRG);
+    while (t.kind != RPARRETO);
   }
 }
 
@@ -442,7 +449,7 @@ void Exprtest() #EXPRTEST :
     {
       t = getNextToken();
     }
-    while (t.kind != PVIRG);
+    while (t.kind != RPAR);
   }
 }
 
@@ -462,7 +469,7 @@ void While() #WHILE :
     {
       t = getNextToken();
     }
-    while (t.kind != PVIRG);
+    while (t.kind != RCHAVETA);
   }
 }
 
@@ -485,7 +492,7 @@ void If() #ID :
     {
       t = getNextToken();
     }
-    while (t.kind != PVIRG);
+    while (t.kind != RCHAVETA);
   }
 }
 
@@ -509,7 +516,7 @@ void Call() #CALL :
     {
       t = getNextToken();
     }
-    while (t.kind != PVIRG);
+    while (t.kind != RPAR);
   }
 }
 
@@ -571,7 +578,7 @@ void ArrayAccess() #ARRAYACCESS :
 {
   try
   {
-    < ID > "[" Index() "]"
+    < ID > < LPARRETO > Index() < RPARRETO >
   }
   catch (ParseException e)
   {
@@ -581,7 +588,7 @@ void ArrayAccess() #ARRAYACCESS :
     {
       t = getNextToken();
     }
-    while (t.kind != PVIRG);
+    while (t.kind != RPARRETO);
   }
 }
 
