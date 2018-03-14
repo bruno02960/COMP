@@ -4,50 +4,40 @@ public interface ExemploTreeConstants
   public int JJTMODULE = 0;
   public int JJTDECLARATION = 1;
   public int JJTFUNCTION = 2;
-  public int JJTVARLIST = 3;
+  public int JJTVOID = 3;
   public int JJTARRAYELEMENT = 4;
   public int JJTSCALARELEMENT = 5;
-  public int JJTSTMTLST = 6;
-  public int JJTSTMT = 7;
-  public int JJTASSIGN = 8;
-  public int JJTLHS = 9;
-  public int JJTRHS = 10;
-  public int JJTARRAYSIZE = 11;
-  public int JJTTERM = 12;
-  public int JJTEXPRTEST = 13;
-  public int JJTWHILE = 14;
-  public int JJTID = 15;
-  public int JJTCALL = 16;
-  public int JJTARGUMENTLIST = 17;
-  public int JJTARGUMENT = 18;
-  public int JJTARRAYACCESS = 19;
-  public int JJTSCALARACCESS = 20;
-  public int JJTINDEX = 21;
+  public int JJTRHS = 6;
+  public int JJTARRAYSIZE = 7;
+  public int JJTTERM = 8;
+  public int JJTEXPRTEST = 9;
+  public int JJTWHILE = 10;
+  public int JJTIF = 11;
+  public int JJTCALL = 12;
+  public int JJTARGUMENT = 13;
+  public int JJTARRAYACCESS = 14;
+  public int JJTSCALARACCESS = 15;
+  public int JJTINDEX = 16;
 
 
   public String[] jjtNodeName = {
     "MODULE",
     "DECLARATION",
     "FUNCTION",
-    "VARLIST",
+    "void",
     "ARRAYELEMENT",
     "SCALARELEMENT",
-    "STMTLST",
-    "STMT",
-    "ASSIGN",
-    "LHS",
     "RHS",
     "ARRAYSIZE",
     "TERM",
     "EXPRTEST",
     "WHILE",
-    "ID",
+    "IF",
     "CALL",
-    "ARGUMENTLIST",
     "ARGUMENT",
     "ARRAYACCESS",
     "SCALARACCESS",
     "INDEX",
   };
 }
-/* JavaCC - OriginalChecksum=7d535ab0ca842273e46480be46efd8df (do not edit this line) */
+/* JavaCC - OriginalChecksum=ff0bbd77430d8c2a4cb349f9ec48a7fa (do not edit this line) */
