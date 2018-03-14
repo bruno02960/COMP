@@ -1,7 +1,6 @@
 options
 {
   LOOKAHEAD= 1;
-
 }
 
 PARSER_BEGIN(Exemplo)
