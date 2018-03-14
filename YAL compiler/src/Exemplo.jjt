@@ -247,8 +247,6 @@ void Function() #FUNCTION :
 void Varlist() #VARLIST :
 {Token t;}
 {
-  try
-  {
     (LOOKAHEAD(2)
     ArrayElement()
   | ScalarElement()) (t = < VIRG >
@@ -258,17 +256,6 @@ void Varlist() #VARLIST :
      (LOOKAHEAD(2)
     ArrayElement()
   | ScalarElement())) *
-  }
-  catch (ParseException e)
-  {
-    System.out.println(e.toString());
-    Token t2;
-    do
-    {
-      t2 = getNextToken();
-    }
-    while (t2.kind != PVIRG);
-  }
 }
 
 /* ArrayElement ::= <ID> "[" "]" */
@@ -331,20 +318,7 @@ void ScalarElement() #SCALARELEMENT :
 void Stmtlst() #STMTLST :
 {}
 {
-  try
-  {
     (Stmt()) *
-  }
-  catch (ParseException e)
-  {
-    System.out.println(e.toString());
-    Token t;
-    do
-    {
-      t = getNextToken();
-    }
-    while (t.kind != PVIRG);
-  }
 }
 
 /* Stmt ::= While | If | Assign | Call <PVIRG> */
@@ -404,22 +378,9 @@ void Assign() #ASSIGN :
 void Lhs() #LHS :
 {}
 {
-  try
-  {
     LOOKAHEAD(2)
     ArrayAccess()
   | ScalarAccess()
-  }
-  catch (ParseException e)
-  {
-    System.out.println(e.toString());
-    Token t;
-    do
-    {
-      t = getNextToken();
-    }
-    while (t.kind != PVIRG);
-  }
 }
 
 /* Rhs ::= ( Term ( ( <ARITH_OP> | <BITWISE_OP> | <ADDSUB_OP> ) Term )? ) | "[" ArraySize "]" */
@@ -474,24 +435,11 @@ void ArraySize() #ARRAYSIZE :
   Token t;
 }
 {
-  try
-  {
     ScalarAccess()
   | t = < INTEGER >
     {
       if(jjtThis.value != "")   jjtThis.value += " " + t.image;   else   jjtThis.value += t.image;
     }
-  }
-  catch (ParseException e)
-  {
-    System.out.println(e.toString());
-    Token t2;
-    do
-    {
-      t2 = getNextToken();
-    }
-    while (t2.kind != PVIRG);
-  }
 }
 
 /* Term ::= ( <ADDSUB_OP> )? ( <INTEGER> | Call | ArrayAccess | ScalarAccess ) */
@@ -500,8 +448,6 @@ void Term() #TERM :
   Token t;
 }
 {
-  try
-  {
     (t = < ADDSUB_OP >
     {
       if(jjtThis.value != "")   jjtThis.value += " " + t.image;   else   jjtThis.value += t.image;
@@ -518,17 +464,6 @@ void Term() #TERM :
     ArrayAccess()
   | ScalarAccess()
     )
-  }
-  catch (ParseException e)
-  {
-    System.out.println(e.toString());
-    Token t2;
-    do
-    {
-      t2 = getNextToken();
-    }
-    while (t2.kind != PVIRG);
-  }
 }
 
 /* Exprtest ::= <LPAR> Lhs <RELA_OP> Rhs <RPAR> */
@@ -673,8 +608,6 @@ void Call() #CALL :
 void ArgumentList() #ARGUMENTLIST :
 {Token t;}
 {
-  try
-  {
     Argument() 
     (
     t = < VIRG >
@@ -682,17 +615,6 @@ void ArgumentList() #ARGUMENTLIST :
       if(jjtThis.value != "")   jjtThis.value += " " + t.image;   else   jjtThis.value += t.image;
     } Argument()
     ) *
-  }
-  catch (ParseException e)
-  {
-    System.out.println(e.toString());
-    Token t2;
-    do
-    {
-      t2 = getNextToken();
-    }
-    while (t2.kind != PVIRG);
-  }
 }
 
 /* Argument ::= ( <ID> | <STRING> | <INTEGER> ) */
@@ -701,8 +623,6 @@ void Argument() #ARGUMENT :
   Token t;
 }
 {
-  try
-  {
     (
     t = < ID >
     {
@@ -717,17 +637,6 @@ void Argument() #ARGUMENT :
       if(jjtThis.value != "")   jjtThis.value += " " + t.image;   else   jjtThis.value += t.image;
     }
     )
-  }
-  catch (ParseException e)
-  {
-    System.out.println(e.toString());
-    Token t2;
-    do
-    {
-      t2 = getNextToken();
-    }
-    while (t2.kind != PVIRG);
-  }
 }
 
 /* ArrayAccess ::= <ID> "[" Index "]"*/
@@ -765,8 +674,6 @@ void ScalarAccess() #SCALARACCESS :
   Token t;
 }
 {
-  try
-  {
     t = < ID >
     {
       if(jjtThis.value != "")   jjtThis.value += " " + t.image;   else   jjtThis.value += t.image;
@@ -777,17 +684,6 @@ void ScalarAccess() #SCALARACCESS :
     {
       if(jjtThis.value != "")   jjtThis.value += " " + t.image;   else   jjtThis.value += t.image;
     }) ?
-  }
-  catch (ParseException e)
-  {
-    System.out.println(e.toString());
-    Token t2;
-    do
-    {
-      t2 = getNextToken();
-    }
-    while (t2.kind != PVIRG);
-  }
 }
 
 /*Index ::= <ID> | <INTEGER>*/
@@ -796,8 +692,6 @@ void Index() #INDEX :
   Token t;
 }
 {
-  try
-  {
     t = < ID >
     {
       if(jjtThis.value != "")   jjtThis.value += " " + t.image;   else   jjtThis.value += t.image;
@@ -806,15 +700,4 @@ void Index() #INDEX :
     {
       if(jjtThis.value != "")   jjtThis.value += " " + t.image;   else   jjtThis.value += t.image;
     }
-  }
-  catch (ParseException e)
-  {
-    System.out.println(e.toString());
-    Token t2;
-    do
-    {
-      t2 = getNextToken();
-    }
-    while (t2.kind != PVIRG);
-  }
 }

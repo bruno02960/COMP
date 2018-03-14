@@ -7,21 +7,22 @@ public interface ExemploTreeConstants
   public int JJTVARLIST = 3;
   public int JJTARRAYELEMENT = 4;
   public int JJTSCALARELEMENT = 5;
-  public int JJTVOID = 6;
+  public int JJTSTMTLST = 6;
   public int JJTSTMT = 7;
   public int JJTASSIGN = 8;
-  public int JJTRHS = 9;
-  public int JJTARRAYSIZE = 10;
-  public int JJTTERM = 11;
-  public int JJTEXPRTEST = 12;
-  public int JJTWHILE = 13;
-  public int JJTID = 14;
-  public int JJTCALL = 15;
-  public int JJTARGUMENTLIST = 16;
-  public int JJTARGUMENT = 17;
-  public int JJTARRAYACCESS = 18;
-  public int JJTSCALARACCESS = 19;
-  public int JJTINDEX = 20;
+  public int JJTLHS = 9;
+  public int JJTRHS = 10;
+  public int JJTARRAYSIZE = 11;
+  public int JJTTERM = 12;
+  public int JJTEXPRTEST = 13;
+  public int JJTWHILE = 14;
+  public int JJTID = 15;
+  public int JJTCALL = 16;
+  public int JJTARGUMENTLIST = 17;
+  public int JJTARGUMENT = 18;
+  public int JJTARRAYACCESS = 19;
+  public int JJTSCALARACCESS = 20;
+  public int JJTINDEX = 21;
 
 
   public String[] jjtNodeName = {
@@ -31,9 +32,10 @@ public interface ExemploTreeConstants
     "VARLIST",
     "ARRAYELEMENT",
     "SCALARELEMENT",
-    "void",
+    "STMTLST",
     "STMT",
     "ASSIGN",
+    "LHS",
     "RHS",
     "ARRAYSIZE",
     "TERM",
@@ -48,4 +50,4 @@ public interface ExemploTreeConstants
     "INDEX",
   };
 }
-/* JavaCC - OriginalChecksum=1ec9fdf320fbee9f6718860a553ac2d5 (do not edit this line) */
+/* JavaCC - OriginalChecksum=7d535ab0ca842273e46480be46efd8df (do not edit this line) */
