@@ -1,7 +1,6 @@
 options
 {
   LOOKAHEAD= 1;
-
   MULTI = true;
 }
 
@@ -115,7 +114,7 @@ SimpleNode Module() #MODULE :
   {
     < MODULE > t = < ID >
     {
-      jjtThis.value = t.image;
+      jjtThis.name = t.image;
     }
     < LCHAVETA > (Declaration()) * (Function()) * < RCHAVETA >
   }
@@ -154,13 +153,14 @@ void Declaration() #DECLARATION() :
     ArraySize() < RPARRETO >)
   | (t = < ADDSUB_OP >
     {
-      if (jjtThis.value != "") jjtThis.value += " " + t.image;
-      else jjtThis.value += t.image;
+      if (jjtThis.operator != "")
+      	jjtThis.operator += " " + t.image;
+      else
+      	jjtThis.operator += t.image;
     }
     ) ? t = < INTEGER >
     {
-      if (jjtThis.value != "") jjtThis.value += " " + t.image;
-      else jjtThis.value += t.image;
+		jjtThis.integer = new Integer(t.image);
     }
     )) ? < PVIRG >
   }
@@ -189,14 +189,14 @@ void Function() #FUNCTION :
     ArrayElement()
   | ScalarElement()) < ASSIGN > t = < ID >
     {
-      if (jjtThis.value != "") jjtThis.value += " " + t.image;
-      else jjtThis.value += t.image;
+      if (jjtThis.id != "") jjtThis.id += " " + t.image;
+      else jjtThis.id += t.image;
     }
     < LPAR > (Varlist()) ? < RPAR >)
   | (< FUNCTION > t = < ID >
     {
-      if (jjtThis.value != "") jjtThis.value += " " + t.image;
-      else jjtThis.value += t.image;
+      if (jjtThis.id != "") jjtThis.id += " " + t.image;
+      else jjtThis.id += t.image;
     }
     < LPAR > (Varlist()) ? < RPAR >)) < LCHAVETA > Stmtlst() < RCHAVETA >
   }
@@ -241,8 +241,8 @@ void ArrayElement() #ARRAYELEMENT :
   {
     t = < ID >
     {
-      if (jjtThis.value != "") jjtThis.value += " " + t.image;
-      else jjtThis.value += t.image;
+      if (jjtThis.id != "") jjtThis.id += " " + t.image;
+      else jjtThis.id += t.image;
     }
     < LPARRETO > < RPARRETO >
   }
