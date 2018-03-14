@@ -4,23 +4,25 @@ options
   MULTI = true;
 }
 
-PARSER_BEGIN(Exemplo)
+PARSER_BEGIN(YalParser)
 import java.io.FileInputStream;
 import java.io.IOException;
 
-//código Java que invoca o parser 
-public class Exemplo
+
+public class YalParser
 {
   public static void main(String args []) throws ParseException, IOException
   {
-    //criação do objecto
-    Exemplo parser = new Exemplo(new FileInputStream("src/test.yal"));
+    //Create parser and parse
+    YalParser parser = new YalParser(new FileInputStream("src/test.yal"));
     SimpleNode root = parser.Module();
+
+    //Display tree
     root.dump("");
   }
 }
 
-PARSER_END(Exemplo)
+PARSER_END(YalParser)
 
 // definição dos tokens (símbolos terminais) 
 < DEFAULT >
@@ -139,7 +141,7 @@ SimpleNode Module() #MODULE :
 							( 	( "[" ArraySize "]" )
 							| (<ADDSUB_OP> )? <INTEGER> )
 															)? <PVIRG> */
-void Declaration() #DECLARATION() :
+void Declaration() #DECLARATION :
 {
   Token t;
 }

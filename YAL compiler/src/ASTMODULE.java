@@ -8,7 +8,7 @@ public class ASTMODULE extends SimpleNode {
 		super(id);
 	}
 
-	public ASTMODULE(Exemplo p, int id) {
+	public ASTMODULE(YalParser p, int id) {
 		super(p, id);
 	}
 

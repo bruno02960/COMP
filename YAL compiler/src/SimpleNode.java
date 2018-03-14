@@ -7,13 +7,13 @@ class SimpleNode implements Node {
   protected Node[] children;
   protected int id;
   protected String value = "";
-  protected Exemplo parser;
+  protected YalParser parser;
 
   public SimpleNode(int i) {
     id = i;
   }
 
-  public SimpleNode(Exemplo p, int i) {
+  public SimpleNode(YalParser p, int i) {
     this(i);
     parser = p;
   }
@@ -55,28 +55,14 @@ class SimpleNode implements Node {
      toString(String), otherwise overriding toString() is probably all
      you need to do. */
 
-  public String toString() { return ExemploTreeConstants.jjtNodeName[id]; }
+  public String toString() { return YalParserTreeConstants.jjtNodeName[id]; }
   public String toString(String prefix) { return prefix + toString(); }
 
   /* Override this method if you want to customize how the node dumps
      out its children. */
 
-  public void dump(String prefix) {
-    System.out.println(toString(prefix));
-    if (children == null) {
-    	System.out.println(prefix + "\"" + this.value + "\"");
-    }
-    if (children != null) {
-    	if(this.value != "")
-    		System.out.println(prefix + "\"" + this.value + "\"");
-      for (int i = 0; i < children.length; ++i) {
-        SimpleNode n = (SimpleNode)children[i];
-        if (n != null) {
-          n.dump(prefix + " ");
-        }
-      }
-    }
-  }
+  public void dump(String prefix) {}
+  
 }
 
 /* JavaCC - OriginalChecksum=30ae3df463cb6ba19429b4eac9290435 (do not edit this line) */

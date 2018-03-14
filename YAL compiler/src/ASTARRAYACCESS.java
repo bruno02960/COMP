@@ -6,9 +6,9 @@ class ASTARRAYACCESS extends SimpleNode {
     super(id);
   }
 
-  public ASTARRAYACCESS(Exemplo p, int id) {
+  public ASTARRAYACCESS(YalParser p, int id) {
     super(p, id);
   }
 
 }
-/* JavaCC - OriginalChecksum=e0229cc90fae74ce9fa380b3d1059961 (do not edit this line) */
+/* JavaCC - OriginalChecksum=6574219720363313732db25bd18012bc (do not edit this line) */

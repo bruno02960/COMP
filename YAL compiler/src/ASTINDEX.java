@@ -6,9 +6,9 @@ class ASTINDEX extends SimpleNode {
     super(id);
   }
 
-  public ASTINDEX(Exemplo p, int id) {
+  public ASTINDEX(YalParser p, int id) {
     super(p, id);
   }
 
 }
-/* JavaCC - OriginalChecksum=6cdf649ac9dfd5482db2faae8227a9d6 (do not edit this line) */
+/* JavaCC - OriginalChecksum=b3d757b886bb47f4c6cbd2218ec57c04 (do not edit this line) */

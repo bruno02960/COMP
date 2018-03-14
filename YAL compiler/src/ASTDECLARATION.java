@@ -9,7 +9,7 @@ public class ASTDECLARATION extends SimpleNode {
 		super(id);
 	}
 
-	public ASTDECLARATION(Exemplo p, int id) {
+	public ASTDECLARATION(YalParser p, int id) {
 		super(p, id);
 	}
 

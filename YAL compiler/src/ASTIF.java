@@ -6,9 +6,9 @@ class ASTIF extends SimpleNode {
     super(id);
   }
 
-  public ASTIF(Exemplo p, int id) {
+  public ASTIF(YalParser p, int id) {
     super(p, id);
   }
 
 }
-/* JavaCC - OriginalChecksum=70186ec23c5467e3d3fb2d0c083333b1 (do not edit this line) */
+/* JavaCC - OriginalChecksum=ab2cb94c39b89fe41cbe764770ad943d (do not edit this line) */

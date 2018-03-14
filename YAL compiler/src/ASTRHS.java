@@ -6,9 +6,9 @@ class ASTRHS extends SimpleNode {
     super(id);
   }
 
-  public ASTRHS(Exemplo p, int id) {
+  public ASTRHS(YalParser p, int id) {
     super(p, id);
   }
 
 }
-/* JavaCC - OriginalChecksum=23931e4bde4415406c7ace06dd9f3616 (do not edit this line) */
+/* JavaCC - OriginalChecksum=4cfc0a8c9e82e9fa096b84c26a34f603 (do not edit this line) */

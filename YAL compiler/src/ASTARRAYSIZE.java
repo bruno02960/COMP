@@ -6,9 +6,9 @@ class ASTARRAYSIZE extends SimpleNode {
     super(id);
   }
 
-  public ASTARRAYSIZE(Exemplo p, int id) {
+  public ASTARRAYSIZE(YalParser p, int id) {
     super(p, id);
   }
 
 }
-/* JavaCC - OriginalChecksum=e7aa7d7ca8f3cf9d8e4cbf84b1bbee9f (do not edit this line) */
+/* JavaCC - OriginalChecksum=a238e909d76a3d4158925ca6da835f3c (do not edit this line) */

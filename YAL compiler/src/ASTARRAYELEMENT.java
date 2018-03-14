@@ -8,7 +8,7 @@ public class ASTARRAYELEMENT extends SimpleNode {
 		super(id);
 	}
 
-	public ASTARRAYELEMENT(Exemplo p, int id) {
+	public ASTARRAYELEMENT(YalParser p, int id) {
 		super(p, id);
 	}
 

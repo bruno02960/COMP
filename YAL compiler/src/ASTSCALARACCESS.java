@@ -6,9 +6,9 @@ class ASTSCALARACCESS extends SimpleNode {
     super(id);
   }
 
-  public ASTSCALARACCESS(Exemplo p, int id) {
+  public ASTSCALARACCESS(YalParser p, int id) {
     super(p, id);
   }
 
 }
-/* JavaCC - OriginalChecksum=2099131e4dba80ed3ef7b4991df83627 (do not edit this line) */
+/* JavaCC - OriginalChecksum=bbd0ecb4b2a9ba1c85851106de049694 (do not edit this line) */

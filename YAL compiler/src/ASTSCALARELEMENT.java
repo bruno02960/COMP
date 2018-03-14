@@ -6,9 +6,9 @@ class ASTSCALARELEMENT extends SimpleNode {
     super(id);
   }
 
-  public ASTSCALARELEMENT(Exemplo p, int id) {
+  public ASTSCALARELEMENT(YalParser p, int id) {
     super(p, id);
   }
 
 }
-/* JavaCC - OriginalChecksum=017d76a99776255e9399c9811b98ec18 (do not edit this line) */
+/* JavaCC - OriginalChecksum=23516b9736804c0aa3da9178894e101f (do not edit this line) */

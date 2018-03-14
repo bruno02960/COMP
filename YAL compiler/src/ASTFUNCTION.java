@@ -8,7 +8,7 @@ public class ASTFUNCTION extends SimpleNode {
 		super(id);
 	}
 
-	public ASTFUNCTION(Exemplo p, int id) {
+	public ASTFUNCTION(YalParser p, int id) {
 		super(p, id);
 	}
 

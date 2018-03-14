@@ -6,9 +6,9 @@ class ASTCALL extends SimpleNode {
     super(id);
   }
 
-  public ASTCALL(Exemplo p, int id) {
+  public ASTCALL(YalParser p, int id) {
     super(p, id);
   }
 
 }
-/* JavaCC - OriginalChecksum=2918fe612d5f50080347e885c3c41883 (do not edit this line) */
+/* JavaCC - OriginalChecksum=38eb0a4d10c26f9cc1cc1d16c4d72dc8 (do not edit this line) */

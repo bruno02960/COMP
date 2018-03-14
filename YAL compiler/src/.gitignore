@@ -26,3 +26,9 @@
 /ASTSCALARELEMENT.java
 /ASTTERM.java
 /ASTWHILE.java
+/YalParser.java
+/YalParserConstants.java
+/YalParserTokenManager.java
+/JJTYalParserState.java
+/YalParserTreeConstants.java
+/YalParser.jj

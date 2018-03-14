@@ -6,9 +6,9 @@ class ASTARGUMENT extends SimpleNode {
     super(id);
   }
 
-  public ASTARGUMENT(Exemplo p, int id) {
+  public ASTARGUMENT(YalParser p, int id) {
     super(p, id);
   }
 
 }
-/* JavaCC - OriginalChecksum=09c62d73ff792928f87ef0972748a8e8 (do not edit this line) */
+/* JavaCC - OriginalChecksum=8487cc95adcac2e8e9f0ee712d2eb9c5 (do not edit this line) */

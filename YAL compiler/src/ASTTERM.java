@@ -6,9 +6,9 @@ class ASTTERM extends SimpleNode {
     super(id);
   }
 
-  public ASTTERM(Exemplo p, int id) {
+  public ASTTERM(YalParser p, int id) {
     super(p, id);
   }
 
 }
-/* JavaCC - OriginalChecksum=74f3e6d31cb433f38fcd49efcf597bd6 (do not edit this line) */
+/* JavaCC - OriginalChecksum=d3c6e82ee5fb454b3142fb846a70184e (do not edit this line) */

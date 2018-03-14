@@ -6,9 +6,9 @@ class ASTEXPRTEST extends SimpleNode {
     super(id);
   }
 
-  public ASTEXPRTEST(Exemplo p, int id) {
+  public ASTEXPRTEST(YalParser p, int id) {
     super(p, id);
   }
 
 }
-/* JavaCC - OriginalChecksum=84ace95a14ce1b83690e2ed7d5fb8266 (do not edit this line) */
+/* JavaCC - OriginalChecksum=36536559df5438e881ab911851494c63 (do not edit this line) */
