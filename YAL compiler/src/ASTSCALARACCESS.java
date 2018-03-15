@@ -2,13 +2,32 @@
 /* JavaCCOptions:MULTI=true,NODE_USES_PARSER=false,VISITOR=false,TRACK_TOKENS=false,NODE_PREFIX=AST,NODE_EXTENDS=,NODE_FACTORY=,SUPPORT_CLASS_VISIBILITY_PUBLIC=true */
 public
 class ASTSCALARACCESS extends SimpleNode {
-  public ASTSCALARACCESS(int id) {
-    super(id);
-  }
+	public String id;
+	
+	public ASTSCALARACCESS(int id) {
+	  super(id);
+	}
+	
+	public ASTSCALARACCESS(YalParser p, int id) {
+		super(p, id);
+	}
 
-  public ASTSCALARACCESS(YalParser p, int id) {
-    super(p, id);
-  }
-
+	public void dump(String prefix) {
+		System.out.println(toString(prefix));
+		if (children == null) {
+			if (this.id != null)
+				System.out.println(prefix + "\"" + this.id + "\"");
+		}
+		if (children != null) {
+			if (this.id != null)
+				System.out.println(prefix + "\"" + this.id +"\"");
+			for (int i = 0; i < children.length; ++i) {
+				SimpleNode n = (SimpleNode) children[i];
+				if (n != null) {
+					n.dump(prefix + " ");
+				}
+			}
+		}
+	}
 }
 /* JavaCC - OriginalChecksum=bbd0ecb4b2a9ba1c85851106de049694 (do not edit this line) */
