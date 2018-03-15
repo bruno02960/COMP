@@ -2,13 +2,38 @@
 /* JavaCCOptions:MULTI=true,NODE_USES_PARSER=false,VISITOR=false,TRACK_TOKENS=false,NODE_PREFIX=AST,NODE_EXTENDS=,NODE_FACTORY=,SUPPORT_CLASS_VISIBILITY_PUBLIC=true */
 public
 class ASTCALL extends SimpleNode {
-  public ASTCALL(int id) {
-    super(id);
-  }
-
-  public ASTCALL(YalParser p, int id) {
-    super(p, id);
-  }
+	public String module;
+	public String method;
+		
+	public ASTCALL(int id) {
+	  super(id);
+	}
+	
+	public ASTCALL(YalParser p, int id) {
+	  super(p, id);
+	}
+	
+	public void dump(String prefix) {
+		System.out.println(toString(prefix));
+		if (children == null) {
+			if (this.module != null)
+				System.out.println(prefix + "\"" + this.method + " ON MODULE " + this.module + "\"");
+			else
+				System.out.println(prefix + "\"" + this.method + "\"");
+		}
+		if (children != null) {
+			if (this.module != null)
+				System.out.println(prefix + "\"" + this.method + " ON MODULE " + this.module + "\"");
+			else
+				System.out.println(prefix + "\"" + this.method + "\"");
+			for (int i = 0; i < children.length; ++i) {
+				SimpleNode n = (SimpleNode) children[i];
+				if (n != null) {
+					n.dump(prefix + " ");
+				}
+			}
+		}
+	}
 
 }
 /* JavaCC - OriginalChecksum=38eb0a4d10c26f9cc1cc1d16c4d72dc8 (do not edit this line) */

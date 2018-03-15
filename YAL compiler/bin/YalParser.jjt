@@ -443,9 +443,10 @@ void Exprtest() #EXPRTEST :
   try
   {
     < LPAR > Lhs() t = < RELA_OP >
-    {
+    {/*
       if (jjtThis.value != "") jjtThis.value += " " + t.image;
-      else jjtThis.value += t.image;
+      else jjtThis.value += t.image;*/
+		jjtThis.operation = t.image;
     }
     Rhs() < RPAR >
   }
@@ -514,15 +515,16 @@ void Call() #CALL :
   {
     t = < ID >
     {
-      jjtThis.value = t.image;
+      jjtThis.method = t.image;
     }
     (< PONTO >
     {
-      jjtThis.value += ".";
+      
     }
     t = < ID >
     {
-      jjtThis.value += t.image;
+      jjtThis.module = jjtThis.method;
+      jjtThis.method = t.image;
     }
     ) ? < LPAR > 
     (
@@ -561,18 +563,15 @@ void Argument() #ARGUMENT :
   (
     t = < ID >
     {
-      if (jjtThis.value != "") jjtThis.value += " " + t.image;
-      else jjtThis.value += t.image;
+      jjtThis.idArg = t.image;
     }
   | t = < STRING >
     {
-      if (jjtThis.value != "") jjtThis.value += " " + t.image;
-      else jjtThis.value += t.image;
+      jjtThis.stringArg = t.image;
     }
   | t = < INTEGER >	
     {
-      if (jjtThis.value != "") jjtThis.value += " " + t.image;
-      else jjtThis.value += t.image;
+      jjtThis.intArg = Integer.parseInt(t.image);
     }
   )
 }
@@ -587,8 +586,7 @@ void ArrayAccess() #ARRAYACCESS :
   {
     t = < ID >
     {
-      if (jjtThis.value != "") jjtThis.value += " " + t.image;
-      else jjtThis.value += t.image;
+      jjtThis.arrayID = t.image;
     }
     < LPARRETO > Index() < RPARRETO >
   }
@@ -612,8 +610,7 @@ void ScalarAccess() #SCALARACCESS :
 {
   t = < ID >
   {
-    if (jjtThis.value != "") jjtThis.value += " " + t.image;
-    else jjtThis.value += t.image;
+    jjtThis.id = t.image;
   }
   (< PONTO > < SIZE >)?
 }
@@ -626,12 +623,10 @@ void Index() #INDEX :
 {
   t = < ID >
   {
-    if (jjtThis.value != "") jjtThis.value += " " + t.image;
-    else jjtThis.value += t.image;
+    jjtThis.indexID = t.image;
   }
 | t = < INTEGER >
   {
-    if (jjtThis.value != "") jjtThis.value += " " + t.image;
-    else jjtThis.value += t.image;
+    jjtThis.indexValue = Integer.parseInt(t.image);
   }
 }
