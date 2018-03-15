@@ -61,8 +61,21 @@ class SimpleNode implements Node {
   /* Override this method if you want to customize how the node dumps
      out its children. */
 
-  public void dump(String prefix) {}
-  
+  public void dump(String prefix) {System.out.println(toString(prefix));
+	if (children == null) {
+		System.out.println(prefix + "\"" + this.value + "\"");
+	}
+	if (children != null) {
+		if (this.value != "")
+			System.out.println(prefix + "\"" + this.value + "\"");
+		for (int i = 0; i < children.length; ++i) {
+			SimpleNode n = (SimpleNode) children[i];
+			if (n != null) {
+				n.dump(prefix + " ");
+			}
+		}
+	}
+  }
 }
 
 /* JavaCC - OriginalChecksum=30ae3df463cb6ba19429b4eac9290435 (do not edit this line) */
