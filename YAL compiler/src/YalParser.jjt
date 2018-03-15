@@ -178,10 +178,13 @@ void Declaration() #DECLARATION :
   }
 }
 
-/* Function ::= ( ( <FUNCTION> ( ArrayElement | ScalarElement ) <ASSIGN> <ID> <LPAR> (Varlist )? <RPAR> ) | ( <FUNCTION> <ID> <LPAR> ( Varlist )? <RPAR> ) )<LCHAVETA> Stmtlst <RCHAVETA> */
+/* Function ::= ( ( <FUNCTION> ( ArrayElement | ScalarElement ) <ASSIGN> <ID> <LPAR> (Varlist )? <RPAR> )
+| ( <FUNCTION> <ID> <LPAR> ( Varlist )? <RPAR> ) )<LCHAVETA> Stmtlst <RCHAVETA> */
 void Function() #FUNCTION :
 {
   Token t;
+  Token firstPath = null;
+  Token secondPath = null;
 }
 {
   try
@@ -205,12 +208,18 @@ void Function() #FUNCTION :
   catch (ParseException e)
   {
     System.out.println(e.toString());
+        int character;
+    if(secondPath == null)
+      	character = RPAR;
+    else
+   		character = RCHAVETA;
+
     Token t2;
     do
     {
       t2 = getNextToken();
     }
-    while (t2.kind != RCHAVETA);
+    while (t2.kind != character);
   }
 }
 
@@ -277,12 +286,6 @@ void ScalarElement() #SCALARELEMENT :
   catch (ParseException e)
   {
     System.out.println(e.toString());
-    Token t2;
-    do
-    {
-      t2 = getNextToken();
-    }
-    while (t2.kind != ID);
   }
 }
 
@@ -463,44 +466,59 @@ void Exprtest() #EXPRTEST :
 
 /*While ::= <WHILE> Exprtest <LCHAVETA> Stmtlst <RCHAVETA> */
 void While() #WHILE :
-{}
+{
+	Token L_Chaveta = null;
+}
 {
   try
   {
-    < WHILE > Exprtest() < LCHAVETA > Stmtlst() < RCHAVETA >
+    < WHILE > Exprtest() L_Chaveta = < LCHAVETA > Stmtlst() < RCHAVETA >
   }
   catch (ParseException e)
   {
     System.out.println(e.toString());
-    Token t2;
-    do
+     if(L_Chaveta != null)
     {
-      t2 = getNextToken();
-    }
-    while (t2.kind != RCHAVETA);
+	    Token t2;
+	    do
+	    {
+	      t2 = getNextToken();
+	    }
+	    while (t2.kind != RCHAVETA);
+	}
   }
 }
 
 /*If ::= <IF> Exprtest <LCHAVETA> Stmtlst <RCHAVETA> ( <ELSE> <LCHAVETA> Stmtlst <RCHAVETA> )? */
 void If() #IF :
-{}
+{
+	Token L_Chaveta_IF = null;
+	Token L_Chaveta_ELSE = null;
+}
 {
   try
   {
-    < IF > Exprtest() < LCHAVETA > Stmtlst() < RCHAVETA > 
+    < IF > Exprtest() L_Chaveta_IF = < LCHAVETA > Stmtlst() < RCHAVETA > 
     (
-    < ELSE > < LCHAVETA > Stmtlst() < RCHAVETA >
+    	L_Chaveta_ELSE = < ELSE > < LCHAVETA > Stmtlst() < RCHAVETA >
     ) ?
   }
   catch (ParseException e)
   {
     System.out.println(e.toString());
+    
+    int character;
+    if(L_Chaveta_IF != null  || L_Chaveta_ELSE != null)
+    	character = PVIRG;
+    else
+    	character = RCHAVETA;
+
     Token t2;
-    do
+   	do
     {
       t2 = getNextToken();
     }
-    while (t2.kind != RCHAVETA);
+    while (t2.kind != character);
   }
 }
 
@@ -508,6 +526,7 @@ void If() #IF :
 void Call() #CALL :
 {
   Token t;
+  Token L_Par = null;
 }
 {
   try
@@ -524,7 +543,7 @@ void Call() #CALL :
     {
       jjtThis.value += t.image;
     }
-    ) ? < LPAR > 
+    ) ? L_Par = < LPAR > 
     (
     ArgumentList()
     ) ? 
@@ -533,12 +552,15 @@ void Call() #CALL :
   catch (ParseException e)
   {
     System.out.println(e.toString());
-    Token t2;
-    do
+   	if(L_Par != null)
     {
-      t2 = getNextToken();
-    }
-    while (t2.kind != RPAR);
+      Token t2;
+	    do
+	    {
+	      t2 = getNextToken();
+	    }
+	    while (t2.kind != RPAR);
+  }
   }
 }
 
@@ -581,6 +603,7 @@ void Argument() #ARGUMENT :
 void ArrayAccess() #ARRAYACCESS :
 {
   Token t;
+  Token L_Par = null;
 }
 {
   try
@@ -590,17 +613,20 @@ void ArrayAccess() #ARRAYACCESS :
       if (jjtThis.value != "") jjtThis.value += " " + t.image;
       else jjtThis.value += t.image;
     }
-    < LPARRETO > Index() < RPARRETO >
+    L_Par = < LPARRETO > Index() < RPARRETO >
   }
   catch (ParseException e)
   {
     System.out.println(e.toString());
-    Token t2;
-    do
+    if(L_Par != null)
     {
-      t2 = getNextToken();
-    }
-    while (t2.kind != RPARRETO);
+	    Token t2;
+	    do
+	    {
+	      t2 = getNextToken();
+	    }
+	    while (t2.kind != RPARRETO);
+	}
   }
 }
 
