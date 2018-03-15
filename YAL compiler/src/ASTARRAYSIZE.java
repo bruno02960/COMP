@@ -2,6 +2,9 @@
 /* JavaCCOptions:MULTI=true,NODE_USES_PARSER=false,VISITOR=false,TRACK_TOKENS=false,NODE_PREFIX=AST,NODE_EXTENDS=,NODE_FACTORY=,SUPPORT_CLASS_VISIBILITY_PUBLIC=true */
 public
 class ASTARRAYSIZE extends SimpleNode {
+	
+  public Integer integer = null;
+	
   public ASTARRAYSIZE(int id) {
     super(id);
   }
@@ -9,6 +12,25 @@ class ASTARRAYSIZE extends SimpleNode {
   public ASTARRAYSIZE(YalParser p, int id) {
     super(p, id);
   }
+  
+	public void dump(String prefix) {
+		if(this.integer == null)
+			return;
+		
+		System.out.println(toString(prefix));
+		if (children == null) {
+			System.out.println(prefix + "\"" + this.integer + "\"");
+		}
+		if (children != null) {
+				System.out.println(prefix + "\"" + this.integer + "\"");
+			for (int i = 0; i < children.length; ++i) {
+				SimpleNode n = (SimpleNode) children[i];
+				if (n != null) {
+					n.dump(prefix + " ");
+				}
+			}
+		}
+	}
 
 }
 /* JavaCC - OriginalChecksum=a238e909d76a3d4158925ca6da835f3c (do not edit this line) */

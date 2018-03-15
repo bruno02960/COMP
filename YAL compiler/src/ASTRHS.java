@@ -2,6 +2,8 @@
 /* JavaCCOptions:MULTI=true,NODE_USES_PARSER=false,VISITOR=false,TRACK_TOKENS=false,NODE_PREFIX=AST,NODE_EXTENDS=,NODE_FACTORY=,SUPPORT_CLASS_VISIBILITY_PUBLIC=true */
 public
 class ASTRHS extends SimpleNode {
+  public String operator = "";
+	
   public ASTRHS(int id) {
     super(id);
   }
@@ -9,6 +11,23 @@ class ASTRHS extends SimpleNode {
   public ASTRHS(YalParser p, int id) {
     super(p, id);
   }
+  
+  public void dump(String prefix) {
+		System.out.println(toString(prefix));
+		if (children == null) {
+			System.out.println(prefix + "\"" + this.operator + "\"");
+		}
+		if (children != null) {
+			if (this.operator != "")
+				System.out.println(prefix + "\"" + this.operator + "\"");
+			for (int i = 0; i < children.length; ++i) {
+				SimpleNode n = (SimpleNode) children[i];
+				if (n != null) {
+					n.dump(prefix + " ");
+				}
+			}
+		}
+	}
 
 }
 /* JavaCC - OriginalChecksum=4cfc0a8c9e82e9fa096b84c26a34f603 (do not edit this line) */
