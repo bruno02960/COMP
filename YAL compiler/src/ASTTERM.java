@@ -2,6 +2,11 @@
 /* JavaCCOptions:MULTI=true,NODE_USES_PARSER=false,VISITOR=false,TRACK_TOKENS=false,NODE_PREFIX=AST,NODE_EXTENDS=,NODE_FACTORY=,SUPPORT_CLASS_VISIBILITY_PUBLIC=true */
 public
 class ASTTERM extends SimpleNode {
+  public Integer integer = null;
+  public String operator = "";
+  
+  
+	
   public ASTTERM(int id) {
     super(id);
   }
@@ -9,6 +14,25 @@ class ASTTERM extends SimpleNode {
   public ASTTERM(YalParser p, int id) {
     super(p, id);
   }
+  
+	public void dump(String prefix) {
+		if(this.integer == null)
+			return;
+		
+		System.out.println(toString(prefix));
+		if (children == null) {
+			System.out.println(prefix + "\"" + this.operator + this.integer + "\"");
+		}
+		if (children != null) {
+			System.out.println(prefix + "\"" + this.operator + this.integer + "\"");
+			for (int i = 0; i < children.length; ++i) {
+				SimpleNode n = (SimpleNode) children[i];
+				if (n != null) {
+					n.dump(prefix + " ");
+				}
+			}
+		}
+	}
 
 }
 /* JavaCC - OriginalChecksum=d3c6e82ee5fb454b3142fb846a70184e (do not edit this line) */

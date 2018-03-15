@@ -270,8 +270,8 @@ void ScalarElement() #SCALARELEMENT :
   {
     t = < ID >
     {
-      if (jjtThis.value != "") jjtThis.value += " " + t.image;
-      else jjtThis.value += t.image;
+      if (jjtThis.id != "") jjtThis.id += " " + t.image;
+      else jjtThis.id += t.image;
     }
   }
   catch (ParseException e)
@@ -362,18 +362,18 @@ void Rhs() #RHS :
     (
     t = < ARITH_OP >
     {
-      if (jjtThis.value != "") jjtThis.value += " " + t.image;
-      else jjtThis.value += t.image;
+      if (jjtThis.operator != "") jjtThis.operator += " " + t.image;
+      else jjtThis.operator += t.image;
     }
   | t = < BITWISE_OP >
     {
-      if (jjtThis.value != "") jjtThis.value += " " + t.image;
-      else jjtThis.value += t.image;
+      if (jjtThis.operator != "") jjtThis.operator += " " + t.image;
+      else jjtThis.operator += t.image;
     }
   | t = < ADDSUB_OP >
     {
-      if (jjtThis.value != "") jjtThis.value += " " + t.image;
-      else jjtThis.value += t.image;
+      if (jjtThis.operator != "") jjtThis.operator += " " + t.image;
+      else jjtThis.operator += t.image;
     }
     ) 
     Term()
@@ -402,8 +402,8 @@ void ArraySize() #ARRAYSIZE :
   ScalarAccess()
 | t = < INTEGER >
   {
-    if (jjtThis.value != "") jjtThis.value += " " + t.image;
-    else jjtThis.value += t.image;
+    if (jjtThis.integer != null) jjtThis.integer = new Integer(t.image);
+    else jjtThis.integer = new Integer(t.image);
   }
 }
 
@@ -416,15 +416,15 @@ void Term() #TERM :
   (
     t = < ADDSUB_OP >
     {
-      if (jjtThis.value != "") jjtThis.value += " " + t.image;
-      else jjtThis.value += t.image;
+      if (jjtThis.operator != "") jjtThis.operator += " " + t.image;
+      else jjtThis.operator += t.image;
     }
   )?
   (
     t = < INTEGER >
     {
-      if (jjtThis.value != "") jjtThis.value += " " + t.image;
-      else jjtThis.value += t.image;
+      if (jjtThis.integer != null) jjtThis.integer = new Integer(t.image);
+      else jjtThis.integer = new Integer(t.image);
     }
   | LOOKAHEAD(3)
     Call()
