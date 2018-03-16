@@ -499,7 +499,7 @@ void If() #IF :
   {
     < IF > Exprtest() L_Chaveta_IF = < LCHAVETA > Stmtlst() < RCHAVETA > 
     (
-    	L_Chaveta_ELSE = < ELSE > < LCHAVETA > Stmtlst() < RCHAVETA >
+    	Else()
     ) ?
   }
   catch (ParseException e)
@@ -518,6 +518,35 @@ void If() #IF :
       t2 = getNextToken();
     }
     while (t2.kind != character);
+  }
+}
+
+/*Else ::= < ELSE > < LCHAVETA > Stmtlst() < RCHAVETA > */
+void Else() #ELSE :
+{
+	Token L_Chaveta_ELSE = null;
+}
+{
+  try
+  {
+	L_Chaveta_ELSE = < ELSE > < LCHAVETA > Stmtlst() < RCHAVETA >
+  }
+  catch (ParseException e)
+  {
+    System.out.println(e.toString());
+    
+    int character;
+    if(L_Chaveta_ELSE != null)
+    	character = PVIRG;
+    else
+    	character = RCHAVETA;
+
+    Token t2;
+   	do
+    {
+      t2 = getNextToken();
+    }
+    while (t2.kind != RCHAVETA);
   }
 }
 
