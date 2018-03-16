@@ -5,20 +5,43 @@ options
 }
 
 PARSER_BEGIN(YalParser)
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 
 
 public class YalParser
 {
   public static void main(String args []) throws ParseException, IOException
   {
+     //read filepath from user as commmand line argument
+    if(args.length == 0)
+    {
+      System.out.println("Usage: YalParser <filepath>");
+      System.exit(-1);
+    }
+	String filepath = args[0];
+    
     //Create parser and parse
-    YalParser parser = new YalParser(new FileInputStream("src/test.yal"));
+    YalParser parser = new YalParser(new FileInputStream(filepath));
     SimpleNode root = parser.Module();
 
     //Display tree
     root.dump("");
+    }
+
+   public static ArrayList<String> listFilesForFolder(final File folder)
+ {
+  ArrayList<String> list = new ArrayList<String>();
+     for (final File fileEntry : folder.listFiles())
+     {
+         if (fileEntry.isDirectory())
+             list.addAll(listFilesForFolder(fileEntry));
+         else
+          list.add(fileEntry.getName());
+     }
+  return list;
   }
 }
 
@@ -169,6 +192,8 @@ void Declaration() #DECLARATION :
   catch (ParseException e)
   {
     System.out.println(e.toString());
+     System.out.println("Declaration");
+    
     Token t2;
     do
     {
@@ -183,44 +208,57 @@ void Declaration() #DECLARATION :
 void Function() #FUNCTION :
 {
   Token t;
-  Token firstPath = null;
-  Token secondPath = null;
 }
 {
   try
   {
-    (LOOKAHEAD(3)
+	 (LOOKAHEAD(3)
     (< FUNCTION > (LOOKAHEAD(2)
     ArrayElement()
-  | ScalarElement()) < ASSIGN > t = < ID >
+  | ScalarElement())
+   < ASSIGN > t = < ID >
     {
       if (jjtThis.id != "") jjtThis.id += " " + t.image;
       else jjtThis.id += t.image;
     }
-    < LPAR > (Varlist()) ? < RPAR >)
+ 	)
   | (< FUNCTION > t = < ID >
     {
       if (jjtThis.id != "") jjtThis.id += " " + t.image;
       else jjtThis.id += t.image;
     }
-    < LPAR > (Varlist()) ? < RPAR >)) < LCHAVETA > Stmtlst() < RCHAVETA >
+    ))
+  }
+   catch (ParseException e)
+  {
+    System.out.println(e.toString());
+		
+	Token t2;
+    do
+    {
+      getNextToken();
+      t2 = getToken(1);
+    }
+    while (t2.kind != LPAR);
+	}  
+    
+  try
+  {
+  	 < LPAR > (Varlist())? < RPAR >
   }
   catch (ParseException e)
   {
     System.out.println(e.toString());
-        int character;
-    if(secondPath == null)
-      	character = RPAR;
-    else
-   		character = RCHAVETA;
-
-    Token t2;
+	Token t2;
     do
     {
       t2 = getNextToken();
     }
-    while (t2.kind != character);
-  }
+    while (t2.kind != RPAR);
+	}
+
+
+  < LCHAVETA > Stmtlst() < RCHAVETA >
 }
 
 /* Varlist ::= ( ArrayElement | ScalarElement ) ( <VIRG> ( ArrayElement | ScalarElement ))* */
@@ -308,7 +346,33 @@ void Stmt() #void :
   | If()
   | LOOKAHEAD(3)
     Assign()
-  | Call() < PVIRG >
+  | Call() <  PVIRG >
+  }
+  catch (ParseException e)
+  {
+    System.out.println(e.toString());
+    Token t2;
+    do
+    {
+     t2 = getNextToken();
+      if(t2.kind == LCHAVETA)
+      	{
+      	  System.out.println("entrei no if");
+      	  ParseBlock();
+      	  break;
+      	}
+    }
+    while (t2.kind != PVIRG);
+  }
+}
+
+/* ParseBlock ::= Stmtlst <RCHAVETA>*/
+void ParseBlock() #void :
+{}
+{
+  try
+  {
+    Stmtlst() <RCHAVETA>
   }
   catch (ParseException e)
   {
@@ -318,7 +382,50 @@ void Stmt() #void :
     {
       t2 = getNextToken();
     }
-    while (t2.kind != PVIRG);
+    while (t2.kind != RCHAVETA);
+  }
+}
+
+/*Call ::= <ID> ( "." <ID> )? <LPAR> ( ArgumentList )? <RPAR> */
+void CallStatement() #CALL :
+{
+  Token t;
+  Token L_Par = null;
+}
+{
+  try
+  {
+    t = < ID >
+    {
+      jjtThis.method = t.image;
+    }
+    (< PONTO >
+    {
+      
+    }
+    t = < ID >
+    {
+      jjtThis.module = jjtThis.method;
+      jjtThis.method = t.image;
+    }
+    ) ? L_Par = < LPAR > 
+    (
+    ArgumentList()
+    ) ? 
+    < RPAR > < PVIRG >
+  }
+  catch (ParseException e)
+  {
+     System.out.println("CALL");
+    System.out.println(e.toString());
+   
+      Token t2;
+	    do
+	    {
+	      t2 = getNextToken();
+	    }
+	    while (t2.kind != PVIRG && t2.kind != RPAR);
+ 
   }
 }
 
@@ -332,6 +439,7 @@ void Assign() #void :
   }
   catch (ParseException e)
   {
+     System.out.println("Assign");
     System.out.println(e.toString());
     Token t2;
     do
@@ -357,8 +465,7 @@ void Rhs() #RHS :
   Token t;
 }
 {
-  try
-  {
+  
     (
     Term() 
     (
@@ -383,17 +490,7 @@ void Rhs() #RHS :
     ) ?
     )
   | < LPARRETO > ArraySize() < RPARRETO >
-  }
-  catch (ParseException e)
-  {
-    System.out.println(e.toString());
-    Token t2;
-    do
-    {
-      t2 = getNextToken();
-    }
-    while (t2.kind != RPARRETO);
-  }
+
 }
 
 /* ArraySize ::= ScalarAccess | <INTEGER> */
@@ -505,7 +602,7 @@ void If() #IF :
   catch (ParseException e)
   {
     System.out.println(e.toString());
-    
+    System.out.println("if");
     int character;
     if(L_Chaveta_IF != null  || L_Chaveta_ELSE != null)
     	character = PVIRG;
@@ -557,8 +654,7 @@ void Call() #CALL :
   Token L_Par = null;
 }
 {
-  try
-  {
+
     t = < ID >
     {
       jjtThis.method = t.image;
@@ -578,20 +674,7 @@ void Call() #CALL :
     ) ? 
     < RPAR >
   }
-  catch (ParseException e)
-  {
-    System.out.println(e.toString());
-   	if(L_Par != null)
-    {
-      Token t2;
-	    do
-	    {
-	      t2 = getNextToken();
-	    }
-	    while (t2.kind != RPAR);
-  }
-  }
-}
+
 
 /* ArgumentList ::= Argument ( <VIRG> Argument )* */
 void ArgumentList() #void :
@@ -643,6 +726,7 @@ void ArrayAccess() #ARRAYACCESS :
   catch (ParseException e)
   {
     System.out.println(e.toString());
+    System.out.println("ArrayAccess");
     if(L_Par != null)
     {
 	    Token t2;

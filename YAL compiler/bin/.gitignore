@@ -39,3 +39,8 @@
 /ASTSIZE.java
 /ASTELSE.java
 /.gitignore
+/YalParser.jjt
+/test.yal
+/test2.yal
+/MyFirstYalExamples/
+/MyFirstYalExamples_err/

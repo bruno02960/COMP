@@ -2,7 +2,6 @@ options
 {
   LOOKAHEAD= 1;
   MULTI = true;
-  STATIC = false;
 }
 
 PARSER_BEGIN(YalParser)
@@ -16,21 +15,21 @@ public class YalParser
 {
   public static void main(String args []) throws ParseException, IOException
   {
-  File folder = new File("src\\MyFirstYalExamples_err");
-
-   ArrayList<String> listFileNames = listFilesForFolder(folder);
-   for(int i = 0; i < listFileNames.size(); i++)
-   {
-    if(listFileNames.get(i).contains(".yal") )
+     //read filepath from user as commmand line argument
+    if(args.length == 0)
     {
-     System.out.println(listFileNames.get(i) + "###########\u005cn\u005cn");
-     SimpleNode root = new YalParser(new FileInputStream("src\\MyFirstYalExamples_err\\" + listFileNames.get(i))).Module();
-		//root.dump("");
-
+      System.out.println("Usage: YalParser <filepath>");
+      System.exit(-1);
     }
-   }
+	String filepath = args[0];
+    
+    //Create parser and parse
+    YalParser parser = new YalParser(new FileInputStream(filepath));
+    SimpleNode root = parser.Module();
 
-  }
+    //Display tree
+    root.dump("");
+    }
 
    public static ArrayList<String> listFilesForFolder(final File folder)
  {
@@ -544,7 +543,7 @@ void Exprtest() #EXPRTEST :
   try
   {
     < LPAR > Lhs() t = < RELA_OP >
-    {/*
+    {
 		jjtThis.operation = t.image;
     }
     Rhs() < RPAR >
