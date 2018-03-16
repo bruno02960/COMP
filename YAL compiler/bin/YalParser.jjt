@@ -224,7 +224,7 @@ void Function() #FUNCTION :
 }
 
 /* Varlist ::= ( ArrayElement | ScalarElement ) ( <VIRG> ( ArrayElement | ScalarElement ))* */
-void Varlist() #void :
+void Varlist() #ARGUMENTS :
 {}
 {
   (
@@ -290,7 +290,7 @@ void ScalarElement() #SCALARELEMENT :
 }
 
 /* Stmtlst ::= ( Stmt )* */
-void Stmtlst() #void :
+void Stmtlst() #STATEMENTS :
 {}
 {
   (
