@@ -5,10 +5,8 @@ options
 }
 
 PARSER_BEGIN(YalParser)
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.ArrayList;
 
 
 public class YalParser
@@ -30,19 +28,6 @@ public class YalParser
     //Display tree
     root.dump("");
     }
-
-   public static ArrayList<String> listFilesForFolder(final File folder)
- {
-  ArrayList<String> list = new ArrayList<String>();
-     for (final File fileEntry : folder.listFiles())
-     {
-         if (fileEntry.isDirectory())
-             list.addAll(listFilesForFolder(fileEntry));
-         else
-          list.add(fileEntry.getName());
-     }
-  return list;
-  }
 }
 
 PARSER_END(YalParser)
@@ -192,7 +177,6 @@ void Declaration() #DECLARATION :
   catch (ParseException e)
   {
     System.out.println(e.toString());
-     System.out.println("Declaration");
     
     Token t2;
     do
@@ -249,6 +233,7 @@ void Function() #FUNCTION :
   catch (ParseException e)
   {
     System.out.println(e.toString());
+    
 	Token t2;
     do
     {
@@ -357,7 +342,6 @@ void Stmt() #void :
      t2 = getNextToken();
       if(t2.kind == LCHAVETA)
       	{
-      	  System.out.println("entrei no if");
       	  ParseBlock();
       	  break;
       	}
@@ -390,7 +374,6 @@ void ParseBlock() #void :
 void CallStatement() #CALL :
 {
   Token t;
-  Token L_Par = null;
 }
 {
   try
@@ -408,7 +391,7 @@ void CallStatement() #CALL :
       jjtThis.module = jjtThis.method;
       jjtThis.method = t.image;
     }
-    ) ? L_Par = < LPAR > 
+    ) ?  < LPAR > 
     (
     ArgumentList()
     ) ? 
@@ -416,7 +399,6 @@ void CallStatement() #CALL :
   }
   catch (ParseException e)
   {
-     System.out.println("CALL");
     System.out.println(e.toString());
    
       Token t2;
@@ -439,7 +421,6 @@ void Assign() #void :
   }
   catch (ParseException e)
   {
-     System.out.println("Assign");
     System.out.println(e.toString());
     Token t2;
     do
@@ -602,7 +583,6 @@ void If() #IF :
   catch (ParseException e)
   {
     System.out.println(e.toString());
-    System.out.println("if");
     int character;
     if(L_Chaveta_IF != null  || L_Chaveta_ELSE != null)
     	character = PVIRG;
@@ -620,23 +600,15 @@ void If() #IF :
 
 /*Else ::= < ELSE > < LCHAVETA > Stmtlst() < RCHAVETA > */
 void Else() #ELSE :
-{
-	Token L_Chaveta_ELSE = null;
-}
+{}
 {
   try
   {
-	L_Chaveta_ELSE = < ELSE > < LCHAVETA > Stmtlst() < RCHAVETA >
+	< ELSE > < LCHAVETA > Stmtlst() < RCHAVETA >
   }
   catch (ParseException e)
   {
     System.out.println(e.toString());
-    
-    int character;
-    if(L_Chaveta_ELSE != null)
-    	character = PVIRG;
-    else
-    	character = RCHAVETA;
 
     Token t2;
    	do
@@ -651,7 +623,6 @@ void Else() #ELSE :
 void Call() #CALL :
 {
   Token t;
-  Token L_Par = null;
 }
 {
 
@@ -668,7 +639,7 @@ void Call() #CALL :
       jjtThis.module = jjtThis.method;
       jjtThis.method = t.image;
     }
-    ) ? L_Par = < LPAR > 
+    ) ? < LPAR > 
     (
     ArgumentList()
     ) ? 
@@ -726,7 +697,7 @@ void ArrayAccess() #ARRAYACCESS :
   catch (ParseException e)
   {
     System.out.println(e.toString());
-    System.out.println("ArrayAccess");
+   
     if(L_Par != null)
     {
 	    Token t2;
