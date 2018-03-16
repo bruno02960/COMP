@@ -446,9 +446,7 @@ void Exprtest() #EXPRTEST :
   try
   {
     < LPAR > Lhs() t = < RELA_OP >
-    {/*
-      if (jjtThis.value != "") jjtThis.value += " " + t.image;
-      else jjtThis.value += t.image;*/
+    {
 		jjtThis.operation = t.image;
     }
     Rhs() < RPAR >
@@ -638,7 +636,10 @@ void ScalarAccess() #SCALARACCESS :
   {
     jjtThis.id = t.image;
   }
-  (< PONTO > < SIZE >)?
+  (< PONTO > t = < SIZE >
+  {
+    jjtThis.id += ".size";
+  })?
 }
 
 /*Index ::= <ID> | <INTEGER>*/

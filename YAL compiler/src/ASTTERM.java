@@ -15,16 +15,15 @@ class ASTTERM extends SimpleNode {
     super(p, id);
   }
   
-	public void dump(String prefix) {
-		if(this.integer == null)
-			return;
-		
+	public void dump(String prefix) {		
 		System.out.println(toString(prefix));
 		if (children == null) {
-			System.out.println(prefix + "\"" + this.operator + this.integer + "\"");
+			if(this.integer != null)
+				System.out.println(prefix + "\"" + this.operator + this.integer + "\"");
 		}
 		if (children != null) {
-			System.out.println(prefix + "\"" + this.operator + this.integer + "\"");
+			if(this.integer != null)
+				System.out.println(prefix + "\"" + this.operator + this.integer + "\"");
 			for (int i = 0; i < children.length; ++i) {
 				SimpleNode n = (SimpleNode) children[i];
 				if (n != null) {

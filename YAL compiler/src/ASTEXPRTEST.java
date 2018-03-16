@@ -19,7 +19,7 @@ class ASTEXPRTEST extends SimpleNode {
 		}
 		if (children != null) {
 			if (this.operation != "")
-				System.out.println(prefix + "\"" + this.id + "\"");
+				System.out.println(prefix + "\"" + this.operation + "\"");
 			for (int i = 0; i < children.length; ++i) {
 				SimpleNode n = (SimpleNode) children[i];
 				if (n != null) {
