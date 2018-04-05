@@ -6,8 +6,8 @@ options
 }
 
 PARSER_BEGIN(YalParser)
-import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.FileInputStream;
 
 public class YalParser
 {
@@ -199,14 +199,12 @@ void Function() #FUNCTION :
   | ScalarElement()) 
     < ASSIGN > t = < ID >
     {
-      if (jjtThis.id != "") jjtThis.id += " " + t.image;
-      else jjtThis.id += t.image;
+      jjtThis.id = t.image;
     }
     )
   | (< FUNCTION > t = < ID >
     {
-      if (jjtThis.id != "") jjtThis.id += " " + t.image;
-      else jjtThis.id += t.image;
+      jjtThis.id = t.image;
     }
     ))
   }
@@ -267,8 +265,7 @@ void ArrayElement() #ARRAYELEMENT :
   {
     t = < ID >
     {
-      if (jjtThis.id != "") jjtThis.id += " " + t.image;
-      else jjtThis.id += t.image;
+      jjtThis.id = t.image;
     }
     < LPARRETO > < RPARRETO >
   }
@@ -441,18 +438,15 @@ void Rhs() #RHS :
       (
         t = < ARITH_OP >
         {
-          if (jjtThis.operator != "") jjtThis.operator += " " + t.image;
-          else jjtThis.operator += t.image;
+          jjtThis.operator = t.image;
         }
       | t = < BITWISE_OP >
         {
-          if (jjtThis.operator != "") jjtThis.operator += " " + t.image;
-          else jjtThis.operator += t.image;
+          jjtThis.operator = t.image;
         }
       | t = < ADDSUB_OP >
         {
-          if (jjtThis.operator != "") jjtThis.operator += " " + t.image;
-          else jjtThis.operator += t.image;
+          jjtThis.operator = t.image;
         }
       )
       Term()
