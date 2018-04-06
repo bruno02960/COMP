@@ -11,21 +11,26 @@ import java.io.FileInputStream;
 
 public class YalParser
 {
-  public static void main(String args []) throws ParseException, IOException
-  {
-    //read filepath from user as commmand line argument
-    if (args.length == 0)
-    {
-      System.out.println("Usage: YalParser <filepath>");
-      System.exit(- 1);
-    }
-    String filepath = args [0];
-    //Create parser and parse
-    YalParser parser = new YalParser(new FileInputStream(filepath));
-    SimpleNode root = parser.Module();
-    //Display tree
-    root.dump("");
-  }
+	static ErrorCounter errorCounter = new ErrorCounter();
+
+	public static void main(String args []) throws ParseException, IOException
+	{
+		//read filepath from user as commmand line argument
+		if (args.length == 0)
+		{
+		  System.out.println("Usage: YalParser <filepath>");
+		  System.exit(- 1);
+		}
+		
+		String filepath = args [0];
+		
+		//Create parser and parse
+		YalParser parser = new YalParser(new FileInputStream(filepath));
+		SimpleNode root = parser.Module();
+		
+		//Display tree
+		root.dump("");
+	}
 }
 
 PARSER_END(YalParser)
@@ -129,6 +134,10 @@ SimpleNode Module() #MODULE :
   catch (ParseException e)
   {
     System.out.println(e.toString());
+    
+    if (errorCounter.errorControl())
+    	System.exit(1);
+
     Token t2;
     do
     {
@@ -175,6 +184,11 @@ void Declaration() #DECLARATION :
   catch (ParseException e)
   {
     System.out.println(e.toString());
+    
+    if (errorCounter.errorControl())
+    	System.exit(1);
+
+    
     Token t2;
     do
     {
@@ -211,6 +225,11 @@ void Function() #FUNCTION :
   catch (ParseException e)
   {
     System.out.println(e.toString());
+    
+    if (errorCounter.errorControl())
+    	System.exit(1);
+
+    
     Token t2;
     do
     {
@@ -226,6 +245,11 @@ void Function() #FUNCTION :
   catch (ParseException e)
   {
     System.out.println(e.toString());
+    
+    if (errorCounter.errorControl())
+    	System.exit(1);
+
+    
     Token t2;
     do
     {
@@ -272,6 +296,11 @@ void ArrayElement() #ARRAYELEMENT :
   catch (ParseException e)
   {
     System.out.println(e.toString());
+    
+    if (errorCounter.errorControl())
+    	System.exit(1);
+
+    
     Token t2;
     do
     {
@@ -298,6 +327,9 @@ void ScalarElement() #SCALARELEMENT :
   catch (ParseException e)
   {
     System.out.println(e.toString());
+    
+    if (errorCounter.errorControl())
+    	System.exit(1);
   }
 }
 
@@ -325,6 +357,11 @@ void Stmt() #void :
   catch (ParseException e)
   {
     System.out.println(e.toString());
+    
+    if (errorCounter.errorControl())
+    	System.exit(1);
+
+    
     Token t2;
     do
     {
@@ -350,6 +387,11 @@ void ParseBlock() #void :
   catch (ParseException e)
   {
     System.out.println(e.toString());
+    
+    if (errorCounter.errorControl())
+    	System.exit(1);
+
+    
     Token t2;
     do
     {
@@ -388,6 +430,11 @@ void CallStatement() #CALL :
   catch (ParseException e)
   {
     System.out.println(e.toString());
+    
+    if (errorCounter.errorControl())
+    	System.exit(1);
+
+    
     Token t2;
     do
     {
@@ -408,6 +455,11 @@ void Assign() #void :
   catch (ParseException e)
   {
     System.out.println(e.toString());
+    
+    if (errorCounter.errorControl())
+    	System.exit(1);
+
+    
     Token t2;
     do
     {
@@ -513,6 +565,11 @@ void Exprtest() #EXPRTEST :
   catch (ParseException e)
   {
     System.out.println(e.toString());
+    
+    if (errorCounter.errorControl())
+    	System.exit(1);
+
+    
     Token t2;
     do
     {
@@ -535,6 +592,11 @@ void While() #WHILE :
   catch (ParseException e)
   {
     System.out.println(e.toString());
+    
+    if (errorCounter.errorControl())
+    	System.exit(1);
+
+    
     if (L_Chaveta != null)
     {
       Token t2;
@@ -564,6 +626,11 @@ void If() #IF :
   catch (ParseException e)
   {
     System.out.println(e.toString());
+    
+    if (errorCounter.errorControl())
+    	System.exit(1);
+
+    
     int character;
     if (L_Chaveta_IF != null || L_Chaveta_ELSE != null) 
     character = PVIRG;
@@ -589,6 +656,11 @@ void Else() #ELSE :
   catch (ParseException e)
   {
     System.out.println(e.toString());
+    
+    if (errorCounter.errorControl())
+    	System.exit(1);
+
+    
     Token t2;
     do
     {
@@ -673,6 +745,11 @@ void ArrayAccess() #ARRAYACCESS :
   catch (ParseException e)
   {
     System.out.println(e.toString());
+    
+    if (errorCounter.errorControl())
+    	System.exit(1);
+
+    
     if (L_Par != null)
     {
       Token t2;
