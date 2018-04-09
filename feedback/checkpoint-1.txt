@@ -1,0 +1,13 @@
+CHECKPOINT 1 FEEDBACK
+=====================
+Class 5 - Group 52
+
+High-priority:
+	- Some node values are constructed with string concatenations that seem unnecessary:
+		- e.g., Term(), Function(), ArrayElement()
+	- In While(), the operation "if (L_Chaveta != null)" could be more cleanly implemented by separating the body of the "try" into 2 separate "try/catch" blocks.
+
+Low-priority:
+	- Stop after the first 10 parser errors
+	- Consider outputting "prettier" (i.e., cleaner and more informative) error messages.
+	- Consider rewriting the grammar to avoid use of LOOKAHEADs.
