@@ -7,7 +7,7 @@ import yal2jvm.ast.ParseException;
 import yal2jvm.ast.SimpleNode;
 import yal2jvm.ast.YalParser; 
 
-public class Yal2jvm implements Runnable
+public class Yal2jvm
 {
 	private int localVars;
 	private boolean optimize;
@@ -82,7 +82,6 @@ public class Yal2jvm implements Runnable
 		}
 	}
 
-	@Override
 	public void run()
 	{
 		FileInputStream inputStream = getFileStream();
