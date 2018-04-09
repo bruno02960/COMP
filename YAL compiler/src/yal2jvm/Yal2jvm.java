@@ -5,7 +5,7 @@ import java.io.FileNotFoundException;
 
 import yal2jvm.ast.ParseException;
 import yal2jvm.ast.SimpleNode;
-import yal2jvm.ast.YalParser;
+import yal2jvm.ast.YalParser; 
 
 public class Yal2jvm implements Runnable
 {

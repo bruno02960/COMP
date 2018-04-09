@@ -39,7 +39,4 @@
 /ASTSIZE.java
 /ASTELSE.java
 /.gitignore
-/YalParser.jjt
-/test.yal
-/test2.yal
 /yal2jvm/
