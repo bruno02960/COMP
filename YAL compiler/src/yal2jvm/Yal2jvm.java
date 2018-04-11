@@ -2,13 +2,11 @@ package yal2jvm;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 
 import yal2jvm.SymbolTables.Symbol;
 import yal2jvm.SymbolTables.SymbolTable;
-import yal2jvm.ast.ParseException;
-import yal2jvm.ast.SimpleNode;
-import yal2jvm.ast.YalParser; 
+import yal2jvm.ast.*;
 
 public class Yal2jvm
 {
@@ -16,7 +14,7 @@ public class Yal2jvm
 	private boolean optimize;
 	private String inputFile;
 	private SimpleNode ast;
-	private SymbolTable globals = new SymbolTable();
+	private SymbolTable globalsSymbols = new SymbolTable();
 
 	public Yal2jvm(int localVars, boolean optimize, String inputFile)
 	{
@@ -93,21 +91,66 @@ public class Yal2jvm
 		
 		ast = createAst(inputStream);
 		ast.dump("");
+
+		initiateGlobalSymbolTable();
 	}
 	
-	private void initiateGlobalAST()
+	private void initiateGlobalSymbolTable()
 	{
 		int numChildren = ast.jjtGetNumChildren();
 		
 		for(int i = 0; i < numChildren; i++)
 		{
-			SimpleNode child = (SimpleNode) ast.jjtGetChild(i);
-			Symbol symbol = new Symbol(child.jjtGetId(), child.jjtGetValue());
-			globals.addSymbolAndSymbolName(symbol, child.jjtGetId());
-			//add id to the ast of globals
+			Node child = ast.jjtGetChild(i);
+			String type = child.toString();
+			String name = null;
+			switch (type)
+			{
+				case "FUNCTION":
+					name = ((ASTFUNCTION) child).id;
+					break;
+				case "DECLARATION":
+					name = getDeclarationId((ASTDECLARATION) child);
+					ArrayList<Integer> values = getValuesFromDeclarationIfExists(astscalarelement);
+					break;
+				default:
+					//TODO
+
+			}
+			Symbol symbol = new Symbol(name, type);
+			System.out.println("symbol name: " + name);
+			System.out.println("symbol type: " + type);
+			globalsSymbols.addSymbolAndSymbolName(symbol, name);
 		}
 	}
-	
+
+	private ArrayList<Integer> getValuesFromScalarElementDeclarationIfExists(ASTSCALARELEMENT astscalarelement)
+	{
+		ArrayList<Integer> values = new ArrayList<>();
+		values.add(Integer.parseInt(astscalarelement.jjtGetValue()));
+		return values;
+	}
+
+	private ArrayList<Integer> getValuesFromArrayElementDeclarationIfExists(ASTARRAYELEMENT astarrayelement)
+	{
+		ArrayList<Integer> values = new ArrayList<>();
+		values.add(Integer.parseInt(astarrayelement.jjtGetValue()));
+		return values;
+	}
+
+	private String getDeclarationId(ASTDECLARATION astdeclaration)
+	{
+		Node node = astdeclaration.jjtGetChild(0);
+		if(node instanceof ASTSCALARELEMENT)
+		{
+			ASTSCALARELEMENT astscalarelement = (ASTSCALARELEMENT)node;
+			getValuesFromDeclarationIfExists(astscalarelement);
+			return (astscalarelement.id;
+		}
+		else
+			return ((ASTARRAYELEMENT)node).id;
+	}
+
 	private FileInputStream getFileStream()
 	{
 		FileInputStream inputStream = null;
