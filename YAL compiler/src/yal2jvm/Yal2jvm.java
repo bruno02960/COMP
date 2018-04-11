@@ -2,7 +2,10 @@ package yal2jvm;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.time.temporal.ChronoUnit;
 
+import yal2jvm.SymbolTables.Symbol;
+import yal2jvm.SymbolTables.SymbolTable;
 import yal2jvm.ast.ParseException;
 import yal2jvm.ast.SimpleNode;
 import yal2jvm.ast.YalParser; 
@@ -12,6 +15,8 @@ public class Yal2jvm
 	private int localVars;
 	private boolean optimize;
 	private String inputFile;
+	private SimpleNode ast;
+	private SymbolTable globals = new SymbolTable();
 
 	public Yal2jvm(int localVars, boolean optimize, String inputFile)
 	{
@@ -86,8 +91,21 @@ public class Yal2jvm
 	{
 		FileInputStream inputStream = getFileStream();
 		
-		SimpleNode ast = createAst(inputStream);
+		ast = createAst(inputStream);
 		ast.dump("");
+	}
+	
+	private void initiateGlobalAST()
+	{
+		int numChildren = ast.jjtGetNumChildren();
+		
+		for(int i = 0; i < numChildren; i++)
+		{
+			SimpleNode child = (SimpleNode) ast.jjtGetChild(i);
+			Symbol symbol = new Symbol(child.jjtGetId(), child.jjtGetValue());
+			globals.addSymbolAndSymbolName(symbol, child.jjtGetId());
+			//add id to the ast of globals
+		}
 	}
 	
 	private FileInputStream getFileStream()

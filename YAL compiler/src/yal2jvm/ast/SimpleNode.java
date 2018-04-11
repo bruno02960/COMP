@@ -26,6 +26,8 @@ class SimpleNode implements Node {
 	  public void jjtClose() {
 	  }
 
+		public int jjtGetId() { return id; }
+
 	  public void jjtSetParent(Node n) { parent = n; }
 	  public Node jjtGetParent() { return parent; }
 
@@ -49,7 +51,7 @@ class SimpleNode implements Node {
 	  }
 
 	  public void jjtSetValue(String value) { this.value = value; }
-	  public Object jjtGetValue() { return value; }
+	  public String jjtGetValue() { return value; }
 
 	  /* You can override these two methods in subclasses of SimpleNode to
 	     customize the way the node appears when the tree is dumped.  If
