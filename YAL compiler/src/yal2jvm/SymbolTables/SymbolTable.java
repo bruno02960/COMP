@@ -8,9 +8,9 @@ public class SymbolTable
 
     public SymbolTable(){}
     
-    public void addSymbolAndSymbolName(Symbol symbol, String symbolName)
+    public void addSymbolAndSymbolName(Symbol symbol)
     {
-        nameToSymbol.put(symbolName, symbol);
+        nameToSymbol.put(symbol.getName(), symbol);
     }
 
     public Symbol getSymbolBySymbolName(String symbolName)

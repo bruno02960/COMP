@@ -7,7 +7,7 @@ public class Symbol
 {
     private String name;
     private String type;
-    private ArrayList<Integer> values = new ArrayList<Integer>(); //can be just one value or multiple if is an array
+    private ArrayList<Integer> values; //can be just one value or multiple if is an array
 
     public Symbol(String name, String type)
     {
@@ -15,4 +15,15 @@ public class Symbol
         this.type = type;
     }
 
+    public Symbol(String name, String type, ArrayList<Integer> values)
+    {
+        this.name = name;
+        this.type = type;
+        this.values = values;
+    }
+
+    public String getName()
+    {
+        return name;
+    }
 }
