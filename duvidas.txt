@@ -1,0 +1,5 @@
+ver declaration ser tipo a[] = 5 que pela regra parece isso e nao aceita.
+e se for do tipo a[5] = 10; tambem dá erro...como fazer?
+
+
+ver todo's
