@@ -124,14 +124,14 @@ public class ModuleAnalysis extends Analysis
             SimpleNode child = (SimpleNode) arguments.jjtGetChild(i);
             if( child != null)
             {
-                if(arguments instanceof ASTSCALARELEMENT)
+                if(child instanceof ASTSCALARELEMENT)
                 {
-                    ASTSCALARELEMENT astscalarelement = (ASTSCALARELEMENT)arguments;
+                    ASTSCALARELEMENT astscalarelement = (ASTSCALARELEMENT)child;
                     argumentsSymbols.add(getSymbolsFromScalarElementDeclarationIfExists(astscalarelement));
                 }
                 else
                 {
-                    ASTARRAYELEMENT astarrayelement = (ASTARRAYELEMENT)arguments;
+                    ASTARRAYELEMENT astarrayelement = (ASTARRAYELEMENT)child;
                     argumentsSymbols.add(getSymbolsFromArrayElementDeclarationIfExists(astarrayelement));
                 }
             }
