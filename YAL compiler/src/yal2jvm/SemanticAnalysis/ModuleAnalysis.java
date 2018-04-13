@@ -53,6 +53,16 @@ public class ModuleAnalysis extends Analysis
         {
             case "FUNCTION":
                 FunctionSymbol functionSymbol = parseFunctionChild(child);
+                //TODO DEBUG TIRAR
+                System.out.println("functionSymbol name: " + functionSymbol.getName());
+                System.out.println("functionSymbol arguments: ");
+                for(int i = 0; i < functionSymbol.getArguments().size(); i++)
+                {
+                    System.out.println("id: " + functionSymbol.getArguments().get(i).getId() + " type: " + functionSymbol.getArguments().get(i).getType() + " ");
+                }
+
+                System.out.println("functionSymbol returnValue type: " + functionSymbol.getReturnValue().getType());
+                System.out.println("functionSymbol returnValue id: " + functionSymbol.getReturnValue().getId());
                 break;
             case "DECLARATION":
                 Node node = child.jjtGetChild(0);
@@ -68,19 +78,21 @@ public class ModuleAnalysis extends Analysis
                     values = getValuesFromArrayElementDeclarationIfExists(astarrayelement);
                     name = astarrayelement.id;
                 }
+                //TODO DEBUG TIRAR
+                System.out.println("symbol name: " + name);
+                System.out.println("symbol type: " + type);
+                System.out.println("values: ");
+                for(int i = 0; i < values.size(); i++)
+                {
+                    System.out.println(values.get(i) + " ");
+                }
                 break;
             default:
                 //TODO
 
         }
 
-        System.out.println("symbol name: " + name);
-        System.out.println("symbol type: " + type);
-        System.out.println("values: ");
-        for(int i = 0; i < values.size(); i++)
-        {
-            System.out.println(values.get(i) + " ");
-        }
+
 
         return new Symbol(name, type, values);
     }
@@ -95,7 +107,7 @@ public class ModuleAnalysis extends Analysis
         Symbol returnValue = null;
         SimpleNode returnValueNode = (SimpleNode) functionNode.jjtGetChild(0);
         if(returnValueNode instanceof ASTSTATEMENTS)
-            return null;
+            return new FunctionSymbol((SimpleNode) functionNode, id, null, null);;
         if(!(returnValueNode instanceof ASTARGUMENTS))
         {
             argumentsIndex++;
@@ -140,9 +152,10 @@ public class ModuleAnalysis extends Analysis
         return new FunctionSymbol((SimpleNode) functionNode, id, argumentsSymbols, returnValue);
     }
 
-    private Symbol getSymbolsFromArrayElementDeclarationIfExists(ASTARRAYELEMENT astscalarelement)
+    private Symbol getSymbolsFromArrayElementDeclarationIfExists(ASTARRAYELEMENT astarrayelement)
     {
-        return null;
+        String arrayElementId = astarrayelement.id;
+        return new Symbol(arrayElementId, "ARRAYELEMENT");
     }
 
     private Symbol getSymbolsFromScalarElementDeclarationIfExists(ASTSCALARELEMENT astscalarelement)

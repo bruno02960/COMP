@@ -18,4 +18,44 @@ public class FunctionSymbol
         this.arguments = arguments;
         this.returnValue = returnValue;
     }
+
+    public SimpleNode getFunctionAST()
+    {
+        return functionAST;
+    }
+
+    public void setFunctionAST(SimpleNode functionAST)
+    {
+        this.functionAST = functionAST;
+    }
+
+    public String getName()
+    {
+        return name;
+    }
+
+    public void setName(String name)
+    {
+        this.name = name;
+    }
+
+    public ArrayList<Symbol> getArguments()
+    {
+        return arguments;
+    }
+
+    public void setArguments(ArrayList<Symbol> arguments)
+    {
+        this.arguments = arguments;
+    }
+
+    public Symbol getReturnValue()
+    {
+        return returnValue;
+    }
+
+    public void setReturnValue(Symbol returnValue)
+    {
+        this.returnValue = returnValue;
+    }
 }
