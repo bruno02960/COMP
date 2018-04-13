@@ -26,4 +26,9 @@ public class Symbol
     {
         return name;
     }
+
+    public String getType()
+    {
+        return type;
+    }
 }
