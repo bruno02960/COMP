@@ -134,7 +134,7 @@ SimpleNode Module()         :
   {
     < MODULE > t = < ID >
     {
-      jjtn000.name = t.image;
+      jjtn000.id = t.image;
     }
     < LCHAVETA > (Declaration()) * (Function()) * < RCHAVETA >
   }

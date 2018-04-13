@@ -10,7 +10,7 @@ public class SymbolTable
     
     public void addSymbolAndSymbolName(Symbol symbol)
     {
-        nameToSymbol.put(symbol.getName(), symbol);
+        nameToSymbol.put(symbol.getId(), symbol);
     }
 
     public Symbol getSymbolBySymbolName(String symbolName)

@@ -23,7 +23,7 @@ public class ModuleAnalysis extends Analysis
         {
             Node child = ast.jjtGetChild(i);
             Symbol symbol = createSymbol(child);
-            mySymbols.put(symbol.getName(), symbol);
+            mySymbols.put(symbol.getId(), symbol);
         }
 
         //TODO ver analise semantica
@@ -64,9 +64,9 @@ public class ModuleAnalysis extends Analysis
                 }
                 else
                 {
-                    ASTARRAYELEMENT astscalarelement = (ASTARRAYELEMENT)node;
-                    values = getValuesFromArrayElementDeclarationIfExists(astscalarelement);
-                    name = astscalarelement.id;
+                    ASTARRAYELEMENT astarrayelement = (ASTARRAYELEMENT)node;
+                    values = getValuesFromArrayElementDeclarationIfExists(astarrayelement);
+                    name = astarrayelement.id;
                 }
                 break;
             default:
@@ -87,40 +87,68 @@ public class ModuleAnalysis extends Analysis
 
     private FunctionSymbol parseFunctionChild(Node functionNode)
     {
-        String name = ((ASTFUNCTION) functionNode).id;
+        String id = ((ASTFUNCTION) functionNode).id;
 
-        //arguments
-        ArrayList<Symbol> argumentsSymbols = new ArrayList<>();
-        SimpleNode arguments = (SimpleNode) functionNode.jjtGetChild(0);
-        if(arguments != null)
+        int argumentsIndex = 0;
+
+        //return value
+        Symbol returnValue = null;
+        SimpleNode returnValueNode = (SimpleNode) functionNode.jjtGetChild(0);
+        if(returnValueNode instanceof ASTSTATEMENTS)
+            return null;
+        if(!(returnValueNode instanceof ASTARGUMENTS))
         {
-            if(arguments instanceof ASTSCALARELEMENT)
+            argumentsIndex++;
+            if(returnValueNode instanceof ASTSCALARELEMENT)
             {
-                ASTSCALARELEMENT astscalarelement = (ASTSCALARELEMENT)arguments;
-                argumentsSymbols = getSymbolsFromScalarElementDeclarationIfExists(astscalarelement);
-                name = astscalarelement.id;
+                ASTSCALARELEMENT astscalarelement = (ASTSCALARELEMENT)returnValueNode;
+                String returnValueId = astscalarelement.id;
+                returnValue = new Symbol(returnValueId, "ASTSCALARELEMENT");
             }
             else
             {
-                ASTARRAYELEMENT astscalarelement = (ASTARRAYELEMENT)arguments;
-                argumentsSymbols = getSymbolsFromArrayElementDeclarationIfExists(astscalarelement);
-                name = astscalarelement.id;
+                ASTARRAYELEMENT astarrayelement = (ASTARRAYELEMENT)returnValueNode;
+                String returnValueId = astarrayelement.id;
+                returnValue = new Symbol(returnValueId, "ASTARRAYELEMENT");
             }
         }
-        //return value
 
+        //arguments
+        SimpleNode arguments = (SimpleNode) functionNode.jjtGetChild(argumentsIndex);
+        if(arguments == null)
+            return new FunctionSymbol((SimpleNode) functionNode, id, null, returnValue);
 
-        return new FunctionSymbol(child, name, argumentsSymbols, returnValue);
+        ArrayList<Symbol> argumentsSymbols = new ArrayList<>();
+        for(int i = 0; i < arguments.jjtGetNumChildren(); i++)
+        {
+            SimpleNode child = (SimpleNode) arguments.jjtGetChild(i);
+            if( child != null)
+            {
+                if(arguments instanceof ASTSCALARELEMENT)
+                {
+                    ASTSCALARELEMENT astscalarelement = (ASTSCALARELEMENT)arguments;
+                    argumentsSymbols.add(getSymbolsFromScalarElementDeclarationIfExists(astscalarelement));
+                }
+                else
+                {
+                    ASTARRAYELEMENT astarrayelement = (ASTARRAYELEMENT)arguments;
+                    argumentsSymbols.add(getSymbolsFromArrayElementDeclarationIfExists(astarrayelement));
+                }
+            }
+        }
+
+        return new FunctionSymbol((SimpleNode) functionNode, id, argumentsSymbols, returnValue);
     }
 
-    private ArrayList<Symbol> getSymbolsFromArrayElementDeclarationIfExists(ASTARRAYELEMENT astscalarelement)
+    private Symbol getSymbolsFromArrayElementDeclarationIfExists(ASTARRAYELEMENT astscalarelement)
     {
         return null;
     }
 
-    private ArrayList<Symbol> getSymbolsFromScalarElementDeclarationIfExists(ASTSCALARELEMENT astscalarelement)
+    private Symbol getSymbolsFromScalarElementDeclarationIfExists(ASTSCALARELEMENT astscalarelement)
     {
-        return null;
+        String scalarElementId = astscalarelement.id;
+        return new Symbol(scalarElementId, "SCALARELEMENT");
     }
 
     private ArrayList<Integer> getValuesFromScalarElementDeclarationIfExists(ASTSCALARELEMENT astscalarelement)

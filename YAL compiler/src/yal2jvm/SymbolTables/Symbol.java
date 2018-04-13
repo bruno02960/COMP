@@ -5,26 +5,26 @@ import java.util.ArrayList;
 
 public class Symbol
 {
-    private String name;
+    private String id;
     private String type;
     private ArrayList<Integer> values; //can be just one value or multiple if is an array
 
-    public Symbol(String name, String type)
+    public Symbol(String id, String type)
     {
-        this.name = name;
+        this.id = id;
         this.type = type;
     }
 
-    public Symbol(String name, String type, ArrayList<Integer> values)
+    public Symbol(String id, String type, ArrayList<Integer> values)
     {
-        this.name = name;
+        this.id = id;
         this.type = type;
         this.values = values;
     }
 
-    public String getName()
+    public String getId()
     {
-        return name;
+        return id;
     }
 
     public String getType()
