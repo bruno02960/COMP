@@ -4,6 +4,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
+import yal2jvm.SemanticAnalysis.ModuleAnalysis;
 import yal2jvm.SymbolTables.Symbol;
 import yal2jvm.SymbolTables.SymbolTable;
 import yal2jvm.ast.*;
@@ -14,7 +15,6 @@ public class Yal2jvm
 	private boolean optimize;
 	private String inputFile;
 	private SimpleNode ast;
-	private SymbolTable globalsSymbols = new SymbolTable();
 
 	public Yal2jvm(int localVars, boolean optimize, String inputFile)
 	{
@@ -92,81 +92,8 @@ public class Yal2jvm
 		ast = createAst(inputStream);
 		ast.dump("");
 
-		initiateGlobalSymbolTable();
-	}
-	
-	private void initiateGlobalSymbolTable()
-	{
-		int numChildren = ast.jjtGetNumChildren();
-		
-		for(int i = 0; i < numChildren; i++)
-		{
-			Node child = ast.jjtGetChild(i);
-			Symbol symbol = createSymbol(child);
-			globalsSymbols.addSymbolAndSymbolName(symbol);
-		}
-	}
-
-	private Symbol createSymbol(Node child)
-	{
-		String type = child.toString();
-		String name = null;
-		ArrayList<Integer> values = null;
-		switch (type)
-		{
-			case "FUNCTION":
-				name = ((ASTFUNCTION) child).id;
-				break;
-			case "DECLARATION":
-				Node node = child.jjtGetChild(0);
-				if(node instanceof ASTSCALARELEMENT)
-				{
-					ASTSCALARELEMENT astscalarelement = (ASTSCALARELEMENT)node;
-					values = getValuesFromScalarElementDeclarationIfExists(astscalarelement);
-					name = astscalarelement.id;
-				}
-				else
-				{
-					ASTARRAYELEMENT astscalarelement = (ASTARRAYELEMENT)node;
-					values = getValuesFromArrayElementDeclarationIfExists(astscalarelement);
-					name = astscalarelement.id;
-				}
-				break;
-			default:
-				//TODO
-
-		}
-
-		System.out.println("symbol name: " + name);
-		System.out.println("symbol type: " + type);
-		System.out.println("values: ");
-		for(int i = 0; i < values.size(); i++)
-		{
-			System.out.println(values.get(i) + " ");
-		}
-
-		return new Symbol(name, type, values);
-	}
-
-	private ArrayList<Integer> getValuesFromScalarElementDeclarationIfExists(ASTSCALARELEMENT astscalarelement)
-	{
-		ArrayList<Integer> values = new ArrayList<>();
-		String value = astscalarelement.jjtGetValue();
-		if(value != "")
-			values.add(Integer.parseInt(value));
-		return values;
-	}
-
-	private ArrayList<Integer> getValuesFromArrayElementDeclarationIfExists(ASTARRAYELEMENT astarrayelement)
-	{
-		String value = astarrayelement.jjtGetValue();
-		if(value != "")
-		{
-			Integer arraySize = Integer.parseInt(value);
-			return new ArrayList<>(arraySize);
-		}
-
-		return null;
+        ModuleAnalysis moduleAnalysis = new ModuleAnalysis(ast, null);
+        moduleAnalysis.initiateGlobalSymbolTable();
 	}
 
 	private FileInputStream getFileStream()
