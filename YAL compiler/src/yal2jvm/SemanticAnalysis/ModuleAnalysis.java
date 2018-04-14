@@ -15,7 +15,7 @@ public class ModuleAnalysis extends Analysis
         super(ast, inheritedSymbols);
     }
 
-    public void initiateGlobalSymbolTable()
+    private void initiateGlobalSymbolTable()
     {
         int numChildren = ast.jjtGetNumChildren();
 
@@ -31,7 +31,9 @@ public class ModuleAnalysis extends Analysis
 
     public void parse()
     {
-        for(int i = 0; i < this.mySymbols.size(); i++)
+        initiateGlobalSymbolTable();
+        int numSimbols = this.mySymbols.size();
+        for(int i = 0; i < numSimbols; i++)
         {
           if(this.mySymbols.get(i).getType().equals("FUNCTION"))
           {
@@ -39,8 +41,6 @@ public class ModuleAnalysis extends Analysis
               functionAnalysis.parse();
           }
         }
-
-
 
     }
 
@@ -92,18 +92,15 @@ public class ModuleAnalysis extends Analysis
 
         }
 
-
-
         return new Symbol(name, type, values);
     }
 
     private FunctionSymbol parseFunctionChild(Node functionNode)
     {
         String id = ((ASTFUNCTION) functionNode).id;
+        int argumentsIndex = 0; //indicates the index(child num) of the arguments. 0 if no return value, or 1 if has return value.
 
-        int argumentsIndex = 0;
-
-        //return value
+        //get return value if existent
         Symbol returnValue = null;
         SimpleNode returnValueNode = (SimpleNode) functionNode.jjtGetChild(0);
         if(returnValueNode instanceof ASTSTATEMENTS)
@@ -125,7 +122,7 @@ public class ModuleAnalysis extends Analysis
             }
         }
 
-        //arguments
+        //get arguments if existent
         SimpleNode arguments = (SimpleNode) functionNode.jjtGetChild(argumentsIndex);
         if(arguments == null)
             return new FunctionSymbol((SimpleNode) functionNode, id, null, returnValue);
@@ -136,32 +133,22 @@ public class ModuleAnalysis extends Analysis
             SimpleNode child = (SimpleNode) arguments.jjtGetChild(i);
             if( child != null)
             {
+                Symbol symbol;
                 if(child instanceof ASTSCALARELEMENT)
                 {
                     ASTSCALARELEMENT astscalarelement = (ASTSCALARELEMENT)child;
-                    argumentsSymbols.add(getSymbolsFromScalarElementDeclarationIfExists(astscalarelement));
+                    symbol = new Symbol(astscalarelement.id, "SCALARELEMENT");
                 }
                 else
                 {
                     ASTARRAYELEMENT astarrayelement = (ASTARRAYELEMENT)child;
-                    argumentsSymbols.add(getSymbolsFromArrayElementDeclarationIfExists(astarrayelement));
+                    symbol = new Symbol(astarrayelement.id, "ARRAYELEMENT");
                 }
+                argumentsSymbols.add(symbol);
             }
         }
 
         return new FunctionSymbol((SimpleNode) functionNode, id, argumentsSymbols, returnValue);
-    }
-
-    private Symbol getSymbolsFromArrayElementDeclarationIfExists(ASTARRAYELEMENT astarrayelement)
-    {
-        String arrayElementId = astarrayelement.id;
-        return new Symbol(arrayElementId, "ARRAYELEMENT");
-    }
-
-    private Symbol getSymbolsFromScalarElementDeclarationIfExists(ASTSCALARELEMENT astscalarelement)
-    {
-        String scalarElementId = astscalarelement.id;
-        return new Symbol(scalarElementId, "SCALARELEMENT");
     }
 
     private ArrayList<Integer> getValuesFromScalarElementDeclarationIfExists(ASTSCALARELEMENT astscalarelement)

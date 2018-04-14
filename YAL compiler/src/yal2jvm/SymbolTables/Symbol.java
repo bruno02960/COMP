@@ -27,8 +27,28 @@ public class Symbol
         return id;
     }
 
+    public void setId(String id)
+    {
+        this.id = id;
+    }
+
     public String getType()
     {
         return type;
+    }
+
+    public void setType(String type)
+    {
+        this.type = type;
+    }
+
+    public ArrayList<Integer> getValues()
+    {
+        return values;
+    }
+
+    public void setValues(ArrayList<Integer> values)
+    {
+        this.values = values;
     }
 }

@@ -19,4 +19,16 @@ public abstract class Analysis
     }
 
     protected abstract void parse();
+
+    protected Symbol hasAccessToSymbol(String symbolId)
+    {
+        Symbol symbol;
+        symbol = mySymbols.get(symbolId);
+        if(symbol != null)
+            return symbol;
+        else
+            symbol = inheritedSymbols.get(symbolId);
+
+        return symbol;
+    }
 }

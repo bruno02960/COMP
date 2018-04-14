@@ -93,7 +93,7 @@ public class Yal2jvm
 		ast.dump("");
 
         ModuleAnalysis moduleAnalysis = new ModuleAnalysis(ast, null);
-        moduleAnalysis.initiateGlobalSymbolTable();
+        moduleAnalysis.parse();
 	}
 
 	private FileInputStream getFileStream()
