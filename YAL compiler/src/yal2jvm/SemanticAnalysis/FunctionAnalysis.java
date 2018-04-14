@@ -32,7 +32,7 @@ public class FunctionAnalysis extends Analysis
                 sizeAccess = true;
             id = id.substring(0, dotIdx);
         }
-        System.out.println("\nid: " + id);
+        System.out.println("\nid: " + id);//TODO
         Symbol symbol = hasAccessToSymbol(id);
         if(symbol == null)
         {
@@ -49,6 +49,28 @@ public class FunctionAnalysis extends Analysis
         if(symbol.getType().equals("ARRAYELEMENT") && !sizeAccess)
         {
             System.out.println("Access to size of variable +" + id + " that is not an array."); //TODO linha
+            return null;
+        }
+
+        return symbol;
+    }
+
+    //don't use in Declaration
+    private Symbol parseScalarElement()
+    {
+        String id = ((ASTSCALARACCESS) ast.jjtGetChild(0)).id;
+        System.out.println("\nid: " + id);//TODO
+        Symbol symbol = hasAccessToSymbol(id);
+        if(symbol == null)
+        {
+            System.out.println("Access to undeclared variable +" + id + "."); //TODO linha
+            return null;
+        }
+
+        //TODO nao faz sentido em todos os casos apenas quando é read da variavel
+        if(symbol.getValues() == null)
+        {
+            System.out.println("Access to uninitialized variable +" + id + "."); //TODO linha
             return null;
         }
 
