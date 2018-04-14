@@ -2,6 +2,7 @@ package yal2jvm.SemanticAnalysis;
 
 import yal2jvm.Analysis;
 import yal2jvm.SymbolTables.Symbol;
+import yal2jvm.ast.ASTARRAYACCESS;
 import yal2jvm.ast.ASTSCALARACCESS;
 import yal2jvm.ast.SimpleNode;
 
@@ -19,7 +20,50 @@ public class FunctionAnalysis extends Analysis
     protected void parse()
     {
         parseScalarAccess();
+        parseArrayAccess();
     }
+
+    private Symbol parseArrayAccess()
+    {
+        String array = ((ASTARRAYACCESS) ast.jjtGetChild(0)).arrayID;
+
+        int lbrIdx = array.indexOf("[");
+        int rbrIdx = array.indexOf("]");
+
+        String id = array.substring(0, lbrIdx);
+        String idxStr = array.substring(lbrIdx + 1, rbrIdx);
+
+        int index = Integer.parseInt(idxStr);
+        System.out.println("\nindex: " + index);//TODO
+
+        Symbol symbol = hasAccessToSymbol(id);
+        if(symbol == null)
+        {
+            System.out.println("Access to undeclared variable +" + id + "."); //TODO linha
+            return null;
+        }
+
+        if(symbol.getValues() == null)
+        {
+            System.out.println("Access to uninitialized variable +" + id + "."); //TODO linha
+            return null;
+        }
+        else {
+            if(index >= symbol.getValues().size()) {
+                System.out.println("Access to out of bounds " + index + " in array " + id +"."); //TODO linha
+                return null;
+            }
+        }
+
+        if(!symbol.getType().equals("ARRAYELEMENT"))
+        {
+            System.out.println("Access to index of variable +" + id + " that is not an array."); //TODO linha
+            return null;
+        }
+
+        return symbol;
+    }
+
 
     private Symbol parseScalarAccess()
     {
