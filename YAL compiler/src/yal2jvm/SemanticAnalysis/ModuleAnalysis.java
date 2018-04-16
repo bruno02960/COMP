@@ -23,7 +23,15 @@ public class ModuleAnalysis extends Analysis
         {
             Node child = ast.jjtGetChild(i);
             Symbol symbol = createSymbol(child);
-            mySymbols.put(symbol.getId(), symbol);
+            if(symbol.getType().equals("FUNCTION"))
+                inheritedSymbols.put(symbol.getId(), symbol);
+            else if(symbol.getType().equals("DECLARATION"))
+                mySymbols.put(symbol.getId(), symbol);
+            else
+            {
+                System.out.println("Unexpected symbol at module"); //TODO linha
+                System.exit(-1);
+            }
         }
 
         //TODO ver analise semantica

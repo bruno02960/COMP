@@ -1,7 +1,9 @@
 ver declaration ser tipo a[] = 5 que pela regra parece isso e nao aceita.
-e se for do tipo a[5] = 10; tambem dá erro...como fazer?
+e se for do tipo a[5] = 10; tambem dá erro...como fazer?  RESOLVIDO
+
 
 que analise semantica seria necessario fazer no module por exemplo?
+
 
 ver todo's
 
