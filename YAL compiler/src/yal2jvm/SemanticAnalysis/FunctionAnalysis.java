@@ -27,6 +27,6 @@ public class FunctionAnalysis extends Analysis
         ASTEXPRTEST exprtest = ((ASTEXPRTEST) ast.jjtGetChild(0));
 
         SimpleNode lhs = (SimpleNode) exprtest.jjtGetChild(0);
-        return GeneralAnalysis.parseLhs(mySymbols, inheritedSymbols, lhs);
+        return parseLhs(lhs);
     }
 }

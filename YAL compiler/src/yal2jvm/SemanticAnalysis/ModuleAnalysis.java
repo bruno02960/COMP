@@ -39,7 +39,8 @@ public class ModuleAnalysis extends Analysis
             Symbol symbol = this.mySymbols.get(i);
             if(symbol instanceof FunctionSymbol)
             {
-                FunctionAnalysis functionAnalysis = new FunctionAnalysis((SimpleNode) ast.jjtGetChild(i), mySymbols,
+                HashMap<String, Symbol> unifiedSymbolTable = getUnifiedSymbolTable();
+                FunctionAnalysis functionAnalysis = new FunctionAnalysis((SimpleNode) ast.jjtGetChild(i), unifiedSymbolTable,
                         functionNameToFunctionSymbol);
                 functionAnalysis.parse();
             }
@@ -75,7 +76,7 @@ public class ModuleAnalysis extends Analysis
 
                 functionNameToFunctionSymbol.put(functionSymbol.getId(), functionSymbol);
             case "DECLARATION":
-                GeneralAnalysis.parseDeclaration(mySymbols, inheritedSymbols, (ASTDECLARATION) child);
+                parseDeclaration((ASTDECLARATION) child);
                 break;
             default:
                 System.out.println("Unexpected node" + child.toString()); //TODO linha
