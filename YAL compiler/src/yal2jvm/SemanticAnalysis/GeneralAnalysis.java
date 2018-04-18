@@ -1,10 +1,12 @@
 package yal2jvm.SemanticAnalysis;
 
+import com.sun.xml.internal.bind.v2.model.core.ID;
 import sun.java2d.pipe.SpanShapeRenderer;
 import yal2jvm.Analysis;
 import yal2jvm.SymbolTables.VarSymbol;
 import yal2jvm.ast.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class GeneralAnalysis
@@ -84,18 +86,25 @@ public class GeneralAnalysis
     public static VarSymbol parseArgumentList(HashMap<String,Symbol> mySymbols,
                                       HashMap<String,Symbol> inheritedSymbols, SimpleNode argumentListTree)
     {
-        Node child = argumentListTree.jjtGetChild(0);
-        switch (child.toString())
+        Integer childrenLength = argumentListTree.jjtGetNumChildren();
+        ArrayList<VarSymbol> symbolArray = new ArrayList<VarSymbol>();
+        for(int i = 0; i < childrenLength; i++)
         {
-            case "ARGUMENT":
-                return parseArgument(mySymbols, inheritedSymbols, (SimpleNode) child);
-        }
-        return null;
-    }
+            Node child = argumentListTree.jjtGetChild(i);
+            ASTARGUMENT astargument = ((ASTARGUMENT) child);
+            String idArg = astargument.idArg;
+            Integer intArg = astargument.intArg;
+            String stringArg = astargument.stringArg;
 
-    public static VarSymbol parseArgument(HashMap<String,Symbol> mySymbols,
-                                              HashMap<String,Symbol> inheritedSymbols, SimpleNode argumentTree)
-    {
+            if(idArg == null && intArg == null && stringArg == null)
+            {
+                System.out.println("ArgumentList Child " + i + " has all attributes set to null");
+                return null;
+            }
+
+            //if(idArg != null)
+                //symbolArray.add(idArg); //TODO: fazer isto de acordo com o valor esperado e retornar boolean
+        }
         return null;
     }
 
