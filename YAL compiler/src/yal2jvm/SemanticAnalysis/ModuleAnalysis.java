@@ -1,7 +1,7 @@
 package yal2jvm.SemanticAnalysis;
 
 import yal2jvm.Analysis;
-import yal2jvm.SymbolTables.Symbol;
+import yal2jvm.SymbolTables.VarSymbol;
 import yal2jvm.ast.*;
 
 import java.util.ArrayList;
@@ -9,29 +9,19 @@ import java.util.HashMap;
 
 public class ModuleAnalysis extends Analysis
 {
-
     public ModuleAnalysis(SimpleNode ast, HashMap<String, Symbol> inheritedSymbols)
     {
         super(ast, inheritedSymbols);
+        this.inheritedSymbols = new HashMap<String, Symbol>();
     }
 
     private void initiateGlobalSymbolTable()
     {
         int numChildren = ast.jjtGetNumChildren();
-
         for(int i = 0; i < numChildren; i++)
         {
             Node child = ast.jjtGetChild(i);
-            Symbol symbol = createSymbol(child);
-            if(symbol.getType().equals("FUNCTION"))
-                inheritedSymbols.put(symbol.getId(), symbol);
-            else if(symbol.getType().equals("DECLARATION"))
-                mySymbols.put(symbol.getId(), symbol);
-            else
-            {
-                System.out.println("Unexpected symbol at module"); //TODO linha
-                System.exit(-1);
-            }
+            addSymbolToSymbolTable(child);
         }
 
         //TODO ver analise semantica
@@ -43,16 +33,17 @@ public class ModuleAnalysis extends Analysis
         int numSimbols = this.mySymbols.size();
         for(int i = 0; i < numSimbols; i++)
         {
-          if(this.mySymbols.get(i).getType().equals("FUNCTION"))
-          {
-              FunctionAnalysis functionAnalysis = new FunctionAnalysis((SimpleNode) ast.jjtGetChild(i), mySymbols);
-              functionAnalysis.parse();
-          }
+            VarSymbol varSymbol = (VarSymbol) this.mySymbols.get(i);
+            if(varSymbol.getType().equals("FUNCTION"))
+            {
+                FunctionAnalysis functionAnalysis = new FunctionAnalysis((SimpleNode) ast.jjtGetChild(i), mySymbols);
+                functionAnalysis.parse();
+            }
         }
 
     }
 
-    private Symbol createSymbol(Node child)
+    private void addSymbolToSymbolTable(Node child)
     {
         String type = child.toString();
         String name = null;
@@ -62,16 +53,23 @@ public class ModuleAnalysis extends Analysis
             case "FUNCTION":
                 FunctionSymbol functionSymbol = parseFunctionChild(child);
                 //TODO DEBUG TIRAR
-                System.out.println("functionSymbol name: " + functionSymbol.getName());
-                System.out.println("functionSymbol arguments: ");
-                for(int i = 0; i < functionSymbol.getArguments().size(); i++)
+                System.out.println("functionSymbol name: " + functionSymbol.getId());
+                if(functionSymbol.getArguments() != null)
                 {
-                    System.out.println("id: " + functionSymbol.getArguments().get(i).getId() + " type: " + functionSymbol.getArguments().get(i).getType() + " ");
+                    System.out.println("functionSymbol arguments: ");
+                    for(int i = 0; i < functionSymbol.getArguments().size(); i++)
+                    {
+                        System.out.println("id: " + functionSymbol.getArguments().get(i).getId() + " type: " + functionSymbol.getArguments().get(i).getType() + " ");
+                    }
                 }
 
-                System.out.println("functionSymbol returnValue type: " + functionSymbol.getReturnValue().getType());
-                System.out.println("functionSymbol returnValue id: " + functionSymbol.getReturnValue().getId());
-                break;
+                if(functionSymbol.getReturnValue() != null)
+                {
+                    System.out.println("functionSymbol returnValue type: " + functionSymbol.getReturnValue().getType());
+                    System.out.println("functionSymbol returnValue id: " + functionSymbol.getReturnValue().getId());
+                }
+
+                inheritedSymbols.put(functionSymbol.getId(), functionSymbol);
             case "DECLARATION":
                 Node node = child.jjtGetChild(0);
                 if(node instanceof ASTSCALARELEMENT)
@@ -89,18 +87,24 @@ public class ModuleAnalysis extends Analysis
                 //TODO DEBUG TIRAR
                 System.out.println("symbol name: " + name);
                 System.out.println("symbol type: " + type);
-                System.out.println("values: ");
-                for(int i = 0; i < values.size(); i++)
+                if(values != null)
                 {
-                    System.out.println(values.get(i) + " ");
+                    System.out.println("values: ");
+                    for(int i = 0; i < values.size(); i++)
+                    {
+                        System.out.println(values.get(i) + " ");
+                    }
                 }
+
+
+                Symbol varSymbol = new VarSymbol(name, type, values);
+                mySymbols.put(varSymbol.getId(), varSymbol);
                 break;
             default:
-                //TODO
-
+                System.out.println("Unexpected node" + child.toString()); //TODO linha
+                System.exit(-1);
+                break;
         }
-
-        return new Symbol(name, type, values);
     }
 
     private FunctionSymbol parseFunctionChild(Node functionNode)
@@ -109,7 +113,7 @@ public class ModuleAnalysis extends Analysis
         int argumentsIndex = 0; //indicates the index(child num) of the arguments. 0 if no return value, or 1 if has return value.
 
         //get return value if existent
-        Symbol returnValue = null;
+        VarSymbol returnValue = null;
         SimpleNode returnValueNode = (SimpleNode) functionNode.jjtGetChild(0);
         if(returnValueNode instanceof ASTSTATEMENTS)
             return new FunctionSymbol((SimpleNode) functionNode, id, null, null);;
@@ -120,13 +124,13 @@ public class ModuleAnalysis extends Analysis
             {
                 ASTSCALARELEMENT astscalarelement = (ASTSCALARELEMENT)returnValueNode;
                 String returnValueId = astscalarelement.id;
-                returnValue = new Symbol(returnValueId, "ASTSCALARELEMENT");
+                returnValue = new VarSymbol(returnValueId, "ASTSCALARELEMENT");
             }
             else
             {
                 ASTARRAYELEMENT astarrayelement = (ASTARRAYELEMENT)returnValueNode;
                 String returnValueId = astarrayelement.id;
-                returnValue = new Symbol(returnValueId, "ASTARRAYELEMENT");
+                returnValue = new VarSymbol(returnValueId, "ASTARRAYELEMENT");
             }
         }
 
@@ -135,28 +139,28 @@ public class ModuleAnalysis extends Analysis
         if(arguments == null)
             return new FunctionSymbol((SimpleNode) functionNode, id, null, returnValue);
 
-        ArrayList<Symbol> argumentsSymbols = new ArrayList<>();
+        ArrayList<VarSymbol> argumentsVarSymbols = new ArrayList<>();
         for(int i = 0; i < arguments.jjtGetNumChildren(); i++)
         {
             SimpleNode child = (SimpleNode) arguments.jjtGetChild(i);
             if( child != null)
             {
-                Symbol symbol;
+                VarSymbol varSymbol;
                 if(child instanceof ASTSCALARELEMENT)
                 {
                     ASTSCALARELEMENT astscalarelement = (ASTSCALARELEMENT)child;
-                    symbol = new Symbol(astscalarelement.id, "SCALARELEMENT");
+                    varSymbol = new VarSymbol(astscalarelement.id, "SCALARELEMENT");
                 }
                 else
                 {
                     ASTARRAYELEMENT astarrayelement = (ASTARRAYELEMENT)child;
-                    symbol = new Symbol(astarrayelement.id, "ARRAYELEMENT");
+                    varSymbol = new VarSymbol(astarrayelement.id, "ARRAYELEMENT");
                 }
-                argumentsSymbols.add(symbol);
+                argumentsVarSymbols.add(varSymbol);
             }
         }
 
-        return new FunctionSymbol((SimpleNode) functionNode, id, argumentsSymbols, returnValue);
+        return new FunctionSymbol((SimpleNode) functionNode, id, argumentsVarSymbols, returnValue);
     }
 
     private ArrayList<Integer> getValuesFromScalarElementDeclarationIfExists(ASTSCALARELEMENT astscalarelement)

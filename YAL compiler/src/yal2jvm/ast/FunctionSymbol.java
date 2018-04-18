@@ -1,20 +1,19 @@
 package yal2jvm.ast;
 
-import yal2jvm.SymbolTables.Symbol;
+import yal2jvm.SymbolTables.VarSymbol;
 
 import java.util.ArrayList;
 
-public class FunctionSymbol
+public class FunctionSymbol extends Symbol
 {
     private SimpleNode functionAST;
-    private String name;
-    private ArrayList<Symbol> arguments;
-    private Symbol returnValue;
+    private ArrayList<VarSymbol> arguments;
+    private VarSymbol returnValue;
 
-    public FunctionSymbol(SimpleNode functionAST, String name, ArrayList<Symbol> arguments, Symbol returnValue)
+    public FunctionSymbol(SimpleNode functionAST, String id, ArrayList<VarSymbol> arguments, VarSymbol returnValue)
     {
+        super(id);
         this.functionAST = functionAST;
-        this.name = name;
         this.arguments = arguments;
         this.returnValue = returnValue;
     }
@@ -29,32 +28,22 @@ public class FunctionSymbol
         this.functionAST = functionAST;
     }
 
-    public String getName()
-    {
-        return name;
-    }
-
-    public void setName(String name)
-    {
-        this.name = name;
-    }
-
-    public ArrayList<Symbol> getArguments()
+    public ArrayList<VarSymbol> getArguments()
     {
         return arguments;
     }
 
-    public void setArguments(ArrayList<Symbol> arguments)
+    public void setArguments(ArrayList<VarSymbol> arguments)
     {
         this.arguments = arguments;
     }
 
-    public Symbol getReturnValue()
+    public VarSymbol getReturnValue()
     {
         return returnValue;
     }
 
-    public void setReturnValue(Symbol returnValue)
+    public void setReturnValue(VarSymbol returnValue)
     {
         this.returnValue = returnValue;
     }

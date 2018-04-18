@@ -2,11 +2,8 @@ package yal2jvm;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
 
 import yal2jvm.SemanticAnalysis.ModuleAnalysis;
-import yal2jvm.SymbolTables.Symbol;
-import yal2jvm.SymbolTables.SymbolTable;
 import yal2jvm.ast.*;
 
 public class Yal2jvm
