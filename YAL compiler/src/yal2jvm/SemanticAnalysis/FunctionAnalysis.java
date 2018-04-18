@@ -23,21 +23,10 @@ public class FunctionAnalysis extends Analysis
 
     }
 
-    private VarSymbol parseLhs(SimpleNode lhs) {
-        switch(lhs.jjtGetChild(0).toString()) {
-            case "ARRAYACCESS":
-                return GeneralAnalysis.parseArrayAccess(mySymbols, inheritedSymbols, ast);
-            case "SCALARACCESS":
-                return GeneralAnalysis.parseScalarAccess(mySymbols, inheritedSymbols, ast);
-        }
-
-        return null;
-    }
-
     private VarSymbol parseWhile() {
         ASTEXPRTEST exprtest = ((ASTEXPRTEST) ast.jjtGetChild(0));
 
         SimpleNode lhs = (SimpleNode) exprtest.jjtGetChild(0);
-        return parseLhs(lhs);
+        return GeneralAnalysis.parseLhs(mySymbols, inheritedSymbols, ast, lhs);
     }
 }

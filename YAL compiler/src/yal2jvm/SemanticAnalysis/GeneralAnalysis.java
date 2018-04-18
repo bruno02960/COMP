@@ -24,6 +24,18 @@ public class GeneralAnalysis
         return symbol;
     }
 
+    public static VarSymbol parseLhs(HashMap<String,Symbol> mySymbols,
+                                     HashMap<String,Symbol> inheritedSymbols, SimpleNode ast, SimpleNode lhs) {
+        switch(lhs.jjtGetChild(0).toString()) {
+            case "ARRAYACCESS":
+                return parseArrayAccess(mySymbols, inheritedSymbols, ast);
+            case "SCALARACCESS":
+                return parseScalarAccess(mySymbols, inheritedSymbols, ast);
+        }
+
+        return null;
+    }
+
     public static VarSymbol parseArrayAccess(HashMap<String,Symbol> mySymbols,
                                              HashMap<String,Symbol> inheritedSymbols, SimpleNode ast)
     {
