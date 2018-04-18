@@ -75,23 +75,7 @@ public class ModuleAnalysis extends Analysis
                 functionNameToFunctionSymbol.put(functionSymbol.getId(), functionSymbol);
             case "DECLARATION":
                 Node node = child.jjtGetChild(0);
-                if(node instanceof ASTSCALARELEMENT)
-                {
-                    ASTSCALARELEMENT astscalarelement = (ASTSCALARELEMENT)node;
-                    getAssignRHS(child); //child = DECLARATION
-                    values = getValuesFromScalarElementDeclarationIfExists(astscalarelement);
-                    name = astscalarelement.id;
-                    varSymbol = new VarSymbol(name, type, true);
-                }
-                else
-                {
-                    ASTARRAYELEMENT astarrayelement = (ASTARRAYELEMENT)node;
-                    //values = getValuesFromArrayElementDeclarationIfExists(astarrayelement);
-                    name = astarrayelement.id;
-                    int size =
-                    varSymbol = new VarSymbol(name, type, true, );
 
-                }
                 //TODO DEBUG TIRAR
                 System.out.println("symbol name: " + name);
                 System.out.println("symbol type: " + type);
@@ -106,24 +90,64 @@ public class ModuleAnalysis extends Analysis
         }
     }
 
-    private void getAssignRHS(Node declarationNode)
+    private boolean IsAssignRHSFromArrayElementInitialized(Node declarationNode)
     {
         Node node = declarationNode.jjtGetChild(0);
-        String type = node.toString();
-        switch (type)
+       /* if(node == null) //it means that is a declaration of type a[]
         {
-            case "ARRAYSIZE":
+            ASTDECLARATION astdeclaration = ((ASTDECLARATION) declarationNode);
+            Integer value = astdeclaration.integer;
+            if(value != null)
+                return true;
 
+            return false;
+        }*/
 
-            case "DECLARATION":
-                Node node = child.jjtGetChild(0);
-
-                break;
-            default:
-                System.out.println("Unexpected node" + child.toString()); //TODO linha
+       if(node == null) //it means that is a declaration of type a[]
+        {
+            ASTDECLARATION astdeclaration = ((ASTDECLARATION) declarationNode);
+            Integer value = astdeclaration.integer;
+            if(value != null)
+            {
+                System.out.println("Cannot declare an array as a[] = 1. This will set all values of array to 1, but no values set yet.");//TODO linha
                 System.exit(-1);
-                break;
+                return false;
+            }
+
+            return false;
         }
+
+        node = declarationNode.jjtGetChild(1);
+        if(!(node instanceof ASTARRAYSIZE))
+        {
+            System.out.println("Unexpected node" + node.toString()); //TODO linha
+            System.exit(-1);
+        }
+
+        return true;
+    }
+
+    private boolean IsAssignRHSFromScalarElementInitialized(Node declarationNode)
+    {
+        Node node = declarationNode.jjtGetChild(0);
+        if(node == null) //it means that is a declaration of type a[]=1
+        {
+            ASTDECLARATION astdeclaration = ((ASTDECLARATION) declarationNode);
+            Integer value = astdeclaration.integer;
+            if(value != null)
+                return true;
+
+            return false;
+        }
+
+        node = declarationNode.jjtGetChild(1);
+        if(!(node instanceof ASTARRAYSIZE))
+        {
+            System.out.println("Unexpected node" + node.toString()); //TODO linha
+            System.exit(-1);
+        }
+
+        return true;
     }
 
     private FunctionSymbol parseFunctionChild(Node functionNode)

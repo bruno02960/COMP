@@ -208,4 +208,33 @@ public class GeneralAnalysis
 
         return varSymbol;
     }
+
+    public static VarSymbol parseDeclaration(HashMap<String,Symbol> mySymbols,
+                                          HashMap<String,Symbol> inheritedSymbols, SimpleNode argumentTree)
+    {
+        if(argumentTree instanceof ASTSCALARELEMENT)
+        {
+            ASTSCALARELEMENT astscalarelement = (ASTSCALARELEMENT)argumentTree;
+            Symbol symbol = hasAccessToSymbol(mySymbols, inheritedSymbols, astscalarelement.id);
+            if(symbol != null)
+            {
+               System.out.println("Variable " + astscalarelement.id + " already declared."); //TODO linha
+               return null;
+            }
+
+            values = getValuesFromScalarElementDeclarationIfExists(astscalarelement);
+            name = astscalarelement.id;
+            varSymbol = new VarSymbol(name, type, true);
+        }
+        else
+        {
+            ASTARRAYELEMENT astarrayelement = (ASTARRAYELEMENT)argumentTree;
+            boolean isInitialized = IsAssignRHSFromArrayElementInitialized(child);
+            name = astarrayelement.id;
+            int size =
+                    varSymbol = new VarSymbol(name, type, isInitialized, );
+
+        }
+        return null;
+    }
 }
