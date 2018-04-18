@@ -1,11 +1,9 @@
 package yal2jvm.SemanticAnalysis;
 
+import sun.java2d.pipe.SpanShapeRenderer;
 import yal2jvm.Analysis;
 import yal2jvm.SymbolTables.VarSymbol;
-import yal2jvm.ast.ASTARRAYACCESS;
-import yal2jvm.ast.ASTSCALARACCESS;
-import yal2jvm.ast.SimpleNode;
-import yal2jvm.ast.Symbol;
+import yal2jvm.ast.*;
 
 import java.util.HashMap;
 
@@ -25,21 +23,86 @@ public class GeneralAnalysis
     }
 
     public static VarSymbol parseLhs(HashMap<String,Symbol> mySymbols,
-                                     HashMap<String,Symbol> inheritedSymbols, SimpleNode ast, SimpleNode lhs) {
-        switch(lhs.jjtGetChild(0).toString()) {
+                                     HashMap<String,Symbol> inheritedSymbols, SimpleNode lhsTree)
+    {
+        Node child = lhsTree.jjtGetChild(0);
+        switch(child.toString())
+        {
             case "ARRAYACCESS":
-                return parseArrayAccess(mySymbols, inheritedSymbols, ast);
+                return parseArrayAccess(mySymbols, inheritedSymbols, (SimpleNode) child);
             case "SCALARACCESS":
-                return parseScalarAccess(mySymbols, inheritedSymbols, ast);
+                return parseScalarAccess(mySymbols, inheritedSymbols, (SimpleNode) child);
         }
 
         return null;
     }
 
-    public static VarSymbol parseArrayAccess(HashMap<String,Symbol> mySymbols,
-                                             HashMap<String,Symbol> inheritedSymbols, SimpleNode ast)
+    public static VarSymbol parseRhs(HashMap<String,Symbol> mySymbols,
+                                     HashMap<String,Symbol> inheritedSymbols, SimpleNode rhsTree)
     {
-        String array = ((ASTARRAYACCESS) ast.jjtGetChild(0)).arrayID;
+        Node child = rhsTree.jjtGetChild(0);
+        switch(child.toString())
+        {
+            case "ARRAYSIZE":
+
+            case "TERM":
+                return parseTerm(mySymbols, inheritedSymbols, (SimpleNode) child);
+        }
+
+        return null;
+    }
+
+    public static VarSymbol parseTerm(HashMap<String,Symbol> mySymbols,
+                                      HashMap<String,Symbol> inheritedSymbols, SimpleNode termTree)
+    {
+        Node child = termTree.jjtGetChild(0);
+        switch(child.toString())
+        {
+            case "CALL":
+                return parseCall(mySymbols, inheritedSymbols, (SimpleNode) child);
+
+            case "ARRAYACCESS":
+
+            case "SCALARACCESS":
+
+        }
+        return null;
+    }
+
+    public static VarSymbol parseCall(HashMap<String,Symbol> mySymbols,
+                                      HashMap<String,Symbol> inheritedSymbols, SimpleNode callTree)
+    {
+        Node child = callTree.jjtGetChild(0);
+        switch(child.toString())
+        {
+            case "ARGUMENTLIST":
+                return parseArgumentList(mySymbols, inheritedSymbols, (SimpleNode) child);
+        }
+        return null;
+    }
+
+    public static VarSymbol parseArgumentList(HashMap<String,Symbol> mySymbols,
+                                      HashMap<String,Symbol> inheritedSymbols, SimpleNode argumentListTree)
+    {
+        Node child = argumentListTree.jjtGetChild(0);
+        switch (child.toString())
+        {
+            case "ARGUMENT":
+                return parseArgument(mySymbols, inheritedSymbols, (SimpleNode) child);
+        }
+        return null;
+    }
+
+    public static VarSymbol parseArgument(HashMap<String,Symbol> mySymbols,
+                                              HashMap<String,Symbol> inheritedSymbols, SimpleNode argumentTree)
+    {
+        return null;
+    }
+
+    public static VarSymbol parseArrayAccess(HashMap<String,Symbol> mySymbols,
+                                             HashMap<String,Symbol> inheritedSymbols, SimpleNode arrayAccessTree)
+    {
+        String array = ((ASTARRAYACCESS) arrayAccessTree.jjtGetChild(0)).arrayID;
 
         int lbrIdx = array.indexOf("[");
         int rbrIdx = array.indexOf("]");
@@ -80,9 +143,9 @@ public class GeneralAnalysis
 
 
     public static VarSymbol parseScalarAccess(HashMap<String,Symbol> mySymbols,
-                                              HashMap<String,Symbol> inheritedSymbols, SimpleNode ast)
+                                              HashMap<String,Symbol> inheritedSymbols, SimpleNode scalarAccessTree)
     {
-        String id = ((ASTSCALARACCESS) ast.jjtGetChild(0)).id;
+        String id = ((ASTSCALARACCESS) scalarAccessTree.jjtGetChild(0)).id;
         boolean sizeAccess = false;
         if(id.contains("."))
         {
