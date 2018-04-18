@@ -1,8 +1,5 @@
 package yal2jvm.SemanticAnalysis;
 
-import com.sun.xml.internal.bind.v2.model.core.ID;
-import sun.java2d.pipe.SpanShapeRenderer;
-import yal2jvm.Analysis;
 import yal2jvm.SymbolTables.VarSymbol;
 import yal2jvm.ast.*;
 
@@ -210,11 +207,12 @@ public class GeneralAnalysis
     }
 
     public static VarSymbol parseDeclaration(HashMap<String,Symbol> mySymbols,
-                                          HashMap<String,Symbol> inheritedSymbols, SimpleNode argumentTree)
+                                          HashMap<String,Symbol> inheritedSymbols, ASTDECLARATION declarationTree)
     {
-        if(argumentTree instanceof ASTSCALARELEMENT)
+        Node child = declarationTree.jjtGetChild(0);
+        if(child instanceof ASTSCALARELEMENT)
         {
-            ASTSCALARELEMENT astscalarelement = (ASTSCALARELEMENT)argumentTree;
+            ASTSCALARELEMENT astscalarelement = (ASTSCALARELEMENT)child;
             Symbol symbol = hasAccessToSymbol(mySymbols, inheritedSymbols, astscalarelement.id);
             if(symbol != null)
             {
@@ -222,19 +220,36 @@ public class GeneralAnalysis
                return null;
             }
 
-            values = getValuesFromScalarElementDeclarationIfExists(astscalarelement);
+            //parse right hand side if existent
+            if(declarationTree.integer != null) //if is from type a=CONST;
+            {
+
+            }
+            child = declarationTree.jjtGetChild(0);
+
+           /* values = getValuesFromScalarElementDeclarationIfExists(astscalarelement);
             name = astscalarelement.id;
-            varSymbol = new VarSymbol(name, type, true);
+            varSymbol = new VarSymbol(name, type, true);*/
         }
-        else
+        else if(child instanceof ASTARRAYELEMENT)
         {
-            ASTARRAYELEMENT astarrayelement = (ASTARRAYELEMENT)argumentTree;
-            boolean isInitialized = IsAssignRHSFromArrayElementInitialized(child);
+            ASTARRAYELEMENT astarrayelement = (ASTARRAYELEMENT)child;
+           /* boolean isInitialized = IsAssignRHSFromArrayElementInitialized(child);
             name = astarrayelement.id;
             int size =
-                    varSymbol = new VarSymbol(name, type, isInitialized, );
+                    varSymbol = new VarSymbol(name, type, isInitialized, );*/
 
         }
+
+
+       /* Node node = child.jjtGetChild(0);
+
+        //TODO DEBUG TIRAR
+        System.out.println("symbol name: " + name);
+        System.out.println("symbol type: " + type);
+
+
+        mySymbols.put(varSymbol.getId(), varSymbol);*/
         return null;
     }
 }

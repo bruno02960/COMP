@@ -23,16 +23,6 @@ public class Yal2jvm
 	
 	public static void main(String args[])
 	{
-		int i;
-		if(args[1].equals("g"))
-			i = 5;
-		else {
-			if(s == 0)
-				i = 7;
-		}
-
-		i++;
-		System.out.println(i);
 		String inputFile = null;
 		boolean optimize = false;
 		int localVars = 0;

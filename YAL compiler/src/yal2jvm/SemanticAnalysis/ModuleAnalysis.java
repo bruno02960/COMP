@@ -5,6 +5,7 @@ import yal2jvm.SymbolTables.VarSymbol;
 import yal2jvm.ast.*;
 
 import java.util.ArrayList;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 
 public class ModuleAnalysis extends Analysis
@@ -74,14 +75,7 @@ public class ModuleAnalysis extends Analysis
 
                 functionNameToFunctionSymbol.put(functionSymbol.getId(), functionSymbol);
             case "DECLARATION":
-                Node node = child.jjtGetChild(0);
-
-                //TODO DEBUG TIRAR
-                System.out.println("symbol name: " + name);
-                System.out.println("symbol type: " + type);
-
-
-                mySymbols.put(varSymbol.getId(), varSymbol);
+                GeneralAnalysis.parseDeclaration(mySymbols, inheritedSymbols, (ASTDECLARATION) child);
                 break;
             default:
                 System.out.println("Unexpected node" + child.toString()); //TODO linha
@@ -167,13 +161,13 @@ public class ModuleAnalysis extends Analysis
             {
                 ASTSCALARELEMENT astscalarelement = (ASTSCALARELEMENT)returnValueNode;
                 String returnValueId = astscalarelement.id;
-                returnValue = new VarSymbol(returnValueId, "ASTSCALARELEMENT");
+                returnValue = new VarSymbol(returnValueId, "ASTSCALARELEMENT", true);
             }
             else
             {
                 ASTARRAYELEMENT astarrayelement = (ASTARRAYELEMENT)returnValueNode;
                 String returnValueId = astarrayelement.id;
-                returnValue = new VarSymbol(returnValueId, "ASTARRAYELEMENT");
+                returnValue = new VarSymbol(returnValueId, "ASTARRAYELEMENT", true);
             }
         }
 
@@ -192,12 +186,12 @@ public class ModuleAnalysis extends Analysis
                 if(child instanceof ASTSCALARELEMENT)
                 {
                     ASTSCALARELEMENT astscalarelement = (ASTSCALARELEMENT)child;
-                    varSymbol = new VarSymbol(astscalarelement.id, "SCALARELEMENT");
+                    varSymbol = new VarSymbol(astscalarelement.id, "SCALARELEMENT", true);
                 }
                 else
                 {
                     ASTARRAYELEMENT astarrayelement = (ASTARRAYELEMENT)child;
-                    varSymbol = new VarSymbol(astarrayelement.id, "ARRAYELEMENT");
+                    varSymbol = new VarSymbol(astarrayelement.id, "ARRAYELEMENT", true);
                 }
                 argumentsVarSymbols.add(varSymbol);
             }
