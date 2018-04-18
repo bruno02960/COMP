@@ -11,10 +11,13 @@ import java.util.HashMap;
 
 public class FunctionAnalysis extends Analysis
 {
+    private HashMap<String, Symbol> functionNameToFunctionSymbolOfModule;
 
-    public FunctionAnalysis(SimpleNode ast, HashMap<String, Symbol> inheritedSymbols)
+    public FunctionAnalysis(SimpleNode ast, HashMap<String, Symbol> inheritedSymbols,
+                            HashMap<String, Symbol> functionNameToFunctionSymbolOfModule)
     {
        super(ast, inheritedSymbols);
+       this.functionNameToFunctionSymbolOfModule = functionNameToFunctionSymbolOfModule;
     }
 
     @Override
@@ -44,13 +47,13 @@ public class FunctionAnalysis extends Analysis
             return null;
         }
 
-        if(varSymbol.getValues() == null)
+        if(!varSymbol.isInitialized())
         {
             System.out.println("Access to uninitialized variable +" + id + "."); //TODO linha
             return null;
         }
         else {
-            if(index >= varSymbol.getValues().size()) {
+            if(index >= varSymbol.getSize()) {
                 System.out.println("Access to out of bounds " + index + " in array " + id +"."); //TODO linha
                 return null;
             }
@@ -85,7 +88,7 @@ public class FunctionAnalysis extends Analysis
             return null;
         }
 
-        if(varSymbol.getValues() == null)
+        if(varSymbol.isInitialized() == null)
         {
             System.out.println("Access to uninitialized variable +" + id + "."); //TODO linha
             return null;

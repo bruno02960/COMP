@@ -33,3 +33,6 @@
 	-Slides yal
 		Slide 5
 		Último slide
+		
+		
+	-nao é preciso representaçao intermedia quando tem erros de semantica, por isso nao há prblema de percorrer a arvore e nao saber se aquilo tem erro ou nao

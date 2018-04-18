@@ -8,19 +8,23 @@ import java.util.ArrayList;
 public class VarSymbol extends Symbol
 {
     private String type;
-    private ArrayList<Integer> values; //can be just one value or multiple if is an array
+    private boolean initialized = false;
+    private int size = -1;
+    //private ArrayList<Integer> values; //can be just one value or multiple if is an array
 
-    public VarSymbol(String id, String type)
+    public VarSymbol(String id, String type, boolean initialized)
     {
         super(id);
         this.type = type;
+        this.initialized = initialized;
     }
 
-    public VarSymbol(String id, String type, ArrayList<Integer> values)
+    public VarSymbol(String id, String type, boolean initialized, int size)
     {
         super(id);
         this.type = type;
-        this.values = values;
+        this.initialized = initialized;
+        this.size = size;
     }
 
     public String getType()
@@ -33,13 +37,33 @@ public class VarSymbol extends Symbol
         this.type = type;
     }
 
-    public ArrayList<Integer> getValues()
+    public boolean isInitialized()
     {
-        return values;
+        return initialized;
+    }
+
+    public void setInitialized(boolean initialized)
+    {
+        this.initialized = initialized;
+    }
+
+    public int getSize()
+    {
+        return size;
+    }
+
+    public void setSize(int size)
+    {
+        this.size = size;
+    }
+
+  /*  public Values()
+    {
+        return initialized;
     }
 
     public void setValues(ArrayList<Integer> values)
     {
         this.values = values;
-    }
+    }*/
 }

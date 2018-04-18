@@ -12,6 +12,7 @@ public class Yal2jvm
 	private boolean optimize;
 	private String inputFile;
 	private SimpleNode ast;
+	public static int s;
 
 	public Yal2jvm(int localVars, boolean optimize, String inputFile)
 	{
@@ -22,6 +23,10 @@ public class Yal2jvm
 	
 	public static void main(String args[])
 	{
+		int i;
+
+		s++;
+		System.out.println(s);
 		String inputFile = null;
 		boolean optimize = false;
 		int localVars = 0;
@@ -89,7 +94,7 @@ public class Yal2jvm
 		ast = createAst(inputStream);
 		ast.dump("");
 
-        ModuleAnalysis moduleAnalysis = new ModuleAnalysis(ast, null);
+        ModuleAnalysis moduleAnalysis = new ModuleAnalysis(ast);
         moduleAnalysis.parse();
 	}
 

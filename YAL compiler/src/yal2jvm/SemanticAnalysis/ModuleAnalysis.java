@@ -9,10 +9,12 @@ import java.util.HashMap;
 
 public class ModuleAnalysis extends Analysis
 {
-    public ModuleAnalysis(SimpleNode ast, HashMap<String, Symbol> inheritedSymbols)
+    private HashMap<String, Symbol> functionNameToFunctionSymbol;
+
+    public ModuleAnalysis(SimpleNode ast)
     {
-        super(ast, inheritedSymbols);
-        this.inheritedSymbols = new HashMap<String, Symbol>();
+        super(ast, null);
+        functionNameToFunctionSymbol = new HashMap<String, Symbol>();
     }
 
     private void initiateGlobalSymbolTable()
@@ -33,10 +35,11 @@ public class ModuleAnalysis extends Analysis
         int numSimbols = this.mySymbols.size();
         for(int i = 0; i < numSimbols; i++)
         {
-            VarSymbol varSymbol = (VarSymbol) this.mySymbols.get(i);
-            if(varSymbol.getType().equals("FUNCTION"))
+            Symbol symbol = this.mySymbols.get(i);
+            if(symbol instanceof FunctionSymbol)
             {
-                FunctionAnalysis functionAnalysis = new FunctionAnalysis((SimpleNode) ast.jjtGetChild(i), mySymbols);
+                FunctionAnalysis functionAnalysis = new FunctionAnalysis((SimpleNode) ast.jjtGetChild(i), mySymbols,
+                        functionNameToFunctionSymbol);
                 functionAnalysis.parse();
             }
         }
@@ -46,8 +49,8 @@ public class ModuleAnalysis extends Analysis
     private void addSymbolToSymbolTable(Node child)
     {
         String type = child.toString();
-        String name = null;
-        ArrayList<Integer> values = null;
+        String name;
+        Symbol varSymbol;
         switch (type)
         {
             case "FUNCTION":
@@ -69,36 +72,52 @@ public class ModuleAnalysis extends Analysis
                     System.out.println("functionSymbol returnValue id: " + functionSymbol.getReturnValue().getId());
                 }
 
-                inheritedSymbols.put(functionSymbol.getId(), functionSymbol);
+                functionNameToFunctionSymbol.put(functionSymbol.getId(), functionSymbol);
             case "DECLARATION":
                 Node node = child.jjtGetChild(0);
                 if(node instanceof ASTSCALARELEMENT)
                 {
                     ASTSCALARELEMENT astscalarelement = (ASTSCALARELEMENT)node;
+                    getAssignRHS(child); //child = DECLARATION
                     values = getValuesFromScalarElementDeclarationIfExists(astscalarelement);
                     name = astscalarelement.id;
+                    varSymbol = new VarSymbol(name, type, true);
                 }
                 else
                 {
                     ASTARRAYELEMENT astarrayelement = (ASTARRAYELEMENT)node;
-                    values = getValuesFromArrayElementDeclarationIfExists(astarrayelement);
+                    //values = getValuesFromArrayElementDeclarationIfExists(astarrayelement);
                     name = astarrayelement.id;
+                    int size =
+                    varSymbol = new VarSymbol(name, type, true, );
+
                 }
                 //TODO DEBUG TIRAR
                 System.out.println("symbol name: " + name);
                 System.out.println("symbol type: " + type);
-                if(values != null)
-                {
-                    System.out.println("values: ");
-                    for(int i = 0; i < values.size(); i++)
-                    {
-                        System.out.println(values.get(i) + " ");
-                    }
-                }
 
 
-                Symbol varSymbol = new VarSymbol(name, type, values);
                 mySymbols.put(varSymbol.getId(), varSymbol);
+                break;
+            default:
+                System.out.println("Unexpected node" + child.toString()); //TODO linha
+                System.exit(-1);
+                break;
+        }
+    }
+
+    private void getAssignRHS(Node declarationNode)
+    {
+        Node node = declarationNode.jjtGetChild(0);
+        String type = node.toString();
+        switch (type)
+        {
+            case "ARRAYSIZE":
+
+
+            case "DECLARATION":
+                Node node = child.jjtGetChild(0);
+
                 break;
             default:
                 System.out.println("Unexpected node" + child.toString()); //TODO linha
