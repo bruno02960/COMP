@@ -8,13 +8,10 @@ import java.util.HashMap;
 
 public class FunctionAnalysis extends Analysis
 {
-    private HashMap<String, Symbol> functionNameToFunctionSymbolOfModule;
-
     public FunctionAnalysis(SimpleNode ast, HashMap<String, Symbol> inheritedSymbols,
                             HashMap<String, Symbol> functionNameToFunctionSymbolOfModule)
     {
-       super(ast, inheritedSymbols);
-       this.functionNameToFunctionSymbolOfModule = functionNameToFunctionSymbolOfModule;
+       super(ast, inheritedSymbols, functionNameToFunctionSymbolOfModule);
     }
 
     @Override

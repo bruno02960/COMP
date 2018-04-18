@@ -10,12 +10,9 @@ import java.util.HashMap;
 
 public class ModuleAnalysis extends Analysis
 {
-    private HashMap<String, Symbol> functionNameToFunctionSymbol;
-
     public ModuleAnalysis(SimpleNode ast)
     {
-        super(ast, null);
-        functionNameToFunctionSymbol = new HashMap<String, Symbol>();
+        super(ast, null, new HashMap<String, Symbol>());
     }
 
     private void initiateGlobalSymbolTable()

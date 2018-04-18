@@ -10,13 +10,16 @@ public abstract class Analysis
 {
     protected HashMap<String, Symbol> mySymbols;
     protected HashMap<String, Symbol> inheritedSymbols;
+    protected HashMap<String, Symbol> functionNameToFunctionSymbol;
     protected SimpleNode ast;
 
-    protected Analysis(SimpleNode ast, HashMap<String, Symbol> inheritedSymbols)
+    protected Analysis(SimpleNode ast, HashMap<String, Symbol> inheritedSymbols,
+                       HashMap<String, Symbol> functionNameToFunctionSymbol)
     {
         this.ast = ast;
         this.inheritedSymbols = inheritedSymbols;
         this.mySymbols = new HashMap<String, Symbol>();
+        this.functionNameToFunctionSymbol = functionNameToFunctionSymbol;
     }
 
     protected abstract void parse();
