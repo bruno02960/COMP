@@ -2,10 +2,7 @@ package yal2jvm.SemanticAnalysis;
 
 import yal2jvm.Analysis;
 import yal2jvm.SymbolTables.VarSymbol;
-import yal2jvm.ast.ASTARRAYACCESS;
-import yal2jvm.ast.ASTSCALARACCESS;
-import yal2jvm.ast.SimpleNode;
-import yal2jvm.ast.Symbol;
+import yal2jvm.ast.*;
 
 import java.util.HashMap;
 
@@ -27,9 +24,29 @@ public class FunctionAnalysis extends Analysis
         parseArrayAccess();
     }
 
+    private VarSymbol parseLhs(SimpleNode lhs) {
+        switch(lhs.jjtGetChild(0).toString()) {
+            case "ARRAYACCESS":
+                return parseArrayAccess();
+                break;
+            case "SCALARACCESS":
+                return parseScalarAccess();
+                break;
+        }
+
+        return null;
+    }
+
+    private VarSymbol parseWhile() {
+        ASTEXPRTEST exprtest = ((ASTEXPRTEST) ast.jjtGetChild(0));
+
+        SimpleNode lhs = (SimpleNode) exprtest.jjtGetChild(0);
+        return parseLhs(lhs);
+    }
+
     private VarSymbol parseArrayAccess()
     {
-        String array = ((ASTARRAYACCESS) ast.jjtGetChild(0)).arrayID;
+        String array = ((ASTARRAYACCESS) ast).arrayID;
 
         int lbrIdx = array.indexOf("[");
         int rbrIdx = array.indexOf("]");
@@ -71,7 +88,7 @@ public class FunctionAnalysis extends Analysis
 
     private VarSymbol parseScalarAccess()
     {
-        String id = ((ASTSCALARACCESS) ast.jjtGetChild(0)).id;
+        String id = ((ASTSCALARACCESS) ast.id;
         boolean sizeAccess = false;
         if(id.contains("."))
         {
