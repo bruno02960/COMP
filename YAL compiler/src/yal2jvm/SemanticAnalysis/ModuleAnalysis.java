@@ -72,6 +72,7 @@ public class ModuleAnalysis extends Analysis
                 }
 
                 functionNameToFunctionSymbol.put(functionSymbol.getId(), functionSymbol);
+                break;
             case "DECLARATION":
                 parseDeclaration((ASTDECLARATION) child);
                 break;
@@ -171,7 +172,7 @@ public class ModuleAnalysis extends Analysis
 
         //get arguments if existent
         SimpleNode arguments = (SimpleNode) functionNode.jjtGetChild(argumentsIndex);
-        if(arguments == null)
+        if(arguments == null || !(arguments instanceof ASTARGUMENTS))
             return new FunctionSymbol((SimpleNode) functionNode, id, null, returnValue);
 
         ArrayList<VarSymbol> argumentsVarSymbols = new ArrayList<>();

@@ -35,11 +35,14 @@ public abstract class Analysis
 
     protected Symbol hasAccessToSymbol(String symbolId)
     {
-        Symbol symbol;
-        symbol = mySymbols.get(symbolId);
-        if(symbol != null)
-            return symbol;
-        else
+        Symbol symbol = null;
+        if(mySymbols != null)
+        {
+            symbol = mySymbols.get(symbolId);
+            if(symbol != null)
+                return symbol;
+        }
+        else if(inheritedSymbols != null)
             symbol = inheritedSymbols.get(symbolId);
 
         return symbol;
@@ -236,35 +239,84 @@ public abstract class Analysis
             }
 
             //parse right hand side if existent
+            boolean initialized = false;
             if(declarationTree.integer != null) //if is from type a=CONST;
+                initialized = true;
+
+            VarSymbol varSymbol = new VarSymbol(astscalarelement.id, "SCALARELEMENT", initialized);
+
+            if(declarationTree.jjtGetNumChildren() > 1)
             {
-
+                //if is from type a=[CONST];
+                child = declarationTree.jjtGetChild(1);
+                ASTARRAYSIZE astarraysize = (ASTARRAYSIZE)child;
+                varSymbol.setType("ARRAYELEMENT");
+                varSymbol.setSize(astarraysize.integer);
+                varSymbol.setInitialized(true);
             }
-            child = declarationTree.jjtGetChild(0);
 
-           /* values = getValuesFromScalarElementDeclarationIfExists(astscalarelement);
-            name = astscalarelement.id;
-            varSymbol = new VarSymbol(name, type, true);*/
+            //TODO DEBUG TIRAR
+            System.out.println("From parseDeclaration, ASTSCALARELEMENT");
+            System.out.println("symbol id: " + varSymbol.getId());
+            System.out.println("symbol type: " + varSymbol.getType());
+            System.out.println("symbol size: " + varSymbol.getSize());
+
+
+            mySymbols.put(varSymbol.getId(), varSymbol);
+            return varSymbol;
         }
         else if(child instanceof ASTARRAYELEMENT)
         {
             ASTARRAYELEMENT astarrayelement = (ASTARRAYELEMENT)child;
-           /* boolean isInitialized = IsAssignRHSFromArrayElementInitialized(child);
-            name = astarrayelement.id;
-            int size =
-                    varSymbol = new VarSymbol(name, type, isInitialized, );*/
+            Symbol symbol = hasAccessToSymbol(astarrayelement.id);
+            if(symbol != null && declarationTree.integer == null) //if it has already been declared and its not just a initialization
+            {
+                System.out.println("Variable " + astarrayelement.id + " already declared."); //TODO linha
+                return null;
+            }
 
+            boolean initialized = false;
+            int size = -1;
+            if(declarationTree.jjtGetNumChildren() > 1)
+            {
+                //if is from type a[]=[CONST];
+                child = declarationTree.jjtGetChild(1);
+                ASTARRAYSIZE astarraysize = (ASTARRAYSIZE)child;
+                initialized = true;
+                size = astarraysize.integer;
+            }
+            else
+            {
+                if(declarationTree.integer != null) //if is from type a[]=CONST and a[] have not been previously defined, it cannot happen
+                {
+                    if(symbol != null) //if is from type a[]=CONST and a[] have been previously defined
+                    {
+                        VarSymbol varSymbol = (VarSymbol) symbol;
+                        varSymbol.setInitialized(true);
+                        return varSymbol;
+                    }
+                    else
+                    {
+                        System.out.println("Variable " + astarrayelement.id + " has the size not defined. Error assigning " +
+                                declarationTree.integer + " to all elements of " + astarrayelement.id); //TODO linha
+                        return null;
+                    }
+                }
+            }
+
+            VarSymbol varSymbol = new VarSymbol(astarrayelement.id, "ARRAYELEMENT", initialized, size);
+
+            //TODO DEBUG TIRAR
+            System.out.println("From parseDeclaration, ASTARRAYELEMENT");
+            System.out.println("symbol id: " + varSymbol.getId());
+            System.out.println("symbol type: " + varSymbol.getType());
+            System.out.println("symbol size: " + varSymbol.getSize());
+
+
+            mySymbols.put(varSymbol.getId(), varSymbol);
+            return varSymbol;
         }
 
-
-       /* Node node = child.jjtGetChild(0);
-
-        //TODO DEBUG TIRAR
-        System.out.println("symbol name: " + name);
-        System.out.println("symbol type: " + type);
-
-
-        mySymbols.put(varSymbol.getId(), varSymbol);*/
         return null;
     }
 }
