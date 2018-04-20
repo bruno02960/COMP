@@ -134,7 +134,7 @@ SimpleNode Module()         :
   {
     < MODULE > t = < ID >
     {
-      jjtn000.id = t.image;
+      jjtn000.name = t.image;
     }
     < LCHAVETA > (Declaration()) * (Function()) * < RCHAVETA >
   }
@@ -589,9 +589,15 @@ void CallStatement()       :
 }
 
 /* Assign ::= Lhs <ASSIGN> Rhs <PVIRG> */
-void Assign()       :
-{}
-{
+void Assign()         :
+{/*@bgen(jjtree) ASSIGN */
+  ASTASSIGN jjtn000 = new ASTASSIGN(JJTASSIGN);
+  boolean jjtc000 = true;
+  jjtree.openNodeScope(jjtn000);
+/*@egen*/}
+{/*@bgen(jjtree) ASSIGN */
+  try {
+/*@egen*/
   try
   {
     Lhs() < ASSIGN > Rhs() < PVIRG >
@@ -605,7 +611,27 @@ void Assign()       :
       t2 = getNextToken();
     }
     while (t2.kind != PVIRG);
+  }/*@bgen(jjtree)*/
+  } catch (Throwable jjte000) {
+    if (jjtc000) {
+      jjtree.clearNodeScope(jjtn000);
+      jjtc000 = false;
+    } else {
+      jjtree.popNode();
+    }
+    if (jjte000 instanceof RuntimeException) {
+      throw (RuntimeException)jjte000;
+    }
+    if (jjte000 instanceof ParseException) {
+      throw (ParseException)jjte000;
+    }
+    throw (Error)jjte000;
+  } finally {
+    if (jjtc000) {
+      jjtree.closeNodeScope(jjtn000, true);
+    }
   }
+/*@egen*/
 }
 
 /* Lhs ::= ArrayAccess | ScalarAccess */

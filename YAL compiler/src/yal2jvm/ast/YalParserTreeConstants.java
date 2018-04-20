@@ -12,17 +12,18 @@ public interface YalParserTreeConstants
   public int JJTSTATEMENTS = 6;
   public int JJTVOID = 7;
   public int JJTCALL = 8;
-  public int JJTRHS = 9;
-  public int JJTARRAYSIZE = 10;
-  public int JJTTERM = 11;
-  public int JJTEXPRTEST = 12;
-  public int JJTWHILE = 13;
-  public int JJTIF = 14;
-  public int JJTELSE = 15;
-  public int JJTARGUMENT = 16;
-  public int JJTARRAYACCESS = 17;
-  public int JJTSCALARACCESS = 18;
-  public int JJTINDEX = 19;
+  public int JJTASSIGN = 9;
+  public int JJTRHS = 10;
+  public int JJTARRAYSIZE = 11;
+  public int JJTTERM = 12;
+  public int JJTEXPRTEST = 13;
+  public int JJTWHILE = 14;
+  public int JJTIF = 15;
+  public int JJTELSE = 16;
+  public int JJTARGUMENT = 17;
+  public int JJTARRAYACCESS = 18;
+  public int JJTSCALARACCESS = 19;
+  public int JJTINDEX = 20;
 
 
   public String[] jjtNodeName = {
@@ -35,6 +36,7 @@ public interface YalParserTreeConstants
     "STATEMENTS",
     "void",
     "CALL",
+    "ASSIGN",
     "RHS",
     "ARRAYSIZE",
     "TERM",
@@ -48,4 +50,4 @@ public interface YalParserTreeConstants
     "INDEX",
   };
 }
-/* JavaCC - OriginalChecksum=d25106826bc536daa80fb222b39270a8 (do not edit this line) */
+/* JavaCC - OriginalChecksum=570f4ccf125c96ed1859a753b3b81c86 (do not edit this line) */

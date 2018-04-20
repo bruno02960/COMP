@@ -400,7 +400,7 @@ void CallStatement() #CALL :
 }
 
 /* Assign ::= Lhs <ASSIGN> Rhs <PVIRG> */
-void Assign() #void :
+void Assign() #ASSIGN :
 {}
 {
   try

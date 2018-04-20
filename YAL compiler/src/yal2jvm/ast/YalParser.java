@@ -563,12 +563,17 @@ public class YalParser/*@bgen(jjtree)*/implements YalParserTreeConstants, YalPar
 
 /* Assign ::= Lhs <ASSIGN> Rhs <PVIRG> */
   static final public void Assign() throws ParseException {
+ /*@bgen(jjtree) ASSIGN */
+  ASTASSIGN jjtn000 = new ASTASSIGN(JJTASSIGN);
+  boolean jjtc000 = true;
+  jjtree.openNodeScope(jjtn000);
     try {
-      Lhs();
-      jj_consume_token(ASSIGN);
-      Rhs();
-      jj_consume_token(PVIRG);
-    } catch (ParseException e) {
+      try {
+        Lhs();
+        jj_consume_token(ASSIGN);
+        Rhs();
+        jj_consume_token(PVIRG);
+      } catch (ParseException e) {
     System.out.println(e.toString());
     Token t2;
     do
@@ -576,6 +581,25 @@ public class YalParser/*@bgen(jjtree)*/implements YalParserTreeConstants, YalPar
       t2 = getNextToken();
     }
     while (t2.kind != PVIRG);
+      }
+    } catch (Throwable jjte000) {
+    if (jjtc000) {
+      jjtree.clearNodeScope(jjtn000);
+      jjtc000 = false;
+    } else {
+      jjtree.popNode();
+    }
+    if (jjte000 instanceof RuntimeException) {
+      {if (true) throw (RuntimeException)jjte000;}
+    }
+    if (jjte000 instanceof ParseException) {
+      {if (true) throw (ParseException)jjte000;}
+    }
+    {if (true) throw (Error)jjte000;}
+    } finally {
+    if (jjtc000) {
+      jjtree.closeNodeScope(jjtn000, true);
+    }
     }
   }
 
