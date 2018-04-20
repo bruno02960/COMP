@@ -250,8 +250,11 @@ public abstract class Analysis
     {
         String id = ((ASTSCALARACCESS) ast.jjtGetChild(0)).id;
         System.out.println("\nid: " + id);//TODO
-        VarSymbol varSymbol = (VarSymbol) hasAccessToSymbol(id);
-        if(varSymbol == null)
+        VarSymbol varSymbol = (VarSymbol) checkSymbolExistsAndIsInitialized(id);
+        return varSymbol;
+
+
+       /* if(varSymbol == null)
         {
             System.out.println("Access to undeclared variable +" + id + "."); //TODO linha
             return null;
@@ -262,9 +265,7 @@ public abstract class Analysis
         {
             System.out.println("Access to uninitialized variable +" + id + "."); //TODO linha
             return null;
-        }
-
-        return varSymbol;
+        }*/
     }
 
     protected VarSymbol parseDeclaration(ASTDECLARATION declarationTree)
@@ -360,5 +361,28 @@ public abstract class Analysis
         }
 
         return null;
+    }
+
+    protected VarSymbol parseAssign(ASTASSIGN assignTree)
+    {
+        VarSymbol lhsSymbol = null;
+        SimpleNode lhsTree = (SimpleNode) ast.jjtGetChild(0);
+        if(lhsTree != null)
+        {
+            lhsSymbol = parseLhs(lhsTree);
+            if(lhsSymbol == null)
+                return null;
+        }
+
+        SimpleNode rhsTree = (SimpleNode) ast.jjtGetChild(1);
+        if(rhsTree != null)
+        {
+            VarSymbol rhsSymbol = parseRhs(rhsTree);
+            if(rhsSymbol == null)
+                return null;
+        }
+
+        lhsSymbol.setInitialized(true);
+        return lhsSymbol;
     }
 }
