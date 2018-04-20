@@ -129,9 +129,40 @@ public abstract class Analysis
 
     protected VarSymbol parseArrayAccess(ASTARRAYACCESS arrayAccessTree)
     {
-        String array = ((ASTARRAYACCESS) arrayAccessTree.jjtGetChild(0)).arrayID;
+        String arrayId = arrayAccessTree.arrayID;
 
-        int lbrIdx = array.indexOf("[");
+        VarSymbol arraySymbol = (VarSymbol) checkSymbolExistsAndIsInitialized(arrayId);
+        if(arraySymbol == null)
+            return null;
+
+        if(!arraySymbol.getType().equals("ARRAYELEMENT"))
+        {
+            System.out.println("Access to index of variable +" + arrayId + " that is not an array."); //TODO linha
+            return null;
+        }
+
+        ASTINDEX astindex = (ASTINDEX) arrayAccessTree.jjtGetChild(0);
+        String indexSymbolId = astindex.indexID;
+        VarSymbol indexSymbol;
+        if(indexSymbolId != null)
+        {
+            indexSymbol = (VarSymbol)checkSymbolExistsAndIsInitialized(indexSymbolId);
+            if(indexSymbol != null)
+            {
+                if(astindex.indexValue >= indexSymbol.getSize())
+                {
+                    System.out.println("Access to out of bounds " + astindex.indexValue + " in array " + indexSymbolId +"."); //TODO linha
+                    return null;
+                }
+            }
+        }
+
+        return arraySymbol;
+
+
+
+
+       /* int lbrIdx = array.indexOf("[");
         int rbrIdx = array.indexOf("]");
 
         String id = array.substring(0, lbrIdx);
@@ -159,13 +190,24 @@ public abstract class Analysis
             }
         }
 
-        if(!varSymbol.getType().equals("ARRAYELEMENT"))
+*/
+    }
+
+    private Symbol checkSymbolExistsAndIsInitialized(String symbolId)
+    {
+        VarSymbol indexSymbol = (VarSymbol) hasAccessToSymbol(symbolId);
+        if(indexSymbol == null)
         {
-            System.out.println("Access to index of variable +" + id + " that is not an array."); //TODO linha
+            System.out.println("Access to undeclared variable +" + symbolId + "."); //TODO linha
+            return null;
+        }
+        if(!indexSymbol.isInitialized())
+        {
+            System.out.println("Access to uninitialized variable +" + symbolId + "."); //TODO linha
             return null;
         }
 
-        return varSymbol;
+        return indexSymbol;
     }
 
 
