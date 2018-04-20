@@ -24,8 +24,19 @@ public class FunctionAnalysis extends Analysis
             switch(nodeId)
             {
                 case "ASTWHILE":
-                    WhileAnalysis whileAnalysis = new WhileAnalysis(ast, getUnifiedSymbolTable(), functionNameToFunctionSymbol);
+                    WhileAnalysis whileAnalysis = new WhileAnalysis(node, getUnifiedSymbolTable(), functionNameToFunctionSymbol);
                     whileAnalysis.parse();
+                    break;
+                case "ASTIF":
+                    IfAnalysis ifAnalysis = new IfAnalysis(node, getUnifiedSymbolTable(), functionNameToFunctionSymbol);
+                    ifAnalysis.parse();
+                    break;
+                case "ASTCALL":
+                    parseCall((ASTCALL) node);
+                    break;
+                case "ASTASSIGN":
+                    parseAssign((ASTASSIGN) node);
+                    break;
             }
         }
     }
