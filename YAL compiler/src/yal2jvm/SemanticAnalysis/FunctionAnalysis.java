@@ -16,25 +16,29 @@ public class FunctionAnalysis extends Analysis
     @Override
     protected void parse()
     {
-        int astNumChilds = ast.jjtGetNumChildren();
-        for(int i = 0; i < astNumChilds; i++)
+        FunctionSymbol astFunction = (FunctionSymbol) functionNameToFunctionSymbol.get(((ASTFUNCTION)ast).id);
+        int statementsChildNumber = astFunction.getStatementsChildNumber();
+
+        Node statementsNode = ast.jjtGetChild(statementsChildNumber);
+        int statementsNumChilds = statementsNode.jjtGetNumChildren();
+        for(int i = 0; i < statementsNumChilds; i++)
         {
-            SimpleNode node = (SimpleNode) ast.jjtGetChild(i);
+            SimpleNode node = (SimpleNode) statementsNode.jjtGetChild(i);
             String nodeId = node.toString();
             switch(nodeId)
             {
-                case "ASTWHILE":
+                case "WHILE":
                     WhileAnalysis whileAnalysis = new WhileAnalysis(node, getUnifiedSymbolTable(), functionNameToFunctionSymbol);
                     whileAnalysis.parse();
                     break;
-                case "ASTIF":
+                case "IF":
                     IfAnalysis ifAnalysis = new IfAnalysis(node, getUnifiedSymbolTable(), functionNameToFunctionSymbol);
                     ifAnalysis.parse();
                     break;
-                case "ASTCALL":
+                case "CALL":
                     parseCall((ASTCALL) node);
                     break;
-                case "ASTASSIGN":
+                case "ASSIGN":
                     parseAssign((ASTASSIGN) node);
                     break;
             }

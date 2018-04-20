@@ -9,6 +9,14 @@ public class FunctionSymbol extends Symbol
     private SimpleNode functionAST;
     private ArrayList<VarSymbol> arguments;
     private VarSymbol returnValue;
+    private int statementsChildNumber = 0;
+
+    public FunctionSymbol(SimpleNode functionAST, String id)
+    {
+        super(id);
+        this.functionAST = functionAST;
+        this.arguments = new ArrayList<VarSymbol>();
+    }
 
     public FunctionSymbol(SimpleNode functionAST, String id, ArrayList<VarSymbol> arguments, VarSymbol returnValue)
     {
@@ -47,4 +55,70 @@ public class FunctionSymbol extends Symbol
     {
         this.returnValue = returnValue;
     }
+
+    public int getStatementsChildNumber()
+    {
+        return statementsChildNumber;
+    }
+
+    public void setStatementsChildNumber(int statementsChildNumber)
+    {
+        this.statementsChildNumber = statementsChildNumber;
+    }
+
+
+    public void parseFunctionHeader()
+    {
+        int argumentsIndex = 0; //indicates the index(child num) of the arguments. 0 if no return value, or 1 if has return value.
+
+        //get return value if existent
+        SimpleNode returnValueNode = (SimpleNode) functionAST.jjtGetChild(0);
+        if(returnValueNode instanceof ASTSTATEMENTS)
+            return;
+
+        if(!(returnValueNode instanceof ASTARGUMENTS))
+        {
+            argumentsIndex++;
+            statementsChildNumber++;
+            if(returnValueNode instanceof ASTSCALARELEMENT)
+            {
+                ASTSCALARELEMENT astscalarelement = (ASTSCALARELEMENT)returnValueNode;
+                String returnValueId = astscalarelement.id;
+                returnValue = new VarSymbol(returnValueId, "ASTSCALARELEMENT", true);
+            }
+            else
+            {
+                ASTARRAYELEMENT astarrayelement = (ASTARRAYELEMENT)returnValueNode;
+                String returnValueId = astarrayelement.id;
+                returnValue = new VarSymbol(returnValueId, "ASTARRAYELEMENT", true);
+            }
+        }
+
+        //get arguments if existent
+        SimpleNode argumentsNode = (SimpleNode) functionAST.jjtGetChild(argumentsIndex);
+        if(argumentsNode == null || !(argumentsNode instanceof ASTARGUMENTS))
+            return;
+
+        statementsChildNumber++;
+        for(int i = 0; i < argumentsNode.jjtGetNumChildren(); i++)
+        {
+            SimpleNode child = (SimpleNode) argumentsNode.jjtGetChild(i);
+            if( child != null)
+            {
+                VarSymbol varSymbol;
+                if(child instanceof ASTSCALARELEMENT)
+                {
+                    ASTSCALARELEMENT astscalarelement = (ASTSCALARELEMENT)child;
+                    varSymbol = new VarSymbol(astscalarelement.id, "SCALARELEMENT", true);
+                }
+                else
+                {
+                    ASTARRAYELEMENT astarrayelement = (ASTARRAYELEMENT)child;
+                    varSymbol = new VarSymbol(astarrayelement.id, "ARRAYELEMENT", true);
+                }
+                arguments.add(varSymbol);
+            }
+        }
+    }
+
 }

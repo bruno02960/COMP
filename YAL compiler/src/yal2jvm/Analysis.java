@@ -27,8 +27,10 @@ public abstract class Analysis
     protected HashMap<String, Symbol> getUnifiedSymbolTable()
     {
         HashMap<String, Symbol> unifiedSymbolTable = new HashMap<String, Symbol>();
-        unifiedSymbolTable.putAll(mySymbols);
-        unifiedSymbolTable.putAll(inheritedSymbols);
+        if(mySymbols != null)
+            unifiedSymbolTable.putAll(mySymbols);
+        if(inheritedSymbols != null)
+            unifiedSymbolTable.putAll(inheritedSymbols);
 
         return  unifiedSymbolTable;
     }
@@ -366,7 +368,7 @@ public abstract class Analysis
     protected VarSymbol parseAssign(ASTASSIGN assignTree)
     {
         VarSymbol lhsSymbol = null;
-        SimpleNode lhsTree = (SimpleNode) ast.jjtGetChild(0);
+        SimpleNode lhsTree = (SimpleNode) assignTree.jjtGetChild(0);
         if(lhsTree != null)
         {
             lhsSymbol = parseLhs(lhsTree);
@@ -374,7 +376,7 @@ public abstract class Analysis
                 return null;
         }
 
-        SimpleNode rhsTree = (SimpleNode) ast.jjtGetChild(1);
+        SimpleNode rhsTree = (SimpleNode) assignTree.jjtGetChild(1);
         if(rhsTree != null)
         {
             VarSymbol rhsSymbol = parseRhs(rhsTree);

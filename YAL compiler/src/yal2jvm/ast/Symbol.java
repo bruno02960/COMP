@@ -2,7 +2,7 @@ package yal2jvm.ast;
 
 public class Symbol
 {
-    private String id;
+    protected String id;
 
     public Symbol(String id)
     {
