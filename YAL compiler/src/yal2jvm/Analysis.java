@@ -50,6 +50,7 @@ public abstract class Analysis
         return symbol;
     }
 
+
     protected VarSymbol parseLhs(SimpleNode lhsTree, boolean assign)
     {
         Node child = lhsTree.jjtGetChild(0);
@@ -239,7 +240,7 @@ public abstract class Analysis
                 sizeAccess = true;
             id = id.substring(0, dotIdx);
         }
-        System.out.println("\nid: " + id);//TODO
+        System.out.println("id: " + id);//TODO
         VarSymbol varSymbol = (VarSymbol) hasAccessToSymbol(id);
 
         if(!assign) {
