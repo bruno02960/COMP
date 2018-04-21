@@ -44,7 +44,8 @@ public abstract class Analysis
             if(symbol != null)
                 return symbol;
         }
-        else if(inheritedSymbols != null)
+
+        if(inheritedSymbols != null)
             symbol = inheritedSymbols.get(symbolId);
 
         return symbol;
@@ -53,7 +54,7 @@ public abstract class Analysis
     protected VarSymbol parseLhs(SimpleNode lhsTree, boolean assign)
     {
         Node child = lhsTree.jjtGetChild(0);
-        switch(child.toString())
+        switch(lhsTree.toString())
         {
             case "ARRAYACCESS":
                 return parseArrayAccess((ASTARRAYACCESS) child);
@@ -160,18 +161,21 @@ public abstract class Analysis
 
         ASTINDEX astindex = (ASTINDEX) arrayAccessTree.jjtGetChild(0);
         String indexSymbolId = astindex.indexID;
-        VarSymbol indexSymbol;
         if(indexSymbolId != null)
         {
-            indexSymbol = (VarSymbol)checkSymbolExistsAndIsInitialized(indexSymbolId);
-            if(indexSymbol != null)
+            VarSymbol indexSymbol = (VarSymbol)checkSymbolExistsAndIsInitialized(indexSymbolId);
+            if(indexSymbol == null)
+                return null;
+        }
+        else
+        {
+            Integer indexValue = astindex.indexValue;
+            if(indexValue >= arraySymbol.getSize())
             {
-                if(astindex.indexValue >= indexSymbol.getSize())
-                {
-                    System.out.println("Access to out of bounds " + astindex.indexValue + " in array " + indexSymbolId +"."); //TODO linha
-                    return null;
-                }
+                System.out.println("Access to out of bounds " + indexValue + " in array " + arrayId +"."); //TODO linha
+                return null;
             }
+
         }
 
         return arraySymbol;
@@ -191,7 +195,7 @@ public abstract class Analysis
         VarSymbol varSymbol = (VarSymbol) hasAccessToSymbol(id);
         if(varSymbol == null)
         {
-            System.out.println("Access to undeclared variable +" + id + "."); //TODO linha
+            System.out.println("Access to undeclared variable " + id + "."); //TODO linha
             return null;
         }
 
@@ -215,12 +219,12 @@ public abstract class Analysis
         VarSymbol indexSymbol = (VarSymbol) hasAccessToSymbol(symbolId);
         if(indexSymbol == null)
         {
-            System.out.println("Access to undeclared variable +" + symbolId + "."); //TODO linha
+            System.out.println("Access to undeclared variable " + symbolId + "."); //TODO linha
             return null;
         }
         if(!indexSymbol.isInitialized())
         {
-            System.out.println("Access to uninitialized variable +" + symbolId + "."); //TODO linha
+            System.out.println("Access to uninitialized variable " + symbolId + "."); //TODO linha
             return null;
         }
 
@@ -242,8 +246,8 @@ public abstract class Analysis
         System.out.println("\nid: " + id);//TODO
         VarSymbol varSymbol = (VarSymbol) hasAccessToSymbol(id);
 
-        if(!assign) {
-
+        if(!assign)
+        {
             if (varSymbol == null) {
                 System.out.println("Access to undeclared variable" + id + "."); //TODO linha
                 return null;
@@ -277,14 +281,14 @@ public abstract class Analysis
 
        /* if(varSymbol == null)
         {
-            System.out.println("Access to undeclared variable +" + id + "."); //TODO linha
+            System.out.println("Access to undeclared variable " + id + "."); //TODO linha
             return null;
         }
 
         //TODO nao faz sentido em todos os casos apenas quando é read da variavel
         if(!varSymbol.isInitialized())
         {
-            System.out.println("Access to uninitialized variable +" + id + "."); //TODO linha
+            System.out.println("Access to uninitialized variable " + id + "."); //TODO linha
             return null;
         }*/
     }
