@@ -10,7 +10,7 @@ module program1 {
 		M=d.size-1; //d.size equivalent to d.length (Java)
 		while(i<M) { // version not optimized!
 			a=d[i]; i=i+1; b=d[i];
-			mx= library1.max(a,b);
+			mx= library1.max(a,3);
 			mn= library1.min(a,b);
 		}
 	}

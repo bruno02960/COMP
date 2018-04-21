@@ -420,7 +420,7 @@ void Assign() #ASSIGN :
 }
 
 /* Lhs ::= ArrayAccess | ScalarAccess */
-void Lhs() #void :
+void Lhs() #LHS :
 {}
 {
   LOOKAHEAD(2)

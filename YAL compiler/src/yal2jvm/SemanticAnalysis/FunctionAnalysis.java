@@ -17,6 +17,8 @@ public class FunctionAnalysis extends Analysis
     protected void parse()
     {
         FunctionSymbol astFunction = (FunctionSymbol) functionNameToFunctionSymbol.get(((ASTFUNCTION)ast).id);
+
+        /* parseStmtlst() */
         int statementsChildNumber = astFunction.getStatementsChildNumber();
 
         Node statementsNode = ast.jjtGetChild(statementsChildNumber);

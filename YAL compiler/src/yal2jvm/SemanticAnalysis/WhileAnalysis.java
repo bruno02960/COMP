@@ -2,6 +2,7 @@ package yal2jvm.SemanticAnalysis;
 
 import yal2jvm.Analysis;
 import yal2jvm.ast.ASTEXPRTEST;
+import yal2jvm.ast.ASTSTATEMENTS;
 import yal2jvm.ast.SimpleNode;
 import yal2jvm.ast.Symbol;
 
@@ -21,6 +22,11 @@ public class WhileAnalysis extends Analysis
         ASTEXPRTEST exprtest = ((ASTEXPRTEST) ast.jjtGetChild(0));
 
         SimpleNode lhs = (SimpleNode) exprtest.jjtGetChild(0);
-        //return parseLhs(lhs);
+        /* parseLhs(lhs); */
+        SimpleNode rhs = (SimpleNode) exprtest.jjtGetChild(1);
+        /* parseRhs(rhs); */
+
+        ASTSTATEMENTS stmtlst = ((ASTSTATEMENTS) ast.jjtGetChild(1));
+        /* parseStmts(stmtlst); */
     }
 }

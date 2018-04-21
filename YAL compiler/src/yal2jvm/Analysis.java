@@ -50,7 +50,7 @@ public abstract class Analysis
         return symbol;
     }
 
-    protected VarSymbol parseLhs(SimpleNode lhsTree)
+    protected VarSymbol parseLhs(SimpleNode lhsTree, boolean assign)
     {
         Node child = lhsTree.jjtGetChild(0);
         switch(child.toString())
@@ -58,22 +58,35 @@ public abstract class Analysis
             case "ARRAYACCESS":
                 return parseArrayAccess((ASTARRAYACCESS) child);
             case "SCALARACCESS":
-                return parseScalarAccess((ASTSCALARACCESS) child);
+                return parseScalarAccess((ASTSCALARACCESS) child, true);
         }
 
         return null;
     }
 
-    protected VarSymbol parseRhs(SimpleNode rhsTree)
+    protected VarSymbol parseRhs(SimpleNode rhsTree, boolean assign)
     {
         Node child = rhsTree.jjtGetChild(0);
         switch(child.toString())
         {
             case "ARRAYSIZE":
+                return parseArraySize((ASTARRAYSIZE) child);
 
             case "TERM":
                 return parseTerm((ASTTERM) child);
         }
+
+        return null;
+    }
+
+    protected VarSymbol parseArraySize(ASTARRAYSIZE arraySizeTree) {
+        ASTSCALARACCESS child = (ASTSCALARACCESS) arraySizeTree.jjtGetChild(0);
+
+        if(child.toString() == "SCALARACCESS") {
+            parseScalarAccess(child, false);
+        }
+
+        /* Get <INTEGER> for analysis */
 
         return null;
     }
@@ -87,8 +100,10 @@ public abstract class Analysis
                 return parseCall((ASTCALL) child);
 
             case "ARRAYACCESS":
+                return parseArrayAccess((ASTARRAYACCESS) child);
 
             case "SCALARACCESS":
+                return parseScalarAccess((ASTSCALARACCESS) child, false);
 
         }
         return null;
@@ -213,9 +228,9 @@ public abstract class Analysis
     }
 
 
-    protected VarSymbol parseScalarAccess(ASTSCALARACCESS scalarAccessTree)
+    protected VarSymbol parseScalarAccess(ASTSCALARACCESS scalarAccessTree, boolean assign)
     {
-        String id = ((ASTSCALARACCESS) scalarAccessTree.jjtGetChild(0)).id;
+        String id = scalarAccessTree.id;
         boolean sizeAccess = false;
         if(id.contains("."))
         {
@@ -226,25 +241,29 @@ public abstract class Analysis
         }
         System.out.println("\nid: " + id);//TODO
         VarSymbol varSymbol = (VarSymbol) hasAccessToSymbol(id);
-        if(varSymbol == null)
-        {
-            System.out.println("Access to undeclared variable +" + id + "."); //TODO linha
-            return null;
+
+        if(!assign) {
+
+            if (varSymbol == null) {
+                System.out.println("Access to undeclared variable" + id + "."); //TODO linha
+                return null;
+            }
+
+            if (!varSymbol.isInitialized()) {
+                System.out.println("Access to uninitialized variable +" + id + "."); //TODO linha
+                return null;
+            }
+
+            if (varSymbol.getType().equals("ARRAYELEMENT") && !sizeAccess) {
+                System.out.println("Access to size of variable +" + id + " that is not an array."); //TODO linha
+                return null;
+            }
+
+            return varSymbol;
+
         }
 
-        if(!varSymbol.isInitialized())
-        {
-            System.out.println("Access to uninitialized variable +" + id + "."); //TODO linha
-            return null;
-        }
-
-        if(varSymbol.getType().equals("ARRAYELEMENT") && !sizeAccess)
-        {
-            System.out.println("Access to size of variable +" + id + " that is not an array."); //TODO linha
-            return null;
-        }
-
-        return varSymbol;
+        return null;
     }
 
     //don't use in Declaration
@@ -371,7 +390,7 @@ public abstract class Analysis
         SimpleNode lhsTree = (SimpleNode) assignTree.jjtGetChild(0);
         if(lhsTree != null)
         {
-            lhsSymbol = parseLhs(lhsTree);
+            lhsSymbol = parseLhs(lhsTree, true);
             if(lhsSymbol == null)
                 return null;
         }
@@ -379,7 +398,7 @@ public abstract class Analysis
         SimpleNode rhsTree = (SimpleNode) assignTree.jjtGetChild(1);
         if(rhsTree != null)
         {
-            VarSymbol rhsSymbol = parseRhs(rhsTree);
+            VarSymbol rhsSymbol = parseRhs(rhsTree, true);
             if(rhsSymbol == null)
                 return null;
         }
