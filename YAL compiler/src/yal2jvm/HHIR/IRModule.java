@@ -25,6 +25,9 @@ public class IRModule extends IRNode
 		inst.add(inst1);
 		inst.add(inst2);
 		
+		for (int i = 0; i < children.size(); i++)
+			inst.addAll(children.get(i).getInstructions());
+		
 		return inst;
 	}
 
@@ -37,5 +40,4 @@ public class IRModule extends IRNode
 	{
 		this.name = name;
 	}
-	
 }
