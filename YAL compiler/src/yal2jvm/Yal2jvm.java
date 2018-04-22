@@ -97,7 +97,7 @@ public class Yal2jvm
 		FileInputStream inputStream = getFileStream();
 		
 		ast = createAst(inputStream);
-		//ast.dump("");
+		ast.dump("");
 
         //ModuleAnalysis moduleAnalysis = new ModuleAnalysis(ast);
         //moduleAnalysis.parse();
