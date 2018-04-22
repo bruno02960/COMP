@@ -17,6 +17,7 @@ import yal2jvm.HHIR.IRReturn;
 import yal2jvm.HHIR.IRStoreArith;
 import yal2jvm.HHIR.Operation;
 import yal2jvm.HHIR.Type;
+import yal2jvm.SemanticAnalysis.ModuleAnalysis;
 import yal2jvm.ast.*;
 
 public class Yal2jvm
@@ -103,19 +104,19 @@ public class Yal2jvm
 		ast = createAst(inputStream);
 		ast.dump("");
 
-        //ModuleAnalysis moduleAnalysis = new ModuleAnalysis(ast);
-        //moduleAnalysis.parse();
+        ModuleAnalysis moduleAnalysis = new ModuleAnalysis(ast);
+        moduleAnalysis.parse();
         //create HHIR
-        //IRModule module = moduleAnalysis.parse();
+		//IRModule module = moduleAnalysis.parse();
         
-        IRModule module = createHardcodedIR("Module1");
+        /*IRModule module = createHardcodedIR("Module1");
         ArrayList<String> instructions = module.getInstructions();
         String moduleName = module.getName();
         
         saveToJasminFile(instructions, moduleName);
         compileToBytecode(moduleName + ".j");
 
-        System.exit(0);
+        System.exit(0);*/
 	}
 
 	private FileInputStream getFileStream()
