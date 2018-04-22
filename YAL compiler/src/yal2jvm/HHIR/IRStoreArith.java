@@ -37,11 +37,22 @@ public class IRStoreArith extends IRNode
 			case AND: opInst = "iand"; break;
 			case OR: opInst = "ior"; break;
 		}
-		//code for storing
+		
+		ArrayList<String> storeInst = getInstForStoring();
 		
 		inst.addAll(rhsInst);
 		inst.addAll(lhsInst);
 		inst.add(opInst);
+		inst.addAll(storeInst);
+		return inst;
+	}
+
+	private ArrayList<String> getInstForStoring()
+	{
+		ArrayList<String> inst = new ArrayList<>();
+		
+		
+		
 		return inst;
 	}
 

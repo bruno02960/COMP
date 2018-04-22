@@ -6,9 +6,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 
 import yal2jvm.HHIR.IRAllocate;
@@ -18,10 +15,8 @@ import yal2jvm.HHIR.IRMethod;
 import yal2jvm.HHIR.IRModule;
 import yal2jvm.HHIR.IRReturn;
 import yal2jvm.HHIR.IRStoreArith;
-import yal2jvm.HHIR.IntermediateRepresentation;
 import yal2jvm.HHIR.Operation;
 import yal2jvm.HHIR.Type;
-import yal2jvm.SemanticAnalysis.ModuleAnalysis;
 import yal2jvm.ast.*;
 
 public class Yal2jvm
@@ -108,14 +103,14 @@ public class Yal2jvm
 		ast = createAst(inputStream);
 		ast.dump("");
 
-        ModuleAnalysis moduleAnalysis = new ModuleAnalysis(ast);
-        moduleAnalysis.parse();
+        //ModuleAnalysis moduleAnalysis = new ModuleAnalysis(ast);
+        //moduleAnalysis.parse();
         //create HHIR
-        //IntermediateRepresentation hhir = moduleAnalysis.parse();
+        //IRModule module = moduleAnalysis.parse();
         
-        IntermediateRepresentation hhir = createHardcodedIR("Module1");
-        ArrayList<String> instructions = hhir.selectInstructions();
-        String moduleName = hhir.getModuleName();
+        IRModule module = createHardcodedIR("Module1");
+        ArrayList<String> instructions = module.getInstructions();
+        String moduleName = module.getName();
         
         saveToJasminFile(instructions, moduleName);
         compileToBytecode(moduleName + ".j");
@@ -189,10 +184,9 @@ public class Yal2jvm
 		}
 	}
 	
-	private IntermediateRepresentation createHardcodedIR(String moduleName)
+	private IRModule createHardcodedIR(String moduleName)
 	{
-		IntermediateRepresentation hhir = new IntermediateRepresentation(moduleName);
-		IRModule module = hhir.getRoot();
+		IRModule module = new IRModule("Module1");
 		module.addChild(new IRGlobal("a", Type.INTEGER, null));
 		module.addChild(new IRGlobal("b", Type.INTEGER, null));
 		module.addChild(new IRGlobal("c", Type.INTEGER, 12));
@@ -214,6 +208,6 @@ public class Yal2jvm
 			method.addChild(new IRReturn(null, null));
 		
 		module.addChild(method);
-		return hhir;
+		return module;
 	}
 }
