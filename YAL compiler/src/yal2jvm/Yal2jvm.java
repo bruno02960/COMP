@@ -11,9 +11,11 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 
+import yal2jvm.HHIR.IRAllocate;
 import yal2jvm.HHIR.IRGlobal;
 import yal2jvm.HHIR.IRMethod;
 import yal2jvm.HHIR.IRModule;
+import yal2jvm.HHIR.IRReturn;
 import yal2jvm.HHIR.IntermediateRepresentation;
 import yal2jvm.HHIR.Type;
 import yal2jvm.SemanticAnalysis.ModuleAnalysis;
@@ -176,7 +178,7 @@ public class Yal2jvm
 		{
 			Runtime.getRuntime().exec("java -jar jasmin.jar " + fileName).waitFor();
 			File file = new File(fileName);
-			file.delete();
+			//file.delete();
 		} 
         catch (IOException | InterruptedException e)
 		{
@@ -192,10 +194,17 @@ public class Yal2jvm
 		module.addChild(new IRGlobal("b", Type.INTEGER, null));
 		module.addChild(new IRGlobal("c", Type.INTEGER, 12));
 		module.addChild(new IRGlobal("d", Type.INTEGER, 12345));
-		module.addChild(new IRMethod("method1", Type.VOID, null));
+		module.addChild(new IRMethod("method1", Type.INTEGER, null));
 		module.addChild(new IRMethod("method2", Type.VOID, new Type[]{Type.INTEGER}));
-		module.addChild(new IRMethod("method3", Type.INTEGER, new Type[]{Type.INTEGER, Type.INTEGER, Type.INTEGER}));
+		module.addChild(new IRMethod("method3", Type.VOID, new Type[]{Type.INTEGER, Type.INTEGER, Type.INTEGER}));
 		
+		IRMethod method = new IRMethod("main", Type.VOID, null);
+		method.addChild(new IRAllocate("var1", Type.INTEGER, null));
+		method.addChild(new IRAllocate("var2", Type.INTEGER, 10));
+		method.addChild(new IRAllocate("var3", Type.INTEGER, 20000));
+		method.addChild(new IRReturn(null, null));
+		
+		module.addChild(method);
 		return hhir;
 	}
 }

@@ -7,6 +7,9 @@ public class IRMethod extends IRNode
 	private String name;
 	private Type returnType;
 	private Type[] argsType;
+	public int labelN = 0;
+	public int regN = 0;
+	public int varN = 0;
 
 	public IRMethod(String name, Type returnType, Type[] argsTypes)
 	{
@@ -23,9 +26,27 @@ public class IRMethod extends IRNode
 		ArrayList<String> inst = new ArrayList<>();
 		
 		String inst1 = ".method public static " + name + "(";
-		for (int i = 0; i < argsType.length; i++)
+		
+		if (name.equals("main"))
+			inst1 += "main([Ljava/lang/String;)V";
+		else
 		{
-			switch(argsType[i])
+			for (int i = 0; i < argsType.length; i++)
+			{
+				switch(argsType[i])
+				{
+					case INTEGER:
+					{
+						inst1 += "I";
+						break;
+					}
+					case ARRAY: break;
+					default: break;
+				}
+			}
+			inst1 += ")";
+			
+			switch(returnType)
 			{
 				case INTEGER:
 				{
@@ -33,32 +54,42 @@ public class IRMethod extends IRNode
 					break;
 				}
 				case ARRAY: break;
-				default: break;
+				case VOID:
+					inst1 += "V";
+					break;
+				default:
+					break;
 			}
 		}
-		inst1 += ")";
 		
-		switch(returnType)
-		{
-			case INTEGER:
-			{
-				inst1 += "I";
-				break;
-			}
-			case ARRAY: break;
-			case VOID:
-				inst1 += "V";
-				break;
-			default:
-				break;
-		}
-		
-		//ArrayList<String> methodBody = children.get(0).getInstructions();
+		ArrayList<String> methodBody = getMethodBody();
 		String instFinal = ".end method";
 		
 		inst.add(inst1);
-		//inst.add(methodBody);
+		inst.addAll(methodBody);
 		inst.add(instFinal);
+		return inst;
+	}
+
+	private ArrayList<String> getMethodBody()
+	{
+		ArrayList<String> inst = new ArrayList<>();
+		
+		int localsCount = 0;
+		for (int i = 0; i < children.size(); i++)
+		{
+			IRNode node = children.get(i);
+			if (node.toString() == "Allocate")
+				localsCount++;
+		}
+		if (localsCount > 0)
+			inst.add(".limit locals " + localsCount);
+		
+		for (int i = 0; i < children.size(); i++)
+		{
+			IRNode node = children.get(i);
+			inst.addAll(node.getInstructions());
+		}
 		return inst;
 	}
 }
