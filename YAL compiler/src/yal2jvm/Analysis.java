@@ -1,5 +1,6 @@
 package yal2jvm;
 
+import yal2jvm.SymbolTables.ImmediateSymbol;
 import yal2jvm.SymbolTables.VarSymbol;
 import yal2jvm.ast.*;
 
@@ -44,14 +45,14 @@ public abstract class Analysis
             if(symbol != null)
                 return symbol;
         }
-        else if(inheritedSymbols != null)
+
+        if(inheritedSymbols != null)
             symbol = inheritedSymbols.get(symbolId);
 
         return symbol;
     }
 
-
-    protected VarSymbol parseLhs(SimpleNode lhsTree, boolean assign)
+    protected VarSymbol parseLhs(SimpleNode lhsTree)
     {
         Node child = lhsTree.jjtGetChild(0);
         switch(child.toString())
@@ -59,13 +60,13 @@ public abstract class Analysis
             case "ARRAYACCESS":
                 return parseArrayAccess((ASTARRAYACCESS) child);
             case "SCALARACCESS":
-                return parseScalarAccess((ASTSCALARACCESS) child, true);
+                return parseScalarAccess((ASTSCALARACCESS) child);
         }
 
         return null;
     }
 
-    protected VarSymbol parseRhs(SimpleNode rhsTree, boolean assign)
+    protected VarSymbol parseRhs(SimpleNode rhsTree)
     {
         Node child = rhsTree.jjtGetChild(0);
         switch(child.toString())
@@ -84,7 +85,7 @@ public abstract class Analysis
         ASTSCALARACCESS child = (ASTSCALARACCESS) arraySizeTree.jjtGetChild(0);
 
         if(child.toString() == "SCALARACCESS") {
-            parseScalarAccess(child, false);
+            parseScalarAccess(child);
         }
 
         /* Get <INTEGER> for analysis */
@@ -94,6 +95,9 @@ public abstract class Analysis
 
     protected VarSymbol parseTerm(ASTTERM termTree)
     {
+        if(termTree.integer != null)
+            return new ImmediateSymbol(termTree.integer);
+
         Node child = termTree.jjtGetChild(0);
         switch(child.toString())
         {
@@ -104,7 +108,7 @@ public abstract class Analysis
                 return parseArrayAccess((ASTARRAYACCESS) child);
 
             case "SCALARACCESS":
-                return parseScalarAccess((ASTSCALARACCESS) child, false);
+                return parseScalarAccess((ASTSCALARACCESS) child);
 
         }
         return null;
@@ -153,7 +157,7 @@ public abstract class Analysis
         if(arraySymbol == null)
             return null;
 
-        if(!arraySymbol.getType().equals("ARRAYELEMENT"))
+        if(!arraySymbol.getType().equals("ARRAY"))
         {
             System.out.println("Access to index of variable +" + arrayId + " that is not an array."); //TODO linha
             return null;
@@ -161,18 +165,21 @@ public abstract class Analysis
 
         ASTINDEX astindex = (ASTINDEX) arrayAccessTree.jjtGetChild(0);
         String indexSymbolId = astindex.indexID;
-        VarSymbol indexSymbol;
         if(indexSymbolId != null)
         {
-            indexSymbol = (VarSymbol)checkSymbolExistsAndIsInitialized(indexSymbolId);
-            if(indexSymbol != null)
+            VarSymbol indexSymbol = (VarSymbol)checkSymbolExistsAndIsInitialized(indexSymbolId);
+            if(indexSymbol == null)
+                return null;
+        }
+        else
+        {
+            Integer indexValue = astindex.indexValue;
+            if(indexValue >= arraySymbol.getSize())
             {
-                if(astindex.indexValue >= indexSymbol.getSize())
-                {
-                    System.out.println("Access to out of bounds " + astindex.indexValue + " in array " + indexSymbolId +"."); //TODO linha
-                    return null;
-                }
+                System.out.println("Access to out of bounds " + indexValue + " in array " + arrayId +"."); //TODO linha
+                return null;
             }
+
         }
 
         return arraySymbol;
@@ -192,7 +199,7 @@ public abstract class Analysis
         VarSymbol varSymbol = (VarSymbol) hasAccessToSymbol(id);
         if(varSymbol == null)
         {
-            System.out.println("Access to undeclared variable +" + id + "."); //TODO linha
+            System.out.println("Access to undeclared variable " + id + "."); //TODO linha
             return null;
         }
 
@@ -216,12 +223,12 @@ public abstract class Analysis
         VarSymbol indexSymbol = (VarSymbol) hasAccessToSymbol(symbolId);
         if(indexSymbol == null)
         {
-            System.out.println("Access to undeclared variable +" + symbolId + "."); //TODO linha
+            System.out.println("Access to undeclared variable " + symbolId + "."); //TODO linha
             return null;
         }
         if(!indexSymbol.isInitialized())
         {
-            System.out.println("Access to uninitialized variable +" + symbolId + "."); //TODO linha
+            System.out.println("Access to uninitialized variable " + symbolId + "."); //TODO linha
             return null;
         }
 
@@ -229,7 +236,7 @@ public abstract class Analysis
     }
 
 
-    protected VarSymbol parseScalarAccess(ASTSCALARACCESS scalarAccessTree, boolean assign)
+    protected VarSymbol parseScalarAccess(ASTSCALARACCESS scalarAccessTree)
     {
         String id = scalarAccessTree.id;
         boolean sizeAccess = false;
@@ -243,28 +250,23 @@ public abstract class Analysis
         System.out.println("id: " + id);//TODO
         VarSymbol varSymbol = (VarSymbol) hasAccessToSymbol(id);
 
-        if(!assign) {
 
-            if (varSymbol == null) {
-                System.out.println("Access to undeclared variable" + id + "."); //TODO linha
-                return null;
-            }
-
-            if (!varSymbol.isInitialized()) {
-                System.out.println("Access to uninitialized variable +" + id + "."); //TODO linha
-                return null;
-            }
-
-            if (varSymbol.getType().equals("ARRAYELEMENT") && !sizeAccess) {
-                System.out.println("Access to size of variable +" + id + " that is not an array."); //TODO linha
-                return null;
-            }
-
-            return varSymbol;
-
+        if (varSymbol == null) {
+            System.out.println("Access to undeclared variable" + id + "."); //TODO linha
+            return null;
         }
 
-        return null;
+        if (!varSymbol.isInitialized()) {
+            System.out.println("Access to uninitialized variable +" + id + "."); //TODO linha
+            return null;
+        }
+
+        if (varSymbol.getType().equals("ARRAYELEMENT") && !sizeAccess) {
+            System.out.println("Access to size of variable +" + id + " that is not an array."); //TODO linha
+            return null;
+        }
+
+        return varSymbol;
     }
 
     //don't use in Declaration
@@ -278,14 +280,14 @@ public abstract class Analysis
 
        /* if(varSymbol == null)
         {
-            System.out.println("Access to undeclared variable +" + id + "."); //TODO linha
+            System.out.println("Access to undeclared variable " + id + "."); //TODO linha
             return null;
         }
 
         //TODO nao faz sentido em todos os casos apenas quando é read da variavel
         if(!varSymbol.isInitialized())
         {
-            System.out.println("Access to uninitialized variable +" + id + "."); //TODO linha
+            System.out.println("Access to uninitialized variable " + id + "."); //TODO linha
             return null;
         }*/
     }
@@ -308,14 +310,14 @@ public abstract class Analysis
             if(declarationTree.integer != null) //if is from type a=CONST;
                 initialized = true;
 
-            VarSymbol varSymbol = new VarSymbol(astscalarelement.id, "SCALARELEMENT", initialized);
+            VarSymbol varSymbol = new VarSymbol(astscalarelement.id, "INTEGER", initialized);
 
             if(declarationTree.jjtGetNumChildren() > 1)
             {
                 //if is from type a=[CONST];
                 child = declarationTree.jjtGetChild(1);
                 ASTARRAYSIZE astarraysize = (ASTARRAYSIZE)child;
-                varSymbol.setType("ARRAYELEMENT");
+                varSymbol.setType("ARRAY");
                 varSymbol.setSize(astarraysize.integer);
                 varSymbol.setInitialized(true);
             }
@@ -369,7 +371,7 @@ public abstract class Analysis
                 }
             }
 
-            VarSymbol varSymbol = new VarSymbol(astarrayelement.id, "ARRAYELEMENT", initialized, size);
+            VarSymbol varSymbol = new VarSymbol(astarrayelement.id, "ARRAY", initialized, size);
 
             //TODO DEBUG TIRAR
             System.out.println("From parseDeclaration, ASTARRAYELEMENT");
@@ -385,26 +387,89 @@ public abstract class Analysis
         return null;
     }
 
-    protected VarSymbol parseAssign(ASTASSIGN assignTree)
+    protected boolean parseAssign(ASTASSIGN assignTree)
     {
-        VarSymbol lhsSymbol = null;
-        SimpleNode lhsTree = (SimpleNode) assignTree.jjtGetChild(0);
-        if(lhsTree != null)
-        {
-            lhsSymbol = parseLhs(lhsTree, true);
-            if(lhsSymbol == null)
-                return null;
-        }
-
+        VarSymbol rhsSymbol = null;
         SimpleNode rhsTree = (SimpleNode) assignTree.jjtGetChild(1);
         if(rhsTree != null)
+            rhsSymbol = parseRhs(rhsTree);
+        if(rhsSymbol == null)
+            return false;
+
+        //TODO DEBUG TIRAR
+        System.out.println("From parseAssign, rhsSymbol");
+        System.out.println("symbol id: " + rhsSymbol.getId());
+        System.out.println("symbol type: " + rhsSymbol.getType());
+        System.out.println("symbol size: " + rhsSymbol.getSize());
+
+
+
+        SimpleNode lhsTree = (SimpleNode) assignTree.jjtGetChild(0);
+        VarSymbol lhsSymbol = getLhsVariable(lhsTree);
+        if(lhsSymbol == null)
+            return false;
+        String symbolType = lhsSymbol.getType();
+        if(!symbolType.equals(rhsSymbol.getType()))
         {
-            VarSymbol rhsSymbol = parseRhs(rhsTree, true);
-            if(rhsSymbol == null)
-                return null;
+            System.out.println("Variables dont match! " + lhsSymbol.getId() + " has type " + symbolType +
+                    " and " + rhsSymbol.getId() + " has type " + rhsSymbol.getType()); //TODO linha
+            return false;
         }
 
-        lhsSymbol.setInitialized(true);
-        return lhsSymbol;
+        //TODO DEBUG TIRAR
+        System.out.println("From parseAssign, lhsSymbol");
+        System.out.println("symbol id: " + lhsSymbol.getId());
+        System.out.println("symbol type: " + lhsSymbol.getType());
+        System.out.println("symbol size: " + lhsSymbol.getSize());
+
+        mySymbols.put(lhsSymbol.getId(), lhsSymbol);
+        return true;
+    }
+
+    private VarSymbol getLhsVariable(SimpleNode lhsTree)
+    {
+        VarSymbol symbol = null;
+        String id;
+        switch(lhsTree.toString())
+        {
+            case "ARRAYACCESS":
+                id = ((ASTARRAYACCESS) lhsTree).arrayID;
+                symbol = (VarSymbol) checkSymbolExistsAndIsInitialized(id);
+                if(symbol == null)
+                    return null;
+                ASTINDEX astindex = (ASTINDEX) lhsTree.jjtGetChild(0);
+                if(!parseIndex(astindex, symbol))
+                    return null;
+                break;
+            case "SCALARACCESS":
+                id = ((ASTSCALARACCESS) lhsTree).id;
+                symbol = new VarSymbol(id, "INTEGER", true);
+                break;
+        }
+
+        return symbol;
+    }
+
+    protected boolean parseIndex(ASTINDEX astIndex, VarSymbol arraySymbol)
+    {
+        String indexSymbolId = astIndex.indexID;
+        if (indexSymbolId != null)
+        {
+            VarSymbol indexSymbol = (VarSymbol) checkSymbolExistsAndIsInitialized(indexSymbolId);
+            if (indexSymbol == null)
+                return false;
+        }
+        else
+        {
+            Integer indexValue = astIndex.indexValue;
+            if (indexValue >= arraySymbol.getSize())
+            {
+                System.out.println("Access to out of bounds " + indexValue + " in array " + arraySymbol.getId() + "."); //TODO linha
+                return false;
+            }
+
+        }
+
+        return true;
     }
 }
