@@ -7,6 +7,7 @@ module program1 {
 	
 	function det(d[]) {
 		i=0;
+		z=[5];
 		M=d.size-1; //d.size equivalent to d.length (Java)
 		while(i<M) { // version not optimized!
 			a=d[i]; i=i+1; b=d[i];
