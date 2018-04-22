@@ -84,13 +84,13 @@ public class FunctionSymbol extends Symbol
             {
                 ASTSCALARELEMENT astscalarelement = (ASTSCALARELEMENT)returnValueNode;
                 String returnValueId = astscalarelement.id;
-                returnValue = new VarSymbol(returnValueId, "INTEGER", true);
+                returnValue = new VarSymbol(returnValueId, "INTEGER", false);
             }
             else
             {
                 ASTARRAYELEMENT astarrayelement = (ASTARRAYELEMENT)returnValueNode;
                 String returnValueId = astarrayelement.id;
-                returnValue = new VarSymbol(returnValueId, "ARRAY", true);
+                returnValue = new VarSymbol(returnValueId, "ARRAY", false);
             }
         }
 
