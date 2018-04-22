@@ -12,6 +12,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 
 import yal2jvm.HHIR.IRGlobal;
+import yal2jvm.HHIR.IRMethod;
 import yal2jvm.HHIR.IRModule;
 import yal2jvm.HHIR.IntermediateRepresentation;
 import yal2jvm.HHIR.Type;
@@ -191,6 +192,9 @@ public class Yal2jvm
 		module.addChild(new IRGlobal("b", Type.INTEGER, null));
 		module.addChild(new IRGlobal("c", Type.INTEGER, 12));
 		module.addChild(new IRGlobal("d", Type.INTEGER, 12345));
+		module.addChild(new IRMethod("method1", Type.VOID, null));
+		module.addChild(new IRMethod("method2", Type.VOID, new Type[]{Type.INTEGER}));
+		module.addChild(new IRMethod("method3", Type.INTEGER, new Type[]{Type.INTEGER, Type.INTEGER, Type.INTEGER}));
 		
 		return hhir;
 	}
