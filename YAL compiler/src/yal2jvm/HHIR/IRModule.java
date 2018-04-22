@@ -23,7 +23,12 @@ public class IRModule extends IRNode
 		String inst2 = ".super java/lang/Object";
 		
 		inst.add(inst1);
-		inst.add(inst2);
+		inst.add(inst2);/*
+		inst.add(".method public <init>()V");
+		inst.add("aload_0");
+		inst.add("invokevirtual java/lang/Object/<init>()V");
+		inst.add("return");
+		inst.add(".end method");*/
 		
 		return inst;
 	}

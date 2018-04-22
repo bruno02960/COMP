@@ -10,6 +10,5 @@ public enum Operation
 	SHIFT_L,
 	USHIFT_R,
 	AND,
-	OR,
-	NOT
+	OR
 }

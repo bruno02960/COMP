@@ -25,12 +25,13 @@ public class IRMethod extends IRNode
 	{
 		ArrayList<String> inst = new ArrayList<>();
 		
-		String inst1 = ".method public static " + name + "(";
+		String inst1 = ".method public static ";
 		
 		if (name.equals("main"))
 			inst1 += "main([Ljava/lang/String;)V";
 		else
 		{
+			inst1 += name + "(";
 			for (int i = 0; i < argsType.length; i++)
 			{
 				switch(argsType[i])

@@ -12,11 +12,14 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 
 import yal2jvm.HHIR.IRAllocate;
+import yal2jvm.HHIR.IRConstant;
 import yal2jvm.HHIR.IRGlobal;
 import yal2jvm.HHIR.IRMethod;
 import yal2jvm.HHIR.IRModule;
 import yal2jvm.HHIR.IRReturn;
+import yal2jvm.HHIR.IRStoreArith;
 import yal2jvm.HHIR.IntermediateRepresentation;
+import yal2jvm.HHIR.Operation;
 import yal2jvm.HHIR.Type;
 import yal2jvm.SemanticAnalysis.ModuleAnalysis;
 import yal2jvm.ast.*;
@@ -178,7 +181,7 @@ public class Yal2jvm
 		{
 			Runtime.getRuntime().exec("java -jar jasmin.jar " + fileName).waitFor();
 			File file = new File(fileName);
-			//file.delete();
+			file.delete();
 		} 
         catch (IOException | InterruptedException e)
 		{
@@ -198,11 +201,17 @@ public class Yal2jvm
 		module.addChild(new IRMethod("method2", Type.VOID, new Type[]{Type.INTEGER}));
 		module.addChild(new IRMethod("method3", Type.VOID, new Type[]{Type.INTEGER, Type.INTEGER, Type.INTEGER}));
 		
-		IRMethod method = new IRMethod("main", Type.VOID, null);
-		method.addChild(new IRAllocate("var1", Type.INTEGER, null));
-		method.addChild(new IRAllocate("var2", Type.INTEGER, 10));
-		method.addChild(new IRAllocate("var3", Type.INTEGER, 20000));
-		method.addChild(new IRReturn(null, null));
+			IRMethod method = new IRMethod("main", Type.VOID, null);
+			method.addChild(new IRAllocate("var1", Type.INTEGER, null));
+			method.addChild(new IRAllocate("var2", Type.INTEGER, 10));
+			method.addChild(new IRAllocate("var3", Type.INTEGER, 20000));
+		
+				IRStoreArith arith = new IRStoreArith("var1", Operation.ADD);
+				arith.setRhs(new IRConstant(100));
+				arith.setLhs(new IRConstant(200));
+		
+			method.addChild(arith);
+			method.addChild(new IRReturn(null, null));
 		
 		module.addChild(method);
 		return hhir;
