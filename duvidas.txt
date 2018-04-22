@@ -1,11 +1,6 @@
-ver declaration ser tipo a[] = 5 que pela regra parece isso e nao aceita.
-e se for do tipo a[5] = 10; tambem dá erro...como fazer?  RESOLVIDO
-
-
-que analise semantica seria necessario fazer no module por exemplo?
-
-
-ver todo's
-
-
-ser? boa ideia fazer uma class por tipo, para parsar? ou seja, ScalarElementParse, WhileParse...
+function a[]=det(d[]) 
+{
+		data[5] = 7;
+		i=a;
+	}
+Isto ? possivel?

@@ -57,6 +57,11 @@ public class VarSymbol extends Symbol
         this.size = size;
     }
 
+    public VarSymbol getCopy()
+    {
+        return new VarSymbol(new String(id), new String(type), new Boolean(initialized), new Integer(size));
+    }
+
   /*  public Values()
     {
         return initialized;

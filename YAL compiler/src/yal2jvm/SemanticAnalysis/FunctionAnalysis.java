@@ -52,6 +52,16 @@ public class FunctionAnalysis extends Analysis
                     break;
             }
         }
+
+        //verify return value is defined if exists
+        VarSymbol returnValue = astFunction.getReturnValue();
+        if(returnValue != null)
+        {
+            if(!returnValue.isInitialized())
+                System.out.println("Function " + astFunction.getId() + " must have return variable " +
+                        returnValue.getId() + " defined."); //TODO linha
+
+        }
     }
 
 }
