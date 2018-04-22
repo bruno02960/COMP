@@ -1,8 +1,10 @@
 package yal2jvm.SemanticAnalysis;
 
 import yal2jvm.Analysis;
+import yal2jvm.SymbolTables.VarSymbol;
 import yal2jvm.ast.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class FunctionAnalysis extends Analysis
@@ -17,6 +19,11 @@ public class FunctionAnalysis extends Analysis
     protected void parse()
     {
         FunctionSymbol astFunction = (FunctionSymbol) functionNameToFunctionSymbol.get(((ASTFUNCTION)ast).id);
+
+        //add arguments to mySymbols
+        ArrayList<VarSymbol> arguments = astFunction.getArguments();
+        for(int i = 0; i < arguments.size(); i++)
+            mySymbols.put(arguments.get(i).getId(), arguments.get(i));
 
         /* parseStmtlst() */
         int statementsChildNumber = astFunction.getStatementsChildNumber();

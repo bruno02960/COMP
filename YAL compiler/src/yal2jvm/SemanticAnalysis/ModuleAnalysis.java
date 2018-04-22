@@ -54,7 +54,6 @@ public class ModuleAnalysis extends Analysis
                 FunctionSymbol functionSymbol = new FunctionSymbol(astfunctionNode, functionId);
                 functionSymbol.parseFunctionHeader();
 
-
                 //TODO DEBUG TIRAR
                 System.out.println("functionSymbol name: " + functionSymbol.getId());
                 if(functionSymbol.getArguments() != null)

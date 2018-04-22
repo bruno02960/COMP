@@ -5,7 +5,7 @@ public class ImmediateSymbol extends VarSymbol
 {
     public ImmediateSymbol(Integer value)
     {
-        super("", "INTEGER", true, value);
+        super(value.toString(), "INTEGER", true, value);
     }
 
 }

@@ -68,17 +68,32 @@ public abstract class Analysis
 
     protected VarSymbol parseRhs(SimpleNode rhsTree)
     {
-        Node child = rhsTree.jjtGetChild(0);
-        switch(child.toString())
-        {
-            case "ARRAYSIZE":
-                return parseArraySize((ASTARRAYSIZE) child);
+        Node firstChild = rhsTree.jjtGetChild(0);
+        if(firstChild.toString().equals("ARRAYSIZE"))
+            return parseArraySize((ASTARRAYSIZE) firstChild);
 
-            case "TERM":
-                return parseTerm((ASTTERM) child);
+        VarSymbol symbol = null;
+        String previousType = null;
+        int numChildren = rhsTree.jjtGetNumChildren();
+        for(int i= 0; i < numChildren; i++)
+        {
+            ASTTERM child = (ASTTERM) rhsTree.jjtGetChild(i);
+            VarSymbol previousSymbol = symbol;
+            symbol = parseTerm(child);
+            if(symbol == null)
+                return null;
+            String symbolType = symbol.getType();
+            if(previousType == null)
+                previousType = symbolType;
+            else if(!previousType.equals(symbolType))
+            {
+                System.out.println("Variables dont match! Variable " + previousSymbol.getId() + " has type " + previousSymbol.getType() +
+                        " and " + symbol.getId() + " has type " + symbol.getType() + "."); //TODO linha
+                return null;
+            }
         }
 
-        return null;
+        return symbol;
     }
 
     protected VarSymbol parseArraySize(ASTARRAYSIZE arraySizeTree) {
@@ -252,19 +267,22 @@ public abstract class Analysis
 
 
         if (varSymbol == null) {
-            System.out.println("Access to undeclared variable" + id + "."); //TODO linha
+            System.out.println("Access to undeclared variable " + id + "."); //TODO linha
             return null;
         }
 
         if (!varSymbol.isInitialized()) {
-            System.out.println("Access to uninitialized variable +" + id + "."); //TODO linha
+            System.out.println("Access to uninitialized variable " + id + "."); //TODO linha
             return null;
         }
 
         if (varSymbol.getType().equals("ARRAYELEMENT") && !sizeAccess) {
-            System.out.println("Access to size of variable +" + id + " that is not an array."); //TODO linha
+            System.out.println("Access to size of variable " + id + " that is not an array."); //TODO linha
             return null;
         }
+
+        if(sizeAccess)
+            varSymbol.setType("INTEGER");
 
         return varSymbol;
     }
@@ -411,8 +429,8 @@ public abstract class Analysis
         String symbolType = lhsSymbol.getType();
         if(!symbolType.equals(rhsSymbol.getType()))
         {
-            System.out.println("Variables dont match! " + lhsSymbol.getId() + " has type " + symbolType +
-                    " and " + rhsSymbol.getId() + " has type " + rhsSymbol.getType()); //TODO linha
+            System.out.println("Variables dont match! Variable " + lhsSymbol.getId() + " has type " + symbolType +
+                    " and " + rhsSymbol.getId() + " has type " + rhsSymbol.getType() + "."); //TODO linha
             return false;
         }
 
@@ -430,19 +448,21 @@ public abstract class Analysis
     {
         VarSymbol symbol = null;
         String id;
-        switch(lhsTree.toString())
+        Node child = lhsTree.jjtGetChild(0);
+        switch(child.toString())
         {
             case "ARRAYACCESS":
-                id = ((ASTARRAYACCESS) lhsTree).arrayID;
+                id = ((ASTARRAYACCESS) child).arrayID;
                 symbol = (VarSymbol) checkSymbolExistsAndIsInitialized(id);
                 if(symbol == null)
                     return null;
-                ASTINDEX astindex = (ASTINDEX) lhsTree.jjtGetChild(0);
+                ASTINDEX astindex = (ASTINDEX) child.jjtGetChild(0);
                 if(!parseIndex(astindex, symbol))
                     return null;
+                symbol.setType("INTEGER");
                 break;
             case "SCALARACCESS":
-                id = ((ASTSCALARACCESS) lhsTree).id;
+                id = ((ASTSCALARACCESS) child).id;
                 symbol = new VarSymbol(id, "INTEGER", true);
                 break;
         }
