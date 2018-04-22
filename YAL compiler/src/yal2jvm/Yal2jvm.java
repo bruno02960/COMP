@@ -11,7 +11,10 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 
+import yal2jvm.HHIR.IRGlobal;
+import yal2jvm.HHIR.IRModule;
 import yal2jvm.HHIR.IntermediateRepresentation;
+import yal2jvm.HHIR.Type;
 import yal2jvm.SemanticAnalysis.ModuleAnalysis;
 import yal2jvm.ast.*;
 
@@ -104,7 +107,7 @@ public class Yal2jvm
         //create HHIR
         //IntermediateRepresentation hhir = moduleAnalysis.parse();
         
-        IntermediateRepresentation hhir = new IntermediateRepresentation("module1");
+        IntermediateRepresentation hhir = createHardcodedIR("Module1");
         ArrayList<String> instructions = hhir.selectInstructions();
         String moduleName = hhir.getModuleName();
         
@@ -155,6 +158,7 @@ public class Yal2jvm
 			{
 				file.write(instructions.get(i));
 				file.write("\n");
+				System.out.println(instructions.get(i));
 			}
 			
 			file.close();
@@ -177,5 +181,17 @@ public class Yal2jvm
 		{
 			System.out.println("Unable to find or execute jasmin.jar");
 		}
+	}
+	
+	private IntermediateRepresentation createHardcodedIR(String moduleName)
+	{
+		IntermediateRepresentation hhir = new IntermediateRepresentation(moduleName);
+		IRModule module = hhir.getRoot();
+		module.addChild(new IRGlobal("a", Type.INTEGER, null));
+		module.addChild(new IRGlobal("b", Type.INTEGER, null));
+		module.addChild(new IRGlobal("c", Type.INTEGER, 12));
+		module.addChild(new IRGlobal("d", Type.INTEGER, 12345));
+		
+		return hhir;
 	}
 }

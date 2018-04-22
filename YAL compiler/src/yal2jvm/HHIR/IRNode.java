@@ -8,9 +8,14 @@ public abstract class IRNode
 	protected ArrayList<IRNode> children;
 	protected String nodeType;
 	
+	public IRNode()
+	{
+		children = new ArrayList<IRNode>();
+	}
+	
 	public void addChild(IRNode child)
 	{
-		getChildren().add(child);
+		children.add(child);
 		child.setParent(this);
 	}
 

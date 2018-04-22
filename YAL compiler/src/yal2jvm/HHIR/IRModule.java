@@ -9,6 +9,7 @@ public class IRModule extends IRNode
 
 	public IRModule(String name)
 	{
+		super();
 		this.setName(name);
 		this.nodeType = "Module";
 	}

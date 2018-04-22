@@ -22,7 +22,21 @@ public class IRGlobal extends IRNode
 	{
 		ArrayList<String> inst = new ArrayList<>();
 		
+		String inst1 = ".field private static " + name;
+		switch(type)
+		{
+			case INTEGER:
+			{
+				inst1 += " I ";
+				if (initVal != null)
+					inst1 += "= " + initVal;
+				break;
+			}
+			case ARRAY: break;
+			default: break;
+		}
+		
+		inst.add(inst1);
 		return inst;
 	}
-
 }

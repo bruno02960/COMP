@@ -11,16 +11,31 @@ public class IntermediateRepresentation
 	{
 		this.nodes = new ArrayList<IRNode>();
 		this.root = new IRModule(moduleName);
-		nodes.add(this.root);
-	}
-	
-	public ArrayList<String> selectInstructions()
-	{
-		return root.getInstructions();
+		nodes.add(this.getRoot());
 	}
 
 	public String getModuleName()
 	{
-		return root.getName();
+		return getRoot().getName();
 	}
+
+	public IRModule getRoot()
+	{
+		return root;
+	}
+
+	public void setRoot(IRModule root)
+	{
+		this.root = root;
+	}
+	
+	public ArrayList<String> selectInstructions()
+	{
+		ArrayList<String> inst = new ArrayList<>();
+		inst.addAll(root.getInstructions());
+		for (int i = 0; i < root.getChildren().size(); i++)
+			inst.addAll(root.getChildren().get(i).getInstructions());
+		return inst;
+	}
+
 }
