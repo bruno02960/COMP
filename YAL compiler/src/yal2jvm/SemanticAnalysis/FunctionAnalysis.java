@@ -20,10 +20,8 @@ public class FunctionAnalysis extends Analysis
     {
         FunctionSymbol astFunction = (FunctionSymbol) functionNameToFunctionSymbol.get(((ASTFUNCTION)ast).id);
 
-        //add arguments to mySymbols
-        ArrayList<VarSymbol> arguments = astFunction.getArguments();
-        for(int i = 0; i < arguments.size(); i++)
-            mySymbols.put(arguments.get(i).getId(), arguments.get(i));
+        addArgumentsToMySymbols(astFunction);
+        addReturnValueToMySymbols(astFunction);
 
         /* parseStmtlst() */
         int statementsChildNumber = astFunction.getStatementsChildNumber();
@@ -63,5 +61,20 @@ public class FunctionAnalysis extends Analysis
 
         }
     }
+
+    private void addArgumentsToMySymbols(FunctionSymbol astFunction)
+    {
+        ArrayList<VarSymbol> arguments = astFunction.getArguments();
+        for(int i = 0; i < arguments.size(); i++)
+            mySymbols.put(arguments.get(i).getId(), arguments.get(i));
+    }
+
+    private void addReturnValueToMySymbols(FunctionSymbol astFunction)
+    {
+       VarSymbol returnValue = astFunction.getReturnValue();
+       if(returnValue != null)
+           mySymbols.put(returnValue.getId(), returnValue);
+    }
+
 
 }
