@@ -10,7 +10,7 @@
 .end method
 .method public static method3(III)V
 .end method
-.method public static main([Ljava/lang/String;)V
+.method public static main(main([Ljava/lang/String;)V
 .limit locals 3
 .var 0 is  I var1 from Label0 to Label1
 Label0:
