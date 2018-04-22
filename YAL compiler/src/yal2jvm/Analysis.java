@@ -512,4 +512,34 @@ public abstract class Analysis
 
         return true;
     }
+
+    private boolean parseExprTest(ASTEXPRTEST astExprtest)
+    {
+        ASTLHS astLhs = (ASTLHS) astExprtest.jjtGetChild(0);
+        VarSymbol lhsSymbol = parseLhs(astLhs);
+        if(lhsSymbol == null)
+            return false;
+
+        ASTLHS astRhs = (ASTLHS) astExprtest.jjtGetChild(1);
+        VarSymbol rhsSymbol = parseLhs(astRhs);
+        if(rhsSymbol == null)
+            return false;
+
+        if(!lhsSymbol.getType().equals(rhsSymbol.getType()))
+        {
+            System.out.println("Variables must have same type to be compared. Variable " + lhsSymbol.getId() + " has type "
+                    + lhsSymbol.getType() + " and variable " + rhsSymbol.getId() + " has type " + rhsSymbol.getType() + "."); //TODO linha
+            return false;
+        }
+
+        if(!lhsSymbol.getType().equals("ARRAY"))
+        {
+            System.out.println("Variables must be INTEGER to be compared. Variable " + lhsSymbol.getId() + " has type "
+                    + lhsSymbol.getType() + " and variable " + rhsSymbol.getId() + " has type " + rhsSymbol.getType() + "."); //TODO linha
+            return false;
+        }
+
+        return true;
+    }
+
 }
