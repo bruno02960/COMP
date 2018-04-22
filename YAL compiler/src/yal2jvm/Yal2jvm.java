@@ -103,8 +103,8 @@ public class Yal2jvm
 		ast = createAst(inputStream);
 		ast.dump("");
 
-        //ModuleAnalysis moduleAnalysis = new ModuleAnalysis(ast);
-        //moduleAnalysis.parse();
+        ModuleAnalysis moduleAnalysis = new ModuleAnalysis(ast);
+        moduleAnalysis.parse();
         //create HHIR
         //IntermediateRepresentation hhir = moduleAnalysis.parse();
         

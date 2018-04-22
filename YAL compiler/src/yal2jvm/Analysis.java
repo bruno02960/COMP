@@ -97,15 +97,13 @@ public abstract class Analysis
     }
 
     protected VarSymbol parseArraySize(ASTARRAYSIZE arraySizeTree) {
-        ASTSCALARACCESS child = (ASTSCALARACCESS) arraySizeTree.jjtGetChild(0);
-
-        if(child.toString() == "SCALARACCESS") {
-            parseScalarAccess(child);
+        if(arraySizeTree.integer != null) {
+            return new ImmediateSymbol(arraySizeTree.integer);
         }
-
-        /* Get <INTEGER> for analysis */
-
-        return null;
+        else {
+            ASTSCALARACCESS child = (ASTSCALARACCESS) arraySizeTree.jjtGetChild(0);
+            return parseScalarAccess(child);
+        }
     }
 
     protected VarSymbol parseTerm(ASTTERM termTree)
