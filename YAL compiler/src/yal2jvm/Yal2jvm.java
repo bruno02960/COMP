@@ -1,8 +1,17 @@
 package yal2jvm;
 
+import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
 
+import yal2jvm.HHIR.IntermediateRepresentation;
 import yal2jvm.SemanticAnalysis.ModuleAnalysis;
 import yal2jvm.ast.*;
 
@@ -88,10 +97,21 @@ public class Yal2jvm
 		FileInputStream inputStream = getFileStream();
 		
 		ast = createAst(inputStream);
-		ast.dump("");
+		//ast.dump("");
 
-        ModuleAnalysis moduleAnalysis = new ModuleAnalysis(ast);
-        moduleAnalysis.parse();
+        //ModuleAnalysis moduleAnalysis = new ModuleAnalysis(ast);
+        //moduleAnalysis.parse();
+        //create HHIR
+        //IntermediateRepresentation hhir = moduleAnalysis.parse();
+        
+        IntermediateRepresentation hhir = new IntermediateRepresentation("module1");
+        ArrayList<String> instructions = hhir.selectInstructions();
+        String moduleName = hhir.getModuleName();
+        
+        saveToJasminFile(instructions, moduleName);
+        compileToBytecode(moduleName + ".j");
+
+        System.exit(0);
 	}
 
 	private FileInputStream getFileStream()
@@ -123,5 +143,39 @@ public class Yal2jvm
 			System.exit(-1);
 		}
 		return root;
+	}
+	
+	private void saveToJasminFile(ArrayList<String> instructions, String moduleName)
+	{
+		try
+		{
+			BufferedWriter file = new BufferedWriter(new FileWriter(moduleName + ".j"));
+			
+			for (int i = 0; i < instructions.size(); i++)
+			{
+				file.write(instructions.get(i));
+				file.write("\n");
+			}
+			
+			file.close();
+		} 
+		catch (IOException e)
+		{
+			e.printStackTrace();
+		}	
+	}
+	
+	private void compileToBytecode(String fileName)
+	{
+        try
+		{
+			Runtime.getRuntime().exec("java -jar jasmin.jar " + fileName).waitFor();
+			File file = new File(fileName);
+			file.delete();
+		} 
+        catch (IOException | InterruptedException e)
+		{
+			System.out.println("Unable to find or execute jasmin.jar");
+		}
 	}
 }
