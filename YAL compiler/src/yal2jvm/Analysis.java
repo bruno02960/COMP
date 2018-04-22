@@ -195,6 +195,8 @@ public abstract class Analysis
                 return null;
             }
 
+            arraySymbol = arraySymbol.getCopy();
+            arraySymbol.setType("INTEGER");
         }
 
         return arraySymbol;
@@ -440,7 +442,8 @@ public abstract class Analysis
         System.out.println("symbol type: " + lhsSymbol.getType());
         System.out.println("symbol size: " + lhsSymbol.getSize());
 
-        mySymbols.put(lhsSymbol.getId(), lhsSymbol);
+        if(inheritedSymbols.get(lhsSymbol.getId()) == null)
+            mySymbols.put(lhsSymbol.getId(), lhsSymbol);
         return true;
     }
 
@@ -459,6 +462,7 @@ public abstract class Analysis
                 ASTINDEX astindex = (ASTINDEX) child.jjtGetChild(0);
                 if(!parseIndex(astindex, symbol))
                     return null;
+                symbol = symbol.getCopy(); //symbol type will be altered but only for this case, so we need a copy
                 symbol.setType("INTEGER");
                 break;
             case "SCALARACCESS":

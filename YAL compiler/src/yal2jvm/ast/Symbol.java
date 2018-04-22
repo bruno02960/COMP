@@ -1,5 +1,6 @@
 package yal2jvm.ast;
 
+
 public class Symbol
 {
     protected String id;
@@ -18,4 +19,5 @@ public class Symbol
     {
         this.id = id;
     }
+
 }
