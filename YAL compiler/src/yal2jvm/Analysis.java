@@ -1,5 +1,7 @@
 package yal2jvm;
 
+import yal2jvm.SemanticAnalysis.IfAnalysis;
+import yal2jvm.SemanticAnalysis.WhileAnalysis;
 import yal2jvm.SymbolTables.ImmediateSymbol;
 import yal2jvm.SymbolTables.VarSymbol;
 import yal2jvm.ast.*;
@@ -513,14 +515,14 @@ public abstract class Analysis
         return true;
     }
 
-    private boolean parseExprTest(ASTEXPRTEST astExprtest)
+    protected boolean parseExprTest(ASTEXPRTEST astExprtest)
     {
         ASTLHS astLhs = (ASTLHS) astExprtest.jjtGetChild(0);
         VarSymbol lhsSymbol = parseLhs(astLhs);
         if(lhsSymbol == null)
             return false;
 
-        ASTLHS astRhs = (ASTLHS) astExprtest.jjtGetChild(1);
+        ASTRHS astRhs = (ASTRHS) astExprtest.jjtGetChild(1);
         VarSymbol rhsSymbol = parseLhs(astRhs);
         if(rhsSymbol == null)
             return false;
@@ -540,6 +542,33 @@ public abstract class Analysis
         }
 
         return true;
+    }
+
+    protected void parseStmtLst(ASTSTATEMENTS astStatements)
+    {
+        int statementsNumChilds = astStatements.jjtGetNumChildren();
+        for(int i = 0; i < statementsNumChilds; i++)
+        {
+            SimpleNode node = (SimpleNode) astStatements.jjtGetChild(i);
+            String nodeId = node.toString();
+            switch(nodeId)
+            {
+                case "WHILE":
+                    WhileAnalysis whileAnalysis = new WhileAnalysis(node, getUnifiedSymbolTable(), functionNameToFunctionSymbol);
+                    whileAnalysis.parse();
+                    break;
+                case "IF":
+                    IfAnalysis ifAnalysis = new IfAnalysis(node, getUnifiedSymbolTable(), functionNameToFunctionSymbol);
+                    ifAnalysis.parse();
+                    break;
+                case "CALL":
+                    parseCall((ASTCALL) node);
+                    break;
+                case "ASSIGN":
+                    parseAssign((ASTASSIGN) node);
+                    break;
+            }
+        }
     }
 
 }

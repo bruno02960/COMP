@@ -24,33 +24,9 @@ public class FunctionAnalysis extends Analysis
         addArgumentsToMySymbols(astFunction);
         addReturnValueToMySymbols(astFunction);
 
-        /* parseStmtlst() */
         int statementsChildNumber = astFunction.getStatementsChildNumber();
-
-        Node statementsNode = ast.jjtGetChild(statementsChildNumber);
-        int statementsNumChilds = statementsNode.jjtGetNumChildren();
-        for(int i = 0; i < statementsNumChilds; i++)
-        {
-            SimpleNode node = (SimpleNode) statementsNode.jjtGetChild(i);
-            String nodeId = node.toString();
-            switch(nodeId)
-            {
-                case "WHILE":
-                    WhileAnalysis whileAnalysis = new WhileAnalysis(node, getUnifiedSymbolTable(), functionNameToFunctionSymbol);
-                    whileAnalysis.parse();
-                    break;
-                case "IF":
-                    IfAnalysis ifAnalysis = new IfAnalysis(node, getUnifiedSymbolTable(), functionNameToFunctionSymbol);
-                    ifAnalysis.parse();
-                    break;
-                case "CALL":
-                    parseCall((ASTCALL) node);
-                    break;
-                case "ASSIGN":
-                    parseAssign((ASTASSIGN) node);
-                    break;
-            }
-        }
+        ASTSTATEMENTS statementsNode = (ASTSTATEMENTS) ast.jjtGetChild(statementsChildNumber);
+        parseStmtLst(statementsNode);
 
         //verify return value is defined if exists
         VarSymbol returnValue = astFunction.getReturnValue();
@@ -59,7 +35,6 @@ public class FunctionAnalysis extends Analysis
             if(!returnValue.isInitialized())
                 System.err.println("Function " + astFunction.getId() + " must have return variable " +
                         returnValue.getId() + " defined."); //TODO linha
-
         }
     }
 

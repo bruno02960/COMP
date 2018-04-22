@@ -17,16 +17,15 @@ public class WhileAnalysis extends Analysis
     }
 
     @Override
-    protected void parse()
+    public void parse()
     {
-        ASTEXPRTEST exprtest = ((ASTEXPRTEST) ast.jjtGetChild(0));
-
-        SimpleNode lhs = (SimpleNode) exprtest.jjtGetChild(0);
-        /* parseLhs(lhs); */
-        SimpleNode rhs = (SimpleNode) exprtest.jjtGetChild(1);
-        /* parseRhs(rhs); */
+        ASTEXPRTEST exprTest = ((ASTEXPRTEST) ast.jjtGetChild(0));
+        parseExprTest(exprTest);
 
         ASTSTATEMENTS stmtlst = ((ASTSTATEMENTS) ast.jjtGetChild(1));
-        /* parseStmts(stmtlst); */
+        parseStmtLst(stmtlst);
+
+        //TODO: ver mySimbols (que sao do while e nao da funçao) e dai por ou nao como inicializado nos simbolos da funçao
+        //TODO: aqui na realidade nao se por nenhum como initializado
     }
 }
