@@ -1,6 +1,7 @@
-package yal2jvm.ast;
+package yal2jvm.SymbolTables;
 
 import yal2jvm.SymbolTables.VarSymbol;
+import yal2jvm.ast.*;
 
 import java.util.ArrayList;
 
@@ -114,7 +115,7 @@ public class FunctionSymbol extends Symbol
                 else
                 {
                     ASTARRAYELEMENT astarrayelement = (ASTARRAYELEMENT)child;
-                    varSymbol = new VarSymbol(astarrayelement.id, "ARRAY", true);
+                    varSymbol = new VarSymbol(astarrayelement.id, "ARRAY", true, Integer.MAX_VALUE);
                 }
                 arguments.add(varSymbol);
             }

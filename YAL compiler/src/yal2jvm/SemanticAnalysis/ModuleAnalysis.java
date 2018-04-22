@@ -1,6 +1,7 @@
 package yal2jvm.SemanticAnalysis;
 
 import yal2jvm.Analysis;
+import yal2jvm.SymbolTables.FunctionSymbol;
 import yal2jvm.ast.*;
 
 import java.util.*;

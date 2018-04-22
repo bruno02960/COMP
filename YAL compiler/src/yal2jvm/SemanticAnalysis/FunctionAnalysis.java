@@ -1,6 +1,7 @@
 package yal2jvm.SemanticAnalysis;
 
 import yal2jvm.Analysis;
+import yal2jvm.SymbolTables.FunctionSymbol;
 import yal2jvm.SymbolTables.VarSymbol;
 import yal2jvm.ast.*;
 
@@ -56,7 +57,7 @@ public class FunctionAnalysis extends Analysis
         if(returnValue != null)
         {
             if(!returnValue.isInitialized())
-                System.out.println("Function " + astFunction.getId() + " must have return variable " +
+                System.err.println("Function " + astFunction.getId() + " must have return variable " +
                         returnValue.getId() + " defined."); //TODO linha
 
         }

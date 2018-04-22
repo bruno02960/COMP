@@ -69,8 +69,11 @@ public abstract class Analysis
     protected VarSymbol parseRhs(SimpleNode rhsTree)
     {
         Node firstChild = rhsTree.jjtGetChild(0);
-        if(firstChild.toString().equals("ARRAYSIZE"))
-            return parseArraySize((ASTARRAYSIZE) firstChild);
+        if(firstChild.toString().equals("ARRAYSIZE")) {
+            VarSymbol retVal = parseArraySize((ASTARRAYSIZE) firstChild);
+            retVal.setType("ARRAY");
+            return retVal;
+        }
 
         VarSymbol symbol = null;
         String previousType = null;
@@ -426,13 +429,22 @@ public abstract class Analysis
         VarSymbol lhsSymbol = getLhsVariable(lhsTree);
         if(lhsSymbol == null)
             return false;
+        if(!lhsSymbol.isInitialized()) {
+            lhsSymbol.setType(rhsSymbol.getType());
+            lhsSymbol.setSize(rhsSymbol.getSize());
+        }
         String symbolType = lhsSymbol.getType();
+
+        //TODO
+        //if(symbolType.equals("ARRAY") && rhsSymbol.getType().equals("INTEGER"))
+
         if(!symbolType.equals(rhsSymbol.getType()))
         {
             System.out.println("Variables dont match! Variable " + lhsSymbol.getId() + " has type " + symbolType +
                     " and " + rhsSymbol.getId() + " has type " + rhsSymbol.getType() + "."); //TODO linha
             return false;
         }
+        lhsSymbol.setInitialized(true);
 
         //TODO DEBUG TIRAR
         System.out.println("From parseAssign, lhsSymbol");
@@ -440,8 +452,9 @@ public abstract class Analysis
         System.out.println("symbol type: " + lhsSymbol.getType());
         System.out.println("symbol size: " + lhsSymbol.getSize());
 
-        if(inheritedSymbols.get(lhsSymbol.getId()) == null)
+        if((inheritedSymbols.get(lhsSymbol.getId()) == null) && (mySymbols.get(lhsSymbol.getId()) == null))
             mySymbols.put(lhsSymbol.getId(), lhsSymbol);
+
         return true;
     }
 
@@ -465,7 +478,12 @@ public abstract class Analysis
                 break;
             case "SCALARACCESS":
                 id = ((ASTSCALARACCESS) child).id;
-                symbol = new VarSymbol(id, "INTEGER", true);
+                symbol = (VarSymbol) hasAccessToSymbol(id);
+
+                if(symbol == null) {
+                    symbol = new VarSymbol(id, "INTEGER", false);
+                }
+
                 break;
         }
 
