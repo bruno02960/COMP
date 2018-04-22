@@ -19,7 +19,7 @@ public class IRReturn extends IRNode
 	public ArrayList<String> getInstructions()
 	{
 		ArrayList<String> inst = new ArrayList<>();
-		
+		inst.add("return");
 		return inst;
 	}
 
