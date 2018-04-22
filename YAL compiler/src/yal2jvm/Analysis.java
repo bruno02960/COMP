@@ -459,6 +459,7 @@ public abstract class Analysis
                 ASTINDEX astindex = (ASTINDEX) child.jjtGetChild(0);
                 if(!parseIndex(astindex, symbol))
                     return null;
+                symbol = symbol.getCopy(); //symbol type will be altered but only for this case, so we need a copy
                 symbol.setType("INTEGER");
                 break;
             case "SCALARACCESS":
