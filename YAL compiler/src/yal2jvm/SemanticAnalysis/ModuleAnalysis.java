@@ -8,9 +8,12 @@ import java.util.*;
 
 public class ModuleAnalysis extends Analysis
 {
+    public static String moduleName;
+
     public ModuleAnalysis(SimpleNode ast)
     {
         super(ast, null, new HashMap<String, Symbol>());
+        moduleName = ((ASTMODULE) ast).name;
     }
 
     private void initiateGlobalSymbolTable()

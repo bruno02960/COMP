@@ -1,6 +1,7 @@
 package yal2jvm;
 
 import yal2jvm.SemanticAnalysis.IfAnalysis;
+import yal2jvm.SemanticAnalysis.ModuleAnalysis;
 import yal2jvm.SemanticAnalysis.WhileAnalysis;
 import yal2jvm.SymbolTables.FunctionSymbol;
 import yal2jvm.SymbolTables.ImmediateSymbol;
@@ -36,7 +37,7 @@ public abstract class Analysis
         if(inheritedSymbols != null)
             unifiedSymbolTable.putAll(inheritedSymbols);
 
-        return  unifiedSymbolTable;
+        return unifiedSymbolTable;
     }
 
     protected Symbol hasAccessToSymbol(String symbolId)
@@ -133,34 +134,34 @@ public abstract class Analysis
         return null;
     }
 
-    protected boolean parseCall(ASTCALL callTree)
+    protected VarSymbol parseCall(ASTCALL callTree)
     {
         String module = callTree.module;
-        if(module == null)
-            return true;
+        if(module != null && !module.equals(ModuleAnalysis.moduleName))
+            return new VarSymbol("", "UNDEFINED", true);
 
         String method = callTree.method;
         FunctionSymbol functionSymbol = (FunctionSymbol) functionNameToFunctionSymbol.get(method);
         if(functionSymbol == null)
         {
             System.out.println("Method " + method + " can´t be found."); //TODO linha
-            return false;
+            return null;
         }
 
-        ASTARGUMENTSLIST astArgumentsList = callTree.jjtGetChild(0);
+        ASTARGUMENTS astArgumentsList = (ASTARGUMENTS) callTree.jjtGetChild(0);
         ArrayList<String> argumentsTypes = parseArgumentList(astArgumentsList);
         if(argumentsTypes == null)
-            return false;
+            return null;
 
         ArrayList<VarSymbol> functionArguments = functionSymbol.getArguments();
         if(functionArguments.size() != argumentsTypes.size())
         {
             System.out.println("Method " + method + " arguments number(" + argumentsTypes.size() +
                     ") does not match expected number(" + functionArguments.size() + ") of arguments"); //TODO linha
-            return false;
+            return null;
         }
 
-        boolean returnValue = true;
+        VarSymbol returnSymbol = functionSymbol.getReturnValue();
         for(int i = 0; i < functionArguments.size(); i++)
         {
             String argumentType = argumentsTypes.get(i);
@@ -169,14 +170,14 @@ public abstract class Analysis
             {
                 System.out.println("Type " + argumentType + " of argument " + i + " of method " + method +
                         " call does not match expected type " + exepectedArgumentType + "."); //TODO linha
-                returnValue = false;
+                returnSymbol = null;
             }
         }
 
-        return returnValue;
+        return returnSymbol;
     }
 
-    protected ArrayList<String> parseArgumentList(ASTARGUMENTSLIST argumentsListTree)
+    protected ArrayList<String> parseArgumentList(ASTARGUMENTS argumentsListTree)
     {
         Integer childrenLength = argumentsListTree.jjtGetNumChildren();
         ArrayList<String> argumentsTypes = new ArrayList<String>();
@@ -479,20 +480,24 @@ public abstract class Analysis
         if(lhsSymbol == null)
             return false;
         if(!lhsSymbol.isInitialized()) {
-            lhsSymbol.setType(rhsSymbol.getType());
+            if(rhsSymbol.getType().equals("UNDEFINED"))
+                lhsSymbol.setType("INTEGER");
+            else
+                lhsSymbol.setType(rhsSymbol.getType());
             lhsSymbol.setSize(rhsSymbol.getSize());
         }
-        String symbolType = lhsSymbol.getType();
+        String lhsSymbolType = lhsSymbol.getType();
+        String rhsSymbolType = rhsSymbol.getType();
 
-        //TODO
-        //if(symbolType.equals("ARRAY") && rhsSymbol.getType().equals("INTEGER"))
 
-        if(!symbolType.equals(rhsSymbol.getType()))
-        {
-            System.out.println("Variables dont match! Variable " + lhsSymbol.getId() + " has type " + symbolType +
-                    " and " + rhsSymbol.getId() + " has type " + rhsSymbol.getType() + "."); //TODO linha
-            return false;
-        }
+        if(! (lhsSymbolType.equals("ARRAY") && rhsSymbol.getType().equals("INTEGER"))) //for A=5; in which A is an array and all its elements are set to 5
+            if(!rhsSymbolType.equals("UNDEFINED")) //for A=m.f(); in which m.f() function is from another module that we not know the return value, so it can be INTEGER or ARRAY
+                if(!lhsSymbolType.equals(rhsSymbolType))
+                {
+                    System.out.println("Variables dont match! Variable " + lhsSymbol.getId() + " has type " + lhsSymbolType +
+                            " and " + rhsSymbol.getId() + " has type " + rhsSymbolType + "."); //TODO linha
+                    return false;
+                }
         lhsSymbol.setInitialized(true);
 
         //TODO DEBUG TIRAR

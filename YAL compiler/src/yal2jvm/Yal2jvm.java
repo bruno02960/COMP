@@ -26,7 +26,6 @@ public class Yal2jvm
 	private boolean optimize;
 	private String inputFile;
 	private SimpleNode ast;
-	public static int s;
 
 	public Yal2jvm(int localVars, boolean optimize, String inputFile)
 	{
