@@ -2,6 +2,7 @@ package yal2jvm;
 
 import yal2jvm.SemanticAnalysis.IfAnalysis;
 import yal2jvm.SemanticAnalysis.WhileAnalysis;
+import yal2jvm.SymbolTables.FunctionSymbol;
 import yal2jvm.SymbolTables.ImmediateSymbol;
 import yal2jvm.SymbolTables.VarSymbol;
 import yal2jvm.ast.*;
@@ -132,32 +133,64 @@ public abstract class Analysis
         return null;
     }
 
-    protected VarSymbol parseCall(ASTCALL callTree)
+    protected boolean parseCall(ASTCALL callTree)
     {
-        Node child = callTree.jjtGetChild(0);
-        switch(child.toString())
+        String module = callTree.module;
+        if(module == null)
+            return true;
+
+        String method = callTree.method;
+        FunctionSymbol functionSymbol = (FunctionSymbol) functionNameToFunctionSymbol.get(method);
+        if(functionSymbol == null)
         {
-            case "ARGUMENTLIST":
-                //return parseArgumentList((ASTARGUMENTS) child);
+            System.out.println("Method " + method + " can´t be found."); //TODO linha
+            return false;
         }
-        return null;
+
+        ASTARGUMENTSLIST astArgumentsList = callTree.jjtGetChild(0);
+        ArrayList<String> argumentsTypes = parseArgumentList(astArgumentsList);
+        if(argumentsTypes == null)
+            return false;
+
+        ArrayList<VarSymbol> functionArguments = functionSymbol.getArguments();
+        if(functionArguments.size() != argumentsTypes.size())
+        {
+            System.out.println("Method " + method + " arguments number(" + argumentsTypes.size() +
+                    ") does not match expected number(" + functionArguments.size() + ") of arguments"); //TODO linha
+            return false;
+        }
+
+        boolean returnValue = true;
+        for(int i = 0; i < functionArguments.size(); i++)
+        {
+            String argumentType = argumentsTypes.get(i);
+            String exepectedArgumentType = functionArguments.get(i).getType();
+            if(argumentType.equals(exepectedArgumentType) == false)
+            {
+                System.out.println("Type " + argumentType + " of argument " + i + " of method " + method +
+                        " call does not match expected type " + exepectedArgumentType + "."); //TODO linha
+                returnValue = false;
+            }
+        }
+
+        return returnValue;
     }
 
-    protected ArrayList<String> parseArgumentList(ASTARGUMENTS argumentListTree)
+    protected ArrayList<String> parseArgumentList(ASTARGUMENTSLIST argumentsListTree)
     {
-        Integer childrenLength = argumentListTree.jjtGetNumChildren();
+        Integer childrenLength = argumentsListTree.jjtGetNumChildren();
         ArrayList<String> argumentsTypes = new ArrayList<String>();
         boolean haveFailed = false;
         for(int i = 0; i < childrenLength; i++)
         {
-            ASTARGUMENT astargument = ((ASTARGUMENT) argumentListTree.jjtGetChild(i));
+            ASTARGUMENT astargument = ((ASTARGUMENT) argumentsListTree.jjtGetChild(i));
             String idArg = astargument.idArg;
             Integer intArg = astargument.intArg;
             String stringArg = astargument.stringArg;
 
             if(idArg == null && intArg == null && stringArg == null)
             {
-                System.out.println("Argument " + i + " is neither a variable, a string or an integer.");
+                System.out.println("Argument " + i + " is neither a variable, a string or an integer."); //TODO linha
                 return null;
             }
 
