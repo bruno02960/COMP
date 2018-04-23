@@ -245,10 +245,10 @@ public abstract class Analysis
                 System.out.println("Access to out of bounds " + indexValue + " in array " + arrayId +"."); //TODO linha
                 return null;
             }
-
-            arraySymbol = arraySymbol.getCopy();
-            arraySymbol.setType("INTEGER");
         }
+
+        arraySymbol = arraySymbol.getCopy();
+        arraySymbol.setType("INTEGER");
 
         return arraySymbol;
 
@@ -315,19 +315,10 @@ public abstract class Analysis
                 sizeAccess = true;
             id = id.substring(0, dotIdx);
         }
-        System.out.println("id: " + id);//TODO
-        VarSymbol varSymbol = (VarSymbol) hasAccessToSymbol(id);
-
-
-        if (varSymbol == null) {
-            System.out.println("Access to undeclared variable " + id + "."); //TODO linha
+        System.out.println("id: " + id); //TODO
+        VarSymbol varSymbol = (VarSymbol) checkSymbolExistsAndIsInitialized(id);
+        if(varSymbol == null)
             return null;
-        }
-
-        if (!varSymbol.isInitialized()) {
-            System.out.println("Access to uninitialized variable " + id + "."); //TODO linha
-            return null;
-        }
 
         if (varSymbol.getType().equals("ARRAYELEMENT") && !sizeAccess) {
             System.out.println("Access to size of variable " + id + " that is not an array."); //TODO linha
@@ -335,7 +326,10 @@ public abstract class Analysis
         }
 
         if(sizeAccess)
+        {
+            varSymbol = varSymbol.getCopy();
             varSymbol.setType("INTEGER");
+        }
 
         return varSymbol;
     }
