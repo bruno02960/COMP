@@ -1,11 +1,23 @@
 function a[]=det(d[]) 
 {
-		data[5] = 7;
-		i=a;
-	}
-Isto ? possivel?
+	data[5] = 7;
+	i=a;
+}
 
-Duvida no pc Bruno
+Isto é possivel?
+
+-----//-----
+
+function main()
+{
+	a=[100];
+	a=1;
+	a=2;
+}
+
+Isto é possivel?
+
+-----//-----
 
 codigo fornecido nao corre
 
