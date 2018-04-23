@@ -75,6 +75,7 @@ public abstract class Analysis
         Node firstChild = rhsTree.jjtGetChild(0);
         if(firstChild.toString().equals("ARRAYSIZE")) {
             VarSymbol retVal = parseArraySize((ASTARRAYSIZE) firstChild);
+            retVal = retVal.getCopy();
             retVal.setType("ARRAY");
             return retVal;
         }
@@ -148,29 +149,40 @@ public abstract class Analysis
             return null;
         }
 
-        ASTARGUMENTS astArgumentsList = (ASTARGUMENTS) callTree.jjtGetChild(0);
-        ArrayList<String> argumentsTypes = parseArgumentList(astArgumentsList);
-        if(argumentsTypes == null)
-            return null;
-
         ArrayList<VarSymbol> functionArguments = functionSymbol.getArguments();
-        if(functionArguments.size() != argumentsTypes.size())
-        {
-            System.out.println("Method " + method + " arguments number(" + argumentsTypes.size() +
-                    ") does not match expected number(" + functionArguments.size() + ") of arguments"); //TODO linha
-            return null;
-        }
+        VarSymbol returnSymbol = null;
 
-        VarSymbol returnSymbol = functionSymbol.getReturnValue();
-        for(int i = 0; i < functionArguments.size(); i++)
-        {
-            String argumentType = argumentsTypes.get(i);
-            String exepectedArgumentType = functionArguments.get(i).getType();
-            if(argumentType.equals(exepectedArgumentType) == false)
+        if(callTree.jjtGetNumChildren() == 0) {
+            if(callTree.jjtGetNumChildren() != functionArguments.size()){
+                System.out.println("Method " + method + " arguments number(0) does not match expected" +
+                        "number(" + functionArguments.size() + ") of arguments"); //TODO linha
+                return null;
+            }
+        }
+        else {
+            ASTARGUMENTS astArgumentsList = (ASTARGUMENTS) callTree.jjtGetChild(0);
+            ArrayList<String> argumentsTypes = parseArgumentList(astArgumentsList);
+            if (argumentsTypes == null)
+                return null;
+
+            if(functionArguments.size() != argumentsTypes.size())
             {
-                System.out.println("Type " + argumentType + " of argument " + i + " of method " + method +
-                        " call does not match expected type " + exepectedArgumentType + "."); //TODO linha
-                returnSymbol = null;
+                System.out.println("Method " + method + " arguments number(" + argumentsTypes.size() +
+                        ") does not match expected number(" + functionArguments.size() + ") of arguments"); //TODO linha
+                return null;
+            }
+
+            returnSymbol = functionSymbol.getReturnValue();
+            for(int i = 0; i < functionArguments.size(); i++)
+            {
+                String argumentType = argumentsTypes.get(i);
+                String exepectedArgumentType = functionArguments.get(i).getType();
+                if(argumentType.equals(exepectedArgumentType) == false)
+                {
+                    System.out.println("Type " + argumentType + " of argument " + i + " of method " + method +
+                            " call does not match expected type " + exepectedArgumentType + "."); //TODO linha
+                    returnSymbol = null;
+                }
             }
         }
 
@@ -245,10 +257,10 @@ public abstract class Analysis
                 System.out.println("Access to out of bounds " + indexValue + " in array " + arrayId +"."); //TODO linha
                 return null;
             }
-
-            arraySymbol = arraySymbol.getCopy();
-            arraySymbol.setType("INTEGER");
         }
+
+        arraySymbol = arraySymbol.getCopy();
+        arraySymbol.setType("INTEGER");
 
         return arraySymbol;
 
