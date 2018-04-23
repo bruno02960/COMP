@@ -4,3 +4,13 @@ function a[]=det(d[])
 		i=a;
 	}
 Isto ? possivel?
+
+Duvida no pc Bruno
+
+codigo fornecido nao corre
+
+o nosso codigo tambem nao corre
+
+Otimizaçoes
+
+registos
