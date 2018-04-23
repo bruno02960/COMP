@@ -109,14 +109,14 @@ public class Yal2jvm
         //create HHIR
 		//IRModule module = moduleAnalysis.parse();
         
-        /*IRModule module = createHardcodedIR("Module1");
+        IRModule module = createHardcodedIR("Module1");
         ArrayList<String> instructions = module.getInstructions();
         String moduleName = module.getName();
         
         saveToJasminFile(instructions, moduleName);
         compileToBytecode(moduleName + ".j");
 
-        System.exit(0);*/
+        System.exit(0);
 	}
 
 	private FileInputStream getFileStream()
@@ -177,7 +177,7 @@ public class Yal2jvm
 		{
 			Runtime.getRuntime().exec("java -jar jasmin.jar " + fileName).waitFor();
 			File file = new File(fileName);
-			file.delete();
+			//file.delete();
 		} 
         catch (IOException | InterruptedException e)
 		{
