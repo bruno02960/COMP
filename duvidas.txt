@@ -19,10 +19,8 @@ Isto é possivel?
 
 -----//-----
 
-codigo fornecido nao corre
-
 o nosso codigo tambem nao corre
 
-Otimizaçoes
+Otimizaçoes - 2 indicadas  + 1 escolha mas so no 3ºcheclpoint
 
-registos
+registos- com -r NUM, num indica o numero de registos que se pode usar para o codigo, ,mas so no 3ºcheclpoint
