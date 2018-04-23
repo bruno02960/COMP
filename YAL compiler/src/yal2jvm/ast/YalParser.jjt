@@ -626,7 +626,7 @@ void Call() #CALL :
 }
 
 /* ArgumentList ::= Argument ( <VIRG> Argument )* */
-void ArgumentList() #void :
+void ArgumentList() #ARGUMENTS :
 {}
 {
   Argument()
