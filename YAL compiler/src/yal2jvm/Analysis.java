@@ -138,33 +138,47 @@ public abstract class Analysis
         switch(child.toString())
         {
             case "ARGUMENTLIST":
-                return parseArgumentList((ASTARGUMENTS) child);
+                //return parseArgumentList((ASTARGUMENTS) child);
         }
         return null;
     }
 
-    protected VarSymbol parseArgumentList(ASTARGUMENTS argumentListTree)
+    protected ArrayList<String> parseArgumentList(ASTARGUMENTS argumentListTree)
     {
         Integer childrenLength = argumentListTree.jjtGetNumChildren();
-        ArrayList<VarSymbol> symbolArray = new ArrayList<VarSymbol>();
+        ArrayList<String> argumentsTypes = new ArrayList<String>();
+        boolean haveFailed = false;
         for(int i = 0; i < childrenLength; i++)
         {
-            Node child = argumentListTree.jjtGetChild(i);
-            ASTARGUMENT astargument = ((ASTARGUMENT) child);
+            ASTARGUMENT astargument = ((ASTARGUMENT) argumentListTree.jjtGetChild(i));
             String idArg = astargument.idArg;
             Integer intArg = astargument.intArg;
             String stringArg = astargument.stringArg;
 
             if(idArg == null && intArg == null && stringArg == null)
             {
-                System.out.println("ArgumentList Child " + i + " has all attributes set to null");
+                System.out.println("Argument " + i + " is neither a variable, a string or an integer.");
                 return null;
             }
 
-            //if(idArg != null)
-            //symbolArray.add(idArg); //TODO: fazer isto de acordo com o valor esperado e retornar boolean
+            if(idArg != null)
+            {
+                VarSymbol varSymbol = (VarSymbol) checkSymbolExistsAndIsInitialized(idArg);
+                if(varSymbol == null)
+                    haveFailed = true;
+                argumentsTypes.add(varSymbol.getType().toString());
+                continue;
+            }
+            else if(intArg != null)
+                argumentsTypes.add("INTEGER");
+            else
+                argumentsTypes.add("STRING");
         }
-        return null;
+
+        if(haveFailed)
+            return null;
+
+        return argumentsTypes;
     }
 
     protected VarSymbol parseArrayAccess(ASTARRAYACCESS arrayAccessTree)
