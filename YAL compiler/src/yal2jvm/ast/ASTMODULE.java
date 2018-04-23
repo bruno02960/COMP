@@ -2,7 +2,8 @@
 /* JavaCCOptions:MULTI=true,NODE_USES_PARSER=false,VISITOR=false,TRACK_TOKENS=false,NODE_PREFIX=AST,NODE_EXTENDS=,NODE_FACTORY=,SUPPORT_CLASS_VISIBILITY_PUBLIC=true */
 package yal2jvm.ast;
 
-public class ASTMODULE extends SimpleNode {
+public class
+ASTMODULE extends SimpleNode {
 	
 	public String name = "";
 

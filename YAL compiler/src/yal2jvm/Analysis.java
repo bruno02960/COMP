@@ -147,7 +147,7 @@ public abstract class Analysis
             return false;
         }
 
-        ASTARGUMENTSLIST astArgumentsList = callTree.jjtGetChild(0);
+        ASTARGUMENTS astArgumentsList = (ASTARGUMENTS) callTree.jjtGetChild(0);
         ArrayList<String> argumentsTypes = parseArgumentList(astArgumentsList);
         if(argumentsTypes == null)
             return false;
@@ -176,7 +176,7 @@ public abstract class Analysis
         return returnValue;
     }
 
-    protected ArrayList<String> parseArgumentList(ASTARGUMENTSLIST argumentsListTree)
+    protected ArrayList<String> parseArgumentList(ASTARGUMENTS argumentsListTree)
     {
         Integer childrenLength = argumentsListTree.jjtGetNumChildren();
         ArrayList<String> argumentsTypes = new ArrayList<String>();
