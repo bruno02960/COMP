@@ -616,10 +616,12 @@ public abstract class Analysis
                 case "WHILE":
                     WhileAnalysis whileAnalysis = new WhileAnalysis(node, getUnifiedSymbolTable(), functionNameToFunctionSymbol);
                     whileAnalysis.parse();
+                    mySymbols.putAll(whileAnalysis.mySymbols);
                     break;
                 case "IF":
                     IfAnalysis ifAnalysis = new IfAnalysis(node, getUnifiedSymbolTable(), functionNameToFunctionSymbol);
                     ifAnalysis.parse();
+                    mySymbols.putAll(ifAnalysis.mySymbols);
                     break;
                 case "CALL":
                     parseCall((ASTCALL) node);

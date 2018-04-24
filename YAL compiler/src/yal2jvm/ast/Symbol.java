@@ -20,4 +20,9 @@ public class Symbol
         this.id = id;
     }
 
+    @Override
+    public boolean equals(Object other)
+    {
+        return this.id.equals(((Symbol)other).getId());
+    }
 }
