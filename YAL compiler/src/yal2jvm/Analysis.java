@@ -186,6 +186,8 @@ public abstract class Analysis
             }
         }
 
+        returnSymbol.setSize(Integer.MAX_VALUE);
+
         return returnSymbol;
     }
 
