@@ -25,13 +25,13 @@ public class WhileAnalysis extends Analysis
         parseExprTest(exprTest);
 
         //get symbols States Before While
-        ArrayList<Symbol> symbolsStatesBeforeWhile = (ArrayList<Symbol>) inheritedSymbols.values();
+        ArrayList<Symbol> symbolsStatesBeforeWhile = new ArrayList<Symbol>(inheritedSymbols.values());
 
         ASTSTATEMENTS stmtlst = ((ASTSTATEMENTS) ast.jjtGetChild(1));
         parseStmtLst(stmtlst);
 
         //get symbols States after While
-        ArrayList<Symbol> symbolsStatesAfterWhile = (ArrayList<Symbol>) inheritedSymbols.values();
+        ArrayList<Symbol> symbolsStatesAfterWhile = new ArrayList<Symbol>(inheritedSymbols.values());
 
         //set as not initialized symbols that were initialized inside while, as its statements can not be executed
         assert symbolsStatesBeforeWhile.size() == symbolsStatesAfterWhile.size();
@@ -42,8 +42,7 @@ public class WhileAnalysis extends Analysis
             symbolAfterWhile.setType(symbolBeforeWhile.getType());
         }
 
-        //TODO: ver mySimbols (que sao do while e nao da funçao) e dai por ou nao como inicializado nos simbolos da funçao
-        //TODO: aqui na realidade nao se por nenhum como initializado
+        //symbols created inside while don't are added to symbol table, because while statements can not be executed
     }
 
 }
