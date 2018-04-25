@@ -383,9 +383,15 @@ public abstract class Analysis
         if(child instanceof ASTSCALARELEMENT)
         {
             ASTSCALARELEMENT astscalarelement = (ASTSCALARELEMENT)child;
-            Symbol symbol = hasAccessToSymbol(astscalarelement.id);
+            VarSymbol symbol = (VarSymbol) hasAccessToSymbol(astscalarelement.id);
+
             if(symbol != null)
             {
+                if(symbol.getSize() != -1 && declarationTree.integer != null) {
+                    symbol.setInitialized(true);
+                    return symbol;
+                }
+
                 System.out.println("Variable " + astscalarelement.id + " already declared."); //TODO linha
                 return null;
             }
@@ -553,6 +559,11 @@ public abstract class Analysis
         System.out.println("symbol id: " + lhsSymbol.getId());
         System.out.println("symbol type: " + lhsSymbol.getType());
         System.out.println("symbol size: " + lhsSymbol.getSize());
+
+        if(lhsSymbol.getId().contains(".size")) {
+            System.out.println("Impossible to assign a value to " + lhsSymbol.getId());
+            return false;
+        }
 
         if((inheritedSymbols.get(lhsSymbol.getId()) == null) && (mySymbols.get(lhsSymbol.getId()) == null))
             mySymbols.put(lhsSymbol.getId(), lhsSymbol);
