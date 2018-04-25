@@ -448,6 +448,8 @@ public abstract class Analysis
                 {
                     ASTSCALARACCESS astScalarAccess = (ASTSCALARACCESS) astarraysize.jjtGetChild(0);
                     VarSymbol scalarAccessSymbol = parseScalarAccess(astScalarAccess);
+                    if(scalarAccessSymbol == null)
+                        return null;
                     arraySize = scalarAccessSymbol.getSize();
                 }
                 initialized = true;
@@ -466,7 +468,7 @@ public abstract class Analysis
                     else
                     {
                         System.out.println("Variable " + astarrayelement.id + " has the size not defined. Error assigning " +
-                                declarationTree.integer + " to all elements of " + astarrayelement.id); //TODO linha
+                                declarationTree.integer + " to all elements of " + astarrayelement.id + "."); //TODO linha
                         return null;
                     }
                 }
