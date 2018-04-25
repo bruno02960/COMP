@@ -8,7 +8,7 @@ import java.util.ArrayList;
 public class VarSymbol extends Symbol
 {
     private String type;
-    private boolean initialized = false;
+    private boolean initialized;
     private int size = -1;
     //private ArrayList<Integer> values; //can be just one value or multiple if is an array
 

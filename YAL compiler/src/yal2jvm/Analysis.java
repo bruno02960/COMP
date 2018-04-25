@@ -646,6 +646,7 @@ public abstract class Analysis
             VarSymbol symbol = (VarSymbol) pair.getValue();
             symbol.setInitialized(false);
             symbolsNotInitialized.put(symbolName, symbol);
+            symbol.setSize(-1);
         }
 
         return symbolsNotInitialized;
