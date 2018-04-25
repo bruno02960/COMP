@@ -1,6 +1,7 @@
 package yal2jvm.SemanticAnalysis;
 
 import yal2jvm.Analysis;
+import yal2jvm.Utils.Utils;
 import yal2jvm.ast.ASTEXPRTEST;
 import yal2jvm.ast.ASTSTATEMENTS;
 import yal2jvm.ast.SimpleNode;
@@ -22,14 +23,14 @@ public class WhileAnalysis extends Analysis
         ASTEXPRTEST exprTest = ((ASTEXPRTEST) ast.jjtGetChild(0));
         parseExprTest(exprTest);
 
-        //get inherited symbols States after while
-        HashMap<String, Symbol> inheritedSymbolsHashMapAfterWhile = new HashMap<>(inheritedSymbols);
+        //get inherited symbols States before while, in order to not change original values
+        HashMap<String, Symbol> inheritedSymbolsHashMapBeforeWhile = Utils.copyHashMap(inheritedSymbols);
 
         ASTSTATEMENTS stmtlst = ((ASTSTATEMENTS) ast.jjtGetChild(1));
         parseStmtLst(stmtlst);
 
         //set inheritedSymbols as they were before while, because while can not be executed
-        inheritedSymbols = inheritedSymbolsHashMapAfterWhile;
+        inheritedSymbols = inheritedSymbolsHashMapBeforeWhile;
 
         //symbols created inside while are added to symbol table, but as not initialized, because while statements can not be executed
         mySymbols = setAllSymbolsAsNotInitialized(mySymbols);

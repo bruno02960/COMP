@@ -25,4 +25,9 @@ public class Symbol
     {
         return this.id.equals(((Symbol)other).getId());
     }
+
+    public Symbol getCopy()
+    {
+        return new Symbol(new String(id));
+    }
 }

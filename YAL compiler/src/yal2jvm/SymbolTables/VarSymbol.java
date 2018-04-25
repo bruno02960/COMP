@@ -58,4 +58,10 @@ public class VarSymbol extends Symbol
     {
         return new VarSymbol(new String(id), new String(type), new Boolean(initialized), new Integer(size));
     }
+
+    @Override
+    protected Object clone()
+    {
+        return getCopy();
+    }
 }
