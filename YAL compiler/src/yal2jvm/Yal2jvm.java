@@ -8,20 +8,13 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import yal2jvm.HHIR.IRAllocate;
-import yal2jvm.HHIR.IRConstant;
-import yal2jvm.HHIR.IRGlobal;
-import yal2jvm.HHIR.IRMethod;
-import yal2jvm.HHIR.IRModule;
-import yal2jvm.HHIR.IRReturn;
-import yal2jvm.HHIR.IRStoreArith;
-import yal2jvm.HHIR.Operation;
-import yal2jvm.HHIR.Type;
+import yal2jvm.HHIR.HHIR;
 import yal2jvm.SemanticAnalysis.ModuleAnalysis;
 import yal2jvm.ast.*;
 
 public class Yal2jvm
 {
+	private static final int MAX_LOCAL_VARS = 255;
 	private int localVars;
 	private boolean optimize;
 	private String inputFile;
@@ -38,7 +31,7 @@ public class Yal2jvm
 	{
 		String inputFile = null;
 		boolean optimize = false;
-		int localVars = 0;
+		int localVars = MAX_LOCAL_VARS;
 		boolean validInput = true;
 		
 		switch (args.length)
@@ -105,17 +98,20 @@ public class Yal2jvm
 
         ModuleAnalysis moduleAnalysis = new ModuleAnalysis(ast);
         moduleAnalysis.parse();
-        //create HHIR
-		//IRModule module = moduleAnalysis.parse();
         
-        /*IRModule module = createHardcodedIR("Module1");
-        ArrayList<String> instructions = module.getInstructions();
-        String moduleName = module.getName();
+        HHIR hhir = new HHIR(ast);
+        if (this.optimize)
+        	hhir.optimize();
+        hhir.dataflowAnalysis();
+        hhir.allocateRegisters(this.localVars);
+   
+        ArrayList<String> instructions = hhir.selectInstructions();
+        String moduleName = hhir.getModuleName();
         
         saveToJasminFile(instructions, moduleName);
         compileToBytecode(moduleName + ".j");
 
-        System.exit(0);*/
+        System.exit(0);
 	}
 
 	private FileInputStream getFileStream()
@@ -186,32 +182,5 @@ public class Yal2jvm
 		{
 			System.out.println("Unable to find or execute jasmin.jar");
 		}
-	}
-	
-	private IRModule createHardcodedIR(String moduleName)
-	{
-		IRModule module = new IRModule("Module1");
-		module.addChild(new IRGlobal("a", Type.INTEGER, null));
-		module.addChild(new IRGlobal("b", Type.INTEGER, null));
-		module.addChild(new IRGlobal("c", Type.INTEGER, 12));
-		module.addChild(new IRGlobal("d", Type.INTEGER, 12345));
-		module.addChild(new IRMethod("method1", Type.INTEGER, null));
-		module.addChild(new IRMethod("method2", Type.VOID, new Type[]{Type.INTEGER}));
-		module.addChild(new IRMethod("method3", Type.VOID, new Type[]{Type.INTEGER, Type.INTEGER, Type.INTEGER}));
-		
-			IRMethod method = new IRMethod("main", Type.VOID, null);
-			method.addChild(new IRAllocate("var1", Type.INTEGER, null));
-			method.addChild(new IRAllocate("var2", Type.INTEGER, 10));
-			method.addChild(new IRAllocate("var3", Type.INTEGER, 20000));
-		
-				IRStoreArith arith = new IRStoreArith("var1", Operation.ADD);
-				arith.setRhs(new IRConstant(100));
-				arith.setLhs(new IRConstant(200));
-		
-			method.addChild(arith);
-			method.addChild(new IRReturn(null, null));
-		
-		module.addChild(method);
-		return module;
 	}
 }
