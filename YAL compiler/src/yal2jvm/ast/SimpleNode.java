@@ -5,7 +5,7 @@ package yal2jvm.ast;
 public
 class SimpleNode implements Node {
 
-	  protected Node parent;
+	  private Node parent;
 	  protected Node[] children;
 	  protected int id;
 	  protected String value = "";
@@ -26,9 +26,7 @@ class SimpleNode implements Node {
 	  public void jjtClose() {
 	  }
 
-		public int jjtGetId() { return id; }
-
-	  public void jjtSetParent(Node n) { parent = n; }
+	public void jjtSetParent(Node n) { parent = n; }
 	  public Node jjtGetParent() { return parent; }
 
 	  public void jjtAddChild(Node n, int i) {
@@ -50,8 +48,7 @@ class SimpleNode implements Node {
 	    return (children == null) ? 0 : children.length;
 	  }
 
-	  public void jjtSetValue(String value) { this.value = value; }
-	  public String jjtGetValue() { return value; }
+	public String jjtGetValue() { return value; }
 
 	  /* You can override these two methods in subclasses of SimpleNode to
 	     customize the way the node appears when the tree is dumped.  If
@@ -71,10 +68,10 @@ class SimpleNode implements Node {
 			System.out.println(prefix + "\"" + this.value + "\"");
 		}
 		if (children != null) {
-			if (this.value != "")
+			if (!this.value.equals(""))
 				System.out.println(prefix + "\"" + this.value + "\"");
-			for (int i = 0; i < children.length; ++i) {
-				SimpleNode n = (SimpleNode) children[i];
+			for (Node aChildren : children) {
+				SimpleNode n = (SimpleNode) aChildren;
 				if (n != null) {
 					n.dump(prefix + " ");
 				}

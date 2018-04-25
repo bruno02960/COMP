@@ -20,10 +20,10 @@ class ASTRHS extends SimpleNode {
 			System.out.println(prefix + "\"" + this.operator + "\"");
 		}
 		if (children != null) {
-			if (this.operator != "")
+			if (!this.operator.equals(""))
 				System.out.println(prefix + "\"" + this.operator + "\"");
-			for (int i = 0; i < children.length; ++i) {
-				SimpleNode n = (SimpleNode) children[i];
+			for (Node aChildren : children) {
+				SimpleNode n = (SimpleNode) aChildren;
 				if (n != null) {
 					n.dump(prefix + " ");
 				}

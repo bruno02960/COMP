@@ -21,10 +21,10 @@ ASTMODULE extends SimpleNode {
 			System.out.println(prefix + "\"" + this.name + "\"");
 		}
 		if (children != null) {
-			if (this.name != "")
+			if (!this.name.equals(""))
 				System.out.println(prefix + "\"" + this.name + "\"");
-			for (int i = 0; i < children.length; ++i) {
-				SimpleNode n = (SimpleNode) children[i];
+			for (Node aChildren : children) {
+				SimpleNode n = (SimpleNode) aChildren;
 				if (n != null) {
 					n.dump(prefix + " ");
 				}

@@ -23,8 +23,8 @@ class ASTSCALARACCESS extends SimpleNode {
 		if (children != null) {
 			if (this.id != null)
 				System.out.println(prefix + "\"" + this.id +"\"");
-			for (int i = 0; i < children.length; ++i) {
-				SimpleNode n = (SimpleNode) children[i];
+			for (Node aChildren : children) {
+				SimpleNode n = (SimpleNode) aChildren;
 				if (n != null) {
 					n.dump(prefix + " ");
 				}

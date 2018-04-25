@@ -20,10 +20,10 @@ public class ASTARRAYELEMENT extends SimpleNode {
 			System.out.println(prefix + "\"" + this.id + "\"");
 		}
 		if (children != null) {
-			if (this.id != "")
+			if (!this.id.equals(""))
 				System.out.println(prefix + "\"" + this.id + "\"");
-			for (int i = 0; i < children.length; ++i) {
-				SimpleNode n = (SimpleNode) children[i];
+			for (Node aChildren : children) {
+				SimpleNode n = (SimpleNode) aChildren;
 				if (n != null) {
 					n.dump(prefix + " ");
 				}

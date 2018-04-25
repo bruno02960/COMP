@@ -28,8 +28,8 @@ class ASTCALL extends SimpleNode {
 				System.out.println(prefix + "\"" + this.method + " ON MODULE " + this.module + "\"");
 			else
 				System.out.println(prefix + "\"" + this.method + "\"");
-			for (int i = 0; i < children.length; ++i) {
-				SimpleNode n = (SimpleNode) children[i];
+			for (Node aChildren : children) {
+				SimpleNode n = (SimpleNode) aChildren;
 				if (n != null) {
 					n.dump(prefix + " ");
 				}
