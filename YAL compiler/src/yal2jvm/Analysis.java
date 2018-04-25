@@ -488,7 +488,18 @@ public abstract class Analysis
         VarSymbol lhsSymbol = getLhsVariable(lhsTree);
         if(lhsSymbol == null)
             return false;
-        if(!lhsSymbol.isInitialized()) {
+        //TODO
+       /* if(!lhsSymbol.isInitialized())
+        {
+            if(rhsSymbol.getType().equals("UNDEFINED"))
+                lhsSymbol.setType("INTEGER");
+            else
+                lhsSymbol.setType(rhsSymbol.getType());
+            lhsSymbol.setSize(rhsSymbol.getSize());
+        }*/
+
+        if(lhsSymbol.getType().equals("UNDEFINED"))
+        {
             if(rhsSymbol.getType().equals("UNDEFINED"))
                 lhsSymbol.setType("INTEGER");
             else
@@ -544,7 +555,7 @@ public abstract class Analysis
                 symbol = (VarSymbol) hasAccessToSymbol(id);
 
                 if(symbol == null) {
-                    symbol = new VarSymbol(id, "INTEGER", false);
+                    symbol = new VarSymbol(id, "UNDEFINED", false);
                 }
 
                 break;
