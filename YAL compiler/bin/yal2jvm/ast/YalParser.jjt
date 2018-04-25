@@ -1,38 +1,41 @@
 options
 {
-  LOOKAHEAD= 1;
-
-  MULTI = true;
+  	LOOKAHEAD= 1;
+	NODE_SCOPE_HOOK=true;
+  	MULTI = true;
 }
 
 PARSER_BEGIN(YalParser)
 package yal2jvm.ast;
-
 import java.io.IOException;
 import java.io.FileInputStream;
 
 public class YalParser
 {
-	static ErrorCounter errorCounter = new ErrorCounter();
+  public static ErrorCounter errorCounter = new ErrorCounter();
 
-	public static void main(String args []) throws ParseException, IOException
-	{
-		//read filepath from user as commmand line argument
-		if (args.length == 0)
-		{
-		  System.out.println("Usage: YalParser <filepath>");
-		  System.exit(- 1);
-		}
-		
-		String filepath = args [0];
-		
-		//Create parser and parse
-		YalParser parser = new YalParser(new FileInputStream(filepath));
-		SimpleNode root = parser.Module();
-		
-		//Display tree
-		root.dump("");
-	}
+  public static void main(String args []) throws ParseException, IOException
+  {
+    //read filepath from user as commmand line argument
+    if (args.length == 0)
+    {
+      System.out.println("Usage: YalParser <filepath>");
+      System.exit(- 1);
+    }
+    String filepath = args [0];
+    //Create parser and parse
+    YalParser parser = new YalParser(new FileInputStream(filepath));
+    SimpleNode root = parser.Module();
+    //Display tree
+    root.dump("");
+  }
+
+static void jjtreeOpenNodeScope(Node n) {
+    ((SimpleNode)n).setBeginLine( getToken(1).beginLine) ;
+}
+
+static void jjtreeCloseNodeScope(Node n) {
+}
 }
 
 PARSER_END(YalParser)
@@ -136,10 +139,8 @@ SimpleNode Module() #MODULE :
   catch (ParseException e)
   {
     System.out.println(e.toString());
-    
-    if (errorCounter.errorControl())
-    	System.exit(1);
-
+    if (errorCounter.errorControl()) 
+    System.exit(1);
     Token t2;
     do
     {
@@ -163,7 +164,7 @@ void Declaration() #DECLARATION :
   Token t;
 }
 {
-  try
+	try
   {
     (LOOKAHEAD(2)
     ArrayElement()
@@ -186,11 +187,8 @@ void Declaration() #DECLARATION :
   catch (ParseException e)
   {
     System.out.println(e.toString());
-    
-    if (errorCounter.errorControl())
-    	System.exit(1);
-
-    
+    if (errorCounter.errorControl()) 
+    System.exit(1);
     Token t2;
     do
     {
@@ -207,7 +205,7 @@ void Function() #FUNCTION :
   Token t;
 }
 {
-  try
+	try
   {
     (LOOKAHEAD(3)
     (< FUNCTION > (LOOKAHEAD(2)
@@ -227,11 +225,8 @@ void Function() #FUNCTION :
   catch (ParseException e)
   {
     System.out.println(e.toString());
-    
-    if (errorCounter.errorControl())
-    	System.exit(1);
-
-    
+    if (errorCounter.errorControl()) 
+    System.exit(1);
     Token t2;
     do
     {
@@ -247,11 +242,8 @@ void Function() #FUNCTION :
   catch (ParseException e)
   {
     System.out.println(e.toString());
-    
-    if (errorCounter.errorControl())
-    	System.exit(1);
-
-    
+    if (errorCounter.errorControl()) 
+    System.exit(1);
     Token t2;
     do
     {
@@ -266,7 +258,7 @@ void Function() #FUNCTION :
 void Varlist() #ARGUMENTS :
 {}
 {
-  (
+	(
     LOOKAHEAD(2)
     ArrayElement()
   | ScalarElement()
@@ -287,7 +279,7 @@ void ArrayElement() #ARRAYELEMENT :
   Token t;
 }
 {
-  try
+	try
   {
     t = < ID >
     {
@@ -298,11 +290,8 @@ void ArrayElement() #ARRAYELEMENT :
   catch (ParseException e)
   {
     System.out.println(e.toString());
-    
-    if (errorCounter.errorControl())
-    	System.exit(1);
-
-    
+    if (errorCounter.errorControl()) 
+    System.exit(1);
     Token t2;
     do
     {
@@ -318,7 +307,7 @@ void ScalarElement() #SCALARELEMENT :
   Token t;
 }
 {
-  try
+	try
   {
     t = < ID >
     {
@@ -329,9 +318,8 @@ void ScalarElement() #SCALARELEMENT :
   catch (ParseException e)
   {
     System.out.println(e.toString());
-    
-    if (errorCounter.errorControl())
-    	System.exit(1);
+    if (errorCounter.errorControl()) 
+    System.exit(1);
   }
 }
 
@@ -339,7 +327,7 @@ void ScalarElement() #SCALARELEMENT :
 void Stmtlst() #STATEMENTS :
 {}
 {
-  (
+	(
     Stmt()
   )*
 }
@@ -348,7 +336,7 @@ void Stmtlst() #STATEMENTS :
 void Stmt() #void :
 {}
 {
-  try
+	try
   {
     While()
   | If()
@@ -359,11 +347,8 @@ void Stmt() #void :
   catch (ParseException e)
   {
     System.out.println(e.toString());
-    
-    if (errorCounter.errorControl())
-    	System.exit(1);
-
-    
+    if (errorCounter.errorControl()) 
+    System.exit(1);
     Token t2;
     do
     {
@@ -382,18 +367,15 @@ void Stmt() #void :
 void ParseBlock() #void :
 {}
 {
-  try
+	try
   {
     Stmtlst() < RCHAVETA >
   }
   catch (ParseException e)
   {
     System.out.println(e.toString());
-    
-    if (errorCounter.errorControl())
-    	System.exit(1);
-
-    
+    if (errorCounter.errorControl()) 
+    System.exit(1);
     Token t2;
     do
     {
@@ -409,7 +391,7 @@ void CallStatement() #CALL :
   Token t;
 }
 {
-  try
+	try
   {
     t = < ID >
     {
@@ -432,11 +414,8 @@ void CallStatement() #CALL :
   catch (ParseException e)
   {
     System.out.println(e.toString());
-    
-    if (errorCounter.errorControl())
-    	System.exit(1);
-
-    
+    if (errorCounter.errorControl()) 
+    System.exit(1);
     Token t2;
     do
     {
@@ -450,34 +429,31 @@ void CallStatement() #CALL :
 void Assign() #ASSIGN :
 {}
 {
-  try
+	try
   {
     Lhs() < ASSIGN > Rhs() < PVIRG >
   }
   catch (ParseException e)
   {
     System.out.println(e.toString());
-    
-    if (errorCounter.errorControl())
-    	System.exit(1);
-
-    
+    if (errorCounter.errorControl()) 
+    System.exit(1);
     Token t2;
     do
     {
       t2 = getNextToken();
     }
     while (t2.kind != PVIRG);
-  }
+  }	
 }
 
 /* Lhs ::= ArrayAccess | ScalarAccess */
 void Lhs() #LHS :
 {}
 {
-  LOOKAHEAD(2)
+	 LOOKAHEAD(2)
   ArrayAccess()
-| ScalarAccess()
+| ScalarAccess()	
 }
 
 /* Rhs ::= ( Term ( ( <ARITH_OP> | <BITWISE_OP> | <ADDSUB_OP> ) Term )? ) | "[" ArraySize "]" */
@@ -486,7 +462,7 @@ void Rhs() #RHS :
   Token t;
 }
 {
-  (
+	(
     Term()
     (
       (
@@ -515,7 +491,7 @@ void ArraySize() #ARRAYSIZE :
   Token t;
 }
 {
-  ScalarAccess()
+	ScalarAccess()
 | t = < INTEGER >
   {
     if (jjtThis.integer != null) jjtThis.integer = new Integer(t.image);
@@ -529,7 +505,7 @@ void Term() #TERM :
   Token t;
 }
 {
-  (
+	 (
     t = < ADDSUB_OP >
     {
       if (jjtThis.operator != "") jjtThis.operator += " " + t.image;
@@ -556,7 +532,7 @@ void Exprtest() #EXPRTEST :
   Token t;
 }
 {
-  try
+ try
   {
     < LPAR > Lhs() t = < RELA_OP >
     {
@@ -567,11 +543,8 @@ void Exprtest() #EXPRTEST :
   catch (ParseException e)
   {
     System.out.println(e.toString());
-    
-    if (errorCounter.errorControl())
-    	System.exit(1);
-
-    
+    if (errorCounter.errorControl()) 
+    System.exit(1);
     Token t2;
     do
     {
@@ -587,18 +560,15 @@ void While() #WHILE :
   Token L_Chaveta = null;
 }
 {
-  try
+	try
   {
     < WHILE > Exprtest() L_Chaveta = < LCHAVETA > Stmtlst() < RCHAVETA >
   }
   catch (ParseException e)
   {
     System.out.println(e.toString());
-    
-    if (errorCounter.errorControl())
-    	System.exit(1);
-
-    
+    if (errorCounter.errorControl()) 
+    System.exit(1);
     if (L_Chaveta != null)
     {
       Token t2;
@@ -618,9 +588,10 @@ void If() #IF :
   Token L_Chaveta_ELSE = null;
 }
 {
-  try
+	try
   {
-    < IF > Exprtest() L_Chaveta_IF = < LCHAVETA > Stmtlst() < RCHAVETA > 
+    < IF > Exprtest() L_Chaveta_IF = < LCHAVETA > Stmtlst() < RCHAVETA >
+    
     (
     Else()
     ) ?
@@ -628,11 +599,8 @@ void If() #IF :
   catch (ParseException e)
   {
     System.out.println(e.toString());
-    
-    if (errorCounter.errorControl())
-    	System.exit(1);
-
-    
+    if (errorCounter.errorControl()) 
+    System.exit(1);
     int character;
     if (L_Chaveta_IF != null || L_Chaveta_ELSE != null) 
     character = PVIRG;
@@ -651,18 +619,15 @@ void If() #IF :
 void Else() #ELSE :
 {}
 {
-  try
+	try
   {
     < ELSE > < LCHAVETA > Stmtlst() < RCHAVETA >
   }
   catch (ParseException e)
   {
     System.out.println(e.toString());
-    
-    if (errorCounter.errorControl())
-    	System.exit(1);
-
-    
+    if (errorCounter.errorControl()) 
+    System.exit(1);
     Token t2;
     do
     {
@@ -678,7 +643,7 @@ void Call() #CALL :
   Token t;
 }
 {
-  t = < ID >
+	t = < ID >
   {
     jjtThis.method = t.image;
   }
@@ -701,7 +666,7 @@ void Call() #CALL :
 void ArgumentList() #ARGUMENTS :
 {}
 {
-  Argument()
+	Argument()
   (
     < VIRG > Argument()
   )*
@@ -713,7 +678,7 @@ void Argument() #ARGUMENT :
   Token t;
 }
 {
-  (
+	(
     t = < ID >
     {
       jjtThis.idArg = t.image;
@@ -736,7 +701,7 @@ void ArrayAccess() #ARRAYACCESS :
   Token L_Par = null;
 }
 {
-  try
+	try
   {
     t = < ID >
     {
@@ -747,11 +712,8 @@ void ArrayAccess() #ARRAYACCESS :
   catch (ParseException e)
   {
     System.out.println(e.toString());
-    
-    if (errorCounter.errorControl())
-    	System.exit(1);
-
-    
+    if (errorCounter.errorControl()) 
+    System.exit(1);
     if (L_Par != null)
     {
       Token t2;
@@ -770,7 +732,7 @@ void ScalarAccess() #SCALARACCESS :
   Token t;
 }
 {
-  t = < ID >
+	t = < ID >
   {
     jjtThis.id = t.image;
   }
