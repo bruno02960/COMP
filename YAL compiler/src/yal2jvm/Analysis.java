@@ -77,7 +77,7 @@ public abstract class Analysis
         if(firstChild.toString().equals("ARRAYSIZE")) {
             VarSymbol retVal = parseArraySize((ASTARRAYSIZE) firstChild);
             retVal = retVal.getCopy();
-            retVal.setType("ARRAY");
+            retVal.setType("ARRAYSIZE");
             return retVal;
         }
 
@@ -177,11 +177,11 @@ public abstract class Analysis
             for(int i = 0; i < functionArguments.size(); i++)
             {
                 String argumentType = argumentsTypes.get(i);
-                String exepectedArgumentType = functionArguments.get(i).getType();
-                if(argumentType.equals(exepectedArgumentType) == false)
+                String expectedArgumentType = functionArguments.get(i).getType();
+                if(argumentType.equals(expectedArgumentType) == false)
                 {
-                    System.out.println("Type " + argumentType + " of argument " + i + " of method " + method +
-                            " call does not match expected type " + exepectedArgumentType + "."); //TODO linha
+                    System.out.println("Type " + argumentType + " of argument " + i+1 + " of method " + method +
+                            " call does not match expected type " + expectedArgumentType + "."); //TODO linha
                     returnSymbol = null;
                 }
             }
@@ -532,19 +532,28 @@ public abstract class Analysis
             lhsSymbol.setSize(rhsSymbol.getSize());
         }*/
 
-        if(lhsSymbol.getType().equals("UNDEFINED"))
-        {
-            if(rhsSymbol.getType().equals("UNDEFINED"))
-                lhsSymbol.setType("INTEGER");
-            else
-                lhsSymbol.setType(rhsSymbol.getType());
-            lhsSymbol.setSize(rhsSymbol.getSize());
-        }
+       if(rhsSymbol.getType().equals("ARRAYSIZE"))
+       {
+           if (lhsSymbol.getType().equals("ARRAY"))
+               return addToSymbolTable(lhsSymbol);
+           else
+               rhsSymbol.setType("ARRAY");
+       }
+
+       if(lhsSymbol.getType().equals("UNDEFINED"))
+       {
+           if(rhsSymbol.getType().equals("UNDEFINED"))
+               lhsSymbol.setType("INTEGER");
+           else
+               lhsSymbol.setType(rhsSymbol.getType());
+           lhsSymbol.setSize(rhsSymbol.getSize());
+       }
+
         String lhsSymbolType = lhsSymbol.getType();
         String rhsSymbolType = rhsSymbol.getType();
 
 
-        if(! (lhsSymbolType.equals("ARRAY") && rhsSymbol.getType().equals("INTEGER"))) //for A=5; in which A is an array and all its elements are set to 5
+        if(! (lhsSymbolType.equals("ARRAY") && rhsSymbolType.equals("INTEGER"))) //for A=5; in which A is an array and all its elements are set to 5
             if(!rhsSymbolType.equals("UNDEFINED")) //for A=m.f(); in which m.f() function is from another module that we not know the return value, so it can be INTEGER or ARRAY
                 if(!lhsSymbolType.equals(rhsSymbolType))
                 {
@@ -552,6 +561,7 @@ public abstract class Analysis
                             " and " + rhsSymbol.getId() + " has type " + rhsSymbolType + "."); //TODO linha
                     return false;
                 }
+
         lhsSymbol.setInitialized(true);
 
         //TODO DEBUG TIRAR
@@ -565,10 +575,18 @@ public abstract class Analysis
             return false;
         }
 
-        if((inheritedSymbols.get(lhsSymbol.getId()) == null) && (mySymbols.get(lhsSymbol.getId()) == null))
-            mySymbols.put(lhsSymbol.getId(), lhsSymbol);
+        return addToSymbolTable(lhsSymbol);
+    }
 
-        return true;
+    private boolean addToSymbolTable(VarSymbol lhsSymbol)
+    {
+        if((inheritedSymbols.get(lhsSymbol.getId()) == null) && (mySymbols.get(lhsSymbol.getId()) == null))
+        {
+            mySymbols.put(lhsSymbol.getId(), lhsSymbol);
+            return true;
+        }
+
+        return false;
     }
 
     private VarSymbol getLhsVariable(SimpleNode lhsTree)
@@ -580,22 +598,23 @@ public abstract class Analysis
         {
             case "ARRAYACCESS":
                 id = ((ASTARRAYACCESS) child).arrayID;
-                symbol = (VarSymbol) checkSymbolExistsAndIsInitialized(id);
+                symbol = (VarSymbol) hasAccessToSymbol(id);
                 if(symbol == null)
                     return null;
+
                 ASTINDEX astindex = (ASTINDEX) child.jjtGetChild(0);
                 if(!parseIndex(astindex, symbol))
                     return null;
                 symbol = symbol.getCopy(); //symbol type will be altered but only for this case, so we need a copy
                 symbol.setType("INTEGER");
                 break;
+
             case "SCALARACCESS":
                 id = ((ASTSCALARACCESS) child).id;
                 symbol = (VarSymbol) hasAccessToSymbol(id);
 
-                if(symbol == null) {
+                if(symbol == null)
                     symbol = new VarSymbol(id, "UNDEFINED", false);
-                }
 
                 break;
         }
@@ -634,7 +653,7 @@ public abstract class Analysis
             return false;
 
         ASTRHS astRhs = (ASTRHS) astExprtest.jjtGetChild(1);
-        VarSymbol rhsSymbol = parseLhs(astRhs);
+        VarSymbol rhsSymbol = parseRhs(astRhs);
         if(rhsSymbol == null)
             return false;
 
@@ -645,7 +664,7 @@ public abstract class Analysis
             return false;
         }
 
-        if(!lhsSymbol.getType().equals("ARRAY"))
+        if(lhsSymbol.getType().equals("ARRAY"))
         {
             System.out.println("Variables must be INTEGER to be compared. Variable " + lhsSymbol.getId() + " has type "
                     + lhsSymbol.getType() + " and variable " + rhsSymbol.getId() + " has type " + rhsSymbol.getType() + "."); //TODO linha
@@ -665,9 +684,37 @@ public abstract class Analysis
             switch(nodeId)
             {
                 case "WHILE":
+                    //TODO remove debug
+                    System.out.println("mySymbols before while: ");
+                    ArrayList<Symbol> symbols = new ArrayList<Symbol>(mySymbols.values());
+                    for(int j = 0; j < symbols.size(); j++)
+                    {
+                        VarSymbol symbol = (VarSymbol) symbols.get(j);
+                        System.out.println("id: " + symbol.getId() + " type: " + symbol.getType() +
+                                " initialized: " + symbol.isInitialized() + " size: " + symbol.getSize() + " ");
+                    }
                     WhileAnalysis whileAnalysis = new WhileAnalysis(node, getUnifiedSymbolTable(), functionNameToFunctionSymbol);
                     whileAnalysis.parse();
                     mySymbols.putAll(whileAnalysis.mySymbols);
+
+                    //TODO remove debug
+                    System.out.println("mySymbols after while: ");
+                    symbols = new ArrayList<Symbol>(mySymbols.values());
+                    for(int j = 0; j < symbols.size(); j++)
+                    {
+                        VarSymbol symbol = (VarSymbol) symbols.get(j);
+                        System.out.println("id: " + symbol.getId() + " type: " + symbol.getType() +
+                                " initialized: " + symbol.isInitialized() + " size: " + symbol.getSize() + " ");
+                    }
+                    System.out.println("inheritedSymbols from while: ");
+                    symbols = new ArrayList<Symbol>(inheritedSymbols.values());
+                    for(int j = 0; j < symbols.size(); j++)
+                    {
+                        VarSymbol symbol = (VarSymbol) symbols.get(j);
+                        System.out.println("id: " + symbol.getId() + " type: " + symbol.getType() +
+                                " initialized: " + symbol.isInitialized() + " size: " + symbol.getSize() + " ");
+                    }
+
                     break;
                 case "IF":
                     IfAnalysis ifAnalysis = new IfAnalysis(node, getUnifiedSymbolTable(), functionNameToFunctionSymbol);
