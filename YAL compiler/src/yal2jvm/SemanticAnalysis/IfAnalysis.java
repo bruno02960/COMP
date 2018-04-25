@@ -155,8 +155,32 @@ public class IfAnalysis extends Analysis
     private ArrayList<Symbol> getCommonDeclaredSymbols(ArrayList<Symbol> mySymbolsStatesAfterIf,
                                                ArrayList<Symbol> mySymbolsStatesAfterElse)
     {
-        ArrayList<Symbol> commons = mySymbolsStatesAfterIf;
-        commons.retainAll(mySymbolsStatesAfterElse);
+        ArrayList<Symbol> commons = new ArrayList<Symbol>();
+
+        //number of common symbols is the minimum of arrays size
+        int numCommonSymbols = mySymbolsStatesAfterIf.size();
+        ArrayList<Symbol> symbolsBeingIterated = mySymbolsStatesAfterIf;
+        ArrayList<Symbol> symbolsBeingChecked = mySymbolsStatesAfterElse;
+        if(numCommonSymbols > mySymbolsStatesAfterElse.size())
+        {
+            numCommonSymbols = mySymbolsStatesAfterElse.size();
+            symbolsBeingIterated = mySymbolsStatesAfterElse;
+            symbolsBeingChecked = mySymbolsStatesAfterIf;
+        }
+
+        for(int i = 0; i < numCommonSymbols; i++)
+        {
+            VarSymbol symbolIterated = (VarSymbol) symbolsBeingIterated.get(i);
+            int symbolIndex = symbolsBeingChecked.indexOf(symbolIterated);
+            if(symbolIndex != -1)
+            {
+                VarSymbol symbolChecked = (VarSymbol) symbolsBeingChecked.get(symbolIndex);
+                if(!symbolChecked.getType().equals(symbolIterated.getType()))
+                    symbolIterated.setType("UNDEFINED");
+
+                commons.add(symbolIterated);
+            }
+        }
 
         return commons;
     }
