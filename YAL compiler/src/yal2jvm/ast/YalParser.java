@@ -22,6 +22,13 @@ public class YalParser/*@bgen(jjtree)*/implements YalParserTreeConstants, YalPar
     root.dump("");
   }
 
+void jjtreeOpenNodeScope(Node n) {
+    ((SimpleNode)n).setBeginLine( getToken(1).beginLine) ;
+}
+
+void jjtreeCloseNodeScope(Node n) {
+}
+
 //Non-terminals
 /* Module ::= <MODULE> <ID> <LCHAVETA> ( Declaration )* ( Function )* <RCHAVETA> */
   static final public SimpleNode Module() throws ParseException {
@@ -1383,23 +1390,6 @@ public class YalParser/*@bgen(jjtree)*/implements YalParserTreeConstants, YalPar
     finally { jj_save(8, xla); }
   }
 
-  static private boolean jj_3R_16() {
-    if (jj_3R_20()) return true;
-    return false;
-  }
-
-  static private boolean jj_3R_9() {
-    if (jj_scan_token(ID)) return true;
-    if (jj_scan_token(LPARRETO)) return true;
-    if (jj_3R_23()) return true;
-    return false;
-  }
-
-  static private boolean jj_3_5() {
-    if (jj_3R_6()) return true;
-    return false;
-  }
-
   static private boolean jj_3_4() {
     if (jj_3R_6()) return true;
     return false;
@@ -1620,6 +1610,23 @@ public class YalParser/*@bgen(jjtree)*/implements YalParserTreeConstants, YalPar
 
   static private boolean jj_3_7() {
     if (jj_3R_9()) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_16() {
+    if (jj_3R_20()) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_9() {
+    if (jj_scan_token(ID)) return true;
+    if (jj_scan_token(LPARRETO)) return true;
+    if (jj_3R_23()) return true;
+    return false;
+  }
+
+  static private boolean jj_3_5() {
+    if (jj_3R_6()) return true;
     return false;
   }
 

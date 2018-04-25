@@ -29,6 +29,13 @@ public class YalParser
     //Display tree
     root.dump("");
   }
+
+void jjtreeOpenNodeScope(Node n) {
+    ((SimpleNode)n).setBeginLine( getToken(1).beginLine) ;
+}
+
+void jjtreeCloseNodeScope(Node n) {
+}
 }
 
 PARSER_END(YalParser)
