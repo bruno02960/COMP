@@ -214,7 +214,10 @@ public abstract class Analysis
             {
                 VarSymbol varSymbol = (VarSymbol) checkSymbolExistsAndIsInitialized(idArg);
                 if(varSymbol == null)
+                {
                     haveFailed = true;
+                    continue;
+                }
                 argumentsTypes.add(varSymbol.getType().toString());
                 continue;
             }
@@ -397,8 +400,17 @@ public abstract class Analysis
                 //if is from type a=[CONST];
                 child = declarationTree.jjtGetChild(1);
                 ASTARRAYSIZE astarraysize = (ASTARRAYSIZE)child;
+                int arraySize;
+                if(astarraysize.integer != null)
+                    arraySize = astarraysize.integer;
+                else
+                {
+                   ASTSCALARACCESS astScalarAccess = (ASTSCALARACCESS) astarraysize.jjtGetChild(0);
+                   VarSymbol scalarAccessSymbol = parseScalarAccess(astScalarAccess);
+                   arraySize = scalarAccessSymbol.getSize();
+                }
+                varSymbol.setSize(arraySize);
                 varSymbol.setType("ARRAY");
-                varSymbol.setSize(astarraysize.integer);
                 varSymbol.setInitialized(true);
             }
 
@@ -422,21 +434,30 @@ public abstract class Analysis
                 return null;
             }
 
-            boolean initialized = false;
-            int size = -1;
+            boolean initialized;
+            int size;
             if(declarationTree.jjtGetNumChildren() > 1)
             {
                 //if is from type a[]=[CONST];
                 child = declarationTree.jjtGetChild(1);
                 ASTARRAYSIZE astarraysize = (ASTARRAYSIZE)child;
+                int arraySize;
+                if(astarraysize.integer != null)
+                    arraySize = astarraysize.integer;
+                else
+                {
+                    ASTSCALARACCESS astScalarAccess = (ASTSCALARACCESS) astarraysize.jjtGetChild(0);
+                    VarSymbol scalarAccessSymbol = parseScalarAccess(astScalarAccess);
+                    arraySize = scalarAccessSymbol.getSize();
+                }
                 initialized = true;
-                size = astarraysize.integer;
+                size = arraySize;
             }
             else
             {
                 if(declarationTree.integer != null) //if is from type a[]=CONST and a[] have not been previously defined, it cannot happen
                 {
-                    if(symbol != null) //if is from type a[]=CONST and a[] have been previously defined
+                    if (symbol != null) //if is from type a[]=CONST and a[] have been previously defined
                     {
                         VarSymbol varSymbol = (VarSymbol) symbol;
                         varSymbol.setInitialized(true);
@@ -449,6 +470,9 @@ public abstract class Analysis
                         return null;
                     }
                 }
+
+                initialized = false; //if frm type a[]; variable not initialized and size = -1
+                size = -1;
             }
 
             VarSymbol varSymbol = new VarSymbol(astarrayelement.id, "ARRAY", initialized, size);
