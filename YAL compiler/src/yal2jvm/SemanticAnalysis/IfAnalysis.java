@@ -90,23 +90,6 @@ public class IfAnalysis extends Analysis
         return symbolsInitialized;
     }
 
-    private HashMap<String,Symbol> setAllSymbolsAsNotInitialized(HashMap<String, Symbol> symbols)
-    {
-        HashMap<String, Symbol> symbolsNotInitialized = new HashMap<String, Symbol>();
-
-        Iterator it = symbols.entrySet().iterator();
-        while(it.hasNext())
-        {
-            HashMap.Entry pair = (HashMap.Entry)it.next();
-            String symbolName = (String) pair.getKey();
-            VarSymbol symbol = (VarSymbol) pair.getValue();
-            symbol.setInitialized(false);
-            symbolsNotInitialized.put(symbolName, symbol);
-        }
-
-        return symbolsNotInitialized;
-    }
-
     private HashMap<String,Symbol> mergeDeclaredSymbols(ArrayList<Symbol> mySymbolsStatesAfterIf,
                                                         ArrayList<Symbol> mySymbolsStatesAfterElse)
     {

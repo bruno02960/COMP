@@ -42,7 +42,8 @@ public class WhileAnalysis extends Analysis
             symbolAfterWhile.setType(symbolBeforeWhile.getType());
         }
 
-        //symbols created inside while don't are added to symbol table, because while statements can not be executed
+        //symbols created inside while are added to symbol table, but as not initialized, because while statements can not be executed
+        mySymbols = setAllSymbolsAsNotInitialized(mySymbols);
     }
 
 }

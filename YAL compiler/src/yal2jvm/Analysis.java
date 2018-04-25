@@ -10,6 +10,7 @@ import yal2jvm.ast.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 
 public abstract class Analysis
 {
@@ -631,6 +632,23 @@ public abstract class Analysis
                     break;
             }
         }
+    }
+
+    protected HashMap<String,Symbol> setAllSymbolsAsNotInitialized(HashMap<String, Symbol> symbols)
+    {
+        HashMap<String, Symbol> symbolsNotInitialized = new HashMap<String, Symbol>();
+
+        Iterator it = symbols.entrySet().iterator();
+        while(it.hasNext())
+        {
+            HashMap.Entry pair = (HashMap.Entry)it.next();
+            String symbolName = (String) pair.getKey();
+            VarSymbol symbol = (VarSymbol) pair.getValue();
+            symbol.setInitialized(false);
+            symbolsNotInitialized.put(symbolName, symbol);
+        }
+
+        return symbolsNotInitialized;
     }
 
 }
