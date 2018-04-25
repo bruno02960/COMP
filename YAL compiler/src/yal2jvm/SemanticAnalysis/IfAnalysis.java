@@ -2,6 +2,7 @@ package yal2jvm.SemanticAnalysis;
 
 import yal2jvm.Analysis;
 import yal2jvm.SymbolTables.VarSymbol;
+import yal2jvm.Utils.Utils;
 import yal2jvm.ast.*;
 
 import java.util.ArrayList;
@@ -22,55 +23,52 @@ public class IfAnalysis extends Analysis
         parseExprTest(astExprtest);
 
         //get inherited symbols States Before If
-        HashMap<String, Symbol> inheritedSymbolsHashMapBeforeIf = new HashMap<>(inheritedSymbols);
+        HashMap<String, Symbol> inheritedSymbolsHashMapBeforeIfCopy1 = Utils.copyHashMap(inheritedSymbols);
+        HashMap<String, Symbol> inheritedSymbolsHashMapBeforeIfCopy2 = Utils.copyHashMap(inheritedSymbols);
+        HashMap<String, Symbol> originalInheritedSymbols = inheritedSymbols;
+        inheritedSymbols = inheritedSymbolsHashMapBeforeIfCopy1;
 
         ASTSTATEMENTS astStatements = (ASTSTATEMENTS) ast.jjtGetChild(1);
         parseStmtLst(astStatements);
 
-        ASTELSE astElse = null;
-
-        if (ast.jjtGetNumChildren() > 2) {
-            astElse = (ASTELSE) ast.jjtGetChild(2);
-        }
-
-        if(astElse != null)
+        if (ast.jjtGetNumChildren() > 2)
         {
+            ASTELSE astElse = (ASTELSE) ast.jjtGetChild(2);
+
             //get inherited symbols States after If
-            ArrayList<Symbol> inheritedSymbolsStatesAfterIf = new ArrayList<>(inheritedSymbols.values());
+            ArrayList<Symbol> inheritedSymbolsStatesAfterIf = new ArrayList<>(Utils.copyHashMap(inheritedSymbols).values());
             //get my symbols States after If
-            ArrayList<Symbol> mySymbolsStatesAfterIf = new ArrayList<>(mySymbols.values());
+            ArrayList<Symbol> mySymbolsStatesAfterIf = new ArrayList<>(Utils.copyHashMap(mySymbols).values());
 
             //clear mySymbols and inherited symbols for else parse
             mySymbols = new HashMap<>();
-            inheritedSymbols = inheritedSymbolsHashMapBeforeIf;
+            inheritedSymbols = inheritedSymbolsHashMapBeforeIfCopy2;
 
             ASTSTATEMENTS astElseStatements = (ASTSTATEMENTS) astElse.jjtGetChild(0);
             parseStmtLst(astElseStatements);
 
             //get inherited symbols States after else
-            ArrayList<Symbol> inheritedSymbolsStatesAfterElse = new ArrayList<>(inheritedSymbols.values());
+            ArrayList<Symbol> inheritedSymbolsStatesAfterElse = new ArrayList<>(Utils.copyHashMap(inheritedSymbols).values());
             //get my symbols States after else
-            ArrayList<Symbol> mySymbolsStatesAfterElse = new ArrayList<>(mySymbols.values());
+            ArrayList<Symbol> mySymbolsStatesAfterElse = new ArrayList<>(Utils.copyHashMap(mySymbols).values());
+
+            ArrayList<Symbol> commonInitializedSymbols = getCommonInitializedSymbols(inheritedSymbolsStatesAfterIf, inheritedSymbolsStatesAfterElse);
+            for (Object o : originalInheritedSymbols.entrySet())
+            {
+                HashMap.Entry pair = (HashMap.Entry) o;
+                VarSymbol symbol = (VarSymbol) pair.getValue();
+                if (commonInitializedSymbols.contains(symbol))
+                    symbol.setInitialized(true);
+            }
 
             //set mySymbols as the symbols declared in if and else
             HashMap<String, Symbol> newMySymbols = mergeDeclaredSymbols(mySymbolsStatesAfterIf, mySymbolsStatesAfterElse);
             newMySymbols = setAllSymbolsAsNotInitialized(newMySymbols);
             ArrayList<Symbol> commonDeclaredSymbols = getCommonDeclaredSymbols(mySymbolsStatesAfterIf, mySymbolsStatesAfterElse);
             mySymbols = setListSymbolsAsInitializedAccordingToOtherList(newMySymbols, commonDeclaredSymbols);
-
-            ArrayList<Symbol> commonInitializedSymbols = getCommonInitializedSymbols(inheritedSymbolsStatesAfterIf, inheritedSymbolsStatesAfterElse);
-            for (Object o : inheritedSymbols.entrySet()) {
-                HashMap.Entry pair = (HashMap.Entry) o;
-                VarSymbol symbol = (VarSymbol) pair.getValue();
-                if (commonInitializedSymbols.contains(symbol))
-                    symbol.setInitialized(true);
-            }
         }
         else
         {
-            //set as not initialized symbols that were initialized inside if, as its statements can not be executed
-            inheritedSymbols = inheritedSymbolsHashMapBeforeIf;
-
             //symbols created inside while are added to symbol table, but as not initialized, because while statements can not be executed
             mySymbols = setAllSymbolsAsNotInitialized(mySymbols);
         }

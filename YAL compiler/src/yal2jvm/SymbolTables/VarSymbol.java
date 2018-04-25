@@ -34,6 +34,18 @@ public class VarSymbol extends Symbol
         this.initialized = initialized;
     }
 
+    @Override
+    public int hashCode()
+    {
+        return super.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object other)
+    {
+        return id.equals(((VarSymbol)other).getId());
+    }
+
     public VarSymbol getCopy()
     {
         return new VarSymbol(new String(id), new String(type), new Boolean(initialized));
