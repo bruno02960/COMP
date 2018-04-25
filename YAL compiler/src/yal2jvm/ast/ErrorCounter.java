@@ -1,7 +1,7 @@
 package yal2jvm.ast;
 
 public class ErrorCounter {
-	int noErrors = 0;
+	private int noErrors = 0;
 	
 	public ErrorCounter() {
 		
@@ -9,11 +9,8 @@ public class ErrorCounter {
 	
 	public boolean errorControl() {
 		noErrors++;
-		
-		if(noErrors == 10)
-			return true;
-		
-		return false;
+
+		return noErrors == 10;
 	}
 
 	public int getNoErrors() {

@@ -6,7 +6,6 @@ import yal2jvm.ast.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 
 public class IfAnalysis extends Analysis
 {
@@ -23,10 +22,7 @@ public class IfAnalysis extends Analysis
         parseExprTest(astExprtest);
 
         //get inherited symbols States Before If
-        HashMap<String, Symbol> inheritedSymbolsHashMapBeforeIf = new HashMap<String, Symbol>(inheritedSymbols);
-
-        //TODO: remove
-        //ArrayList<Symbol> inheritedSymbolsStatesBeforeIf = new ArrayList<Symbol>(inheritedSymbols.values());
+        HashMap<String, Symbol> inheritedSymbolsHashMapBeforeIf = new HashMap<>(inheritedSymbols);
 
         ASTSTATEMENTS astStatements = (ASTSTATEMENTS) ast.jjtGetChild(1);
         parseStmtLst(astStatements);
@@ -40,23 +36,21 @@ public class IfAnalysis extends Analysis
         if(astElse != null)
         {
             //get inherited symbols States after If
-            //TODO: remove
-            //HashMap<String, Symbol> inheritedSymbolsHashMapAfterIf = new HashMap<String, Symbol>(inheritedSymbols);
-            ArrayList<Symbol> inheritedSymbolsStatesAfterIf = new ArrayList<Symbol>(inheritedSymbols.values());
+            ArrayList<Symbol> inheritedSymbolsStatesAfterIf = new ArrayList<>(inheritedSymbols.values());
             //get my symbols States after If
-            ArrayList<Symbol> mySymbolsStatesAfterIf = new ArrayList<Symbol>(mySymbols.values());
+            ArrayList<Symbol> mySymbolsStatesAfterIf = new ArrayList<>(mySymbols.values());
 
             //clear mySymbols and inherited symbols for else parse
-            mySymbols = new HashMap<String, Symbol>();
+            mySymbols = new HashMap<>();
             inheritedSymbols = inheritedSymbolsHashMapBeforeIf;
 
             ASTSTATEMENTS astElseStatements = (ASTSTATEMENTS) astElse.jjtGetChild(0);
             parseStmtLst(astElseStatements);
 
             //get inherited symbols States after else
-            ArrayList<Symbol> inheritedSymbolsStatesAfterElse = new ArrayList<Symbol>(inheritedSymbols.values());
+            ArrayList<Symbol> inheritedSymbolsStatesAfterElse = new ArrayList<>(inheritedSymbols.values());
             //get my symbols States after else
-            ArrayList<Symbol> mySymbolsStatesAfterElse = new ArrayList<Symbol>(mySymbols.values());
+            ArrayList<Symbol> mySymbolsStatesAfterElse = new ArrayList<>(mySymbols.values());
 
             //set mySymbols as the symbols declared in if and else
             HashMap<String, Symbol> newMySymbols = mergeDeclaredSymbols(mySymbolsStatesAfterIf, mySymbolsStatesAfterElse);
@@ -65,12 +59,10 @@ public class IfAnalysis extends Analysis
             mySymbols = setListSymbolsAsInitializedAccordingToOtherList(newMySymbols, commonDeclaredSymbols);
 
             ArrayList<Symbol> commonInitializedSymbols = getCommonInitializedSymbols(inheritedSymbolsStatesAfterIf, inheritedSymbolsStatesAfterElse);
-            Iterator it = inheritedSymbols.entrySet().iterator();
-            while(it.hasNext())
-            {
-                HashMap.Entry pair = (HashMap.Entry)it.next();
+            for (Object o : inheritedSymbols.entrySet()) {
+                HashMap.Entry pair = (HashMap.Entry) o;
                 VarSymbol symbol = (VarSymbol) pair.getValue();
-                if(commonInitializedSymbols.contains(symbol))
+                if (commonInitializedSymbols.contains(symbol))
                     symbol.setInitialized(true);
             }
         }
@@ -78,17 +70,6 @@ public class IfAnalysis extends Analysis
         {
             //set as not initialized symbols that were initialized inside if, as its statements can not be executed
             inheritedSymbols = inheritedSymbolsHashMapBeforeIf;
-
-            //TODO: remove
-            /*assert inheritedSymbolsStatesBeforeIf.size() == inheritedSymbols.size();
-            for(int i = 0; i < inheritedSymbols.size(); i++)
-            {
-                VarSymbol symbolBeforeIf = (VarSymbol) inheritedSymbolsStatesBeforeIf.get(i);
-                VarSymbol symbolAfterIf = (VarSymbol) inheritedSymbols.get(i);
-                symbolAfterIf.setInitialized(symbolBeforeIf.isInitialized());
-                if(symbolAfterIf.getType().equals("ARRAY"))
-                    symbolAfterIf.setSize(symbolBeforeIf.getSize());
-            }*/
 
             //symbols created inside while are added to symbol table, but as not initialized, because while statements can not be executed
             mySymbols = setAllSymbolsAsNotInitialized(mySymbols);
@@ -98,15 +79,12 @@ public class IfAnalysis extends Analysis
     private HashMap<String,Symbol> setListSymbolsAsInitializedAccordingToOtherList(HashMap<String, Symbol> symbols,
                                                                                    ArrayList<Symbol> commonDeclaredSymbols)
     {
-        HashMap<String, Symbol> symbolsInitialized = new HashMap<String, Symbol>();
+        HashMap<String, Symbol> symbolsInitialized = new HashMap<>();
 
-        Iterator it = symbols.entrySet().iterator();
-        while(it.hasNext())
-        {
-            HashMap.Entry pair = (HashMap.Entry)it.next();
+        for (Object o : symbols.entrySet()) {
+            HashMap.Entry pair = (HashMap.Entry) o;
             VarSymbol symbol = (VarSymbol) pair.getValue();
-            if(commonDeclaredSymbols.contains(symbol))
-            {
+            if (commonDeclaredSymbols.contains(symbol)) {
                 String symbolName = (String) pair.getKey();
                 symbol.setInitialized(true);
                 symbolsInitialized.put(symbolName, symbol);
@@ -119,17 +97,17 @@ public class IfAnalysis extends Analysis
     private HashMap<String,Symbol> mergeDeclaredSymbols(ArrayList<Symbol> mySymbolsStatesAfterIf,
                                                         ArrayList<Symbol> mySymbolsStatesAfterElse)
     {
-        HashMap<String,Symbol> mergedDeclaredSymbols = new HashMap<String,Symbol>();
+        HashMap<String,Symbol> mergedDeclaredSymbols = new HashMap<>();
 
         for(Symbol symbol : mySymbolsStatesAfterIf)
         {
-            if(mergedDeclaredSymbols.containsKey(symbol.getId()) == false)
+            if(!mergedDeclaredSymbols.containsKey(symbol.getId()))
                 mergedDeclaredSymbols.put(symbol.getId(), symbol);
         }
 
         for(Symbol symbol : mySymbolsStatesAfterElse)
         {
-            if(mergedDeclaredSymbols.containsKey(symbol.getId()) == false)
+            if(!mergedDeclaredSymbols.containsKey(symbol.getId()))
                 mergedDeclaredSymbols.put(symbol.getId(), symbol);
         }
 
@@ -140,7 +118,7 @@ public class IfAnalysis extends Analysis
                                                           ArrayList<Symbol> inheritedSymbolsStatesAfterElse)
     {
         assert inheritedSymbolsStatesAfterIf.size() == inheritedSymbolsStatesAfterElse.size();
-        ArrayList<Symbol> commonInitializedSymbols = new ArrayList<Symbol>();
+        ArrayList<Symbol> commonInitializedSymbols = new ArrayList<>();
         for(int i = 0; i < inheritedSymbolsStatesAfterIf.size(); i++)
         {
             VarSymbol symbolAfterIf = (VarSymbol) inheritedSymbolsStatesAfterIf.get(i);
@@ -155,7 +133,7 @@ public class IfAnalysis extends Analysis
     private ArrayList<Symbol> getCommonDeclaredSymbols(ArrayList<Symbol> mySymbolsStatesAfterIf,
                                                ArrayList<Symbol> mySymbolsStatesAfterElse)
     {
-        ArrayList<Symbol> commons = new ArrayList<Symbol>();
+        ArrayList<Symbol> commons = new ArrayList<>();
 
         //number of common symbols is the minimum of arrays size
         int numCommonSymbols = mySymbolsStatesAfterIf.size();

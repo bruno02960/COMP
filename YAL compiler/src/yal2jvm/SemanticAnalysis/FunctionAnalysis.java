@@ -10,8 +10,8 @@ import java.util.HashMap;
 
 public class FunctionAnalysis extends Analysis
 {
-    public FunctionAnalysis(SimpleNode ast, HashMap<String, Symbol> inheritedSymbols,
-                            HashMap<String, Symbol> functionNameToFunctionSymbolOfModule)
+    FunctionAnalysis(SimpleNode ast, HashMap<String, Symbol> inheritedSymbols,
+                     HashMap<String, Symbol> functionNameToFunctionSymbolOfModule)
     {
        super(ast, inheritedSymbols, functionNameToFunctionSymbolOfModule);
     }
@@ -33,26 +33,15 @@ public class FunctionAnalysis extends Analysis
         if(returnValue != null)
         {
             if(!returnValue.isInitialized())
-                System.err.println("Function " + astFunction.getId() + " must have return variable " +
-                        returnValue.getId() + " defined."); //TODO linha
-        }
-
-        //TODO remove debug
-        System.out.println("mySymbols: ");
-        ArrayList<Symbol> symbols = new ArrayList<Symbol>(mySymbols.values());
-        for(int i = 0; i < symbols.size(); i++)
-        {
-            VarSymbol symbol = (VarSymbol) symbols.get(i);
-            System.out.println("id: " + symbol.getId() + " type: " + symbol.getType() +
-                    " initialized: " + symbol.isInitialized() + " size: " + symbol.getSize() + " ");
+                System.out.println("Line" + statementsNode.getBeginLine() + ": Function " + astFunction.getId()
+                        + " must have return variable " + returnValue.getId() + " defined.");
         }
     }
 
     private void addArgumentsToMySymbols(FunctionSymbol astFunction)
     {
         ArrayList<VarSymbol> arguments = astFunction.getArguments();
-        for(int i = 0; i < arguments.size(); i++)
-            mySymbols.put(arguments.get(i).getId(), arguments.get(i));
+        for (VarSymbol argument : arguments) mySymbols.put(argument.getId(), argument);
     }
 
     private void addReturnValueToMySymbols(FunctionSymbol astFunction)
