@@ -33,7 +33,7 @@ public class FunctionAnalysis extends Analysis
         if(returnValue != null)
         {
             if(!returnValue.isInitialized())
-                System.out.println("Line" + statementsNode.getBeginLine() + ": Function " + astFunction.getId()
+                System.out.println("Line " + astFunction.getFunctionAST().getBeginLine() + ": Function " + astFunction.getId()
                         + " must have return variable " + returnValue.getId() + " defined.");
         }
     }

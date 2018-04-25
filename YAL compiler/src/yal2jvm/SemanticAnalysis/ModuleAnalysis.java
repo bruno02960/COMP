@@ -52,7 +52,6 @@ public class ModuleAnalysis extends Analysis
                 String functionId = astfunctionNode.id;
                 FunctionSymbol functionSymbol = new FunctionSymbol(astfunctionNode, functionId);
                 functionSymbol.parseFunctionHeader();
-
                 if(functionSymbol.getReturnValue() != null)
                 {
                     System.out.println("functionSymbol returnValue type: " + functionSymbol.getReturnValue().getType());
