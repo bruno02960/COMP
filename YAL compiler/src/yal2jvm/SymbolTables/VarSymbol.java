@@ -2,21 +2,18 @@ package yal2jvm.SymbolTables;
 
 import yal2jvm.ast.Symbol;
 
-import java.util.ArrayList;
-
-
 public class VarSymbol extends Symbol
 {
     private String type;
     private boolean initialized;
-    private int size = -1;
-    //private ArrayList<Integer> values; //can be just one value or multiple if is an array
+    private int size;
 
     public VarSymbol(String id, String type, boolean initialized)
     {
         super(id);
         this.type = type;
         this.initialized = initialized;
+        this.size = -1;
     }
 
     public VarSymbol(String id, String type, boolean initialized, int size)
@@ -61,14 +58,4 @@ public class VarSymbol extends Symbol
     {
         return new VarSymbol(new String(id), new String(type), new Boolean(initialized), new Integer(size));
     }
-
-  /*  public Values()
-    {
-        return initialized;
-    }
-
-    public void setValues(ArrayList<Integer> values)
-    {
-        this.values = values;
-    }*/
 }

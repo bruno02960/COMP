@@ -1,6 +1,5 @@
 package yal2jvm.SymbolTables;
 
-import yal2jvm.SymbolTables.VarSymbol;
 import yal2jvm.ast.*;
 
 import java.util.ArrayList;
@@ -16,15 +15,7 @@ public class FunctionSymbol extends Symbol
     {
         super(id);
         this.functionAST = functionAST;
-        this.arguments = new ArrayList<VarSymbol>();
-    }
-
-    public FunctionSymbol(SimpleNode functionAST, String id, ArrayList<VarSymbol> arguments, VarSymbol returnValue)
-    {
-        super(id);
-        this.functionAST = functionAST;
-        this.arguments = arguments;
-        this.returnValue = returnValue;
+        this.arguments = new ArrayList<>();
     }
 
     public SimpleNode getFunctionAST()
@@ -32,19 +23,9 @@ public class FunctionSymbol extends Symbol
         return functionAST;
     }
 
-    public void setFunctionAST(SimpleNode functionAST)
-    {
-        this.functionAST = functionAST;
-    }
-
     public ArrayList<VarSymbol> getArguments()
     {
         return arguments;
-    }
-
-    public void setArguments(ArrayList<VarSymbol> arguments)
-    {
-        this.arguments = arguments;
     }
 
     public VarSymbol getReturnValue()
@@ -52,25 +33,15 @@ public class FunctionSymbol extends Symbol
         return returnValue;
     }
 
-    public void setReturnValue(VarSymbol returnValue)
-    {
-        this.returnValue = returnValue;
-    }
-
     public int getStatementsChildNumber()
     {
         return statementsChildNumber;
     }
 
-    public void setStatementsChildNumber(int statementsChildNumber)
-    {
-        this.statementsChildNumber = statementsChildNumber;
-    }
-
-
     public void parseFunctionHeader()
     {
-        int argumentsIndex = 0; //indicates the index(child num) of the arguments. 0 if no return value, or 1 if has return value.
+        //indicates the index(child num) of the arguments. 0 if no return value, or 1 if has return value
+        int argumentsIndex = 0;
 
         //get return value if existent
         SimpleNode returnValueNode = (SimpleNode) functionAST.jjtGetChild(0);

@@ -24,7 +24,7 @@ public abstract class Analysis
     {
         this.ast = ast;
         this.inheritedSymbols = inheritedSymbols;
-        this.mySymbols = new HashMap<String, Symbol>();
+        this.mySymbols = new HashMap<>();
         this.functionNameToFunctionSymbol = functionNameToFunctionSymbol;
     }
 
@@ -32,7 +32,7 @@ public abstract class Analysis
 
     protected HashMap<String, Symbol> getUnifiedSymbolTable()
     {
-        HashMap<String, Symbol> unifiedSymbolTable = new HashMap<String, Symbol>();
+        HashMap<String, Symbol> unifiedSymbolTable = new HashMap<>();
         if(mySymbols != null)
             unifiedSymbolTable.putAll(mySymbols);
         if(inheritedSymbols != null)
@@ -41,7 +41,7 @@ public abstract class Analysis
         return unifiedSymbolTable;
     }
 
-    protected Symbol hasAccessToSymbol(String symbolId)
+    private Symbol hasAccessToSymbol(String symbolId)
     {
         Symbol symbol = null;
         if(mySymbols != null)
@@ -57,7 +57,7 @@ public abstract class Analysis
         return symbol;
     }
 
-    protected VarSymbol parseLhs(SimpleNode lhsTree)
+    private VarSymbol parseLhs(SimpleNode lhsTree)
     {
         Node child = lhsTree.jjtGetChild(0);
         switch(child.toString())
@@ -71,7 +71,7 @@ public abstract class Analysis
         return null;
     }
 
-    protected VarSymbol parseRhs(SimpleNode rhsTree)
+    private VarSymbol parseRhs(SimpleNode rhsTree)
     {
         Node firstChild = rhsTree.jjtGetChild(0);
         if(firstChild.toString().equals("ARRAYSIZE")) {
@@ -105,7 +105,7 @@ public abstract class Analysis
         return symbol;
     }
 
-    protected VarSymbol parseArraySize(ASTARRAYSIZE arraySizeTree) {
+    private VarSymbol parseArraySize(ASTARRAYSIZE arraySizeTree) {
         if(arraySizeTree.integer != null) {
             return new ImmediateSymbol("[" + arraySizeTree.integer + "]", arraySizeTree.integer);
         }
