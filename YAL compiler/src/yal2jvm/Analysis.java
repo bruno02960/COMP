@@ -187,9 +187,8 @@ public abstract class Analysis
             }
         }
 
-        if(returnSymbol != null) {
+        if(returnSymbol != null)
             returnSymbol.setSize(Integer.MAX_VALUE);
-        }
 
         return returnSymbol;
     }

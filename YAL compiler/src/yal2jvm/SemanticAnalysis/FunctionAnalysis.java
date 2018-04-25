@@ -36,6 +36,16 @@ public class FunctionAnalysis extends Analysis
                 System.err.println("Function " + astFunction.getId() + " must have return variable " +
                         returnValue.getId() + " defined."); //TODO linha
         }
+
+        //TODO remove debug
+        System.out.println("mySymbols: ");
+        ArrayList<Symbol> symbols = new ArrayList<Symbol>(mySymbols.values());
+        for(int i = 0; i < symbols.size(); i++)
+        {
+            VarSymbol symbol = (VarSymbol) symbols.get(i);
+            System.out.println("id: " + symbol.getId() + " type: " + symbol.getType() +
+                    " initialized: " + symbol.isInitialized() + " size: " + symbol.getSize() + " ");
+        }
     }
 
     private void addArgumentsToMySymbols(FunctionSymbol astFunction)

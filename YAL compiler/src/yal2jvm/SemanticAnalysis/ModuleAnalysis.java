@@ -2,6 +2,7 @@ package yal2jvm.SemanticAnalysis;
 
 import yal2jvm.Analysis;
 import yal2jvm.SymbolTables.FunctionSymbol;
+import yal2jvm.SymbolTables.VarSymbol;
 import yal2jvm.ast.*;
 
 import java.util.*;
@@ -42,6 +43,17 @@ public class ModuleAnalysis extends Analysis
             FunctionAnalysis functionAnalysis = new FunctionAnalysis(functionAST, unifiedSymbolTable,
                     functionNameToFunctionSymbol);
             functionAnalysis.parse();
+        }
+
+
+        //TODO remove debug
+        System.out.println("mySymbols: ");
+
+        for(int i = 0; i < mySymbols.size(); i++)
+        {
+            VarSymbol symbol = (VarSymbol) mySymbols.get(i);
+            System.out.println("id: " + symbol.getId() + " type: " + symbol.getType() +
+                    " initialized: " + symbol.isInitialized() + " size: " + symbol.getSize() + " ");
         }
     }
 
