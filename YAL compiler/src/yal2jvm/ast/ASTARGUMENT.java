@@ -33,8 +33,8 @@ class ASTARGUMENT extends SimpleNode {
 				System.out.println(prefix + "\"" + this.intArg + "\"");
 			else
 				System.out.println(prefix + "\"" + this.idArg + "\"");
-			for (int i = 0; i < children.length; ++i) {
-				SimpleNode n = (SimpleNode) children[i];
+			for (Node aChildren : children) {
+				SimpleNode n = (SimpleNode) aChildren;
 				if (n != null) {
 					n.dump(prefix + " ");
 				}

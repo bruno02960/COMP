@@ -26,8 +26,8 @@ class ASTTERM extends SimpleNode {
 		if (children != null) {
 			if(this.integer != null)
 				System.out.println(prefix + "\"" + this.operator + this.integer + "\"");
-			for (int i = 0; i < children.length; ++i) {
-				SimpleNode n = (SimpleNode) children[i];
+			for (Node aChildren : children) {
+				SimpleNode n = (SimpleNode) aChildren;
 				if (n != null) {
 					n.dump(prefix + " ");
 				}

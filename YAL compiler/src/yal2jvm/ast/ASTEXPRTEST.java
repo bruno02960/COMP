@@ -20,10 +20,10 @@ class ASTEXPRTEST extends SimpleNode {
 			System.out.println(prefix + "\"" + this.operation + "\"");
 		}
 		if (children != null) {
-			if (this.operation != "")
+			if (!this.operation.equals(""))
 				System.out.println(prefix + "\"" + this.operation + "\"");
-			for (int i = 0; i < children.length; ++i) {
-				SimpleNode n = (SimpleNode) children[i];
+			for (Node aChildren : children) {
+				SimpleNode n = (SimpleNode) aChildren;
 				if (n != null) {
 					n.dump(prefix + " ");
 				}
