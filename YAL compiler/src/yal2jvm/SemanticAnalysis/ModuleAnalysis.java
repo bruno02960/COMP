@@ -44,17 +44,6 @@ public class ModuleAnalysis extends Analysis
                     functionNameToFunctionSymbol);
             functionAnalysis.parse();
         }
-
-
-        //TODO remove debug
-        System.out.println("mySymbols: ");
-
-        for(int i = 0; i < mySymbols.size(); i++)
-        {
-            VarSymbol symbol = (VarSymbol) mySymbols.get(i);
-            System.out.println("id: " + symbol.getId() + " type: " + symbol.getType() +
-                    " initialized: " + symbol.isInitialized() + " size: " + symbol.getSize() + " ");
-        }
     }
 
     private void addSymbolToSymbolTable(Node child)
