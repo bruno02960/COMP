@@ -31,8 +31,12 @@ public class IfAnalysis extends Analysis
         ASTSTATEMENTS astStatements = (ASTSTATEMENTS) ast.jjtGetChild(1);
         parseStmtLst(astStatements);
 
+        ASTELSE astElse = null;
 
-        ASTELSE astElse = (ASTELSE) ast.jjtGetChild(2);
+        if (ast.jjtGetNumChildren() > 2) {
+            astElse = (ASTELSE) ast.jjtGetChild(2);
+        }
+
         if(astElse != null)
         {
             //get inherited symbols States after If
