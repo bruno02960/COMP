@@ -87,6 +87,7 @@ public class ModuleAnalysis extends Analysis
         }
     }
 
+    //TODO: remove maybe
     private boolean IsAssignRHSFromArrayElementInitialized(Node declarationNode)
     {
         Node node = declarationNode.jjtGetChild(0);
@@ -124,6 +125,7 @@ public class ModuleAnalysis extends Analysis
         return true;
     }
 
+    //TODO: remove maybe
     private boolean IsAssignRHSFromScalarElementInitialized(Node declarationNode)
     {
         Node node = declarationNode.jjtGetChild(0);
@@ -147,6 +149,7 @@ public class ModuleAnalysis extends Analysis
         return true;
     }
 
+    //TODO: remove maybe
     private ArrayList<Integer> getValuesFromScalarElementDeclarationIfExists(ASTSCALARELEMENT astscalarelement)
     {
         ArrayList<Integer> values = new ArrayList<>();
@@ -160,6 +163,7 @@ public class ModuleAnalysis extends Analysis
         return values;
     }
 
+    //TODO: remove maybe
     private ArrayList<Integer> getValuesFromArrayElementDeclarationIfExists(ASTARRAYELEMENT astarrayelement)
     {
         String value = astarrayelement.jjtGetValue();

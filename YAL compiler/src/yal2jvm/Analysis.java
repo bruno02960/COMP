@@ -352,6 +352,7 @@ public abstract class Analysis
         return varSymbol;
     }
 
+    //TODO: remove maybe
     //don't use in Declaration
     protected VarSymbol parseScalarElement(ASTSCALARELEMENT ast)
     {
