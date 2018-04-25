@@ -1,10 +1,5 @@
 module programa2 {
 
-function a[]=f2(N) {
-    a = [N];
-    a = 1
-}
-
 function a[]=f1(b[]) {
 		 i = 0;
 		 N = b.size;
@@ -17,7 +12,7 @@ function a[]=f1(b[]) {
 
 function a[]=f2(N) {
 		 a = [N];
-		 
+
 		 a = 1; // initialize all the N elements of a with value 1
 }
 
@@ -41,4 +36,3 @@ function main() {
 	io.println("last: ",last);
 }
 }
-

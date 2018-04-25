@@ -137,8 +137,17 @@ public class Yal2jvm
 		{
 			root = parser.Module();
 
-			if(parser.errorCounter.getNoErrors() > 0)
+			int noErrors = parser.errorCounter.getNoErrors();
+
+			if(noErrors > 0) {
+				if(noErrors == 10) {
+					System.err.println("At least 10 errors found!");
+				}
+				else {
+					System.err.println(noErrors + " errors found!");
+				}
 				System.exit(-1);
+			}
 		}
 		catch (ParseException e)
 		{
