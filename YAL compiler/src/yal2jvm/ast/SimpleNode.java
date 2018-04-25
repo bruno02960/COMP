@@ -10,8 +10,7 @@ class SimpleNode implements Node {
 	  protected int id;
 	  protected String value = "";
 	  protected YalParser parser;
-
-	protected int beginLine = -1;
+	  protected int beginLine = -1;
 
 	  public SimpleNode(int i) {
 	    id = i;
@@ -83,6 +82,10 @@ class SimpleNode implements Node {
 
 		public int getBeginLine() {
 			return beginLine;
+		}
+
+		public void setBeginLine(int beginLine) {
+			this.beginLine = beginLine;
 		}
 	}
 

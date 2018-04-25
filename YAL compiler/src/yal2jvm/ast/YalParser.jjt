@@ -1,8 +1,8 @@
 options
 {
-  LOOKAHEAD= 1;
-
-  MULTI = true;
+  	LOOKAHEAD= 1;
+	NODE_SCOPE_HOOK=true;
+  	MULTI = true;
 }
 
 PARSER_BEGIN(YalParser)
@@ -29,6 +29,13 @@ public class YalParser
     //Display tree
     root.dump("");
   }
+
+static void jjtreeOpenNodeScope(Node n) {
+    ((SimpleNode)n).setBeginLine( getToken(1).beginLine) ;
+}
+
+static void jjtreeCloseNodeScope(Node n) {
+}
 }
 
 PARSER_END(YalParser)
@@ -144,9 +151,6 @@ SimpleNode Module() #MODULE :
   {
     return jjtThis;
   }
-  
-	{jjtThis.beginLine = t.beginLine;}
-	
 }
 
 /* Declaration ::= 	( ArrayElement | ScalarElement )
@@ -157,7 +161,7 @@ SimpleNode Module() #MODULE :
 															)? <PVIRG> */
 void Declaration() #DECLARATION :
 {
-  Token t = new Token();
+  Token t;
 }
 {
 	try
@@ -179,8 +183,6 @@ void Declaration() #DECLARATION :
       jjtThis.integer = new Integer(t.image);
     }
     )) ? < PVIRG >
-  
-	{jjtThis.beginLine = t.beginLine;}
   }
   catch (ParseException e)
   {
@@ -194,14 +196,13 @@ void Declaration() #DECLARATION :
     }
     while (t2.kind != PVIRG);
   }
-	
 }
 
 /* Function ::= ( ( <FUNCTION> ( ArrayElement | ScalarElement ) <ASSIGN> <ID> <LPAR> (Varlist )? <RPAR> )
 | ( <FUNCTION> <ID> <LPAR> ( Varlist )? <RPAR> ) )<LCHAVETA> Stmtlst <RCHAVETA> */
 void Function() #FUNCTION :
 {
-  Token t = new Token();
+  Token t;
 }
 {
 	try
@@ -251,9 +252,6 @@ void Function() #FUNCTION :
     while (t2.kind != RPAR);
   }
   < LCHAVETA > Stmtlst() < RCHAVETA >
-  
-	{jjtThis.beginLine = t.beginLine;}
-	
 }
 
 /* Varlist ::= ( ArrayElement | ScalarElement ) ( <VIRG> ( ArrayElement | ScalarElement ))* */
@@ -278,7 +276,7 @@ void Varlist() #ARGUMENTS :
 /* ArrayElement ::= <ID> "[" "]" */
 void ArrayElement() #ARRAYELEMENT :
 {
-  Token t = new Token();
+  Token t;
 }
 {
 	try
@@ -301,15 +299,12 @@ void ArrayElement() #ARRAYELEMENT :
     }
     while (t2.kind != RPARRETO);
   }
-  
-	{jjtThis.beginLine = t.beginLine;}
-	
 }
 
 /*ScalarElement ::= <ID>*/
 void ScalarElement() #SCALARELEMENT :
 {
-  Token t = new Token();
+  Token t;
 }
 {
 	try
@@ -326,9 +321,6 @@ void ScalarElement() #SCALARELEMENT :
     if (errorCounter.errorControl()) 
     System.exit(1);
   }
-  
-	{jjtThis.beginLine = t.beginLine;}
-	
 }
 
 /* Stmtlst ::= ( Stmt )* */
@@ -369,7 +361,6 @@ void Stmt() #void :
     }
     while (t2.kind != PVIRG);
   }
-	
 }
 
 /* ParseBlock ::= Stmtlst <RCHAVETA>*/
@@ -392,13 +383,12 @@ void ParseBlock() #void :
     }
     while (t2.kind != RCHAVETA);
   }
-	
 }
 
 /*Call ::= <ID> ( "." <ID> )? <LPAR> ( ArgumentList )? <RPAR> */
 void CallStatement() #CALL :
 {
-  Token t = new Token();
+  Token t;
 }
 {
 	try
@@ -433,9 +423,6 @@ void CallStatement() #CALL :
     }
     while (t2.kind != PVIRG && t2.kind != RPAR);
   }
-  
-	{jjtThis.beginLine = t.beginLine;}
-	
 }
 
 /* Assign ::= Lhs <ASSIGN> Rhs <PVIRG> */
@@ -472,7 +459,7 @@ void Lhs() #LHS :
 /* Rhs ::= ( Term ( ( <ARITH_OP> | <BITWISE_OP> | <ADDSUB_OP> ) Term )? ) | "[" ArraySize "]" */
 void Rhs() #RHS :
 {
-  Token t = new Token();
+  Token t;
 }
 {
 	(
@@ -496,15 +483,12 @@ void Rhs() #RHS :
     )?
   )
 | < LPARRETO > ArraySize() < RPARRETO >
-  
-	{jjtThis.beginLine = t.beginLine;}
-	
 }
 
 /* ArraySize ::= ScalarAccess | <INTEGER> */
 void ArraySize() #ARRAYSIZE :
 {
-  Token t = new Token();
+  Token t;
 }
 {
 	ScalarAccess()
@@ -513,15 +497,12 @@ void ArraySize() #ARRAYSIZE :
     if (jjtThis.integer != null) jjtThis.integer = new Integer(t.image);
     else jjtThis.integer = new Integer(t.image);
   }
-  
-	{jjtThis.beginLine = t.beginLine;}
-	
 }
 
 /* Term ::= ( <ADDSUB_OP> )? ( <INTEGER> | Call | ArrayAccess | ScalarAccess ) */
 void Term() #TERM :
 {
-  Token t = new Token();
+  Token t;
 }
 {
 	 (
@@ -543,15 +524,12 @@ void Term() #TERM :
     ArrayAccess()
   | ScalarAccess()
   )
-  
-	{jjtThis.beginLine = t.beginLine;}
-	
 }
 
 /* Exprtest ::= <LPAR> Lhs <RELA_OP> Rhs <RPAR> */
 void Exprtest() #EXPRTEST :
 {
-  Token t = new Token();
+  Token t;
 }
 {
  try
@@ -574,21 +552,17 @@ void Exprtest() #EXPRTEST :
     }
     while (t2.kind != RPAR);
   }
-  
-	{jjtThis.beginLine = t.beginLine;}
-	
 }
 
 /*While ::= <WHILE> Exprtest <LCHAVETA> Stmtlst <RCHAVETA> */
 void While() #WHILE :
 {
   Token L_Chaveta = null;
-  Token t = new Token();
 }
 {
 	try
   {
-    < WHILE > Exprtest() L_Chaveta = < LCHAVETA > Stmtlst() t = < RCHAVETA >
+    < WHILE > Exprtest() L_Chaveta = < LCHAVETA > Stmtlst() < RCHAVETA >
   }
   catch (ParseException e)
   {
@@ -605,9 +579,6 @@ void While() #WHILE :
       while (t2.kind != RCHAVETA);
     }
   }
-  
-	{jjtThis.beginLine = t.beginLine;}
-	
 }
 
 /*If ::= <IF> Exprtest <LCHAVETA> Stmtlst <RCHAVETA> ( <ELSE> <LCHAVETA> Stmtlst <RCHAVETA> )? */
@@ -615,12 +586,11 @@ void If() #IF :
 {
   Token L_Chaveta_IF = null;
   Token L_Chaveta_ELSE = null;
-  Token t = new Token();
 }
 {
 	try
   {
-    < IF > Exprtest() L_Chaveta_IF = < LCHAVETA > Stmtlst() t = < RCHAVETA >
+    < IF > Exprtest() L_Chaveta_IF = < LCHAVETA > Stmtlst() < RCHAVETA >
     
     (
     Else()
@@ -643,9 +613,6 @@ void If() #IF :
     }
     while (t2.kind != character);
   }
-  
-	{jjtThis.beginLine = t.beginLine;}
-	
 }
 
 /*Else ::= < ELSE > < LCHAVETA > Stmtlst() < RCHAVETA > */
@@ -668,13 +635,12 @@ void Else() #ELSE :
     }
     while (t2.kind != RCHAVETA);
   }
-	
 }
 
 /*Call ::= <ID> ( "." <ID> )? <LPAR> ( ArgumentList )? <RPAR> */
 void Call() #CALL :
 {
-  Token t = new Token();
+  Token t;
 }
 {
 	t = < ID >
@@ -694,9 +660,6 @@ void Call() #CALL :
     ArgumentList()
   )?
   < RPAR >
-  
-	{jjtThis.beginLine = t.beginLine;}
-	
 }
 
 /* ArgumentList ::= Argument ( <VIRG> Argument )* */
@@ -707,13 +670,12 @@ void ArgumentList() #ARGUMENTS :
   (
     < VIRG > Argument()
   )*
-	
 }
 
 /* Argument ::= ( <ID> | <STRING> | <INTEGER> ) */
 void Argument() #ARGUMENT :
 {
-  Token t = new Token();
+  Token t;
 }
 {
 	(
@@ -730,15 +692,12 @@ void Argument() #ARGUMENT :
       jjtThis.intArg = Integer.parseInt(t.image);
     }
   )
-  
-	{jjtThis.beginLine = t.beginLine;}
-	
 }
 
 /* ArrayAccess ::= <ID> "[" Index "]"*/
 void ArrayAccess() #ARRAYACCESS :
 {
-  Token t = new Token();
+  Token t;
   Token L_Par = null;
 }
 {
@@ -765,15 +724,12 @@ void ArrayAccess() #ARRAYACCESS :
       while (t2.kind != RPARRETO);
     }
   }
-  
-	{jjtThis.beginLine = t.beginLine;}
-	
 }
 
 /* ScalarAccess ::= <ID> ( "." <SIZE> )? */
 void ScalarAccess() #SCALARACCESS :
 {
-  Token t = new Token();
+  Token t;
 }
 {
 	t = < ID >
@@ -785,15 +741,12 @@ void ScalarAccess() #SCALARACCESS :
     jjtThis.id += ".size";
   }
   )?
-  
-	{jjtThis.beginLine = t.beginLine;}
-	
 }
 
 /*Index ::= <ID> | <INTEGER>*/
 void Index() #INDEX :
 {
-  Token t = new Token();
+  Token t;
 }
 {
   t = < ID >
@@ -804,7 +757,4 @@ void Index() #INDEX :
   {
     jjtThis.indexValue = Integer.parseInt(t.image);
   }
-  
-	{jjtThis.beginLine = t.beginLine;}
-	
 }

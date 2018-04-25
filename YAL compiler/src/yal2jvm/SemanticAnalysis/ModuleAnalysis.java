@@ -29,16 +29,24 @@ public class ModuleAnalysis extends Analysis
     public void parse()
     {
         initiateGlobalSymbolTable();
+        boolean mainExists = false;
 
         HashMap<String, Symbol> unifiedSymbolTable = getUnifiedSymbolTable();
         for (Object o : functionNameToFunctionSymbol.entrySet()) {
             Map.Entry pair = (Map.Entry) o;
             FunctionSymbol functionSymbol = (FunctionSymbol) pair.getValue();
+            if(pair.getKey().equals("main"))
+                mainExists = true;
+
             SimpleNode functionAST = functionSymbol.getFunctionAST();
             FunctionAnalysis functionAnalysis = new FunctionAnalysis(functionAST, unifiedSymbolTable,
                     functionNameToFunctionSymbol);
             functionAnalysis.parse();
         }
+
+        //check main exists
+        if(!mainExists)
+            System.out.println("Module must contain a function main! ");
     }
 
     private void addSymbolToSymbolTable(SimpleNode child)
@@ -52,11 +60,6 @@ public class ModuleAnalysis extends Analysis
                 String functionId = astfunctionNode.id;
                 FunctionSymbol functionSymbol = new FunctionSymbol(astfunctionNode, functionId);
                 functionSymbol.parseFunctionHeader();
-                if(functionSymbol.getReturnValue() != null)
-                {
-                    System.out.println("functionSymbol returnValue type: " + functionSymbol.getReturnValue().getType());
-                    System.out.println("functionSymbol returnValue id: " + functionSymbol.getReturnValue().getId());
-                }
 
                 functionNameToFunctionSymbol.put(functionSymbol.getId(), functionSymbol);
                 break;
