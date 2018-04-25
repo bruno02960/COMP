@@ -140,12 +140,16 @@ public class Yal2jvm
 		try
 		{
 			root = parser.Module();
-		} 
+
+			if(parser.errorCounter.getNoErrors() > 0)
+				System.exit(-1);
+		}
 		catch (ParseException e)
 		{
 			System.out.println("Error: fatal error during parsing stage\n");
 			System.exit(-1);
 		}
+
 		return root;
 	}
 	

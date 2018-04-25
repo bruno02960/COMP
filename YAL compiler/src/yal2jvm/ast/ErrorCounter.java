@@ -1,3 +1,4 @@
+package yal2jvm.ast;
 
 public class ErrorCounter {
 	int noErrors = 0;
@@ -13,5 +14,9 @@ public class ErrorCounter {
 			return true;
 		
 		return false;
+	}
+
+	public int getNoErrors() {
+		return noErrors;
 	}
 }

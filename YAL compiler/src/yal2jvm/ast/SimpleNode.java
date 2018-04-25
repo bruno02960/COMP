@@ -10,6 +10,7 @@ class SimpleNode implements Node {
 	  protected int id;
 	  protected String value = "";
 	  protected YalParser parser;
+	  protected int beginLine = -1;
 
 	  public SimpleNode(int i) {
 	    id = i;
