@@ -557,8 +557,8 @@ public abstract class Analysis
             if(!rhsSymbolType.equals("UNDEFINED")) //for A=m.f(); in which m.f() function is from another module that we not know the return value, so it can be INTEGER or ARRAY
                 if(!lhsSymbolType.equals(rhsSymbolType))
                 {
-                    System.out.println("Variables dont match! Variable " + lhsSymbol.getId() + " has type " + lhsSymbolType +
-                            " and " + rhsSymbol.getId() + " has type " + rhsSymbolType + "."); //TODO linha
+                    System.out.println("Variable " + lhsSymbol.getId() + " has been declared as " + lhsSymbolType +
+                            ". Cannot redeclare it as " + rhsSymbolType + "."); //TODO linha
                     return false;
                 }
 
