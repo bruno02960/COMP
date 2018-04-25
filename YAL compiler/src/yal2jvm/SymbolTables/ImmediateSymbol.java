@@ -8,4 +8,9 @@ public class ImmediateSymbol extends VarSymbol
         super(value.toString(), "INTEGER", true, value);
     }
 
+    public ImmediateSymbol(String id, Integer value)
+    {
+        super(id, "INTEGER", true, value);
+    }
+
 }

@@ -107,7 +107,7 @@ public abstract class Analysis
 
     protected VarSymbol parseArraySize(ASTARRAYSIZE arraySizeTree) {
         if(arraySizeTree.integer != null) {
-            return new ImmediateSymbol(arraySizeTree.integer);
+            return new ImmediateSymbol("[" + arraySizeTree.integer + "]", arraySizeTree.integer);
         }
         else {
             ASTSCALARACCESS child = (ASTSCALARACCESS) arraySizeTree.jjtGetChild(0);
