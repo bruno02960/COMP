@@ -34,10 +34,9 @@
 /YalParser.jj
 /ASTSTMTLST.java
 /ASTVARLIST.java
-/ASTARGUMENTS.java
+/ASTVARS.java
 /ASTSTATEMENTS.java
 /ASTSIZE.java
 /ASTELSE.java
 /.gitignore
-/test/
 /yal2jvm/

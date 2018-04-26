@@ -305,8 +305,8 @@ static void jjtreeCloseNodeScope(Node n) {
 
 /* Varlist ::= ( ArrayElement | ScalarElement ) ( <VIRG> ( ArrayElement | ScalarElement ))* */
   static final public void Varlist() throws ParseException {
- /*@bgen(jjtree) ARGUMENTS */
-  ASTARGUMENTS jjtn000 = new ASTARGUMENTS(JJTARGUMENTS);
+ /*@bgen(jjtree) VARS */
+  ASTVARS jjtn000 = new ASTVARS(JJTVARS);
   boolean jjtc000 = true;
   jjtree.openNodeScope(jjtn000);
   jjtreeOpenNodeScope(jjtn000);
@@ -935,27 +935,30 @@ static void jjtreeCloseNodeScope(Node n) {
   ASTWHILE jjtn000 = new ASTWHILE(JJTWHILE);
   boolean jjtc000 = true;
   jjtree.openNodeScope(jjtn000);
-  jjtreeOpenNodeScope(jjtn000);Token L_Chaveta = null;
+  jjtreeOpenNodeScope(jjtn000);
     try {
       try {
         jj_consume_token(WHILE);
         Exprtest();
-        L_Chaveta = jj_consume_token(LCHAVETA);
+      } catch (ParseException e) {
+    System.out.println(e.toString());
+    if (errorCounter.errorControl())
+        System.exit(1);
+      }
+      try {
+        jj_consume_token(LCHAVETA);
         Stmtlst();
         jj_consume_token(RCHAVETA);
       } catch (ParseException e) {
     System.out.println(e.toString());
     if (errorCounter.errorControl())
     System.exit(1);
-    if (L_Chaveta != null)
-    {
-      Token t2;
-      do
-      {
-        t2 = getNextToken();
-      }
-      while (t2.kind != RCHAVETA);
-    }
+        Token t2;
+        do
+        {
+         t2 = getNextToken();
+        }
+        while (t2.kind != RCHAVETA);
       }
     } catch (Throwable jjte000) {
           if (jjtc000) {
@@ -1407,11 +1410,6 @@ static void jjtreeCloseNodeScope(Node n) {
     finally { jj_save(8, xla); }
   }
 
-  static private boolean jj_3R_32() {
-    if (jj_scan_token(INTEGER)) return true;
-    return false;
-  }
-
   static private boolean jj_3R_13() {
     Token xsp;
     xsp = jj_scanpos;
@@ -1427,26 +1425,6 @@ static void jjtreeCloseNodeScope(Node n) {
     return false;
   }
 
-  static private boolean jj_3R_23() {
-    Token xsp;
-    xsp = jj_scanpos;
-    if (jj_3R_31()) {
-    jj_scanpos = xsp;
-    if (jj_3R_32()) return true;
-    }
-    return false;
-  }
-
-  static private boolean jj_3R_31() {
-    if (jj_scan_token(ID)) return true;
-    return false;
-  }
-
-  static private boolean jj_3_5() {
-    if (jj_3R_6()) return true;
-    return false;
-  }
-
   static private boolean jj_3R_10() {
     if (jj_scan_token(ID)) return true;
     Token xsp;
@@ -1456,6 +1434,25 @@ static void jjtreeCloseNodeScope(Node n) {
     xsp = jj_scanpos;
     if (jj_3R_15()) jj_scanpos = xsp;
     if (jj_scan_token(RPAR)) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_14() {
+    if (jj_scan_token(PONTO)) return true;
+    if (jj_scan_token(ID)) return true;
+    return false;
+  }
+
+  static private boolean jj_3_5() {
+    if (jj_3R_6()) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_20() {
+    if (jj_scan_token(ID)) return true;
+    Token xsp;
+    xsp = jj_scanpos;
+    if (jj_3R_24()) jj_scanpos = xsp;
     return false;
   }
 
@@ -1474,9 +1471,9 @@ static void jjtreeCloseNodeScope(Node n) {
     return false;
   }
 
-  static private boolean jj_3R_14() {
+  static private boolean jj_3R_24() {
     if (jj_scan_token(PONTO)) return true;
-    if (jj_scan_token(ID)) return true;
+    if (jj_scan_token(SIZE)) return true;
     return false;
   }
 
@@ -1487,20 +1484,6 @@ static void jjtreeCloseNodeScope(Node n) {
 
   static private boolean jj_3R_16() {
     if (jj_3R_20()) return true;
-    return false;
-  }
-
-  static private boolean jj_3R_20() {
-    if (jj_scan_token(ID)) return true;
-    Token xsp;
-    xsp = jj_scanpos;
-    if (jj_3R_24()) jj_scanpos = xsp;
-    return false;
-  }
-
-  static private boolean jj_3R_24() {
-    if (jj_scan_token(PONTO)) return true;
-    if (jj_scan_token(SIZE)) return true;
     return false;
   }
 
@@ -1526,6 +1509,13 @@ static void jjtreeCloseNodeScope(Node n) {
     return false;
   }
 
+  static private boolean jj_3R_9() {
+    if (jj_scan_token(ID)) return true;
+    if (jj_scan_token(LPARRETO)) return true;
+    if (jj_3R_23()) return true;
+    return false;
+  }
+
   static private boolean jj_3_9() {
     if (jj_3R_9()) return true;
     return false;
@@ -1533,13 +1523,6 @@ static void jjtreeCloseNodeScope(Node n) {
 
   static private boolean jj_3_8() {
     if (jj_3R_10()) return true;
-    return false;
-  }
-
-  static private boolean jj_3R_9() {
-    if (jj_scan_token(ID)) return true;
-    if (jj_scan_token(LPARRETO)) return true;
-    if (jj_3R_23()) return true;
     return false;
   }
 
@@ -1576,30 +1559,13 @@ static void jjtreeCloseNodeScope(Node n) {
     return false;
   }
 
-  static private boolean jj_3R_11() {
-    if (jj_scan_token(ID)) return true;
-    return false;
-  }
-
   static private boolean jj_3R_30() {
     if (jj_scan_token(INTEGER)) return true;
     return false;
   }
 
-  static private boolean jj_3R_7() {
-    if (jj_3R_11()) return true;
-    return false;
-  }
-
-  static private boolean jj_3_3() {
-    if (jj_scan_token(FUNCTION)) return true;
-    Token xsp;
-    xsp = jj_scanpos;
-    if (jj_3_2()) {
-    jj_scanpos = xsp;
-    if (jj_3R_7()) return true;
-    }
-    if (jj_scan_token(ASSIGN)) return true;
+  static private boolean jj_3R_11() {
+    if (jj_scan_token(ID)) return true;
     return false;
   }
 
@@ -1621,18 +1587,35 @@ static void jjtreeCloseNodeScope(Node n) {
     return false;
   }
 
+  static private boolean jj_3R_7() {
+    if (jj_3R_11()) return true;
+    return false;
+  }
+
   static private boolean jj_3R_28() {
     if (jj_scan_token(ID)) return true;
     return false;
   }
 
-  static private boolean jj_3R_18() {
-    if (jj_scan_token(LPARRETO)) return true;
+  static private boolean jj_3_3() {
+    if (jj_scan_token(FUNCTION)) return true;
+    Token xsp;
+    xsp = jj_scanpos;
+    if (jj_3_2()) {
+    jj_scanpos = xsp;
+    if (jj_3R_7()) return true;
+    }
+    if (jj_scan_token(ASSIGN)) return true;
     return false;
   }
 
   static private boolean jj_3R_19() {
     if (jj_3R_22()) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_18() {
+    if (jj_scan_token(LPARRETO)) return true;
     return false;
   }
 
@@ -1644,6 +1627,26 @@ static void jjtreeCloseNodeScope(Node n) {
 
   static private boolean jj_3R_15() {
     if (jj_3R_19()) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_32() {
+    if (jj_scan_token(INTEGER)) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_23() {
+    Token xsp;
+    xsp = jj_scanpos;
+    if (jj_3R_31()) {
+    jj_scanpos = xsp;
+    if (jj_3R_32()) return true;
+    }
+    return false;
+  }
+
+  static private boolean jj_3R_31() {
+    if (jj_scan_token(ID)) return true;
     return false;
   }
 

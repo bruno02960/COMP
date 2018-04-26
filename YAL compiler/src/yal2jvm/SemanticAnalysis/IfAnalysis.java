@@ -1,6 +1,8 @@
 package yal2jvm.SemanticAnalysis;
 
 import yal2jvm.Analysis;
+import yal2jvm.SymbolTables.Symbol;
+import yal2jvm.SymbolTables.SymbolType;
 import yal2jvm.SymbolTables.VarSymbol;
 import yal2jvm.Utils.Utils;
 import yal2jvm.ast.*;
@@ -152,7 +154,7 @@ public class IfAnalysis extends Analysis
             {
                 VarSymbol symbolChecked = (VarSymbol) symbolsBeingChecked.get(symbolIndex);
                 if(!symbolChecked.getType().equals(symbolIterated.getType()))
-                    symbolIterated.setType("UNDEFINED");
+                    symbolIterated.setType(SymbolType.UNDEFINED.toString());
 
                 commons.add(symbolIterated);
             }

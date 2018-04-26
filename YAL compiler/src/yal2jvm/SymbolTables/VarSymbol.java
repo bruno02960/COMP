@@ -1,7 +1,5 @@
 package yal2jvm.SymbolTables;
 
-import yal2jvm.ast.Symbol;
-
 public class VarSymbol extends Symbol
 {
     private String type;

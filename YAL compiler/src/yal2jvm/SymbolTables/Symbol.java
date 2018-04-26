@@ -1,4 +1,4 @@
-package yal2jvm.ast;
+package yal2jvm.SymbolTables;
 
 
 import java.util.Objects;

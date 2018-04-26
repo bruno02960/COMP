@@ -3,9 +3,7 @@ package yal2jvm;
 import yal2jvm.SemanticAnalysis.IfAnalysis;
 import yal2jvm.SemanticAnalysis.ModuleAnalysis;
 import yal2jvm.SemanticAnalysis.WhileAnalysis;
-import yal2jvm.SymbolTables.FunctionSymbol;
-import yal2jvm.SymbolTables.ImmediateSymbol;
-import yal2jvm.SymbolTables.VarSymbol;
+import yal2jvm.SymbolTables.*;
 import yal2jvm.ast.*;
 
 import java.util.ArrayList;
@@ -140,7 +138,7 @@ public abstract class Analysis
     {
         String module = callTree.module;
         if(module != null && !module.equals(ModuleAnalysis.moduleName))
-            return new VarSymbol("", "UNDEFINED", true);
+            return new VarSymbol("", SymbolType.UNDEFINED.toString(), true);
 
         String method = callTree.method;
         FunctionSymbol functionSymbol = (FunctionSymbol) functionNameToFunctionSymbol.get(method);
@@ -161,14 +159,14 @@ public abstract class Analysis
             }
         }
         else {
-            ASTARGUMENTS astArgumentsList = (ASTARGUMENTS) callTree.jjtGetChild(0);
-            ArrayList<String> argumentsTypes = parseArgumentList(astArgumentsList);
+            ASTARGUMENTS astarguments = (ASTARGUMENTS) callTree.jjtGetChild(0);
+            ArrayList<String> argumentsTypes = parseArgumentList(astarguments);
             if (argumentsTypes == null)
                 return null;
 
             if(functionArguments.size() != argumentsTypes.size())
             {
-                System.out.println("Line " + astArgumentsList.getBeginLine() + ": Method " + method + " arguments" +
+                System.out.println("Line " + astarguments.getBeginLine() + ": Method " + method + " arguments" +
                         "number(" + argumentsTypes.size() + ") does not match expected number(" +
                         functionArguments.size() + ") of arguments");
                 return null;
@@ -181,7 +179,7 @@ public abstract class Analysis
                 String expectedArgumentType = functionArguments.get(i).getType();
                 if(!argumentType.equals(expectedArgumentType))
                 {
-                    System.out.println("Line " + astArgumentsList.getBeginLine() + ": Type " + argumentType +
+                    System.out.println("Line " + astarguments.getBeginLine() + ": Type " + argumentType +
                             " of argument " + i+1 + " of method " + method +
                             " call does not match expected type " + expectedArgumentType + ".");
                     returnSymbol = null;
@@ -192,14 +190,14 @@ public abstract class Analysis
         return returnSymbol;
     }
 
-    private ArrayList<String> parseArgumentList(ASTARGUMENTS argumentsListTree)
+    private ArrayList<String> parseArgumentList(ASTARGUMENTS astarguments)
     {
-        Integer childrenLength = argumentsListTree.jjtGetNumChildren();
+        Integer childrenLength = astarguments.jjtGetNumChildren();
         ArrayList<String> argumentsTypes = new ArrayList<>();
         boolean haveFailed = false;
         for(int i = 0; i < childrenLength; i++)
         {
-            ASTARGUMENT astargument = ((ASTARGUMENT) argumentsListTree.jjtGetChild(i));
+            ASTARGUMENT astargument = ((ASTARGUMENT) astarguments.jjtGetChild(i));
             String idArg = astargument.idArg;
             Integer intArg = astargument.intArg;
             String stringArg = astargument.stringArg;
@@ -222,7 +220,7 @@ public abstract class Analysis
                 argumentsTypes.add(varSymbol.getType());
             }
             else if(intArg != null)
-                argumentsTypes.add("INTEGER");
+                argumentsTypes.add(SymbolType.INTEGER.toString());
             else
                 argumentsTypes.add("STRING");
         }
@@ -241,7 +239,7 @@ public abstract class Analysis
         if(arraySymbol == null)
             return null;
 
-        if(!arraySymbol.getType().equals("ARRAY"))
+        if(!arraySymbol.getType().equals(SymbolType.ARRAY.toString()))
         {
             System.out.println("Line " + arrayAccessTree.getBeginLine() + ": Access to index of variable +" + arrayId
                     + " that is not an array.");
@@ -258,7 +256,7 @@ public abstract class Analysis
         }
 
         arraySymbol = arraySymbol.getCopy();
-        arraySymbol.setType("INTEGER");
+        arraySymbol.setType(SymbolType.INTEGER.toString());
 
         return arraySymbol;
     }
@@ -306,7 +304,7 @@ public abstract class Analysis
         if(sizeAccess)
         {
             varSymbol = varSymbol.getCopy();
-            varSymbol.setType("INTEGER");
+            varSymbol.setType(SymbolType.INTEGER.toString());
         }
 
         return varSymbol;
@@ -338,25 +336,22 @@ public abstract class Analysis
             if(declarationTree.integer != null)
                 initialized = true;
 
-            VarSymbol varSymbol = new VarSymbol(astscalarelement.id, "INTEGER", initialized);
+            VarSymbol varSymbol = new VarSymbol(astscalarelement.id, SymbolType.INTEGER.toString(), initialized);
 
             if(declarationTree.jjtGetNumChildren() > 1)
             {
                 //if is from type a=[CONST];
                 child = declarationTree.jjtGetChild(1);
                 ASTARRAYSIZE astarraysize = (ASTARRAYSIZE)child;
-                int arraySize;
-                if(astarraysize.integer != null)
-                    arraySize = astarraysize.integer;
-                else
-                {
-                   ASTSCALARACCESS astScalarAccess = (ASTSCALARACCESS) astarraysize.jjtGetChild(0);
-                   VarSymbol scalarAccessSymbol = parseScalarAccess(astScalarAccess);
+                if(astarraysize.integer == null) {
+                    ASTSCALARACCESS astScalarAccess = (ASTSCALARACCESS) astarraysize.jjtGetChild(0);
+                    VarSymbol scalarAccessSymbol = parseScalarAccess(astScalarAccess);
+
                     if (scalarAccessSymbol == null)
                         return null;
-
                 }
-                varSymbol.setType("ARRAY");
+
+                varSymbol.setType(SymbolType.ARRAY.toString());
                 varSymbol.setInitialized(true);
             }
 
@@ -377,7 +372,6 @@ public abstract class Analysis
             }
 
             boolean initialized;
-            int size;
             if(declarationTree.jjtGetNumChildren() > 1)
             {
                 //if is from type a[]=[CONST];
@@ -413,10 +407,9 @@ public abstract class Analysis
 
                 //if frm type a[]; variable not initialized and size = -1
                 initialized = false;
-                size = -1;
             }
 
-            VarSymbol varSymbol = new VarSymbol(astarrayelement.id, "ARRAY", initialized);
+            VarSymbol varSymbol = new VarSymbol(astarrayelement.id, SymbolType.ARRAY.toString(), initialized);
 
             mySymbols.put(varSymbol.getId(), varSymbol);
             return varSymbol;
@@ -441,16 +434,16 @@ public abstract class Analysis
 
        if(rhsSymbol.getType().equals("ARRAYSIZE"))
        {
-           if (lhsSymbol.getType().equals("ARRAY"))
+           if (lhsSymbol.getType().equals(SymbolType.ARRAY.toString()))
                return addToSymbolTable(lhsSymbol);
            else
-               rhsSymbol.setType("ARRAY");
+               rhsSymbol.setType(SymbolType.ARRAY.toString());
        }
 
-       if(lhsSymbol.getType().equals("UNDEFINED"))
+       if(lhsSymbol.getType().equals(SymbolType.UNDEFINED.toString()))
        {
-           if(rhsSymbol.getType().equals("UNDEFINED"))
-               lhsSymbol.setType("INTEGER");
+           if(rhsSymbol.getType().equals(SymbolType.UNDEFINED.toString()))
+               lhsSymbol.setType(SymbolType.INTEGER.toString());
            else
                lhsSymbol.setType(rhsSymbol.getType());
        }
@@ -459,8 +452,8 @@ public abstract class Analysis
         String rhsSymbolType = rhsSymbol.getType();
 
 
-        if(! (lhsSymbolType.equals("ARRAY") && rhsSymbolType.equals("INTEGER"))) //for A=5; in which A is an array and all its elements are set to 5
-            if(!rhsSymbolType.equals("UNDEFINED")) //for A=m.f(); in which m.f() function is from another module that we not know the return value, so it can be INTEGER or ARRAY
+        if(! (lhsSymbolType.equals(SymbolType.ARRAY.toString()) && rhsSymbolType.equals(SymbolType.INTEGER.toString()))) //for A=5; in which A is an array and all its elements are set to 5
+            if(!rhsSymbolType.equals(SymbolType.UNDEFINED.toString())) //for A=m.f(); in which m.f() function is from another module that we not know the return value, so it can be INTEGER or ARRAY
                 if(!lhsSymbolType.equals(rhsSymbolType))
                 {
                     System.out.println("Line " + lhsTree.getBeginLine() + ": Variable " + lhsSymbol.getId() +
@@ -507,7 +500,7 @@ public abstract class Analysis
                 if(!parseIndex(astindex, symbol))
                     return null;
                 symbol = symbol.getCopy(); //symbol type will be altered but only for this case, so we need a copy
-                symbol.setType("INTEGER");
+                symbol.setType(SymbolType.INTEGER.toString());
                 break;
 
             case "SCALARACCESS":
@@ -515,7 +508,7 @@ public abstract class Analysis
                 symbol = (VarSymbol) hasAccessToSymbol(id);
 
                 if(symbol == null)
-                    symbol = new VarSymbol(id, "UNDEFINED", false);
+                    symbol = new VarSymbol(id, SymbolType.UNDEFINED.toString(), false);
 
                 break;
         }
@@ -555,7 +548,7 @@ public abstract class Analysis
             return false;
         }
 
-        if(lhsSymbol.getType().equals("ARRAY"))
+        if(lhsSymbol.getType().equals(SymbolType.ARRAY.toString()))
         {
             System.out.println("Line " + astLhs.getBeginLine() + ": Variables must be INTEGER to be compared. Variable "
                     + lhsSymbol.getId() + " has type " + lhsSymbol.getType() + " and variable " + rhsSymbol.getId() +
