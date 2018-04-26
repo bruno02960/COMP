@@ -99,7 +99,7 @@ public class Yal2jvm
         ModuleAnalysis moduleAnalysis = new ModuleAnalysis(ast);
         moduleAnalysis.parse();
         
-       /* HHIR hhir = new HHIR(ast);
+        HHIR hhir = new HHIR(ast);
         if (this.optimize)
         	hhir.optimize();
         hhir.dataflowAnalysis();
@@ -110,8 +110,6 @@ public class Yal2jvm
         
         saveToJasminFile(instructions, moduleName);
         compileToBytecode(moduleName + ".j");
-
-        System.exit(0);*/
 	}
 
 	private FileInputStream getFileStream()
@@ -168,7 +166,6 @@ public class Yal2jvm
 			{
 				file.write(instructions.get(i));
 				file.write("\n");
-				System.out.println(instructions.get(i));
 			}
 			
 			file.close();

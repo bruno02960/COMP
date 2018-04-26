@@ -8,16 +8,22 @@ public class IRMethod extends IRNode
 	private Type returnType;
 	private Type[] argsType;
 	public int labelN = 0;
-	public int regN = 0;
+	private int regN = 0;
 	public int varN = 0;
 
-	public IRMethod(String name, Type returnType, Type[] argsTypes)
+	public IRMethod(String name, Type returnType, Type[] argsTypes, String[] argsNames)
 	{
 		this.name = name;
 		this.returnType = returnType;
 		this.argsType = argsTypes;
 		this.argsType = argsTypes == null ? this.argsType = new Type[0] : argsTypes;
 		this.nodeType = "Method";
+		
+		if (argsTypes != null)
+		{
+			for (int i = 0; i < argsTypes.length; i++)
+				this.addChild(new IRAllocate(argsNames[i], argsTypes[i], 0));
+		}
 	}
 
 	@Override
@@ -77,9 +83,9 @@ public class IRMethod extends IRNode
 		ArrayList<String> inst = new ArrayList<>();
 		
 		int localsCount = 0;
-		for (int i = 0; i < children.size(); i++)
+		for (int i = 0; i < getChildren().size(); i++)
 		{
-			IRNode node = children.get(i);
+			IRNode node = getChildren().get(i);
 			if (node.toString() == "Allocate")
 				localsCount++;
 		}
@@ -87,14 +93,24 @@ public class IRMethod extends IRNode
 		
 		inst.add(".limit locals " + localsCount);
 		
-		if (children.size() > 1)
+		if (getChildren().size() > 1)
 			inst.add(".limit stack 20");
 		
-		for (int i = 0; i < children.size(); i++)
+		for (int i = 0; i < getChildren().size(); i++)
 		{
-			IRNode node = children.get(i);
+			IRNode node = getChildren().get(i);
 			inst.addAll(node.getInstructions());
 		}
 		return inst;
+	}
+
+	public int getRegN() 
+	{
+		return regN;
+	}
+
+	public void incrementRegN() 
+	{
+		this.regN++;
 	}
 }

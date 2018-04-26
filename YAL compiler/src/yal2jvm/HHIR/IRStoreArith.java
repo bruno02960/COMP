@@ -51,7 +51,36 @@ public class IRStoreArith extends IRNode
 	{
 		ArrayList<String> inst = new ArrayList<>();
 		
-		
+		switch(parent.toString())
+		{
+			case "Method":
+			{
+				int storeReg = -1;
+				ArrayList<IRNode> methodChildren = parent.getChildren();
+				
+				//check if storage variable exists, and if so get its register
+				for (int i = 0; i < methodChildren.size(); i++)
+				{
+					if (methodChildren.get(i).toString().equals("Allocate"))
+					{
+						storeReg = ((IRAllocate)methodChildren.get(i)).getRegister();
+						break;
+					}
+				}
+				//if storage variable does not exist, allocate it
+				if (storeReg == -1)
+				{
+					IRAllocate storeVar = new IRAllocate(name, Type.INTEGER, 0);
+					parent.addChild(storeVar);
+					storeVar.getRegister();
+				}
+				
+				inst.add("istore " + storeReg);
+				break;
+			}
+			default:
+				break;
+		}
 		
 		return inst;
 	}

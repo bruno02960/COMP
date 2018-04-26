@@ -25,19 +25,19 @@ public class HHIR
 		module.addChild(new IRGlobal("c", Type.INTEGER, 12));
 		module.addChild(new IRGlobal("d", Type.INTEGER, 12345));
 		
-			IRMethod m1 = new IRMethod("method1", Type.VOID, null);
+			IRMethod m1 = new IRMethod("method1", Type.VOID, null, null);
 			m1.addChild(new IRReturn(null, null));
 		module.addChild(m1);
 		
-			IRMethod m2 = new IRMethod("method2", Type.VOID, new Type[]{Type.INTEGER});
+			IRMethod m2 = new IRMethod("method2", Type.VOID, new Type[]{Type.INTEGER}, new String[]{"var1", "var2"});
 			m2.addChild(new IRReturn(null, null));
 		module.addChild(m2);
 			
-			IRMethod m3 = new IRMethod("method3", Type.VOID, new Type[]{Type.INTEGER, Type.INTEGER, Type.INTEGER});
+			IRMethod m3 = new IRMethod("method3", Type.VOID, new Type[]{Type.INTEGER, Type.INTEGER, Type.INTEGER}, new String[]{"var1", "var2", "var3"});
 			m3.addChild(new IRReturn(null, null));
 		module.addChild(m3);
 		
-			IRMethod method = new IRMethod("main", Type.VOID, null);
+			IRMethod method = new IRMethod("main", Type.VOID, null, null);
 			method.addChild(new IRAllocate("var1", Type.INTEGER, null));
 			method.addChild(new IRAllocate("var2", Type.INTEGER, 10));
 			method.addChild(new IRAllocate("var3", Type.INTEGER, 20000));
