@@ -343,11 +343,13 @@ public abstract class Analysis
                 //if is from type a=[CONST];
                 child = declarationTree.jjtGetChild(1);
                 ASTARRAYSIZE astarraysize = (ASTARRAYSIZE)child;
-                ASTSCALARACCESS astScalarAccess = (ASTSCALARACCESS) astarraysize.jjtGetChild(0);
-                VarSymbol scalarAccessSymbol = parseScalarAccess(astScalarAccess);
+                if(astarraysize.integer == null) {
+                    ASTSCALARACCESS astScalarAccess = (ASTSCALARACCESS) astarraysize.jjtGetChild(0);
+                    VarSymbol scalarAccessSymbol = parseScalarAccess(astScalarAccess);
 
-                if (scalarAccessSymbol == null)
-                    return null;
+                    if (scalarAccessSymbol == null)
+                        return null;
+                }
 
                 varSymbol.setType(SymbolType.ARRAY.toString());
                 varSymbol.setInitialized(true);
