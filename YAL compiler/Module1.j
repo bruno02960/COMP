@@ -26,12 +26,12 @@ return
 .method public static method3(III)V
 .limit locals 6
 .limit stack 20
-ldc 0
+ldc 2
+istore 3
+iload 0
+iload 3
+iadd
 istore 0
-ldc 0
-istore 1
-ldc 0
-istore 2
 return
 .end method
 

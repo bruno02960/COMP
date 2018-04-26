@@ -7,23 +7,20 @@ public class IRMethod extends IRNode
 	private String name;
 	private Type returnType;
 	private Type[] argsType;
+	private String[] argsNames;
+	
 	public int labelN = 0;
 	private int regN = 0;
 	public int varN = 0;
 
-	public IRMethod(String name, Type returnType, Type[] argsTypes, String[] argsNames)
+	public IRMethod(String name, Type returnType, String returnVar, Type[] argsTypes, String[] argsNames)
 	{
 		this.name = name;
 		this.returnType = returnType;
-		this.argsType = argsTypes;
 		this.argsType = argsTypes == null ? this.argsType = new Type[0] : argsTypes;
+		this.argsNames = argsNames == null ? this.argsNames = new String[0] : argsNames;
 		this.nodeType = "Method";
-		
-		if (argsTypes != null)
-		{
-			for (int i = 0; i < argsTypes.length; i++)
-				this.addChild(new IRAllocate(argsNames[i], argsTypes[i], 0));
-		}
+		this.regN += this.argsNames.length;
 	}
 
 	@Override
@@ -112,5 +109,15 @@ public class IRMethod extends IRNode
 	public void incrementRegN() 
 	{
 		this.regN++;
+	}
+	
+	public int getArgumentRegister(String name)
+	{
+		for (int i = 0; i < argsNames.length; i++)
+		{
+			if (argsNames[i].equals(name))
+				return i;
+		}
+		return -1;
 	}
 }
