@@ -56,13 +56,13 @@ public class FunctionSymbol extends Symbol
             {
                 ASTSCALARELEMENT astscalarelement = (ASTSCALARELEMENT)returnValueNode;
                 String returnValueId = astscalarelement.id;
-                returnValue = new VarSymbol(returnValueId, "INTEGER", false);
+                returnValue = new VarSymbol(returnValueId, SymbolType.INTEGER.toString(), false);
             }
             else
             {
                 ASTARRAYELEMENT astarrayelement = (ASTARRAYELEMENT)returnValueNode;
                 String returnValueId = astarrayelement.id;
-                returnValue = new VarSymbol(returnValueId, "ARRAY", false);
+                returnValue = new VarSymbol(returnValueId, SymbolType.ARRAY.toString(), false);
             }
         }
 
@@ -81,12 +81,12 @@ public class FunctionSymbol extends Symbol
                 if(child instanceof ASTSCALARELEMENT)
                 {
                     ASTSCALARELEMENT astscalarelement = (ASTSCALARELEMENT)child;
-                    varSymbol = new VarSymbol(astscalarelement.id, "INTEGER", true);
+                    varSymbol = new VarSymbol(astscalarelement.id, SymbolType.INTEGER.toString(), true);
                 }
                 else
                 {
                     ASTARRAYELEMENT astarrayelement = (ASTARRAYELEMENT)child;
-                    varSymbol = new VarSymbol(astarrayelement.id, "ARRAY", true);
+                    varSymbol = new VarSymbol(astarrayelement.id, SymbolType.ARRAY.toString(), true);
                 }
                 arguments.add(varSymbol);
             }

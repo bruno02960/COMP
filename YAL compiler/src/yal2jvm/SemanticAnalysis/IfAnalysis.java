@@ -153,7 +153,7 @@ public class IfAnalysis extends Analysis
             {
                 VarSymbol symbolChecked = (VarSymbol) symbolsBeingChecked.get(symbolIndex);
                 if(!symbolChecked.getType().equals(symbolIterated.getType()))
-                    symbolIterated.setType("UNDEFINED");
+                    symbolIterated.setType(SymbolType.UNDEFINED.toString());
 
                 commons.add(symbolIterated);
             }
