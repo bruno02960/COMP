@@ -177,12 +177,30 @@ public class HHIR
 		createStatementsHHIR((ASTSTATEMENTS) currNode, function);
 	}
 
-	private void createStatementsHHIR(ASTSTATEMENTS returnValueNode, IRMethod functionHHIR)
+	private void createStatementsHHIR(ASTSTATEMENTS aststatements, IRMethod irmethod)
 	{
+		SimpleNode child = (SimpleNode) aststatements.jjtGetChild(0);
 
+		switch (child.toString()) {
+			case "ASSIGN":
+				createAssignHHIR(child, irmethod);
+				break;
+			case "CALL":
+				createCallHHIR(child, irmethod);
+				break;
+			default:
+				System.out.println("Not generating HHIR for " + child.toString() + " yet.");
+				break;
+		}
 	}
 
-    /**
+	private void createAssignHHIR(SimpleNode child, IRMethod irmethod) {
+	}
+
+	private void createCallHHIR(SimpleNode child, IRMethod irmethod) {
+	}
+
+	/**
      * Retrieves the name, type and value of the variable
      * @param astdeclaration declaration to analyse
      */
