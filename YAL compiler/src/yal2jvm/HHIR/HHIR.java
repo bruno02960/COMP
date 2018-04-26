@@ -234,16 +234,17 @@ public class HHIR
 
 		//TODO: Debug
 		System.out.println("name= " + name);
+		assert type != null;
 		System.out.println("type= " + type.toString());
 		System.out.println("value= " + value);
 		System.out.println("size= " + size + "\n");
 
 		switch (type) {
 			case INTEGER:
-				//root.addChild(new IRGlobal(name, type, value));
+				root.addChild(new IRGlobal(name, type, value));
 				break;
 			case ARRAY:
-				//root.addChild(new IRGlobal(name, type, value, size));
+				root.addChild(new IRGlobal(name, type, value, size));
 				break;
 			default:
 				System.err.println("Error on adding declaration to HHIR");
