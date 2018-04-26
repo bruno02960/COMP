@@ -2,6 +2,8 @@ package yal2jvm.HHIR;
 
 import java.util.ArrayList;
 
+import yal2jvm.SemanticAnalysis.ModuleAnalysis;
+import yal2jvm.SymbolTables.FunctionSymbol;
 import yal2jvm.SymbolTables.SymbolType;
 import yal2jvm.SymbolTables.VarSymbol;
 
@@ -205,7 +207,7 @@ public class HHIR
 				createAssignHHIR(child, irmethod);
 				break;
 			case "CALL":
-				createCallHHIR(child, irmethod);
+				createCallHHIR((ASTCALL) child, irmethod);
 				break;
 			default:
 				System.out.println("Not generating HHIR for " + child.toString() + " yet.");
@@ -291,7 +293,63 @@ public class HHIR
 		}
 	}
 
-	private void createCallHHIR(SimpleNode child, IRMethod irmethod) {
+	private void createCallHHIR(ASTCALL astCall, IRMethod IRMethod)
+	{
+		String module = astCall.module;
+		if(module != null && !module.equals(ModuleAnalysis.moduleName))
+		{
+			IRCall irCall = new IRCall(astCall.method, module,);
+
+		}
+
+		String method = astCall.method;
+		FunctionSymbol functionSymbol = (FunctionSymbol) functionNameToFunctionSymbol.get(method);
+		if(functionSymbol == null)
+		{
+			System.out.println("Line " + astCall.getBeginLine() + ": Method " + method + " can´t be found.");
+			return null;
+		}
+
+		ArrayList<VarSymbol> functionArguments = functionSymbol.getArguments();
+		VarSymbol returnSymbol = null;
+
+		if(astCall.jjtGetNumChildren() == 0) {
+			if(astCall.jjtGetNumChildren() != functionArguments.size()){
+				System.out.println("Line " + astCall.getBeginLine() + ": Method " + method + " arguments number(0)" +
+						"does not match expected number(" + functionArguments.size() + ") of arguments");
+				return null;
+			}
+		}
+		else {
+			ASTARGUMENTS astarguments = (ASTARGUMENTS) astCall.jjtGetChild(0);
+			ArrayList<String> argumentsTypes = parseArgumentList(astarguments);
+			if (argumentsTypes == null)
+				return null;
+
+			if(functionArguments.size() != argumentsTypes.size())
+			{
+				System.out.println("Line " + astarguments.getBeginLine() + ": Method " + method + " arguments" +
+						"number(" + argumentsTypes.size() + ") does not match expected number(" +
+						functionArguments.size() + ") of arguments");
+				return null;
+			}
+
+			returnSymbol = functionSymbol.getReturnValue();
+			for(int i = 0; i < functionArguments.size(); i++)
+			{
+				String argumentType = argumentsTypes.get(i);
+				String expectedArgumentType = functionArguments.get(i).getType();
+				if(!argumentType.equals(expectedArgumentType))
+				{
+					System.out.println("Line " + astarguments.getBeginLine() + ": Type " + argumentType +
+							" of argument " + i+1 + " of method " + method +
+							" call does not match expected type " + expectedArgumentType + ".");
+					returnSymbol = null;
+				}
+			}
+		}
+
+		return returnSymbol;
 	}
 
 	/**
