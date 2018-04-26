@@ -1,6 +1,6 @@
 package yal2jvm.Utils;
 
-import yal2jvm.ast.Symbol;
+import yal2jvm.SymbolTables.Symbol;
 
 import java.util.HashMap;
 import java.util.Map;
