@@ -1,5 +1,5 @@
 module program1 {
-	data=[100]; // vector of 100 integers
+	data[]=[100]; // vector of 100 integers
 	mx=4; // attribute mx
 	mn; // attribute mn
 	a[]=[100];

@@ -2,10 +2,10 @@ package yal2jvm.HHIR;
 
 import java.util.ArrayList;
 
-import yal2jvm.ast.ASTDECLARATION;
-import yal2jvm.ast.ASTMODULE;
-import yal2jvm.ast.Node;
-import yal2jvm.ast.SimpleNode;
+import yal2jvm.SymbolTables.SymbolType;
+import yal2jvm.SymbolTables.VarSymbol;
+
+import yal2jvm.ast.*;
 
 public class HHIR
 {
@@ -26,15 +26,15 @@ public class HHIR
 		//create HHIR from AST
 		//hardcoded example for now
 		ASTMODULE astModule = (ASTMODULE) ast;
-		root = createModuleHHIR(astModule);
-		IRModule module = new IRModule("Module1");
-		return module;
+		createModuleHHIR(astModule);
+
+		return root;
 	}
 	
 	public IRModule createHardcoded()
 	{
 		IRModule module = new IRModule("Module1");
-		module.addChild(new IRGlobal("a", Type.INTEGER, null));
+		module.addChild(new IRGlobal("a", Type.ARRAY, null));
 		module.addChild(new IRGlobal("b", Type.INTEGER, null));
 		module.addChild(new IRGlobal("c", Type.INTEGER, 12));
 		module.addChild(new IRGlobal("d", Type.INTEGER, 12345));
@@ -95,29 +95,189 @@ public class HHIR
 		return this.root.getName();
 	}
 
-	private IRModule createModuleHHIR(ASTMODULE astModule)
+	private void createModuleHHIR(ASTMODULE astModule)
 	{
 		String moduleName = astModule.name;
-		IRModule module = new IRModule(moduleName);
+		root = new IRModule(moduleName);
 
 		int moduleNumberChilds = astModule.jjtGetNumChildren();
 		for(int i = 0; i < moduleNumberChilds; i++)
 		{
 			Node child = astModule.jjtGetChild(i);
-		//	if(child instanceof ASTDECLARATION)
-		//		createDeclarationHHIR((ASTDECLARATION) child));
-
+			if(child instanceof ASTDECLARATION)
+				createDeclarationHHIR((ASTDECLARATION) child);
+			else
+				createFunctionHHIR((ASTFUNCTION) child);
 		}
-		module.addChild(new IRGlobal("a", Type.INTEGER, null));
-		module.addChild(new IRGlobal("b", Type.INTEGER, null));
-		module.addChild(new IRGlobal("c", Type.INTEGER, 12));
-		module.addChild(new IRGlobal("d", Type.INTEGER, 12345));
-		
-		return null;
 	}
 
-	private void createDeclarationHHIR(ASTDECLARATION child)
+	private void createFunctionHHIR(ASTFUNCTION astFunction)
 	{
+		String functionId = astFunction.id;
+		Type returnType = null;
+		String returnName = null;
+		Type[] argumentsTypes = null;
+		String[] argumentsNames = null;
 
+
+		//indicates the index(child num) of the arguments. 0 if no return value, or 1 if has return value
+		int argumentsIndex = 0;
+
+		//get return value if existent
+		SimpleNode currNode = (SimpleNode) astFunction.jjtGetChild(0);
+		if (!(currNode instanceof ASTVARS) && !(currNode instanceof ASTSTATEMENTS)) //indicated that is the return variable
+		{
+			argumentsIndex++;
+			if (currNode instanceof ASTSCALARELEMENT)
+			{
+				returnType = Type.INTEGER;
+				returnName = ((ASTSCALARELEMENT) currNode).id;
+			}
+			else
+			{
+				returnType = Type.ARRAY;
+				returnName = ((ASTARRAYELEMENT) currNode).id;
+			}
+		}
+
+		//get arguments if existent
+		currNode = (SimpleNode) astFunction.jjtGetChild(argumentsIndex);
+		if (currNode instanceof ASTVARS)
+		{
+			int numArguments = currNode.jjtGetNumChildren();
+			argumentsNames = new String[numArguments];
+			argumentsTypes = new Type[numArguments];
+
+			for (int i = 0; i < numArguments; i++)
+			{
+				SimpleNode child = (SimpleNode) currNode.jjtGetChild(i);
+				if (child != null)
+				{
+					if (child instanceof ASTSCALARELEMENT)
+					{
+						argumentsNames[i] = ((ASTSCALARELEMENT) child).id;
+						argumentsTypes[i] = Type.INTEGER;
+					}
+					else
+					{
+						argumentsNames[i] = ((ASTARRAYELEMENT) child).id;
+						argumentsTypes[i] = Type.ARRAY;
+					}
+				}
+			}
+		}
+		IRMethod function = new IRMethod(functionId, returnType, returnName, argumentsTypes, argumentsNames);
+
+		//TODO: Debug
+		System.out.println("name= " + functionId);
+		if(returnType != null)
+			System.out.println("return type= " + returnType.toString());
+		if(returnName != null)
+			System.out.println("return name= " + returnName);
+		if(argumentsTypes != null)
+		{
+			System.out.println("argumentsTypes= " );
+			for(int i = 0; i < argumentsTypes.length; i++)
+				System.out.println(argumentsTypes[i]);
+		}
+
+		if(argumentsNames != null)
+		{
+			System.out.println("argumentsNames= " );
+			for(int i = 0; i < argumentsNames.length; i++)
+				System.out.println(argumentsNames[i]);
+		}
+
+		root.addChild(function);
+
+		if(!(currNode instanceof ASTSTATEMENTS))
+			currNode = (SimpleNode) astFunction.jjtGetChild(++argumentsIndex);
+
+		createStatementsHHIR((ASTSTATEMENTS) currNode, function);
+	}
+
+	private void createStatementsHHIR(ASTSTATEMENTS aststatements, IRMethod irmethod)
+	{
+		SimpleNode child = (SimpleNode) aststatements.jjtGetChild(0);
+
+		switch (child.toString()) {
+			case "ASSIGN":
+				createAssignHHIR(child, irmethod);
+				break;
+			case "CALL":
+				createCallHHIR(child, irmethod);
+				break;
+			default:
+				System.out.println("Not generating HHIR for " + child.toString() + " yet.");
+				break;
+		}
+	}
+
+	private void createAssignHHIR(SimpleNode child, IRMethod irmethod) {
+	}
+
+	private void createCallHHIR(SimpleNode child, IRMethod irmethod) {
+	}
+
+	/**
+     * Retrieves the name, type and value of the variable
+     * @param astdeclaration declaration to analyse
+     */
+	private void createDeclarationHHIR(ASTDECLARATION astdeclaration) {
+
+	    SimpleNode id = (SimpleNode) astdeclaration.jjtGetChild(0);
+	    String name = null;
+	    Type type = null;
+	    int value = -1;
+	    int size = -1;
+
+	    switch (id.toString()) {
+			case "SCALARELEMENT":
+				ASTSCALARELEMENT astscalarelement = (ASTSCALARELEMENT) id;
+				name = astscalarelement.id;
+
+				if(astdeclaration.jjtGetNumChildren() == 2) {
+					ASTARRAYSIZE astarraysize = (ASTARRAYSIZE) astdeclaration.jjtGetChild(1);
+					size = astarraysize.integer;
+					type = Type.ARRAY;
+				}
+				else {
+					type = Type.INTEGER;
+					if(astdeclaration.operator == null && astdeclaration.integer!= null) {
+						value = astdeclaration.integer;
+					}
+					else if(astdeclaration.operator != null && astdeclaration.integer!= null) {
+						String str_value = astdeclaration.operator + astdeclaration.integer;
+						value = Integer.parseInt(str_value);
+					}
+				}
+				break;
+			case "ARRAYELEMENT":
+				ASTARRAYELEMENT astarrayelement = (ASTARRAYELEMENT) id;
+				name = astarrayelement.id;
+				type = Type.ARRAY;
+
+				if(astdeclaration.jjtGetNumChildren() == 2) {
+					ASTARRAYSIZE astarraysize = (ASTARRAYSIZE) astdeclaration.jjtGetChild(1);
+					size = astarraysize.integer;
+				}
+				else {
+					String str_value = astdeclaration.operator + astdeclaration.integer;
+					value = Integer.parseInt(str_value);
+				}
+				break;
+		}
+
+		switch (type) {
+			case INTEGER:
+				root.addChild(new IRGlobal(name, type, value));
+				break;
+			case ARRAY:
+				root.addChild(new IRGlobal(name, type, value, size));
+				break;
+			default:
+				System.err.println("Error on adding declaration to HHIR");
+				System.exit(-1);
+		}
 	}
 }
