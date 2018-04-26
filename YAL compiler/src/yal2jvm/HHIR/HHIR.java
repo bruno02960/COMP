@@ -2,10 +2,7 @@ package yal2jvm.HHIR;
 
 import java.util.ArrayList;
 
-import yal2jvm.ast.ASTDECLARATION;
-import yal2jvm.ast.ASTMODULE;
-import yal2jvm.ast.Node;
-import yal2jvm.ast.SimpleNode;
+import yal2jvm.ast.*;
 
 public class HHIR
 {
@@ -105,8 +102,8 @@ public class HHIR
 		for(int i = 0; i < moduleNumberChilds; i++)
 		{
 			Node child = astModule.jjtGetChild(i);
-		//	if(child instanceof ASTDECLARATION)
-		//		createDeclarationHHIR((ASTDECLARATION) child));
+			if(child instanceof ASTDECLARATION)
+				createDeclarationHHIR((ASTDECLARATION) child);
 
 		}
 		module.addChild(new IRGlobal("a", Type.INTEGER, null));
@@ -117,8 +114,72 @@ public class HHIR
 		return null;
 	}
 
-	private void createDeclarationHHIR(ASTDECLARATION child)
-	{
+    /**
+     * Retrieves the name, type and value of the variable
+     * @param astdeclaration declaration to analyse
+     */
+	private void createDeclarationHHIR(ASTDECLARATION astdeclaration) {
 
+	    SimpleNode id = (SimpleNode) astdeclaration.jjtGetChild(0);
+	    String name = null;
+	    Type type = null;
+	    int value = -1;
+	    int size = -1;
+
+	    switch (id.toString()) {
+			case "SCALARELEMENT":
+				ASTSCALARELEMENT astscalarelement = (ASTSCALARELEMENT) id;
+				name = astscalarelement.id;
+
+				if(astdeclaration.jjtGetNumChildren() == 2) {
+					ASTARRAYSIZE astarraysize = (ASTARRAYSIZE) astdeclaration.jjtGetChild(1);
+					size = astarraysize.integer;
+					type = Type.ARRAY;
+				}
+				else {
+					type = Type.INTEGER;
+					if(astdeclaration.operator == null && astdeclaration.integer!= null) {
+						value = astdeclaration.integer;
+					}
+					else if(astdeclaration.operator != null && astdeclaration.integer!= null) {
+						String str_value = astdeclaration.operator + astdeclaration.integer;
+						value = Integer.parseInt(str_value);
+					}
+				}
+				break;
+			case "ARRAYELEMENT":
+				ASTARRAYELEMENT astarrayelement = (ASTARRAYELEMENT) id;
+				name = astarrayelement.id;
+				type = Type.ARRAY;
+
+				if(astdeclaration.jjtGetNumChildren() == 2) {
+					ASTARRAYSIZE astarraysize = (ASTARRAYSIZE) astdeclaration.jjtGetChild(1);
+					size = astarraysize.integer;
+				}
+				else {
+					String str_value = astdeclaration.operator + astdeclaration.integer;
+					value = Integer.parseInt(str_value);
+				}
+				break;
+		}
+
+
+		//TODO: Debug
+		System.out.println("name= " + name);
+		System.out.println("type= " + type.toString());
+		System.out.println("value= " + value);
+		System.out.println("size= " + size + "\n");
+
+		switch (type) {
+			case INTEGER:
+				//root.addChild(new IRGlobal(name, type, value));
+				break;
+			case ARRAY:
+				//root.addChild(new IRGlobal(name, type, value, size));
+				break;
+			default:
+				System.err.println("Error on adding declaration to HHIR");
+				System.exit(-1);
+		}
 	}
 }
