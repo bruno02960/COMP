@@ -309,6 +309,13 @@ public abstract class Analysis
             return null;
         }
 
+        if(varSymbol.getType().equals("ARRAY") && varSymbol.isSizeSet() == false)
+        {
+            System.out.println("Line " + scalarAccessTree.getBeginLine() + ": Access to size of variable " + id +
+                    " that has not size defined");
+            return null;
+        }
+
         if(sizeAccess)
         {
             varSymbol = varSymbol.getCopy();
@@ -340,11 +347,21 @@ public abstract class Analysis
 
             //parse right hand side if existent
             boolean initialized = false;
+            boolean sizeSet = false;
             //if is from type a=CONST;
             if(declarationTree.integer != null)
+            {
                 initialized = true;
+                if(symbol.getType().equals("ARRAY") && symbol.isSizeSet() == false)
+                {
+                    System.out.println("Line " + declarationTree.getBeginLine() + ": Variable " +
+                            symbol.getId() + " has the size not defined." + "Error assigning " +
+                            declarationTree.integer + " to all elements of " + symbol.getId() + ".");
+                    return null;
+                }
+            }
 
-            VarSymbol varSymbol = new VarSymbol(astscalarelement.id, SymbolType.INTEGER.toString(), initialized);
+            VarSymbol varSymbol = new VarSymbol(astscalarelement.id, SymbolType.INTEGER.toString(), initialized, sizeSet);
 
             if(declarationTree.jjtGetNumChildren() > 1)
             {
@@ -361,6 +378,7 @@ public abstract class Analysis
 
                 varSymbol.setType(SymbolType.ARRAY.toString());
                 varSymbol.setInitialized(true);
+                varSymbol.setSizeSet(true);
             }
 
 
@@ -380,6 +398,7 @@ public abstract class Analysis
             }
 
             boolean initialized;
+            boolean sizeSet;
             if(declarationTree.jjtGetNumChildren() > 1)
             {
                 //if is from type a[]=[CONST];
@@ -393,6 +412,7 @@ public abstract class Analysis
                         return null;
                 }
                 initialized = true;
+                sizeSet = true;
             }
             else
             {
@@ -401,23 +421,24 @@ public abstract class Analysis
                     if (symbol != null) //if is from type a[]=CONST and a[] have been previously defined
                     {
                         VarSymbol varSymbol = (VarSymbol) symbol;
+                        if(varSymbol.isSizeSet() == false)
+                        {
+                            System.out.println("Line " + declarationTree.getBeginLine() + ": Variable " +
+                                    astarrayelement.id + " has the size not defined." + "Error assigning " +
+                                    declarationTree.integer + " to all elements of " + astarrayelement.id + ".");
+                            return null;
+                        }
                         varSymbol.setInitialized(true);
                         return varSymbol;
                     }
-                    else
-                    {
-                        System.out.println("Line " + declarationTree.getBeginLine() + ": Variable " +
-                                astarrayelement.id + " has the size not defined." + "Error assigning " +
-                                declarationTree.integer + " to all elements of " + astarrayelement.id + ".");
-                        return null;
-                    }
                 }
 
-                //if frm type a[]; variable not initialized and size = -1
+                //if from type a[]; variable not initialized and size = -1
                 initialized = false;
+                sizeSet = false;
             }
 
-            VarSymbol varSymbol = new VarSymbol(astarrayelement.id, SymbolType.ARRAY.toString(), initialized);
+            VarSymbol varSymbol = new VarSymbol(astarrayelement.id, SymbolType.ARRAY.toString(), initialized, sizeSet);
 
             mySymbols.put(varSymbol.getId(), varSymbol);
             return varSymbol;

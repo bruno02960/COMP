@@ -62,7 +62,7 @@ public class FunctionSymbol extends Symbol
             {
                 ASTARRAYELEMENT astarrayelement = (ASTARRAYELEMENT)returnValueNode;
                 String returnValueId = astarrayelement.id;
-                returnValue = new VarSymbol(returnValueId, SymbolType.ARRAY.toString(), false);
+                returnValue = new VarSymbol(returnValueId, SymbolType.ARRAY.toString(), false, false);
             }
         }
 
@@ -86,7 +86,7 @@ public class FunctionSymbol extends Symbol
                 else
                 {
                     ASTARRAYELEMENT astarrayelement = (ASTARRAYELEMENT)child;
-                    varSymbol = new VarSymbol(astarrayelement.id, SymbolType.ARRAY.toString(), true);
+                    varSymbol = new VarSymbol(astarrayelement.id, SymbolType.ARRAY.toString(), true, false);
                 }
                 arguments.add(varSymbol);
             }
