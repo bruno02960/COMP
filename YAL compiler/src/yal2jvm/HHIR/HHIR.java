@@ -116,8 +116,7 @@ public class HHIR
 		return module;
 	}
 
-	private void createFunctionHHIR(ASTFUNCTION astFunction)
-	{
+	private void createFunctionHHIR(ASTFUNCTION astFunction) {
 		String functionId = astFunction.id;
 		Type returnType = null;
 		String returnName = null;
@@ -130,46 +129,48 @@ public class HHIR
 
 		//get return value if existent
 		SimpleNode returnValueNode = (SimpleNode) astFunction.jjtGetChild(0);
-		if(!(returnValueNode instanceof ASTVARS)) //indicated that is the return variable
+		if (!(returnValueNode instanceof ASTVARS)) //indicated that is the return variable
 		{
 			argumentsIndex++;
-			if(returnValueNode instanceof ASTSCALARELEMENT)
+			if (returnValueNode instanceof ASTSCALARELEMENT)
 			{
-				ASTSCALARELEMENT astscalarelement = (ASTSCALARELEMENT)returnValueNode;
 				returnType = Type.INTEGER;
-				returnName = astscalarelement.id;
+				returnName = ((ASTSCALARELEMENT) returnValueNode).id;
 			}
 			else
 			{
-				ASTARRAYELEMENT astarrayelement = (ASTARRAYELEMENT)returnValueNode;
-				String returnValueId = astarrayelement.id;
+				returnType = Type.ARRAY;
+				returnName = ((ASTARRAYELEMENT) returnValueNode).id;
 			}
 		}
 
 		//get arguments if existent
 		SimpleNode argumentsNode = (SimpleNode) astFunction.jjtGetChild(argumentsIndex);
-		if(argumentsNode == null || !(argumentsNode instanceof ASTVARS))
-			return;
-
-		for(int i = 0; i < argumentsNode.jjtGetNumChildren(); i++)
+		if (argumentsNode instanceof ASTVARS)
 		{
-			SimpleNode child = (SimpleNode) argumentsNode.jjtGetChild(i);
-			if( child != null)
+			int numArguments = argumentsNode.jjtGetNumChildren();
+			argumentsNames = new String[numArguments];
+			argumentsTypes = new Type[numArguments];
+
+			for (int i = 0; i < numArguments; i++)
 			{
-				VarSymbol varSymbol;
-				if(child instanceof ASTSCALARELEMENT)
+				SimpleNode child = (SimpleNode) argumentsNode.jjtGetChild(i);
+				if (child != null)
 				{
-					ASTSCALARELEMENT astscalarelement = (ASTSCALARELEMENT)child;
-					varSymbol = new VarSymbol(astscalarelement.id, SymbolType.INTEGER.toString(), true);
+					if (child instanceof ASTSCALARELEMENT)
+					{
+						argumentsNames[i] = ((ASTSCALARELEMENT) child).id;
+						argumentsTypes[i] = Type.INTEGER;
+					}
+					else
+					{
+						argumentsNames[i] = ((ASTARRAYELEMENT) child).id;
+						argumentsTypes[i] = Type.ARRAY;
+					}
 				}
-				else
-				{
-					ASTARRAYELEMENT astarrayelement = (ASTARRAYELEMENT)child;
-					varSymbol = new VarSymbol(astarrayelement.id, SymbolType.ARRAY.toString(), true);
-				}
-				arguments.add(varSymbol);
 			}
 		}
+
 
 
 		IRMethod function = new IRMethod(functionId, returnType, returnName, argumentsTypes, argumentsNames);
