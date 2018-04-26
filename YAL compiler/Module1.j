@@ -2,36 +2,23 @@
 .super java/lang/Object
 
 
-.field private static a I 
+.field private static a
 .field private static b I 
 .field private static c I = 12
 .field private static d I = 12345
 
 
-.method public static method1()V
-.limit locals 0
+.method public static method1(III)V
+.limit locals 3
 return
 .end method
 
 
-.method public static method2(I)V
-.limit locals 2
+.method public static method2(III)V
+.limit locals 4
 .limit stack 20
-ldc 0
-istore 0
-return
-.end method
-
-
-.method public static method3(III)V
-.limit locals 6
-.limit stack 20
-ldc 2
+ldc 50
 istore 3
-iload 0
-iload 3
-iadd
-istore 0
 return
 .end method
 
@@ -48,6 +35,8 @@ istore 2
 ldc 100
 ldc 200
 iadd
-istore 0
+istore -1
 return
+ldc 0
+istore 3
 .end method
