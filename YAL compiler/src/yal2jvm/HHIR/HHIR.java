@@ -216,7 +216,82 @@ public class HHIR
 		}
 	}
 
+	/**
+	 * Retrieves the name and may retrieve also type, value and operation for some variable
+	 * @param child simplenode
+	 * @param irmethod irmethod
+	 */
 	private void createAssignHHIR(SimpleNode child, IRMethod irmethod) {
+		String name = null;
+		Integer index = -1;
+		Integer value = -1;
+		Type type = null;
+		Integer size = -1;
+
+		ASTLHS astlhs = (ASTLHS) child.jjtGetChild(0);
+		ASTRHS astrhs = (ASTRHS) child.jjtGetChild(1);
+
+		SimpleNode lhchild = (SimpleNode) astlhs.jjtGetChild(0);
+		switch(lhchild.toString()) {
+			case "ARRAYACCESS":
+				ASTARRAYACCESS astarrayaccess = (ASTARRAYACCESS) lhchild.jjtGetChild(0);
+				/*if(astarrayaccess.jjtGetNumChildren() == 1) {
+				//TODO: Index can also be a variable
+					index = ((INDEX) astarrayaccess).jjtGetChild(0)
+				}*/
+				break;
+			case "SCALARACCESS":
+				ASTSCALARACCESS astscalaraccess = (ASTSCALARACCESS) lhchild;
+				name = astscalaraccess.id;
+				break;
+		}
+
+		SimpleNode rhchild = (SimpleNode) astrhs.jjtGetChild(0);
+		switch (rhchild.toString()) {
+			case "TERM":
+				ASTTERM term = (ASTTERM) rhchild;
+
+				if(term.operator == null && term.integer!= null) {
+					type = Type.INTEGER;
+					value = term.integer;
+				}
+				else if(term.operator != null && term.integer!= null) {
+					type = Type.INTEGER;
+					String str_value = term.operator + term.integer;
+					value = Integer.parseInt(str_value);
+				}
+
+
+				//TODO: Term call, arrayaccess and scalaraccess
+				/*if(term.operator != null) {
+					//Term has an operator
+				}
+
+				if(astrhs.jjtGetNumChildren() == 2) {
+					ASTTERM newTerm = (ASTTERM) astrhs.jjtGetChild(1);
+				}*/
+				break;
+			case "ARRAYSIZE":
+				ASTARRAYSIZE astarraysize = (ASTARRAYSIZE) rhchild;
+				if(astarraysize.jjtGetNumChildren() == 0) {
+					size = astarraysize.integer;
+				}
+				else {
+					ASTSCALARACCESS astscalaraccess = (ASTSCALARACCESS) astarraysize.jjtGetChild(0);
+					//TODO: Retrieve variable value
+				}
+				break;
+		}
+
+		//TODO: Debug
+		System.out.println("\nname= " + name);
+		System.out.println("type= " + type.toString());
+		System.out.println("index= " + index);
+		System.out.println("value= " + value + "\n");
+
+		if(type == Type.INTEGER) {
+			irmethod.addChild(new IRAllocate(name, type, value));
+		}
 	}
 
 	private void createCallHHIR(SimpleNode child, IRMethod irmethod) {
@@ -262,7 +337,13 @@ public class HHIR
 
 				if(astdeclaration.jjtGetNumChildren() == 2) {
 					ASTARRAYSIZE astarraysize = (ASTARRAYSIZE) astdeclaration.jjtGetChild(1);
-					size = astarraysize.integer;
+					if(astarraysize.jjtGetNumChildren() == 0) {
+						size = astarraysize.integer;
+					}
+					else {
+						ASTSCALARACCESS astscalaraccess = (ASTSCALARACCESS) astarraysize.jjtGetChild(0);
+						//TODO: Retrieve variable value
+					}
 				}
 				else {
 					String str_value = astdeclaration.operator + astdeclaration.integer;

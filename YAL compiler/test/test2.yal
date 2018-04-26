@@ -6,6 +6,8 @@ module program1 {
 	a[]=1;
 	
 	function det(d[]) {
+        b = 1;
+        c = 3;
 		i=0;
 		z=[5];
 		M=d.size-1; //d.size equivalent to d.length (Java)
