@@ -114,7 +114,8 @@ public class HHIR
 		}
 	}
 
-	private void createFunctionHHIR(ASTFUNCTION astFunction) {
+	private void createFunctionHHIR(ASTFUNCTION astFunction)
+	{
 		String functionId = astFunction.id;
 		Type returnType = null;
 		String returnName = null;
@@ -127,7 +128,7 @@ public class HHIR
 
 		//get return value if existent
 		SimpleNode currNode = (SimpleNode) astFunction.jjtGetChild(0);
-		if (!(currNode instanceof ASTVARS)) //indicated that is the return variable
+		if (!(currNode instanceof ASTVARS) && !(currNode instanceof ASTSTATEMENTS)) //indicated that is the return variable
 		{
 			argumentsIndex++;
 			if (currNode instanceof ASTSCALARELEMENT)
@@ -169,10 +170,31 @@ public class HHIR
 			}
 		}
 		IRMethod function = new IRMethod(functionId, returnType, returnName, argumentsTypes, argumentsNames);
+
+		//TODO: Debug
+		System.out.println("name= " + functionId);
+		if(returnType != null)
+			System.out.println("return type= " + returnType.toString());
+		if(returnName != null)
+			System.out.println("return name= " + returnName);
+		if(argumentsTypes != null)
+		{
+			System.out.println("argumentsTypes= " );
+			for(int i = 0; i < argumentsTypes.length; i++)
+				System.out.println(argumentsTypes[i]);
+		}
+
+		if(argumentsNames != null)
+		{
+			System.out.println("argumentsNames= " );
+			for(int i = 0; i < argumentsNames.length; i++)
+				System.out.println(argumentsNames[i]);
+		}
+
 		root.addChild(function);
 
 		if(!(currNode instanceof ASTSTATEMENTS))
-			currNode = (SimpleNode) astFunction.jjtGetChild(argumentsIndex++);
+			currNode = (SimpleNode) astFunction.jjtGetChild(++argumentsIndex);
 
 		createStatementsHHIR((ASTSTATEMENTS) currNode, function);
 	}
@@ -230,14 +252,6 @@ public class HHIR
 				}
 				break;
 		}
-
-
-		//TODO: Debug
-		System.out.println("name= " + name);
-		assert type != null;
-		System.out.println("type= " + type.toString());
-		System.out.println("value= " + value);
-		System.out.println("size= " + size + "\n");
 
 		switch (type) {
 			case INTEGER:
