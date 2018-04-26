@@ -26,7 +26,7 @@ public class HHIR
 		//create HHIR from AST
 		//hardcoded example for now
 		ASTMODULE astModule = (ASTMODULE) ast;
-		root = createModuleHHIR(astModule);
+		createModuleHHIR(astModule);
 
 		return root;
 	}
@@ -98,10 +98,10 @@ public class HHIR
 		return this.root.getName();
 	}
 
-	private IRModule createModuleHHIR(ASTMODULE astModule)
+	private void createModuleHHIR(ASTMODULE astModule)
 	{
 		String moduleName = astModule.name;
-		IRModule module = new IRModule(moduleName);
+		root = new IRModule(moduleName);
 
 		int moduleNumberChilds = astModule.jjtGetNumChildren();
 		for(int i = 0; i < moduleNumberChilds; i++)
@@ -112,8 +112,6 @@ public class HHIR
 			else
 				createFunctionHHIR((ASTFUNCTION) child);
 		}
-		
-		return module;
 	}
 
 	private void createFunctionHHIR(ASTFUNCTION astFunction) {
@@ -128,33 +126,33 @@ public class HHIR
 		int argumentsIndex = 0;
 
 		//get return value if existent
-		SimpleNode returnValueNode = (SimpleNode) astFunction.jjtGetChild(0);
-		if (!(returnValueNode instanceof ASTVARS)) //indicated that is the return variable
+		SimpleNode currNode = (SimpleNode) astFunction.jjtGetChild(0);
+		if (!(currNode instanceof ASTVARS)) //indicated that is the return variable
 		{
 			argumentsIndex++;
-			if (returnValueNode instanceof ASTSCALARELEMENT)
+			if (currNode instanceof ASTSCALARELEMENT)
 			{
 				returnType = Type.INTEGER;
-				returnName = ((ASTSCALARELEMENT) returnValueNode).id;
+				returnName = ((ASTSCALARELEMENT) currNode).id;
 			}
 			else
 			{
 				returnType = Type.ARRAY;
-				returnName = ((ASTARRAYELEMENT) returnValueNode).id;
+				returnName = ((ASTARRAYELEMENT) currNode).id;
 			}
 		}
 
 		//get arguments if existent
-		SimpleNode argumentsNode = (SimpleNode) astFunction.jjtGetChild(argumentsIndex);
-		if (argumentsNode instanceof ASTVARS)
+		currNode = (SimpleNode) astFunction.jjtGetChild(argumentsIndex);
+		if (currNode instanceof ASTVARS)
 		{
-			int numArguments = argumentsNode.jjtGetNumChildren();
+			int numArguments = currNode.jjtGetNumChildren();
 			argumentsNames = new String[numArguments];
 			argumentsTypes = new Type[numArguments];
 
 			for (int i = 0; i < numArguments; i++)
 			{
-				SimpleNode child = (SimpleNode) argumentsNode.jjtGetChild(i);
+				SimpleNode child = (SimpleNode) currNode.jjtGetChild(i);
 				if (child != null)
 				{
 					if (child instanceof ASTSCALARELEMENT)
@@ -170,13 +168,13 @@ public class HHIR
 				}
 			}
 		}
-
-
-
 		IRMethod function = new IRMethod(functionId, returnType, returnName, argumentsTypes, argumentsNames);
 		root.addChild(function);
 
-		createStatementsHHIR((ASTSTATEMENTS) returnValueNode, function);
+		if(!(currNode instanceof ASTSTATEMENTS))
+			currNode = (SimpleNode) astFunction.jjtGetChild(argumentsIndex++);
+
+		createStatementsHHIR((ASTSTATEMENTS) currNode, function);
 	}
 
 	private void createStatementsHHIR(ASTSTATEMENTS returnValueNode, IRMethod functionHHIR)
