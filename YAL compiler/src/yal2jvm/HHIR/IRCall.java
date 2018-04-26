@@ -1,19 +1,20 @@
 package yal2jvm.HHIR;
 
+import javafx.util.Pair;
+
 import java.util.ArrayList;
 
 public class IRCall extends IRNode
 {
-
 	private String method;
 	private String module;
-	private String[] argIDs;
+	private ArrayList<PairStringType> arguments;
 
-	public IRCall(String method, String module, String[] argIDs)
+	public IRCall(String method, String module, ArrayList<PairStringType> arguments)
 	{
 		this.method = method;
 		this.module = module;
-		this.argIDs = argIDs;
+		this.arguments = arguments;
 		this.nodeType = "Call";
 	}
 

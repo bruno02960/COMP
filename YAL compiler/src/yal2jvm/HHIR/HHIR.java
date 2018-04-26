@@ -2,11 +2,6 @@ package yal2jvm.HHIR;
 
 import java.util.ArrayList;
 
-import yal2jvm.SemanticAnalysis.ModuleAnalysis;
-import yal2jvm.SymbolTables.FunctionSymbol;
-import yal2jvm.SymbolTables.SymbolType;
-import yal2jvm.SymbolTables.VarSymbol;
-
 import yal2jvm.ast.*;
 
 public class HHIR
@@ -202,7 +197,8 @@ public class HHIR
 	{
 		SimpleNode child = (SimpleNode) aststatements.jjtGetChild(0);
 
-		switch (child.toString()) {
+		switch (child.toString())
+		{
 			case "ASSIGN":
 				createAssignHHIR(child, irmethod);
 				break;
@@ -293,63 +289,49 @@ public class HHIR
 		}
 	}
 
-	private void createCallHHIR(ASTCALL astCall, IRMethod IRMethod)
+	private void createCallHHIR(ASTCALL astCall, IRNode irNode)
 	{
-		String module = astCall.module;
-		if(module != null && !module.equals(ModuleAnalysis.moduleName))
+		String moduleId = astCall.module;
+		String methodId = astCall.method;
+		ArrayList<PairStringType> arguments = null;
+
+		if(astCall.jjtGetNumChildren() > 0)
 		{
-			IRCall irCall = new IRCall(astCall.method, module,);
-
-		}
-
-		String method = astCall.method;
-		FunctionSymbol functionSymbol = (FunctionSymbol) functionNameToFunctionSymbol.get(method);
-		if(functionSymbol == null)
-		{
-			System.out.println("Line " + astCall.getBeginLine() + ": Method " + method + " can´t be found.");
-			return null;
-		}
-
-		ArrayList<VarSymbol> functionArguments = functionSymbol.getArguments();
-		VarSymbol returnSymbol = null;
-
-		if(astCall.jjtGetNumChildren() == 0) {
-			if(astCall.jjtGetNumChildren() != functionArguments.size()){
-				System.out.println("Line " + astCall.getBeginLine() + ": Method " + method + " arguments number(0)" +
-						"does not match expected number(" + functionArguments.size() + ") of arguments");
-				return null;
-			}
-		}
-		else {
 			ASTARGUMENTS astarguments = (ASTARGUMENTS) astCall.jjtGetChild(0);
-			ArrayList<String> argumentsTypes = parseArgumentList(astarguments);
-			if (argumentsTypes == null)
-				return null;
+			arguments = getFunctionCallArgumentsIds(astarguments);
+		}
 
-			if(functionArguments.size() != argumentsTypes.size())
+		IRCall irCall = new IRCall(methodId, moduleId, arguments);
+		irNode.addChild(irCall);
+	}
+
+	private ArrayList<PairStringType> getFunctionCallArgumentsIds(ASTARGUMENTS astArguments)
+	{
+		ArrayList<PairStringType> arguments = new ArrayList<>();
+		int numArguments = astArguments.jjtGetNumChildren();
+		for(int i = 0; i < numArguments; i++)
+		{
+			ASTARGUMENT astArgument = (ASTARGUMENT) astArguments.jjtGetChild(i);
+			if(astArgument.intArg != null)
 			{
-				System.out.println("Line " + astarguments.getBeginLine() + ": Method " + method + " arguments" +
-						"number(" + argumentsTypes.size() + ") does not match expected number(" +
-						functionArguments.size() + ") of arguments");
-				return null;
+				PairStringType pair = new PairStringType(astArgument.intArg.toString(), Type.INTEGER);
+				arguments.add(pair);
+				continue;
 			}
-
-			returnSymbol = functionSymbol.getReturnValue();
-			for(int i = 0; i < functionArguments.size(); i++)
+			if(astArgument.stringArg != null)
 			{
-				String argumentType = argumentsTypes.get(i);
-				String expectedArgumentType = functionArguments.get(i).getType();
-				if(!argumentType.equals(expectedArgumentType))
-				{
-					System.out.println("Line " + astarguments.getBeginLine() + ": Type " + argumentType +
-							" of argument " + i+1 + " of method " + method +
-							" call does not match expected type " + expectedArgumentType + ".");
-					returnSymbol = null;
-				}
+				PairStringType pair = new PairStringType(astArgument.stringArg, Type.STRING);
+				arguments.add(pair);
+				continue;
+			}
+			if(astArgument.idArg != null)
+			{
+				PairStringType pair = new PairStringType(astArgument.idArg, Type.VARIABLE);
+				arguments.add(pair);
 			}
 		}
 
-		return returnSymbol;
+		return arguments;
 	}
 
 	/**
