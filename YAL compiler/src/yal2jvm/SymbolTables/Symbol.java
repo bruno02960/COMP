@@ -1,6 +1,8 @@
 package yal2jvm.SymbolTables;
 
 
+import java.util.Objects;
+
 public class Symbol
 {
     protected String id;
@@ -23,6 +25,17 @@ public class Symbol
     @Override
     public boolean equals(Object other)
     {
-        return this.id.equals(((Symbol)other).getId());
+        return id.equals(((Symbol)other).getId());
+    }
+
+    public Symbol getCopy()
+    {
+        return new Symbol(new String(id));
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return Objects.hash(id);
     }
 }

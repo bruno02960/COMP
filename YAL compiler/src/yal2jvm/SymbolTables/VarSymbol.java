@@ -4,22 +4,12 @@ public class VarSymbol extends Symbol
 {
     private String type;
     private boolean initialized;
-    private int size;
 
     public VarSymbol(String id, String type, boolean initialized)
     {
         super(id);
         this.type = type;
         this.initialized = initialized;
-        this.size = -1;
-    }
-
-    public VarSymbol(String id, String type, boolean initialized, int size)
-    {
-        super(id);
-        this.type = type;
-        this.initialized = initialized;
-        this.size = size;
     }
 
     public String getType()
@@ -42,18 +32,26 @@ public class VarSymbol extends Symbol
         this.initialized = initialized;
     }
 
-    public int getSize()
+    @Override
+    public int hashCode()
     {
-        return size;
+        return super.hashCode();
     }
 
-    public void setSize(int size)
+    @Override
+    public boolean equals(Object other)
     {
-        this.size = size;
+        return id.equals(((VarSymbol)other).getId());
     }
 
     public VarSymbol getCopy()
     {
-        return new VarSymbol(new String(id), new String(type), new Boolean(initialized), new Integer(size));
+        return new VarSymbol(new String(id), new String(type), new Boolean(initialized));
+    }
+
+    @Override
+    protected Object clone()
+    {
+        return getCopy();
     }
 }

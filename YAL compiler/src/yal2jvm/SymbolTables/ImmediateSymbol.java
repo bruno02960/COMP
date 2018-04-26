@@ -5,12 +5,12 @@ public class ImmediateSymbol extends VarSymbol
 {
     public ImmediateSymbol(Integer value)
     {
-        super(value.toString(), "INTEGER", true, value);
+        super(value.toString(), "INTEGER", true);
     }
 
-    public ImmediateSymbol(String id, Integer value)
+    public ImmediateSymbol(String id)
     {
-        super(id, "INTEGER", true, value);
+        super(id, "INTEGER", true);
     }
 
 }

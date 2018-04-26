@@ -83,8 +83,12 @@ public class IRMethod extends IRNode
 			if (node.toString() == "Allocate")
 				localsCount++;
 		}
-		if (localsCount > 0)
-			inst.add(".limit locals " + localsCount);
+		localsCount += this.argsType.length;
+		
+		inst.add(".limit locals " + localsCount);
+		
+		if (children.size() > 1)
+			inst.add(".limit stack 20");
 		
 		for (int i = 0; i < children.size(); i++)
 		{

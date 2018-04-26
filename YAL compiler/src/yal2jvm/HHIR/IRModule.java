@@ -24,9 +24,14 @@ public class IRModule extends IRNode
 		
 		inst.add(inst1);
 		inst.add(inst2);
+		inst.add("\n");
 		
 		for (int i = 0; i < children.size(); i++)
+		{
+			if (children.get(i).toString().equals("Method"))
+				inst.add("\n");
 			inst.addAll(children.get(i).getInstructions());
+		}
 		
 		return inst;
 	}

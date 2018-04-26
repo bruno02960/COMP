@@ -27,7 +27,7 @@ public class IRAllocate extends IRNode
 		String label2 = "Label" + ((IRMethod)parent).labelN;
 		((IRMethod)parent).labelN++;
 		
-		String inst1 = ".var " + ((IRMethod)parent).varN + " is ";
+		String inst1 = ".var " + ((IRMethod)parent).varN + " is " + name;
 		switch(type)
 		{
 			case INTEGER:
@@ -40,7 +40,7 @@ public class IRAllocate extends IRNode
 			default:
 				break;
 		}
-		inst1 += name + " from " + label1 + " to " + label2;
+		inst1 += " from " + label1 + " to " + label2;
 		String inst2 = label1 + ":";
 		String inst3 = "ldc " + (value == null? 0 : value);
 		String inst4 = label2 + ":";

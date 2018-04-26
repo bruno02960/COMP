@@ -108,7 +108,7 @@ public abstract class Analysis
 
     private VarSymbol parseArraySize(ASTARRAYSIZE arraySizeTree) {
         if(arraySizeTree.integer != null) {
-            return new ImmediateSymbol("[" + arraySizeTree.integer + "]", arraySizeTree.integer);
+            return new ImmediateSymbol("[" + arraySizeTree.integer + "]");
         }
         else {
             ASTSCALARACCESS child = (ASTSCALARACCESS) arraySizeTree.jjtGetChild(0);
@@ -190,9 +190,6 @@ public abstract class Analysis
             }
         }
 
-        if(returnSymbol != null)
-            returnSymbol.setSize(Integer.MAX_VALUE);
-
         return returnSymbol;
     }
 
@@ -260,16 +257,6 @@ public abstract class Analysis
             if(indexSymbol == null)
                 return null;
         }
-        else
-        {
-            Integer indexValue = astindex.indexValue;
-            if(indexValue >= arraySymbol.getSize())
-            {
-                System.out.println("Line " + astindex.getBeginLine() + ": Access to out of bounds " + indexValue +
-                        " in array " + arrayId +".");
-                return null;
-            }
-        }
 
         arraySymbol = arraySymbol.getCopy();
         arraySymbol.setType("INTEGER");
@@ -336,7 +323,7 @@ public abstract class Analysis
 
             if(symbol != null)
             {
-                if(symbol.getSize() != -1 && declarationTree.integer != null) {
+                if(!symbol.isInitialized() && declarationTree.integer != null) {
                     symbol.setInitialized(true);
                     return symbol;
                 }
@@ -366,14 +353,10 @@ public abstract class Analysis
                 {
                    ASTSCALARACCESS astScalarAccess = (ASTSCALARACCESS) astarraysize.jjtGetChild(0);
                    VarSymbol scalarAccessSymbol = parseScalarAccess(astScalarAccess);
-                    if (scalarAccessSymbol != null) {
-                        arraySize = scalarAccessSymbol.getSize();
-                    }
-                    else {
+                    if (scalarAccessSymbol == null)
                         return null;
-                    }
+
                 }
-                varSymbol.setSize(arraySize);
                 varSymbol.setType("ARRAY");
                 varSymbol.setInitialized(true);
             }
@@ -401,19 +384,14 @@ public abstract class Analysis
                 //if is from type a[]=[CONST];
                 child = declarationTree.jjtGetChild(1);
                 ASTARRAYSIZE astarraysize = (ASTARRAYSIZE)child;
-                int arraySize;
-                if(astarraysize.integer != null)
-                    arraySize = astarraysize.integer;
-                else
+                if(astarraysize.integer == null)
                 {
                     ASTSCALARACCESS astScalarAccess = (ASTSCALARACCESS) astarraysize.jjtGetChild(0);
                     VarSymbol scalarAccessSymbol = parseScalarAccess(astScalarAccess);
                     if(scalarAccessSymbol == null)
                         return null;
-                    arraySize = scalarAccessSymbol.getSize();
                 }
                 initialized = true;
-                size = arraySize;
             }
             else
             {
@@ -439,7 +417,7 @@ public abstract class Analysis
                 size = -1;
             }
 
-            VarSymbol varSymbol = new VarSymbol(astarrayelement.id, "ARRAY", initialized, size);
+            VarSymbol varSymbol = new VarSymbol(astarrayelement.id, "ARRAY", initialized);
 
             mySymbols.put(varSymbol.getId(), varSymbol);
             return varSymbol;
@@ -476,7 +454,6 @@ public abstract class Analysis
                lhsSymbol.setType("INTEGER");
            else
                lhsSymbol.setType(rhsSymbol.getType());
-           lhsSymbol.setSize(rhsSymbol.getSize());
        }
 
         String lhsSymbolType = lhsSymbol.getType();
@@ -555,17 +532,6 @@ public abstract class Analysis
             VarSymbol indexSymbol = (VarSymbol) checkSymbolExistsAndIsInitialized(astIndex, indexSymbolId);
             return indexSymbol != null;
         }
-        else
-        {
-            Integer indexValue = astIndex.indexValue;
-            if (indexValue >= arraySymbol.getSize())
-            {
-                System.out.println("Line " + astIndex.getBeginLine() + ": Access to out of bounds " + indexValue
-                        + " in array " + arraySymbol.getId() + ".");
-                return false;
-            }
-
-        }
 
         return true;
     }
@@ -615,14 +581,17 @@ public abstract class Analysis
                     whileAnalysis.parse();
                     mySymbols.putAll(whileAnalysis.mySymbols);
                     break;
+
                 case "IF":
                     IfAnalysis ifAnalysis = new IfAnalysis(node, getUnifiedSymbolTable(), functionNameToFunctionSymbol);
                     ifAnalysis.parse();
                     mySymbols.putAll(ifAnalysis.mySymbols);
                     break;
+
                 case "CALL":
                     parseCall((ASTCALL) node);
                     break;
+
                 case "ASSIGN":
                     parseAssign((ASTASSIGN) node);
                     break;
@@ -640,7 +609,6 @@ public abstract class Analysis
             VarSymbol symbol = (VarSymbol) pair.getValue();
             symbol.setInitialized(false);
             symbolsNotInitialized.put(symbolName, symbol);
-            symbol.setSize(-1);
         }
 
         return symbolsNotInitialized;
