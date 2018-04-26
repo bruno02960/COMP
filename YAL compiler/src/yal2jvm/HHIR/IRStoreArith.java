@@ -67,6 +67,9 @@ public class IRStoreArith extends IRNode
 						break;
 					}
 				}
+				//if not, check if it is one of the method's arguments
+				storeReg = ((IRMethod)parent).getArgumentRegister(name);
+				
 				//if storage variable does not exist, allocate it
 				if (storeReg == -1)
 				{

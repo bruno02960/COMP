@@ -2,6 +2,9 @@ package yal2jvm.HHIR;
 
 import java.util.ArrayList;
 
+import yal2jvm.SymbolTables.SymbolType;
+import yal2jvm.SymbolTables.VarSymbol;
+
 import yal2jvm.ast.*;
 
 public class HHIR
@@ -24,40 +27,42 @@ public class HHIR
 		//hardcoded example for now
 		ASTMODULE astModule = (ASTMODULE) ast;
 		root = createModuleHHIR(astModule);
-		IRModule module = new IRModule("Module1");
-		return module;
+
+		return root;
 	}
 	
 	public IRModule createHardcoded()
 	{
 		IRModule module = new IRModule("Module1");
-		module.addChild(new IRGlobal("a", Type.INTEGER, null));
+		module.addChild(new IRGlobal("a", Type.ARRAY, null));
 		module.addChild(new IRGlobal("b", Type.INTEGER, null));
 		module.addChild(new IRGlobal("c", Type.INTEGER, 12));
 		module.addChild(new IRGlobal("d", Type.INTEGER, 12345));
-		
-			IRMethod m1 = new IRMethod("method1", Type.VOID, null, null);
+			
+			IRMethod m1 = new IRMethod("method1", Type.VOID, "ret", new Type[]{Type.INTEGER, Type.INTEGER, Type.INTEGER}, new String[]{"var1", "var2", "var3"});
 			m1.addChild(new IRReturn(null, null));
 		module.addChild(m1);
 		
-			IRMethod m2 = new IRMethod("method2", Type.VOID, new Type[]{Type.INTEGER}, new String[]{"var1", "var2"});
+			IRMethod m2 = new IRMethod("method2", Type.VOID, "ret", new Type[]{Type.INTEGER, Type.INTEGER, Type.INTEGER}, new String[]{"var1", "var2", "var3"});
+				m2.addChild(new IRAllocate("aNewVar", Type.INTEGER, 50));
+				IRStoreArith arith = new IRStoreArith("var2", Operation.MULT);
+				//arith.setLhs(lhs);
+			
 			m2.addChild(new IRReturn(null, null));
 		module.addChild(m2);
-			
-			IRMethod m3 = new IRMethod("method3", Type.VOID, new Type[]{Type.INTEGER, Type.INTEGER, Type.INTEGER}, new String[]{"var1", "var2", "var3"});
-			m3.addChild(new IRReturn(null, null));
-		module.addChild(m3);
 		
-			IRMethod method = new IRMethod("main", Type.VOID, null, null);
+		
+		
+			IRMethod method = new IRMethod("main", Type.VOID, "ret", null, null);
 			method.addChild(new IRAllocate("var1", Type.INTEGER, null));
 			method.addChild(new IRAllocate("var2", Type.INTEGER, 10));
 			method.addChild(new IRAllocate("var3", Type.INTEGER, 20000));
 		
-				IRStoreArith arith = new IRStoreArith("var1", Operation.ADD);
-				arith.setRhs(new IRConstant(100));
-				arith.setLhs(new IRConstant(200));
+				IRStoreArith arith1 = new IRStoreArith("var1", Operation.ADD);
+				arith1.setRhs(new IRConstant(100));
+				arith1.setLhs(new IRConstant(200));
 		
-			method.addChild(arith);
+			method.addChild(arith1);
 			method.addChild(new IRReturn(null, null));
 		
 		module.addChild(method);
@@ -104,14 +109,78 @@ public class HHIR
 			Node child = astModule.jjtGetChild(i);
 			if(child instanceof ASTDECLARATION)
 				createDeclarationHHIR((ASTDECLARATION) child);
-
+			else
+				createFunctionHHIR((ASTFUNCTION) child);
 		}
-		module.addChild(new IRGlobal("a", Type.INTEGER, null));
-		module.addChild(new IRGlobal("b", Type.INTEGER, null));
-		module.addChild(new IRGlobal("c", Type.INTEGER, 12));
-		module.addChild(new IRGlobal("d", Type.INTEGER, 12345));
 		
-		return null;
+		return module;
+	}
+
+	private void createFunctionHHIR(ASTFUNCTION astFunction)
+	{
+		String functionId = astFunction.id;
+		Type returnType = null;
+		String returnName = null;
+		Type[] argumentsTypes = null;
+		String[] argumentsNames = null;
+
+
+		//indicates the index(child num) of the arguments. 0 if no return value, or 1 if has return value
+		int argumentsIndex = 0;
+
+		//get return value if existent
+		SimpleNode returnValueNode = (SimpleNode) astFunction.jjtGetChild(0);
+		if(!(returnValueNode instanceof ASTVARS)) //indicated that is the return variable
+		{
+			argumentsIndex++;
+			if(returnValueNode instanceof ASTSCALARELEMENT)
+			{
+				ASTSCALARELEMENT astscalarelement = (ASTSCALARELEMENT)returnValueNode;
+				returnType = Type.INTEGER;
+				returnName = astscalarelement.id;
+			}
+			else
+			{
+				ASTARRAYELEMENT astarrayelement = (ASTARRAYELEMENT)returnValueNode;
+				String returnValueId = astarrayelement.id;
+			}
+		}
+
+		//get arguments if existent
+		SimpleNode argumentsNode = (SimpleNode) astFunction.jjtGetChild(argumentsIndex);
+		if(argumentsNode == null || !(argumentsNode instanceof ASTVARS))
+			return;
+
+		for(int i = 0; i < argumentsNode.jjtGetNumChildren(); i++)
+		{
+			SimpleNode child = (SimpleNode) argumentsNode.jjtGetChild(i);
+			if( child != null)
+			{
+				VarSymbol varSymbol;
+				if(child instanceof ASTSCALARELEMENT)
+				{
+					ASTSCALARELEMENT astscalarelement = (ASTSCALARELEMENT)child;
+					varSymbol = new VarSymbol(astscalarelement.id, SymbolType.INTEGER.toString(), true);
+				}
+				else
+				{
+					ASTARRAYELEMENT astarrayelement = (ASTARRAYELEMENT)child;
+					varSymbol = new VarSymbol(astarrayelement.id, SymbolType.ARRAY.toString(), true);
+				}
+				arguments.add(varSymbol);
+			}
+		}
+
+
+		IRMethod function = new IRMethod(functionId, returnType, returnName, argumentsTypes, argumentsNames);
+		root.addChild(function);
+
+		createStatementsHHIR((ASTSTATEMENTS) returnValueNode, function);
+	}
+
+	private void createStatementsHHIR(ASTSTATEMENTS returnValueNode, IRMethod functionHHIR)
+	{
+
 	}
 
     /**
