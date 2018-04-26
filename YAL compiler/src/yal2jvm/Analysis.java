@@ -295,7 +295,8 @@ public abstract class Analysis
         if(varSymbol == null)
             return null;
 
-        if (varSymbol.getType().equals("ARRAYELEMENT") && !sizeAccess) {
+        if (varSymbol.getType().equals("INTEGER") && sizeAccess)
+        {
             System.out.println("Line " + scalarAccessTree.getBeginLine() + ": Access to size of variable " + id +
                     " that is not an array.");
             return null;
