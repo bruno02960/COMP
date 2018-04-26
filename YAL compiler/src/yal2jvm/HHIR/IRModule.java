@@ -45,4 +45,18 @@ public class IRModule extends IRNode
 	{
 		this.name = name;
 	}
+	
+	public IRGlobal getGlobal(String name)
+	{
+		for (int i = 0; i < children.size(); i++)
+		{
+			if (children.get(i).toString().equals("Global"))
+			{
+				IRGlobal global = ((IRGlobal)children.get(i));
+				if (global.getName().equals(name))
+					return global;
+			}
+		}
+		return null;
+	}
 }

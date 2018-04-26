@@ -6,13 +6,11 @@ public class IRLoad extends IRNode
 {
 
 	private String name;
-	private Scope scope;
-	private int register;
+	private int register = -1;
 
-	public IRLoad(String name, Scope scope)
+	public IRLoad(String name)
 	{
 		this.name = name;
-		this.scope = scope;
 		this.nodeType = "Load";
 	}
 
@@ -31,22 +29,35 @@ public class IRLoad extends IRNode
 	{
 		ArrayList<String> inst = new ArrayList<>();
 		
-		switch(scope)
+		IRMethod method = null;
+		IRNode par = this.parent;
+		while(true)
 		{
-			case GLOBAL:
+			if (par.toString().equals("Method"))
 			{
+				method = (IRMethod)par;
 				break;
 			}
-			case LOCAL:
-			{
-				break;
-			}
-			case PARAMETER:
-			{
-				break;
-			}
-			default:
-				break;
+			else
+				par = par.getParent();
+		}
+			
+		int register = method.getVarRegister(name);
+		if (register == -1)
+			register = method.getArgumentRegister(name);
+		
+		if (register > -1)	//variable is local
+		{
+			inst.add("iload " + register);
+		}
+		else				//variable is global
+		{
+			IRModule module = ((IRModule)method.getParent());
+			IRGlobal global = ((IRGlobal)module.getGlobal(name));
+			
+			String in = "getfield " + module.getName() + "/" + global.getName() + " ";
+			in += global.getType() == Type.INTEGER ? "I" : "A";
+			inst.add(in);
 		}
 		
 		return inst;

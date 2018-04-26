@@ -6,6 +6,7 @@ public class IRMethod extends IRNode
 {
 	private String name;
 	private Type returnType;
+	private String returnVar;
 	private Type[] argsType;
 	private String[] argsNames;
 	
@@ -17,10 +18,11 @@ public class IRMethod extends IRNode
 	{
 		this.name = name;
 		this.returnType = returnType;
+		this.returnVar = returnVar;
 		this.argsType = argsTypes == null ? this.argsType = new Type[0] : argsTypes;
 		this.argsNames = argsNames == null ? this.argsNames = new String[0] : argsNames;
 		this.nodeType = "Method";
-		this.regN += this.argsNames.length;
+		this.regN += this.argsNames.length + (returnVar == null ? 0 : 1);
 	}
 
 	@Override
@@ -67,11 +69,32 @@ public class IRMethod extends IRNode
 		}
 		
 		ArrayList<String> methodBody = getMethodBody();
+		ArrayList<String> instReturn = getReturn();
 		String instFinal = ".end method";
 		
 		inst.add(inst1);
 		inst.addAll(methodBody);
+		inst.addAll(instReturn);
 		inst.add(instFinal);
+		return inst;
+	}
+
+	private ArrayList<String> getReturn() 
+	{
+		ArrayList<String> inst = new ArrayList<>();
+		switch(this.returnType)
+		{
+			case INTEGER:
+			{
+				inst.add("iload " + this.argsNames.length + 1);
+				break;
+			}
+			case ARRAY:
+				break;
+			case VOID:
+				break;
+		}
+		inst.add("return");
 		return inst;
 	}
 
@@ -88,10 +111,12 @@ public class IRMethod extends IRNode
 		}
 		localsCount += this.argsType.length;
 		
+		localsCount = 255;
+		
 		inst.add(".limit locals " + localsCount);
 		
 		if (getChildren().size() > 1)
-			inst.add(".limit stack 20");
+			inst.add(".limit stack 0");
 		
 		for (int i = 0; i < getChildren().size(); i++)
 		{
@@ -117,6 +142,16 @@ public class IRMethod extends IRNode
 		{
 			if (argsNames[i].equals(name))
 				return i;
+		}
+		return -1;
+	}
+	
+	public int getVarRegister(String name)
+	{
+		for (int i = 0; i < children.size(); i++)
+		{
+			if (children.get(i).toString().equals("Allocate"))
+				return ((IRAllocate)children.get(i)).getRegister();
 		}
 		return -1;
 	}

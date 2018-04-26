@@ -8,46 +8,30 @@
 .field private static d I = 12345
 
 
-.method public static method1()V
-.limit locals 0
-return
-.end method
-
-
-.method public static method2(I)V
-.limit locals 2
-.limit stack 20
+.method public static method1(III)V
+.limit locals 255
+.limit stack 0
 ldc 0
-istore 0
+istore 3
+iload 3
+iload 3
+imul
+istore 3
 return
 .end method
 
 
-.method public static method3(III)V
-.limit locals 6
-.limit stack 20
-ldc 2
-istore 3
-iload 0
-iload 3
-iadd
+.method public static method2(III)V
+.limit locals 255
+iload 1
+iload 2
+imul
 istore 0
 return
 .end method
 
 
 .method public static main([Ljava/lang/String;)V
-.limit locals 3
-.limit stack 20
-ldc 0
-istore 0
-ldc 10
-istore 1
-ldc 20000
-istore 2
-ldc 100
-ldc 200
-iadd
-istore 0
+.limit locals 255
 return
 .end method
