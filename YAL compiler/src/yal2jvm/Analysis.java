@@ -138,7 +138,14 @@ public abstract class Analysis
     {
         String module = callTree.module;
         if(module != null && !module.equals(ModuleAnalysis.moduleName))
+        {
+            if(callTree.jjtGetNumChildren() > 0)
+            {
+                ASTARGUMENTS astarguments = (ASTARGUMENTS) callTree.jjtGetChild(0);
+                parseArgumentList(astarguments);
+            }
             return new VarSymbol("", SymbolType.UNDEFINED.toString(), true);
+        }
 
         String method = callTree.method;
         FunctionSymbol functionSymbol = (FunctionSymbol) functionNameToFunctionSymbol.get(method);
