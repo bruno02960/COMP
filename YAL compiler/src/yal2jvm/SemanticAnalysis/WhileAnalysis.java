@@ -4,7 +4,7 @@ import yal2jvm.Analysis;
 import yal2jvm.ast.ASTEXPRTEST;
 import yal2jvm.ast.ASTSTATEMENTS;
 import yal2jvm.ast.SimpleNode;
-import yal2jvm.ast.Symbol;
+import yal2jvm.SymbolTables.Symbol;
 
 import java.util.HashMap;
 

@@ -6,7 +6,7 @@ public interface YalParserTreeConstants
   public int JJTMODULE = 0;
   public int JJTDECLARATION = 1;
   public int JJTFUNCTION = 2;
-  public int JJTARGUMENTS = 3;
+  public int JJTVARS = 3;
   public int JJTARRAYELEMENT = 4;
   public int JJTSCALARELEMENT = 5;
   public int JJTSTATEMENTS = 6;
@@ -21,17 +21,18 @@ public interface YalParserTreeConstants
   public int JJTWHILE = 15;
   public int JJTIF = 16;
   public int JJTELSE = 17;
-  public int JJTARGUMENT = 18;
-  public int JJTARRAYACCESS = 19;
-  public int JJTSCALARACCESS = 20;
-  public int JJTINDEX = 21;
+  public int JJTARGUMENTS = 18;
+  public int JJTARGUMENT = 19;
+  public int JJTARRAYACCESS = 20;
+  public int JJTSCALARACCESS = 21;
+  public int JJTINDEX = 22;
 
 
   public String[] jjtNodeName = {
     "MODULE",
     "DECLARATION",
     "FUNCTION",
-    "ARGUMENTS",
+    "VARS",
     "ARRAYELEMENT",
     "SCALARELEMENT",
     "STATEMENTS",
@@ -46,10 +47,11 @@ public interface YalParserTreeConstants
     "WHILE",
     "IF",
     "ELSE",
+    "ARGUMENTS",
     "ARGUMENT",
     "ARRAYACCESS",
     "SCALARACCESS",
     "INDEX",
   };
 }
-/* JavaCC - OriginalChecksum=a8c9edf50e5bb3a5152a7b50161d467f (do not edit this line) */
+/* JavaCC - OriginalChecksum=c05cd5902472de347e5bf4f5430c0650 (do not edit this line) */

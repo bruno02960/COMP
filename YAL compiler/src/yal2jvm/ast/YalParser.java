@@ -305,8 +305,8 @@ static void jjtreeCloseNodeScope(Node n) {
 
 /* Varlist ::= ( ArrayElement | ScalarElement ) ( <VIRG> ( ArrayElement | ScalarElement ))* */
   static final public void Varlist() throws ParseException {
- /*@bgen(jjtree) ARGUMENTS */
-  ASTARGUMENTS jjtn000 = new ASTARGUMENTS(JJTARGUMENTS);
+ /*@bgen(jjtree) VARS */
+  ASTVARS jjtn000 = new ASTVARS(JJTVARS);
   boolean jjtc000 = true;
   jjtree.openNodeScope(jjtn000);
   jjtreeOpenNodeScope(jjtn000);

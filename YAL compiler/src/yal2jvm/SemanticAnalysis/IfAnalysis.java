@@ -1,6 +1,7 @@
 package yal2jvm.SemanticAnalysis;
 
 import yal2jvm.Analysis;
+import yal2jvm.SymbolTables.Symbol;
 import yal2jvm.SymbolTables.VarSymbol;
 import yal2jvm.ast.*;
 

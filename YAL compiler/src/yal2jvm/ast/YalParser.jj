@@ -349,14 +349,14 @@ void Function()           :
 }
 
 /* Varlist ::= ( ArrayElement | ScalarElement ) ( <VIRG> ( ArrayElement | ScalarElement ))* */
-void Varlist()            :
-{/*@bgen(jjtree) ARGUMENTS */
-  ASTARGUMENTS jjtn000 = new ASTARGUMENTS(JJTARGUMENTS);
+void Varlist()       :
+{/*@bgen(jjtree) VARS */
+  ASTVARS jjtn000 = new ASTVARS(JJTVARS);
   boolean jjtc000 = true;
   jjtree.openNodeScope(jjtn000);
   jjtreeOpenNodeScope(jjtn000);
 /*@egen*/}
-{/*@bgen(jjtree) ARGUMENTS */
+{/*@bgen(jjtree) VARS */
         try {
 /*@egen*/
 	(

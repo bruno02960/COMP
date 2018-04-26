@@ -48,7 +48,7 @@ public class FunctionSymbol extends Symbol
         if(returnValueNode instanceof ASTSTATEMENTS)
             return;
 
-        if(!(returnValueNode instanceof ASTARGUMENTS))
+        if(!(returnValueNode instanceof ASTVARS))
         {
             argumentsIndex++;
             statementsChildNumber++;
@@ -68,7 +68,7 @@ public class FunctionSymbol extends Symbol
 
         //get arguments if existent
         SimpleNode argumentsNode = (SimpleNode) functionAST.jjtGetChild(argumentsIndex);
-        if(argumentsNode == null || !(argumentsNode instanceof ASTARGUMENTS))
+        if(argumentsNode == null || !(argumentsNode instanceof ASTVARS))
             return;
 
         statementsChildNumber++;

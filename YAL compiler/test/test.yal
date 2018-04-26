@@ -2,7 +2,7 @@ module programa2 {
 
 function a[]=f2(N) {
     a = [N];
-    a = 1
+    a = 1;
 }
 
 function a[]=f1(b[]) {

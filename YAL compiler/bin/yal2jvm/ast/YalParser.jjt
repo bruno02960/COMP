@@ -255,7 +255,7 @@ void Function() #FUNCTION :
 }
 
 /* Varlist ::= ( ArrayElement | ScalarElement ) ( <VIRG> ( ArrayElement | ScalarElement ))* */
-void Varlist() #ARGUMENTS :
+void Varlist() #VARS :
 {}
 {
 	(
