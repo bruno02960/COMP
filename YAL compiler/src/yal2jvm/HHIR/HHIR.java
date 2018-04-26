@@ -2,6 +2,9 @@ package yal2jvm.HHIR;
 
 import java.util.ArrayList;
 
+import yal2jvm.ast.ASTDECLARATION;
+import yal2jvm.ast.ASTMODULE;
+import yal2jvm.ast.Node;
 import yal2jvm.ast.SimpleNode;
 
 public class HHIR
@@ -19,6 +22,8 @@ public class HHIR
 	{
 		//create HHIR from AST
 		//hardcoded example for now
+		ASTMODULE astModule = (ASTMODULE) ast;
+		root = createModuleHHIR(astModule);
 		IRModule module = new IRModule("Module1");
 		module.addChild(new IRGlobal("a", Type.INTEGER, null));
 		module.addChild(new IRGlobal("b", Type.INTEGER, null));
@@ -80,5 +85,29 @@ public class HHIR
 	public String getModuleName()
 	{
 		return this.root.getName();
+	}
+
+	private IRModule createModuleHHIR(ASTMODULE astModule)
+	{
+		String moduleName = astModule.name;
+		IRModule module = new IRModule(moduleName);
+
+		int moduleNumberChilds = astModule.jjtGetNumChildren();
+		for(int i = 0; i < moduleNumberChilds; i++)
+		{
+			Node child = astModule.jjtGetChild(i);
+			if(child instanceof ASTDECLARATION)
+				createDeclarationHHIR((ASTDECLARATION) child));
+
+		}
+		module.addChild(new IRGlobal("a", Type.INTEGER, null));
+		module.addChild(new IRGlobal("b", Type.INTEGER, null));
+		module.addChild(new IRGlobal("c", Type.INTEGER, 12));
+		module.addChild(new IRGlobal("d", Type.INTEGER, 12345));
+	}
+
+	private void createDeclarationHHIR(ASTDECLARATION child)
+	{
+
 	}
 }
