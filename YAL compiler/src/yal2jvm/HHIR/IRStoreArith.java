@@ -59,16 +59,13 @@ public class IRStoreArith extends IRNode
 				ArrayList<IRNode> methodChildren = parent.getChildren();
 				
 				//check if storage variable exists, and if so get its register
-				for (int i = 0; i < methodChildren.size(); i++)
-				{
-					if (methodChildren.get(i).toString().equals("Allocate"))
-					{
-						storeReg = ((IRAllocate)methodChildren.get(i)).getRegister();
-						break;
-					}
-				}
+				storeReg = ((IRMethod)parent).getVarRegister(name);
+				
 				//if not, check if it is one of the method's arguments
-				storeReg = ((IRMethod)parent).getArgumentRegister(name);
+				if (storeReg == -1)
+					storeReg = ((IRMethod)parent).getArgumentRegister(name);
+				
+				//code for global
 				
 				//if storage variable does not exist, allocate it
 				if (storeReg == -1)
@@ -96,6 +93,7 @@ public class IRStoreArith extends IRNode
 	public void setRhs(IRNode rhs)
 	{
 		this.rhs = rhs;
+		this.rhs.setParent((IRNode)this);
 	}
 
 	public IRNode getLhs()
@@ -106,5 +104,6 @@ public class IRStoreArith extends IRNode
 	public void setLhs(IRNode lhs)
 	{
 		this.lhs = lhs;
+		this.lhs.setParent((IRNode)this);
 	}
 }

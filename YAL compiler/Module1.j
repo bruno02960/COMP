@@ -9,6 +9,26 @@
 
 
 .method public static method1(III)V
+<<<<<<< HEAD
+.limit locals 255
+.limit stack 0
+ldc 0
+istore 3
+iload 3
+iload 3
+imul
+istore 3
+return
+.end method
+
+
+.method public static method2(III)V
+.limit locals 255
+iload 1
+iload 2
+imul
+istore 0
+=======
 .limit locals 3
 return
 .end method
@@ -19,11 +39,15 @@ return
 .limit stack 20
 ldc 50
 istore 3
+>>>>>>> branch 'master' of https://github.com/bruno02960/COMP
 return
 .end method
 
 
 .method public static main([Ljava/lang/String;)V
+<<<<<<< HEAD
+.limit locals 255
+=======
 .limit locals 3
 .limit stack 20
 ldc 0
@@ -36,6 +60,7 @@ ldc 100
 ldc 200
 iadd
 istore -1
+>>>>>>> branch 'master' of https://github.com/bruno02960/COMP
 return
 ldc 0
 istore 3

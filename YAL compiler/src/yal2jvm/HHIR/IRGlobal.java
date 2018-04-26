@@ -64,4 +64,19 @@ public class IRGlobal extends IRNode
 		inst.add(inst1);
 		return inst;
 	}
+
+	public String getName() 
+	{
+		return name;
+	}
+
+	public void setName(String name) 
+	{
+		this.name = name;
+	}
+
+	public Type getType() 
+	{
+		return this.type;
+	}
 }
