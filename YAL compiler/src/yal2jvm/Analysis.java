@@ -358,128 +358,139 @@ public abstract class Analysis
         if(child instanceof ASTSCALARELEMENT)
         {
             ASTSCALARELEMENT astscalarelement = (ASTSCALARELEMENT)child;
-            VarSymbol symbol = (VarSymbol) hasAccessToSymbol(astscalarelement.id);
+            return parseDeclarationAstScalarElement(declarationTree, astscalarelement);
 
-            if(symbol != null)
-            {
-                //if it has already been declared and its not just a initialization
-                if( declarationTree.integer == null)
-                {
-                    System.out.println("Line " + astscalarelement.getBeginLine() + ": Variable " + astscalarelement.id +
-                            " already declared.");
-                    return null;
-                }
-
-                symbol.setInitialized(true);
-                if(symbol.getType().equals(Type.ARRAY.toString()) && symbol.isSizeSet() == false)
-                {
-                    System.out.println("Line " + declarationTree.getBeginLine() + ": Variable " +
-                            symbol.getId() + " has the size not defined." + " Error assigning " +
-                            declarationTree.integer + " to all elements of " + symbol.getId() + ".");
-                    return null;
-                }
-
-                return symbol;
-            }
-
-            //parse right hand side if existent
-            boolean initialized = false;
-
-            //if is from type a=CONST;
-            if(declarationTree.integer != null)
-                initialized = true;
-
-
-            VarSymbol varSymbol = new VarSymbol(astscalarelement.id, SymbolType.INTEGER.toString(), initialized, false);
-
-            if(declarationTree.jjtGetNumChildren() > 1) //if is from type a=[CONST];
-            {
-                child = declarationTree.jjtGetChild(1);
-                ASTARRAYSIZE astarraysize = (ASTARRAYSIZE)child;
-                if(astarraysize.integer == null)
-                {
-                    ASTSCALARACCESS astScalarAccess = (ASTSCALARACCESS) astarraysize.jjtGetChild(0);
-                    VarSymbol scalarAccessSymbol = parseScalarAccess(astScalarAccess);
-
-                    if (scalarAccessSymbol == null)
-                        return null;
-                }
-
-                varSymbol.setType(SymbolType.ARRAY.toString());
-                varSymbol.setSizeSet(true);
-            }
-
-
-            mySymbols.put(varSymbol.getId(), varSymbol);
-            return varSymbol;
         }
         else if(child instanceof ASTARRAYELEMENT)
         {
             ASTARRAYELEMENT astarrayelement = (ASTARRAYELEMENT)child;
-            VarSymbol symbol = (VarSymbol) hasAccessToSymbol(astarrayelement.id);
-
-            //if it has already been declared and its not just a initialization
-            if(symbol != null)
-            {
-                if(declarationTree.integer == null)
-                {
-                    System.out.println("Line " + astarrayelement.getBeginLine() + ": Variable " + astarrayelement.id +
-                            " already declared.");
-                    return null;
-                }
-
-                symbol.setInitialized(true);
-                if(symbol.getType().equals(Type.ARRAY.toString()) && symbol.isSizeSet() == false)
-                {
-                    System.out.println("Line " + declarationTree.getBeginLine() + ": Variable " +
-                            symbol.getId() + " has the size not defined." + " Error assigning " +
-                            declarationTree.integer + " to all elements of " + symbol.getId() + ".");
-                    return null;
-                }
-
-                return symbol;
-
-            }
-
-            boolean initialized;
-            boolean sizeSet;
-            if(declarationTree.jjtGetNumChildren() > 1) //if is from type a[]=[CONST];
-            {
-                child = declarationTree.jjtGetChild(1);
-                ASTARRAYSIZE astarraysize = (ASTARRAYSIZE)child;
-                if(astarraysize.integer == null)
-                {
-                    ASTSCALARACCESS astScalarAccess = (ASTSCALARACCESS) astarraysize.jjtGetChild(0);
-                    VarSymbol scalarAccessSymbol = parseScalarAccess(astScalarAccess);
-                    if(scalarAccessSymbol == null)
-                        return null;
-                }
-                initialized = false;
-                sizeSet = true;
-            }
-            else
-            {
-                //if from type a[] = CONST; and variable array has no size set (its not declared even)
-                if(declarationTree.integer != null)
-                {
-                    System.out.println("Line " + declarationTree.getBeginLine() + ": Variable " +
-                            astarrayelement.id + " has the size not defined." + " Error assigning " +
-                            declarationTree.integer + " to all elements of " + astarrayelement.id + ".");
-                    return null;
-                }
-
-                //if from type a[]; variable not initialized and size = -1
-                initialized = false;
-                sizeSet = false;
-            }
-
-            VarSymbol varSymbol = new VarSymbol(astarrayelement.id, SymbolType.ARRAY.toString(), initialized, sizeSet);
-
-            mySymbols.put(varSymbol.getId(), varSymbol);
-            return varSymbol;
+            return parseDeclarationAstArrayElement(declarationTree, astarrayelement);
         }
 
         return null;
+    }
+
+    private VarSymbol parseDeclarationAstScalarElement(ASTDECLARATION declarationTree, ASTSCALARELEMENT astscalarelement)
+    {
+        VarSymbol symbol = (VarSymbol) hasAccessToSymbol(astscalarelement.id);
+
+        if(symbol != null)
+        {
+            //if it has already been declared and its not just a initialization
+            if( declarationTree.integer == null)
+            {
+                System.out.println("Line " + astscalarelement.getBeginLine() + ": Variable " + astscalarelement.id +
+                        " already declared.");
+                return null;
+            }
+
+            symbol.setInitialized(true);
+            if(symbol.getType().equals(Type.ARRAY.toString()) && symbol.isSizeSet() == false)
+            {
+                System.out.println("Line " + declarationTree.getBeginLine() + ": Variable " +
+                        symbol.getId() + " has the size not defined." + " Error assigning " +
+                        declarationTree.integer + " to all elements of " + symbol.getId() + ".");
+                return null;
+            }
+
+            return symbol;
+        }
+
+        //parse right hand side if existent
+        boolean initialized = false;
+
+        //if is from type a=CONST;
+        if(declarationTree.integer != null)
+            initialized = true;
+
+
+        VarSymbol varSymbol = new VarSymbol(astscalarelement.id, SymbolType.INTEGER.toString(), initialized, false);
+
+        if(declarationTree.jjtGetNumChildren() > 1) //if is from type a=[CONST];
+        {
+            Node child = declarationTree.jjtGetChild(1);
+            ASTARRAYSIZE astarraysize = (ASTARRAYSIZE)child;
+            if(astarraysize.integer == null)
+            {
+                ASTSCALARACCESS astScalarAccess = (ASTSCALARACCESS) astarraysize.jjtGetChild(0);
+                VarSymbol scalarAccessSymbol = parseScalarAccess(astScalarAccess);
+
+                if (scalarAccessSymbol == null)
+                    return null;
+            }
+
+            varSymbol.setType(SymbolType.ARRAY.toString());
+            varSymbol.setSizeSet(true);
+        }
+
+
+        mySymbols.put(varSymbol.getId(), varSymbol);
+        return varSymbol;
+    }
+
+    private VarSymbol parseDeclarationAstArrayElement(ASTDECLARATION declarationTree, ASTARRAYELEMENT astarrayelement)
+    {
+        VarSymbol symbol = (VarSymbol) hasAccessToSymbol(astarrayelement.id);
+
+        //if it has already been declared and its not just a initialization
+        if(symbol != null)
+        {
+            if(declarationTree.integer == null)
+            {
+                System.out.println("Line " + astarrayelement.getBeginLine() + ": Variable " + astarrayelement.id +
+                        " already declared.");
+                return null;
+            }
+
+            symbol.setInitialized(true);
+            if(symbol.getType().equals(Type.ARRAY.toString()) && symbol.isSizeSet() == false)
+            {
+                System.out.println("Line " + declarationTree.getBeginLine() + ": Variable " +
+                        symbol.getId() + " has the size not defined." + " Error assigning " +
+                        declarationTree.integer + " to all elements of " + symbol.getId() + ".");
+                return null;
+            }
+
+            return symbol;
+
+        }
+
+        boolean initialized;
+        boolean sizeSet;
+        if(declarationTree.jjtGetNumChildren() > 1) //if is from type a[]=[CONST];
+        {
+            Node child = declarationTree.jjtGetChild(1);
+            ASTARRAYSIZE astarraysize = (ASTARRAYSIZE)child;
+            if(astarraysize.integer == null)
+            {
+                ASTSCALARACCESS astScalarAccess = (ASTSCALARACCESS) astarraysize.jjtGetChild(0);
+                VarSymbol scalarAccessSymbol = parseScalarAccess(astScalarAccess);
+                if(scalarAccessSymbol == null)
+                    return null;
+            }
+            initialized = false;
+            sizeSet = true;
+        }
+        else
+        {
+            //if from type a[] = CONST; and variable array has no size set (its not declared even)
+            if(declarationTree.integer != null)
+            {
+                System.out.println("Line " + declarationTree.getBeginLine() + ": Variable " +
+                        astarrayelement.id + " has the size not defined." + " Error assigning " +
+                        declarationTree.integer + " to all elements of " + astarrayelement.id + ".");
+                return null;
+            }
+
+            //if from type a[]; variable not initialized and size = -1
+            initialized = false;
+            sizeSet = false;
+        }
+
+        VarSymbol varSymbol = new VarSymbol(astarrayelement.id, SymbolType.ARRAY.toString(), initialized, sizeSet);
+
+        mySymbols.put(varSymbol.getId(), varSymbol);
+        return varSymbol;
     }
 
     private boolean parseAssign(ASTASSIGN assignTree)
