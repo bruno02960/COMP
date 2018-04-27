@@ -329,6 +329,19 @@ public class HHIR
 		}
 
 		IRCall irCall = new IRCall(methodId, moduleId, arguments);
+
+		//TODO debug
+        System.out.println("from createCallHHIR");
+        System.out.println("moduleId= " + moduleId);
+        System.out.println("methodId= " + methodId);
+
+        if (arguments != null) {
+            System.out.println("arguments");
+            for (int i = 0; i < arguments.size(); i++)
+                System.out.println("value: " + arguments.get(i).getString() +
+                        "   type: " + arguments.get(i).getType().toString());
+        }
+
 		irNode.addChild(irCall);
 	}
 
