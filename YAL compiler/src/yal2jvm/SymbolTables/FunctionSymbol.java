@@ -89,10 +89,10 @@ public class FunctionSymbol extends Symbol
                         {
                             System.out.println("Line " + astscalarelement.getBeginLine() + ": Argument " + astscalarelement.id +
                                     " already declared as " + returnValue.getType() + ".");
+                            continue;
                         }
                         else
                             returnValue.setInitialized(true);
-                        continue;
                     }
                     varSymbol = new VarSymbol(astScalarElementId, astScalarElementType, true);
                 }
@@ -107,13 +107,13 @@ public class FunctionSymbol extends Symbol
                         {
                             System.out.println("Line " + astarrayelement.getBeginLine() + ": Argument " + astarrayelement.id +
                                     " already declared as " + returnValue.getType() + ".");
+                            continue;
                         }
                         else
                         {
                             returnValue.setSizeSet(true);
                             returnValue.setInitialized(true);
                         }
-                        continue;
                     }
                     varSymbol = new VarSymbol(astArrayElementId, astArrayElementType, true, true);
                 }

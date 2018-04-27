@@ -191,9 +191,8 @@ public abstract class Analysis
 
             if(functionArguments.size() != argumentsTypes.size())
             {
-                System.out.println("Line " + astarguments.getBeginLine() + ": Method " + method + " arguments" +
-                        "number(" + argumentsTypes.size() + ") does not match expected number(" +
-                        functionArguments.size() + ") of arguments");
+                System.out.println("Line " + astarguments.getBeginLine() + ": Method " + method + " arguments number("
+                        + argumentsTypes.size() + ") does not match expected number(" + functionArguments.size() + ") of arguments");
                 return null;
             }
 

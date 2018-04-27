@@ -11,8 +11,9 @@ public class HHIR
 
 	//TODO: Debug
 	boolean declarationDebug = true;
-	boolean functionDebug = true;
-	boolean assignDebug = true;
+	boolean functionDebug = false;
+	boolean assignDebug = false;
+	boolean callDebug = false;
 	
 	public HHIR(SimpleNode ast)
 	{
@@ -327,17 +328,19 @@ public class HHIR
 
 		IRCall irCall = new IRCall(methodId, moduleId, arguments);
 
-		//TODO debug
-        System.out.println("from createCallHHIR");
-        System.out.println("moduleId= " + moduleId);
-        System.out.println("methodId= " + methodId);
+		if(callDebug) {
+			//TODO debug
+			System.out.println("from createCallHHIR");
+			System.out.println("moduleId= " + moduleId);
+			System.out.println("methodId= " + methodId);
 
-        if (arguments != null) {
-            System.out.println("arguments");
-			for (PairStringType argument : arguments)
-				System.out.println("value: " + argument.getString() +
-						"   type: " + argument.getType().toString());
-        }
+			if (arguments != null) {
+				System.out.println("arguments");
+				for (PairStringType argument : arguments)
+					System.out.println("value: " + argument.getString() +
+							"   type: " + argument.getType().toString());
+			}
+		}
 
 		irNode.addChild(irCall);
 	}

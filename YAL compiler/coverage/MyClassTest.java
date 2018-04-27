@@ -30,7 +30,7 @@ public class MyClassTest {
                     parser.ReInit(new FileInputStream("examples\\" + listFileNames.get(i)));
                 try {
                     root = parser.Module();
-                    root.dump("");
+                    //root.dump("");
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
