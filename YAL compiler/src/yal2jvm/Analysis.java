@@ -308,7 +308,6 @@ public abstract class Analysis
         return indexSymbol;
     }
 
-
     private VarSymbol parseScalarAccess(ASTSCALARACCESS scalarAccessTree)
     {
         String id = scalarAccessTree.id;
@@ -329,13 +328,6 @@ public abstract class Analysis
         {
             System.out.println("Line " + scalarAccessTree.getBeginLine() + ": Access to size of variable " + id +
                     " that is not an array.");
-            return null;
-        }
-
-        if(varSymbol.getType().equals("ARRAY") && !varSymbol.isSizeSet())
-        {
-            System.out.println("Line " + scalarAccessTree.getBeginLine() + ": Access to size of variable " + id +
-                    " that has not size defined");
             return null;
         }
 
@@ -430,7 +422,7 @@ public abstract class Analysis
                     if (symbol != null) //if is from type a[]=CONST and a[] have been previously defined
                     {
                         VarSymbol varSymbol = (VarSymbol) symbol;
-                        if(!varSymbol.isSizeSet())
+                        if(varSymbol.isSizeSet() == false)
                         {
                             System.out.println("Line " + declarationTree.getBeginLine() + ": Variable " +
                                     astarrayelement.id + " has the size not defined." + "Error assigning " +
@@ -486,17 +478,24 @@ public abstract class Analysis
                lhsSymbol.setType(rhsSymbol.getType());
        }
 
+        //for the case in which the array as not the size defined yet
+        if(lhsSymbol.getType().equals(SymbolType.ARRAY.toString()) && rhsSymbol.getType().equals("INTEGER")
+                && lhsSymbol.isSizeSet() == false)
+        {
+            System.out.println("Line " + lhsTree.getBeginLine() + ": Variable " + lhsSymbol.getId() +
+                    " has the size not defined." + " Error assigning right hand side to all elements of " + lhsSymbol.getId() + ".");
+            return false;
+        }
+
         String lhsSymbolType = lhsSymbol.getType();
         String rhsSymbolType = rhsSymbol.getType();
-
 
         if(! (lhsSymbolType.equals(SymbolType.ARRAY.toString()) && rhsSymbolType.equals(SymbolType.INTEGER.toString()))) //for A=5; in which A is an array and all its elements are set to 5
             if(!rhsSymbolType.equals(SymbolType.UNDEFINED.toString())) //for A=m.f(); in which m.f() function is from another module that we not know the return value, so it can be INTEGER or ARRAY
                 if(!lhsSymbolType.equals(rhsSymbolType))
                 {
                     System.out.println("Line " + lhsTree.getBeginLine() + ": Variable " + lhsSymbol.getId() +
-                            " has been declared as " + lhsSymbolType + ". Cannot redeclare it as " +
-                            rhsSymbolType + ".");
+                            " has been declared as " + lhsSymbolType + ". Cannot redeclare it as " + rhsSymbolType + ".");
                     return false;
                 }
 
