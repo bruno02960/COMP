@@ -10,9 +10,9 @@ public class HHIR
 	private SimpleNode ast;
 
 	//TODO: Debug
-	boolean declarationDebug = false;
+	boolean declarationDebug = true;
 	boolean functionDebug = false;
-	boolean assignDebug = false;
+	boolean assignDebug = true;
 	
 	public HHIR(SimpleNode ast)
 	{
@@ -20,7 +20,7 @@ public class HHIR
 		this.root = createHHIR();
 		
 		//hardcoded
-		this.root = createHardcoded();
+		//this.root = createHardcoded();
 	}
 
 	private IRModule createHHIR()
@@ -414,7 +414,7 @@ public class HHIR
 				else {
 					type = Type.INTEGER;
 					String str_value = astdeclaration.operator + astdeclaration.integer;
-					if(str_value.equals("null") == false)
+					if(!str_value.equals("null"))
 						value = Integer.parseInt(str_value);
 				}
 				break;
@@ -439,7 +439,7 @@ public class HHIR
 				}
 				else {
 					String str_value = astdeclaration.operator + astdeclaration.integer;
-					if(str_value.equals("null") == false)
+					if(!str_value.equals("null"))
 						value = Integer.parseInt(str_value);
 				}
 				break;

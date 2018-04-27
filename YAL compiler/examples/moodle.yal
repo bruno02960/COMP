@@ -1,5 +1,6 @@
 module moodle {
     b = [20];
+    a[] = [b.size];
 
     function naf() {
 
@@ -7,6 +8,8 @@ module moodle {
 
     function main() {
         b = 1;
+        a = 2;
+        b[a] = 5;
 
         if(b[7] == 4) {
             b[4] = 7;

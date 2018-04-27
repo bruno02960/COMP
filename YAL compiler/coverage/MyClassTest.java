@@ -1,4 +1,5 @@
 import org.junit.Test;
+import yal2jvm.HHIR.HHIR;
 import yal2jvm.SemanticAnalysis.ModuleAnalysis;
 import yal2jvm.Yal2jvm;
 import yal2jvm.ast.ParseException;
@@ -36,6 +37,9 @@ public class MyClassTest {
 
                 ModuleAnalysis moduleAnalysis = new ModuleAnalysis(root);
                 moduleAnalysis.parse();
+
+                HHIR hhir = new HHIR(root);
+
             }
         }
     }

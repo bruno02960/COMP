@@ -83,9 +83,9 @@ public class FunctionSymbol extends Symbol
                     ASTSCALARELEMENT astscalarelement = (ASTSCALARELEMENT)child;
                     String astScalarElementId = astscalarelement.id;
                     String astScalarElementType = SymbolType.INTEGER.toString();
-                    if(returnValue.getId().equals(astScalarElementId))
+                    if(returnValue != null && returnValue.getId().equals(astScalarElementId))
                     {
-                        if(returnValue.getType().equals(astScalarElementType) == false)
+                        if(!returnValue.getType().equals(astScalarElementType))
                         {
                             System.out.println("Line " + astscalarelement.getBeginLine() + ": Argument " + astscalarelement.id +
                                     " already declared as " + returnValue.getType() + ".");
@@ -101,9 +101,9 @@ public class FunctionSymbol extends Symbol
                     ASTARRAYELEMENT astarrayelement = (ASTARRAYELEMENT)child;
                     String astArrayElementId = astarrayelement.id;
                     String astArrayElementType = SymbolType.ARRAY.toString();
-                    if(returnValue.getId().equals(astArrayElementId))
+                    if(returnValue != null && returnValue.getId().equals(astArrayElementId))
                     {
-                        if(returnValue.getType().equals(astArrayElementType) == false)
+                        if(!returnValue.getType().equals(astArrayElementType))
                         {
                             System.out.println("Line " + astarrayelement.getBeginLine() + ": Argument " + astarrayelement.id +
                                     " already declared as " + returnValue.getType() + ".");

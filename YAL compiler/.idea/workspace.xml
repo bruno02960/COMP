@@ -12,15 +12,37 @@
   </component>
   <component name="CoverageDataManager">
     <SUITE FILE_PATH="coverage/YAL_compiler$MyClassTest_testSomething.coverage" NAME="MyClassTest.testSomething Coverage Results" MODIFIED="1524843165520" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
-    <SUITE FILE_PATH="coverage/YAL_compiler$MyClassTest.coverage" NAME="MyClassTest Coverage Results" MODIFIED="1524843716252" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
+    <SUITE FILE_PATH="coverage/YAL_compiler$MyClassTest.coverage" NAME="MyClassTest Coverage Results" MODIFIED="1524845615127" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="Analysis.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Analysis.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/yal2jvm/Analysis.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="261">
-              <caret line="542" column="34" lean-forward="true" selection-start-line="541" selection-start-column="0" selection-end-line="542" selection-end-column="34" />
+            <state relative-caret-position="2890">
+              <caret line="177" column="0" lean-forward="false" selection-start-line="177" selection-start-column="0" selection-end-line="177" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="HHIR.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/yal2jvm/HHIR/HHIR.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="526">
+              <caret line="242" column="8" lean-forward="true" selection-start-line="242" selection-start-column="8" selection-end-line="242" selection-end-column="8" />
+              <folding>
+                <element signature="method#createHardcoded#0;class#HHIR#0" expanded="false" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="IRGlobal.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/yal2jvm/HHIR/IRGlobal.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-359">
+              <caret line="21" column="0" lean-forward="false" selection-start-line="21" selection-start-column="0" selection-end-line="21" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -29,8 +51,8 @@
       <file leaf-file-name="moodle.yal" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/examples/moodle.yal">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="136">
-              <caret line="8" column="14" lean-forward="false" selection-start-line="8" selection-start-column="14" selection-end-line="8" selection-end-column="14" />
+            <state relative-caret-position="187">
+              <caret line="11" column="16" lean-forward="false" selection-start-line="11" selection-start-column="16" selection-end-line="11" selection-end-column="16" />
               <folding />
             </state>
           </provider>
@@ -39,8 +61,8 @@
       <file leaf-file-name="MyClassTest.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/coverage/MyClassTest.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="481">
-              <caret line="33" column="39" lean-forward="false" selection-start-line="33" selection-start-column="39" selection-end-line="33" selection-end-column="39" />
+            <state relative-caret-position="17">
+              <caret line="13" column="0" lean-forward="true" selection-start-line="13" selection-start-column="0" selection-end-line="13" selection-end-column="0" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -48,14 +70,44 @@
           </provider>
         </entry>
       </file>
+      <file leaf-file-name="FunctionSymbol.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/yal2jvm/SymbolTables/FunctionSymbol.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1154">
+              <caret line="105" column="60" lean-forward="false" selection-start-line="105" selection-start-column="60" selection-end-line="105" selection-end-column="60" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="array1.yal" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/examples/array1.yal">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="0">
+              <caret line="0" column="0" lean-forward="true" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ModuleAnalysis.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/yal2jvm/SemanticAnalysis/ModuleAnalysis.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="287">
+              <caret line="55" column="0" lean-forward="false" selection-start-line="55" selection-start-column="0" selection-end-line="55" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file leaf-file-name="Yal2jvm.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/yal2jvm/Yal2jvm.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="17">
-              <caret line="98" column="0" lean-forward="true" selection-start-line="98" selection-start-column="0" selection-end-line="100" selection-end-column="31" />
+            <state relative-caret-position="391">
+              <caret line="102" column="0" lean-forward="true" selection-start-line="102" selection-start-column="0" selection-end-line="103" selection-end-column="34" />
               <folding>
-                <element signature="e#4317#4318#0" expanded="true" />
-                <element signature="e#4350#4351#0" expanded="true" />
+                <element signature="e#4305#4306#0" expanded="true" />
+                <element signature="e#4338#4339#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -72,7 +124,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>checkSymbolEx</find>
       <find>parseDeclaration</find>
       <find>MODULE</find>
       <find>&quot;MODULE&quot;</find>
@@ -102,6 +153,7 @@
       <find>createHHIR</find>
       <find>createModuleHHIR</find>
       <find>parseLhs</find>
+      <find>isSize = true</find>
     </findStrings>
     <replaceStrings>
       <replace>NonTerminals.MODULE.toString()</replace>
@@ -130,7 +182,6 @@
         <option value="$PROJECT_DIR$/src/yal2jvm/SemanticAnalysis/WhileAnalysis.java" />
         <option value="$PROJECT_DIR$/test/test3.yal" />
         <option value="$PROJECT_DIR$/src/yal2jvm/SemanticAnalysis/FunctionAnalysis.java" />
-        <option value="$PROJECT_DIR$/src/yal2jvm/SymbolTables/FunctionSymbol.java" />
         <option value="$PROJECT_DIR$/src/yal2jvm/SymbolTables/VarSymbol.java" />
         <option value="$PROJECT_DIR$/src/yal2jvm/SemanticAnalysis/ModuleAnalysis.java" />
         <option value="$PROJECT_DIR$/src/yal2jvm/SymbolTables/Symbol.java" />
@@ -143,12 +194,13 @@
         <option value="$PROJECT_DIR$/src/yal2jvm/HHIR/IRAllocate.java" />
         <option value="$PROJECT_DIR$/test/test2.yal" />
         <option value="$PROJECT_DIR$/test/moodle.yal" />
-        <option value="$PROJECT_DIR$/src/yal2jvm/HHIR/HHIR.java" />
         <option value="$PROJECT_DIR$/coverage/test.java" />
-        <option value="$PROJECT_DIR$/src/yal2jvm/Yal2jvm.java" />
-        <option value="$PROJECT_DIR$/coverage/MyClassTest.java" />
-        <option value="$PROJECT_DIR$/examples/moodle.yal" />
         <option value="$PROJECT_DIR$/src/yal2jvm/Analysis.java" />
+        <option value="$PROJECT_DIR$/src/yal2jvm/Yal2jvm.java" />
+        <option value="$PROJECT_DIR$/src/yal2jvm/SymbolTables/FunctionSymbol.java" />
+        <option value="$PROJECT_DIR$/coverage/MyClassTest.java" />
+        <option value="$PROJECT_DIR$/src/yal2jvm/HHIR/HHIR.java" />
+        <option value="$PROJECT_DIR$/examples/moodle.yal" />
       </list>
     </option>
   </component>
@@ -202,6 +254,27 @@
               <item name="YAL compiler" type="b2602c69:ProjectViewProjectNode" />
               <item name="YAL compiler" type="462c0819:PsiDirectoryNode" />
             </path>
+            <path>
+              <item name="YAL compiler" type="b2602c69:ProjectViewProjectNode" />
+              <item name="YAL compiler" type="462c0819:PsiDirectoryNode" />
+              <item name="coverage" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="YAL compiler" type="b2602c69:ProjectViewProjectNode" />
+              <item name="YAL compiler" type="462c0819:PsiDirectoryNode" />
+              <item name="examples" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="YAL compiler" type="b2602c69:ProjectViewProjectNode" />
+              <item name="YAL compiler" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="YAL compiler" type="b2602c69:ProjectViewProjectNode" />
+              <item name="YAL compiler" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="yal2jvm" type="462c0819:PsiDirectoryNode" />
+            </path>
           </expand>
           <select />
         </subPane>
@@ -240,7 +313,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Application.Yal2jvm">
+  <component name="RunManager" selected="JUnit.MyClassTest">
     <configuration default="true" type="Applet" factoryName="Applet">
       <option name="HTML_USED" value="false" />
       <option name="WIDTH" value="400" />
@@ -388,8 +461,8 @@
     </list>
     <recent_temporary>
       <list size="3">
-        <item index="0" class="java.lang.String" itemvalue="Application.Yal2jvm" />
-        <item index="1" class="java.lang.String" itemvalue="JUnit.MyClassTest" />
+        <item index="0" class="java.lang.String" itemvalue="JUnit.MyClassTest" />
+        <item index="1" class="java.lang.String" itemvalue="Application.Yal2jvm" />
         <item index="2" class="java.lang.String" itemvalue="JUnit.MyClassTest.testSomething" />
       </list>
     </recent_temporary>
@@ -411,35 +484,35 @@
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="MyClassTest - 2018.04.27 at 16h 35m 24s.xml">
+    <history-entry file="MyClassTest - 2018.04.27 at 16h 58m 59s.xml">
       <configuration name="MyClassTest" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="MyClassTest - 2018.04.27 at 16h 35m 51s.xml">
+    <history-entry file="MyClassTest - 2018.04.27 at 16h 59m 09s.xml">
       <configuration name="MyClassTest" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="MyClassTest - 2018.04.27 at 16h 35m 58s.xml">
+    <history-entry file="MyClassTest - 2018.04.27 at 17h 00m 03s.xml">
       <configuration name="MyClassTest" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="MyClassTest - 2018.04.27 at 16h 36m 38s.xml">
+    <history-entry file="MyClassTest - 2018.04.27 at 17h 01m 33s.xml">
       <configuration name="MyClassTest" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="MyClassTest - 2018.04.27 at 16h 37m 35s.xml">
+    <history-entry file="MyClassTest - 2018.04.27 at 17h 01m 54s.xml">
       <configuration name="MyClassTest" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="MyClassTest - 2018.04.27 at 16h 38m 15s.xml">
+    <history-entry file="MyClassTest - 2018.04.27 at 17h 05m 31s.xml">
       <configuration name="MyClassTest" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="MyClassTest - 2018.04.27 at 16h 38m 23s.xml">
+    <history-entry file="MyClassTest - 2018.04.27 at 17h 06m 30s.xml">
       <configuration name="MyClassTest" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="MyClassTest - 2018.04.27 at 16h 41m 47s.xml">
+    <history-entry file="MyClassTest - 2018.04.27 at 17h 08m 35s.xml">
       <configuration name="MyClassTest" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="MyClassTest - 2018.04.27 at 16h 41m 59s.xml">
+    <history-entry file="MyClassTest - 2018.04.27 at 17h 13m 22s.xml">
       <configuration name="MyClassTest" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="MyClassTest_testSomething - 2018.04.27 at 16h 32m 49s.xml">
-      <configuration name="MyClassTest.testSomething" configurationId="JUnit" />
+    <history-entry file="MyClassTest - 2018.04.27 at 17h 13m 41s.xml">
+      <configuration name="MyClassTest" configurationId="JUnit" />
     </history-entry>
   </component>
   <component name="TodoView">
@@ -465,7 +538,7 @@
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.26630434" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Coverage" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.39072496" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
+      <window_info id="Coverage" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2761194" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -517,7 +590,7 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="37" />
+      <option name="time" value="38" />
     </breakpoint-manager>
     <watches-manager>
       <configuration name="Application">
@@ -527,13 +600,6 @@
     </watches-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/examples/aval7.yal">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-119">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/examples/programa1.yal">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="119">
@@ -652,13 +718,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/yal2jvm/SymbolTables/FunctionSymbol.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="177">
-          <caret line="40" column="21" lean-forward="false" selection-start-line="40" selection-start-column="16" selection-end-line="40" selection-end-column="21" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/yal2jvm/SymbolTables/SymbolType.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="119">
@@ -713,14 +772,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/yal2jvm/HHIR/IRGlobal.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="663">
-          <caret line="39" column="24" lean-forward="false" selection-start-line="39" selection-start-column="24" selection-end-line="39" selection-end-column="24" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/yal2jvm/HHIR/IRLoad.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="680">
@@ -742,16 +793,6 @@
         <state relative-caret-position="255">
           <caret line="15" column="13" lean-forward="false" selection-start-line="15" selection-start-column="13" selection-end-line="15" selection-end-column="13" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/yal2jvm/SemanticAnalysis/ModuleAnalysis.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="935">
-          <caret line="60" column="0" lean-forward="false" selection-start-line="60" selection-start-column="0" selection-end-line="60" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -827,20 +868,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/yal2jvm/HHIR/HHIR.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="408">
-          <caret line="30" column="8" lean-forward="false" selection-start-line="30" selection-start-column="8" selection-end-line="30" selection-end-column="8" />
-          <folding>
-            <element signature="imports" expanded="false" />
-            <element signature="e#2475#2476#0" expanded="false" />
-            <element signature="e#2511#2512#0" expanded="false" />
-            <element signature="e#2546#2547#0" expanded="false" />
-            <element signature="e#2579#2580#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://$APPLICATION_HOME_DIR$/lib/junit-4.12.jar!/org/junit/runners/ParentRunner.class">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="177">
@@ -873,40 +900,82 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/coverage/MyClassTest.java">
+    <entry file="file://$PROJECT_DIR$/src/yal2jvm/Analysis.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="481">
-          <caret line="33" column="39" lean-forward="false" selection-start-line="33" selection-start-column="39" selection-end-line="33" selection-end-column="39" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+        <state relative-caret-position="2890">
+          <caret line="177" column="0" lean-forward="false" selection-start-line="177" selection-start-column="0" selection-end-line="177" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/yal2jvm/SemanticAnalysis/ModuleAnalysis.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="287">
+          <caret line="55" column="0" lean-forward="false" selection-start-line="55" selection-start-column="0" selection-end-line="55" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/yal2jvm/SymbolTables/FunctionSymbol.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1154">
+          <caret line="105" column="60" lean-forward="false" selection-start-line="105" selection-start-column="60" selection-end-line="105" selection-end-column="60" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/yal2jvm/HHIR/IRGlobal.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-359">
+          <caret line="21" column="0" lean-forward="false" selection-start-line="21" selection-start-column="0" selection-end-line="21" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/examples/array1.yal">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="true" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/yal2jvm/Yal2jvm.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="98" column="0" lean-forward="true" selection-start-line="98" selection-start-column="0" selection-end-line="100" selection-end-column="31" />
+        <state relative-caret-position="391">
+          <caret line="102" column="0" lean-forward="true" selection-start-line="102" selection-start-column="0" selection-end-line="103" selection-end-column="34" />
           <folding>
-            <element signature="e#4317#4318#0" expanded="true" />
-            <element signature="e#4350#4351#0" expanded="true" />
+            <element signature="e#4305#4306#0" expanded="true" />
+            <element signature="e#4338#4339#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/examples/moodle.yal">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="8" column="14" lean-forward="false" selection-start-line="8" selection-start-column="14" selection-end-line="8" selection-end-column="14" />
+        <state relative-caret-position="187">
+          <caret line="11" column="16" lean-forward="false" selection-start-line="11" selection-start-column="16" selection-end-line="11" selection-end-column="16" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/yal2jvm/Analysis.java">
+    <entry file="file://$PROJECT_DIR$/coverage/MyClassTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="261">
-          <caret line="542" column="34" lean-forward="true" selection-start-line="541" selection-start-column="0" selection-end-line="542" selection-end-column="34" />
-          <folding />
+        <state relative-caret-position="17">
+          <caret line="13" column="0" lean-forward="true" selection-start-line="13" selection-start-column="0" selection-end-line="13" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/yal2jvm/HHIR/HHIR.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="526">
+          <caret line="242" column="8" lean-forward="true" selection-start-line="242" selection-start-column="8" selection-end-line="242" selection-end-column="8" />
+          <folding>
+            <element signature="method#createHardcoded#0;class#HHIR#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
