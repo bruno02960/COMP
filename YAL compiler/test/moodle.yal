@@ -1,7 +1,0 @@
-module moodle {
-    a;
-    a = 2;
-
-    function main() {
-    }
-}

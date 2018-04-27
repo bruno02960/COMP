@@ -142,7 +142,7 @@ static private int jjMoveStringLiteralDfa0_0()
 }
 static private int jjMoveStringLiteralDfa1_0(long active0)
 {
-   try { curChar = SimpleCharStream.readChar(); }
+   try { curChar = input_stream.readChar(); }
    catch(java.io.IOException e) {
       jjStopStringLiteralDfa_0(0, active0);
       return 1;
@@ -172,7 +172,7 @@ static private int jjMoveStringLiteralDfa2_0(long old0, long active0)
 {
    if (((active0 &= old0)) == 0L)
       return jjStartNfa_0(0, old0);
-   try { curChar = SimpleCharStream.readChar(); }
+   try { curChar = input_stream.readChar(); }
    catch(java.io.IOException e) {
       jjStopStringLiteralDfa_0(1, active0);
       return 2;
@@ -198,7 +198,7 @@ static private int jjMoveStringLiteralDfa3_0(long old0, long active0)
 {
    if (((active0 &= old0)) == 0L)
       return jjStartNfa_0(1, old0);
-   try { curChar = SimpleCharStream.readChar(); }
+   try { curChar = input_stream.readChar(); }
    catch(java.io.IOException e) {
       jjStopStringLiteralDfa_0(2, active0);
       return 3;
@@ -226,7 +226,7 @@ static private int jjMoveStringLiteralDfa4_0(long old0, long active0)
 {
    if (((active0 &= old0)) == 0L)
       return jjStartNfa_0(2, old0);
-   try { curChar = SimpleCharStream.readChar(); }
+   try { curChar = input_stream.readChar(); }
    catch(java.io.IOException e) {
       jjStopStringLiteralDfa_0(3, active0);
       return 4;
@@ -250,7 +250,7 @@ static private int jjMoveStringLiteralDfa5_0(long old0, long active0)
 {
    if (((active0 &= old0)) == 0L)
       return jjStartNfa_0(3, old0);
-   try { curChar = SimpleCharStream.readChar(); }
+   try { curChar = input_stream.readChar(); }
    catch(java.io.IOException e) {
       jjStopStringLiteralDfa_0(4, active0);
       return 5;
@@ -272,7 +272,7 @@ static private int jjMoveStringLiteralDfa6_0(long old0, long active0)
 {
    if (((active0 &= old0)) == 0L)
       return jjStartNfa_0(4, old0);
-   try { curChar = SimpleCharStream.readChar(); }
+   try { curChar = input_stream.readChar(); }
    catch(java.io.IOException e) {
       jjStopStringLiteralDfa_0(5, active0);
       return 6;
@@ -290,7 +290,7 @@ static private int jjMoveStringLiteralDfa7_0(long old0, long active0)
 {
    if (((active0 &= old0)) == 0L)
       return jjStartNfa_0(5, old0);
-   try { curChar = SimpleCharStream.readChar(); }
+   try { curChar = input_stream.readChar(); }
    catch(java.io.IOException e) {
       jjStopStringLiteralDfa_0(6, active0);
       return 7;
@@ -310,7 +310,7 @@ static private int jjStartNfaWithStates_0(int pos, int kind, int state)
 {
    jjmatchedKind = kind;
    jjmatchedPos = pos;
-   try { curChar = SimpleCharStream.readChar(); }
+   try { curChar = input_stream.readChar(); }
    catch(java.io.IOException e) { return pos + 1; }
    return jjMoveNfa_0(state, pos + 1);
 }
@@ -594,7 +594,7 @@ static private int jjMoveNfa_0(int startState, int curPos)
       ++curPos;
       if ((i = jjnewStateCnt) == (startsAt = 30 - (jjnewStateCnt = startsAt)))
          return curPos;
-      try { curChar = SimpleCharStream.readChar(); }
+      try { curChar = input_stream.readChar(); }
       catch(java.io.IOException e) { return curPos; }
    }
 }
@@ -677,11 +677,11 @@ static protected Token jjFillToken()
    final int beginColumn;
    final int endColumn;
    String im = jjstrLiteralImages[jjmatchedKind];
-   curTokenImage = (im == null) ? SimpleCharStream.GetImage() : im;
-   beginLine = SimpleCharStream.getBeginLine();
-   beginColumn = SimpleCharStream.getBeginColumn();
-   endLine = SimpleCharStream.getEndLine();
-   endColumn = SimpleCharStream.getEndColumn();
+   curTokenImage = (im == null) ? input_stream.GetImage() : im;
+   beginLine = input_stream.getBeginLine();
+   beginColumn = input_stream.getBeginColumn();
+   endLine = input_stream.getEndLine();
+   endColumn = input_stream.getEndColumn();
    t = Token.newToken(jjmatchedKind, curTokenImage);
 
    t.beginLine = beginLine;
@@ -710,7 +710,7 @@ public static Token getNextToken()
   {
    try
    {
-      curChar = SimpleCharStream.BeginToken();
+      curChar = input_stream.BeginToken();
    }
    catch(java.io.IOException e)
    {
@@ -719,9 +719,9 @@ public static Token getNextToken()
       return matchedToken;
    }
 
-   try { SimpleCharStream.backup(0);
+   try { input_stream.backup(0);
       while (curChar <= 32 && (0x100002600L & (1L << curChar)) != 0L)
-         curChar = SimpleCharStream.BeginToken();
+         curChar = input_stream.BeginToken();
    }
    catch (java.io.IOException e1) { continue EOFLoop; }
    jjmatchedKind = 0x7fffffff;
@@ -730,7 +730,7 @@ public static Token getNextToken()
    if (jjmatchedKind != 0x7fffffff)
    {
       if (jjmatchedPos + 1 < curPos)
-         SimpleCharStream.backup(curPos - jjmatchedPos - 1);
+         input_stream.backup(curPos - jjmatchedPos - 1);
       if ((jjtoToken[jjmatchedKind >> 6] & (1L << (jjmatchedKind & 077))) != 0L)
       {
          matchedToken = jjFillToken();
@@ -741,14 +741,14 @@ public static Token getNextToken()
          continue EOFLoop;
       }
    }
-   int error_line = SimpleCharStream.getEndLine();
-   int error_column = SimpleCharStream.getEndColumn();
+   int error_line = input_stream.getEndLine();
+   int error_column = input_stream.getEndColumn();
    String error_after = null;
    boolean EOFSeen = false;
-   try { SimpleCharStream.readChar(); SimpleCharStream.backup(1); }
+   try { input_stream.readChar(); input_stream.backup(1); }
    catch (java.io.IOException e1) {
       EOFSeen = true;
-      error_after = curPos <= 1 ? "" : SimpleCharStream.GetImage();
+      error_after = curPos <= 1 ? "" : input_stream.GetImage();
       if (curChar == '\n' || curChar == '\r') {
          error_line++;
          error_column = 0;
@@ -757,8 +757,8 @@ public static Token getNextToken()
          error_column++;
    }
    if (!EOFSeen) {
-      SimpleCharStream.backup(1);
-      error_after = curPos <= 1 ? "" : SimpleCharStream.GetImage();
+      input_stream.backup(1);
+      error_after = curPos <= 1 ? "" : input_stream.GetImage();
    }
    throw new TokenMgrError(EOFSeen, curLexState, error_line, error_column, error_after, curChar, TokenMgrError.LEXICAL_ERROR);
   }

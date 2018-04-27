@@ -1,0 +1,17 @@
+module moodle {
+    b = [20];
+
+    function naf() {
+
+    }
+
+    function main() {
+        b = 1;
+
+        if(b[7] == 4) {
+            b[4] = 7;
+        }
+
+        naf();
+    }
+}

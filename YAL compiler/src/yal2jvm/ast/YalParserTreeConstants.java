@@ -3,32 +3,32 @@ package yal2jvm.ast;
 
 public interface YalParserTreeConstants
 {
-  int JJTMODULE = 0;
-  int JJTDECLARATION = 1;
-  int JJTFUNCTION = 2;
-  int JJTVARS = 3;
-  int JJTARRAYELEMENT = 4;
-  int JJTSCALARELEMENT = 5;
-  int JJTSTATEMENTS = 6;
-  int JJTVOID = 7;
-  int JJTCALL = 8;
-  int JJTASSIGN = 9;
-  int JJTLHS = 10;
-  int JJTRHS = 11;
-  int JJTARRAYSIZE = 12;
-  int JJTTERM = 13;
-  int JJTEXPRTEST = 14;
-  int JJTWHILE = 15;
-  int JJTIF = 16;
-  int JJTELSE = 17;
-  int JJTARGUMENTS = 18;
-  int JJTARGUMENT = 19;
-  int JJTARRAYACCESS = 20;
-  int JJTSCALARACCESS = 21;
-  int JJTINDEX = 22;
+  public int JJTMODULE = 0;
+  public int JJTDECLARATION = 1;
+  public int JJTFUNCTION = 2;
+  public int JJTVARS = 3;
+  public int JJTARRAYELEMENT = 4;
+  public int JJTSCALARELEMENT = 5;
+  public int JJTSTATEMENTS = 6;
+  public int JJTVOID = 7;
+  public int JJTCALL = 8;
+  public int JJTASSIGN = 9;
+  public int JJTLHS = 10;
+  public int JJTRHS = 11;
+  public int JJTARRAYSIZE = 12;
+  public int JJTTERM = 13;
+  public int JJTEXPRTEST = 14;
+  public int JJTWHILE = 15;
+  public int JJTIF = 16;
+  public int JJTELSE = 17;
+  public int JJTARGUMENTS = 18;
+  public int JJTARGUMENT = 19;
+  public int JJTARRAYACCESS = 20;
+  public int JJTSCALARACCESS = 21;
+  public int JJTINDEX = 22;
 
 
-  String[] jjtNodeName = {
+  public String[] jjtNodeName = {
     "MODULE",
     "DECLARATION",
     "FUNCTION",

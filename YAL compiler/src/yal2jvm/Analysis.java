@@ -74,8 +74,11 @@ public abstract class Analysis
         if(firstChild.toString().equals("ARRAYSIZE"))
         {
             VarSymbol retVal = parseArraySize((ASTARRAYSIZE) firstChild);
-            if(retVal == null)
+
+            if(retVal == null) {
                 return null;
+            }
+
             retVal = retVal.getCopy();
             retVal.setType("ARRAYSIZE");
             return retVal;
@@ -147,13 +150,17 @@ public abstract class Analysis
             {
                 ASTARGUMENTS astarguments = (ASTARGUMENTS) callTree.jjtGetChild(0);
                 argumentsTypes = parseArgumentList(astarguments);
+
+                if(argumentsTypes == null)
+                    return null;
             }
 
-            if(argumentsTypes.contains(new String("STRING")) && !module.equals("io")) {
+            if (argumentsTypes.contains("STRING") && !module.equals("io")) {
                 System.out.println("Line " + callTree.getBeginLine() + ": Only module io can have string type arguments.");
             }
 
             return new VarSymbol("", SymbolType.UNDEFINED.toString(), true);
+
         }
 
         String method = callTree.method;
@@ -177,8 +184,10 @@ public abstract class Analysis
         else {
             ASTARGUMENTS astarguments = (ASTARGUMENTS) callTree.jjtGetChild(0);
             ArrayList<String> argumentsTypes = parseArgumentList(astarguments);
-            if (argumentsTypes == null)
+            if (argumentsTypes == null) {
+
                 return null;
+            }
 
             if(functionArguments.size() != argumentsTypes.size())
             {
@@ -318,7 +327,7 @@ public abstract class Analysis
             return null;
         }
 
-        if(varSymbol.getType().equals("ARRAY") && varSymbol.isSizeSet() == false)
+        if(varSymbol.getType().equals("ARRAY") && !varSymbol.isSizeSet())
         {
             System.out.println("Line " + scalarAccessTree.getBeginLine() + ": Access to size of variable " + id +
                     " that has not size defined");
@@ -351,14 +360,13 @@ public abstract class Analysis
 
             //parse right hand side if existent
             boolean initialized = false;
-            boolean sizeSet = false;
 
             //if is from type a=CONST;
             if(declarationTree.integer != null)
                 initialized = true;
 
 
-            VarSymbol varSymbol = new VarSymbol(astscalarelement.id, SymbolType.INTEGER.toString(), initialized, sizeSet);
+            VarSymbol varSymbol = new VarSymbol(astscalarelement.id, SymbolType.INTEGER.toString(), initialized, false);
 
             if(declarationTree.jjtGetNumChildren() > 1) //if is from type a=[CONST];
             {
@@ -417,7 +425,7 @@ public abstract class Analysis
                     if (symbol != null) //if is from type a[]=CONST and a[] have been previously defined
                     {
                         VarSymbol varSymbol = (VarSymbol) symbol;
-                        if(varSymbol.isSizeSet() == false)
+                        if(!varSymbol.isSizeSet())
                         {
                             System.out.println("Line " + declarationTree.getBeginLine() + ": Variable " +
                                     astarrayelement.id + " has the size not defined." + "Error assigning " +
@@ -522,7 +530,7 @@ public abstract class Analysis
                     return null;
 
                 ASTINDEX astindex = (ASTINDEX) child.jjtGetChild(0);
-                if(!parseIndex(astindex, symbol))
+                if(!parseIndex(astindex))
                     return null;
                 symbol = symbol.getCopy(); //symbol type will be altered but only for this case, so we need a copy
                 symbol.setType(SymbolType.INTEGER.toString());
@@ -541,7 +549,7 @@ public abstract class Analysis
         return symbol;
     }
 
-    private boolean parseIndex(ASTINDEX astIndex, VarSymbol arraySymbol)
+    private boolean parseIndex(ASTINDEX astIndex)
     {
         String indexSymbolId = astIndex.indexID;
         if (indexSymbolId != null)

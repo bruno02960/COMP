@@ -15,6 +15,7 @@ import yal2jvm.ast.*;
 public class Yal2jvm
 {
 	private static final int MAX_LOCAL_VARS = 255;
+
 	private int localVars;
 	private boolean optimize;
 	private String inputFile;
@@ -98,7 +99,8 @@ public class Yal2jvm
 
         ModuleAnalysis moduleAnalysis = new ModuleAnalysis(ast);
         moduleAnalysis.parse();
-        
+
+        /*
         HHIR hhir = new HHIR(ast);
         if (this.optimize)
         	hhir.optimize();
@@ -109,7 +111,7 @@ public class Yal2jvm
         String moduleName = hhir.getModuleName();
         
         saveToJasminFile(instructions, moduleName);
-        compileToBytecode(moduleName + ".j");
+        compileToBytecode(moduleName + ".j");*/
 	}
 
 	private FileInputStream getFileStream()
@@ -188,5 +190,9 @@ public class Yal2jvm
 		{
 			System.out.println("Unable to find or execute jasmin.jar");
 		}
+	}
+
+	public void setInputFile(String inputFile) {
+		this.inputFile = inputFile;
 	}
 }
