@@ -1,6 +1,7 @@
 module moodle {
     b = [20];
     a[] = [b.size];
+    naf = 4;
 
     function naf() {
 

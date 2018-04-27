@@ -11,7 +11,7 @@ public class HHIR
 
 	//TODO: Debug
 	boolean declarationDebug = true;
-	boolean functionDebug = false;
+	boolean functionDebug = true;
 	boolean assignDebug = true;
 	
 	public HHIR(SimpleNode ast)
@@ -116,7 +116,7 @@ public class HHIR
 	private void createFunctionHHIR(ASTFUNCTION astFunction)
 	{
 		String functionId = astFunction.id;
-		Type returnType = null;
+		Type returnType = Type.VOID;
 		String returnName = null;
 		Type[] argumentsTypes = null;
 		String[] argumentsNames = null;
@@ -172,20 +172,17 @@ public class HHIR
 
 		if(functionDebug) {
 			System.out.println("name= " + functionId);
-			if (returnType != null)
-				System.out.println("return type= " + returnType.toString());
+			System.out.println("return type= " + returnType.toString());
 			if (returnName != null)
 				System.out.println("return name= " + returnName);
 			if (argumentsTypes != null) {
 				System.out.println("argumentsTypes= ");
-				for (int i = 0; i < argumentsTypes.length; i++)
-					System.out.println(argumentsTypes[i]);
+				for (Type argumentsType : argumentsTypes) System.out.println(argumentsType);
 			}
 
 			if (argumentsNames != null) {
 				System.out.println("argumentsNames= ");
-				for (int i = 0; i < argumentsNames.length; i++)
-					System.out.println(argumentsNames[i]);
+				for (String argumentsName : argumentsNames) System.out.println(argumentsName);
 			}
 		}
 
@@ -337,9 +334,9 @@ public class HHIR
 
         if (arguments != null) {
             System.out.println("arguments");
-            for (int i = 0; i < arguments.size(); i++)
-                System.out.println("value: " + arguments.get(i).getString() +
-                        "   type: " + arguments.get(i).getType().toString());
+			for (PairStringType argument : arguments)
+				System.out.println("value: " + argument.getString() +
+						"   type: " + argument.getType().toString());
         }
 
 		irNode.addChild(irCall);
@@ -464,9 +461,6 @@ public class HHIR
 			case ARRAY:
 				root.addChild(new IRGlobal(name, type, value, size));
 				break;
-			default:
-				System.err.println("Error on adding declaration to HHIR");
-				System.exit(-1);
 		}
 	}
 }

@@ -12,28 +12,33 @@
   </component>
   <component name="CoverageDataManager">
     <SUITE FILE_PATH="coverage/YAL_compiler$MyClassTest_testSomething.coverage" NAME="MyClassTest.testSomething Coverage Results" MODIFIED="1524843165520" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
-    <SUITE FILE_PATH="coverage/YAL_compiler$MyClassTest.coverage" NAME="MyClassTest Coverage Results" MODIFIED="1524845615127" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
+    <SUITE FILE_PATH="coverage/YAL_compiler$MyClassTest.coverage" NAME="MyClassTest Coverage Results" MODIFIED="1524845824751" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="Analysis.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/yal2jvm/Analysis.java">
+      <file leaf-file-name="HHIR.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/yal2jvm/HHIR/HHIR.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2890">
-              <caret line="177" column="0" lean-forward="false" selection-start-line="177" selection-start-column="0" selection-end-line="177" selection-end-column="0" />
-              <folding />
+            <state relative-caret-position="96">
+              <caret line="14" column="31" lean-forward="true" selection-start-line="14" selection-start-column="31" selection-end-line="14" selection-end-column="31" />
+              <folding>
+                <element signature="method#createHardcoded#0;class#HHIR#0" expanded="false" />
+                <element signature="e#2474#2475#0" expanded="true" />
+                <element signature="e#2510#2511#0" expanded="true" />
+                <element signature="method#createModuleHHIR#0;class#HHIR#0" expanded="false" />
+                <element signature="method#createStatementsHHIR#0;class#HHIR#0" expanded="false" />
+                <element signature="method#createAssignHHIR#0;class#HHIR#0" expanded="false" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="HHIR.java" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/yal2jvm/HHIR/HHIR.java">
+      <file leaf-file-name="IRCall.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/yal2jvm/HHIR/IRCall.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="526">
-              <caret line="242" column="8" lean-forward="true" selection-start-line="242" selection-start-column="8" selection-end-line="242" selection-end-column="8" />
-              <folding>
-                <element signature="method#createHardcoded#0;class#HHIR#0" expanded="false" />
-              </folding>
+            <state relative-caret-position="408">
+              <caret line="24" column="5" lean-forward="true" selection-start-line="24" selection-start-column="5" selection-end-line="24" selection-end-column="5" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -51,8 +56,8 @@
       <file leaf-file-name="moodle.yal" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/examples/moodle.yal">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="187">
-              <caret line="11" column="16" lean-forward="false" selection-start-line="11" selection-start-column="16" selection-end-line="11" selection-end-column="16" />
+            <state relative-caret-position="68">
+              <caret line="4" column="0" lean-forward="true" selection-start-line="4" selection-start-column="0" selection-end-line="4" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -70,16 +75,6 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="FunctionSymbol.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/yal2jvm/SymbolTables/FunctionSymbol.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1154">
-              <caret line="105" column="60" lean-forward="false" selection-start-line="105" selection-start-column="60" selection-end-line="105" selection-end-column="60" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="array1.yal" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/examples/array1.yal">
           <provider selected="true" editor-type-id="text-editor">
@@ -90,11 +85,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ModuleAnalysis.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/yal2jvm/SemanticAnalysis/ModuleAnalysis.java">
+      <file leaf-file-name="array2.yal" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/examples/array2.yal">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="287">
-              <caret line="55" column="0" lean-forward="false" selection-start-line="55" selection-start-column="0" selection-end-line="55" selection-end-column="0" />
+            <state relative-caret-position="0">
+              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -103,12 +98,32 @@
       <file leaf-file-name="Yal2jvm.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/yal2jvm/Yal2jvm.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="391">
+            <state relative-caret-position="136">
               <caret line="102" column="0" lean-forward="true" selection-start-line="102" selection-start-column="0" selection-end-line="103" selection-end-column="34" />
               <folding>
                 <element signature="e#4305#4306#0" expanded="true" />
                 <element signature="e#4338#4339#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="IRMethod.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/yal2jvm/HHIR/IRMethod.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="95">
+              <caret line="56" column="23" lean-forward="false" selection-start-line="56" selection-start-column="22" selection-end-line="56" selection-end-column="23" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="IRModule.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/yal2jvm/HHIR/IRModule.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="362">
+              <caret line="32" column="0" lean-forward="false" selection-start-line="32" selection-start-column="0" selection-end-line="32" selection-end-column="0" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -124,7 +139,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>parseDeclaration</find>
       <find>MODULE</find>
       <find>&quot;MODULE&quot;</find>
       <find>&quot;</find>
@@ -154,6 +168,7 @@
       <find>createModuleHHIR</find>
       <find>parseLhs</find>
       <find>isSize = true</find>
+      <find>new IRMethod</find>
     </findStrings>
     <replaceStrings>
       <replace>NonTerminals.MODULE.toString()</replace>
@@ -199,8 +214,8 @@
         <option value="$PROJECT_DIR$/src/yal2jvm/Yal2jvm.java" />
         <option value="$PROJECT_DIR$/src/yal2jvm/SymbolTables/FunctionSymbol.java" />
         <option value="$PROJECT_DIR$/coverage/MyClassTest.java" />
-        <option value="$PROJECT_DIR$/src/yal2jvm/HHIR/HHIR.java" />
         <option value="$PROJECT_DIR$/examples/moodle.yal" />
+        <option value="$PROJECT_DIR$/src/yal2jvm/HHIR/HHIR.java" />
       </list>
     </option>
   </component>
@@ -257,11 +272,6 @@
             <path>
               <item name="YAL compiler" type="b2602c69:ProjectViewProjectNode" />
               <item name="YAL compiler" type="462c0819:PsiDirectoryNode" />
-              <item name="coverage" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="YAL compiler" type="b2602c69:ProjectViewProjectNode" />
-              <item name="YAL compiler" type="462c0819:PsiDirectoryNode" />
               <item name="examples" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -313,7 +323,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="JUnit.MyClassTest">
+  <component name="RunManager" selected="Application.Yal2jvm">
     <configuration default="true" type="Applet" factoryName="Applet">
       <option name="HTML_USED" value="false" />
       <option name="WIDTH" value="400" />
@@ -461,8 +471,8 @@
     </list>
     <recent_temporary>
       <list size="3">
-        <item index="0" class="java.lang.String" itemvalue="JUnit.MyClassTest" />
-        <item index="1" class="java.lang.String" itemvalue="Application.Yal2jvm" />
+        <item index="0" class="java.lang.String" itemvalue="Application.Yal2jvm" />
+        <item index="1" class="java.lang.String" itemvalue="JUnit.MyClassTest" />
         <item index="2" class="java.lang.String" itemvalue="JUnit.MyClassTest.testSomething" />
       </list>
     </recent_temporary>
@@ -484,15 +494,6 @@
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="MyClassTest - 2018.04.27 at 16h 58m 59s.xml">
-      <configuration name="MyClassTest" configurationId="JUnit" />
-    </history-entry>
-    <history-entry file="MyClassTest - 2018.04.27 at 16h 59m 09s.xml">
-      <configuration name="MyClassTest" configurationId="JUnit" />
-    </history-entry>
-    <history-entry file="MyClassTest - 2018.04.27 at 17h 00m 03s.xml">
-      <configuration name="MyClassTest" configurationId="JUnit" />
-    </history-entry>
     <history-entry file="MyClassTest - 2018.04.27 at 17h 01m 33s.xml">
       <configuration name="MyClassTest" configurationId="JUnit" />
     </history-entry>
@@ -514,6 +515,15 @@
     <history-entry file="MyClassTest - 2018.04.27 at 17h 13m 41s.xml">
       <configuration name="MyClassTest" configurationId="JUnit" />
     </history-entry>
+    <history-entry file="MyClassTest - 2018.04.27 at 17h 16m 02s.xml">
+      <configuration name="MyClassTest" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="MyClassTest - 2018.04.27 at 17h 17m 07s.xml">
+      <configuration name="MyClassTest" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="MyClassTest - 2018.04.27 at 17h 58m 54s.xml">
+      <configuration name="MyClassTest" configurationId="JUnit" />
+    </history-entry>
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -525,7 +535,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
+    <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -537,12 +547,12 @@
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.26630434" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Coverage" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2761194" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.40296054" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Coverage" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.39183056" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.14232409" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.20196672" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Inspection Results" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32934782" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -590,7 +600,15 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="38" />
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/yal2jvm/HHIR/HHIR.java</url>
+          <line>345</line>
+          <properties />
+          <option name="timeStamp" value="40" />
+        </line-breakpoint>
+      </breakpoints>
+      <option name="time" value="41" />
     </breakpoint-manager>
     <watches-manager>
       <configuration name="Application">
@@ -600,34 +618,6 @@
     </watches-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/examples/programa1.yal">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="7" column="8" lean-forward="true" selection-start-line="7" selection-start-column="8" selection-end-line="7" selection-end-column="8" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/examples/aval8.yal">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="51">
-          <caret line="3" column="21" lean-forward="false" selection-start-line="3" selection-start-column="21" selection-end-line="3" selection-end-column="21" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/examples/programa3.yal">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/examples/sqrt.yal">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="323">
-          <caret line="30" column="5" lean-forward="true" selection-start-line="30" selection-start-column="5" selection-end-line="30" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/examples/programa2.yal">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -932,33 +922,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/examples/array1.yal">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="true" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/yal2jvm/Yal2jvm.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="391">
-          <caret line="102" column="0" lean-forward="true" selection-start-line="102" selection-start-column="0" selection-end-line="103" selection-end-column="34" />
-          <folding>
-            <element signature="e#4305#4306#0" expanded="true" />
-            <element signature="e#4338#4339#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/examples/moodle.yal">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="187">
-          <caret line="11" column="16" lean-forward="false" selection-start-line="11" selection-start-column="16" selection-end-line="11" selection-end-column="16" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/coverage/MyClassTest.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="17">
@@ -969,12 +932,76 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/yal2jvm/HHIR/IRCall.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="408">
+          <caret line="24" column="5" lean-forward="true" selection-start-line="24" selection-start-column="5" selection-end-line="24" selection-end-column="5" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/examples/array1.yal">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="true" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/examples/array2.yal">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/examples/moodle.yal">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="68">
+          <caret line="4" column="0" lean-forward="true" selection-start-line="4" selection-start-column="0" selection-end-line="4" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/yal2jvm/HHIR/IRModule.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="362">
+          <caret line="32" column="0" lean-forward="false" selection-start-line="32" selection-start-column="0" selection-end-line="32" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/yal2jvm/HHIR/IRMethod.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="95">
+          <caret line="56" column="23" lean-forward="false" selection-start-line="56" selection-start-column="22" selection-end-line="56" selection-end-column="23" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/yal2jvm/Yal2jvm.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="136">
+          <caret line="102" column="0" lean-forward="true" selection-start-line="102" selection-start-column="0" selection-end-line="103" selection-end-column="34" />
+          <folding>
+            <element signature="e#4305#4306#0" expanded="true" />
+            <element signature="e#4338#4339#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/yal2jvm/HHIR/HHIR.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="526">
-          <caret line="242" column="8" lean-forward="true" selection-start-line="242" selection-start-column="8" selection-end-line="242" selection-end-column="8" />
+        <state relative-caret-position="96">
+          <caret line="14" column="31" lean-forward="true" selection-start-line="14" selection-start-column="31" selection-end-line="14" selection-end-column="31" />
           <folding>
             <element signature="method#createHardcoded#0;class#HHIR#0" expanded="false" />
+            <element signature="e#2474#2475#0" expanded="true" />
+            <element signature="e#2510#2511#0" expanded="true" />
+            <element signature="method#createModuleHHIR#0;class#HHIR#0" expanded="false" />
+            <element signature="method#createStatementsHHIR#0;class#HHIR#0" expanded="false" />
+            <element signature="method#createAssignHHIR#0;class#HHIR#0" expanded="false" />
           </folding>
         </state>
       </provider>
