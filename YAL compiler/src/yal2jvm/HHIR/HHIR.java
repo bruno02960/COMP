@@ -8,6 +8,11 @@ public class HHIR
 {
 	private IRModule root;
 	private SimpleNode ast;
+
+	//TODO: Debug
+	boolean declarationDebug = true;
+	boolean functionDebug = false;
+	boolean assignDebug = true;
 	
 	public HHIR(SimpleNode ast)
 	{
@@ -165,24 +170,23 @@ public class HHIR
 		}
 		IRMethod function = new IRMethod(functionId, returnType, returnName, argumentsTypes, argumentsNames);
 
-		//TODO: Debug
-		System.out.println("name= " + functionId);
-		if(returnType != null)
-			System.out.println("return type= " + returnType.toString());
-		if(returnName != null)
-			System.out.println("return name= " + returnName);
-		if(argumentsTypes != null)
-		{
-			System.out.println("argumentsTypes= " );
-			for(int i = 0; i < argumentsTypes.length; i++)
-				System.out.println(argumentsTypes[i]);
-		}
+		if(functionDebug) {
+			System.out.println("name= " + functionId);
+			if (returnType != null)
+				System.out.println("return type= " + returnType.toString());
+			if (returnName != null)
+				System.out.println("return name= " + returnName);
+			if (argumentsTypes != null) {
+				System.out.println("argumentsTypes= ");
+				for (int i = 0; i < argumentsTypes.length; i++)
+					System.out.println(argumentsTypes[i]);
+			}
 
-		if(argumentsNames != null)
-		{
-			System.out.println("argumentsNames= " );
-			for(int i = 0; i < argumentsNames.length; i++)
-				System.out.println(argumentsNames[i]);
+			if (argumentsNames != null) {
+				System.out.println("argumentsNames= ");
+				for (int i = 0; i < argumentsNames.length; i++)
+					System.out.println(argumentsNames[i]);
+			}
 		}
 
 		root.addChild(function);
@@ -190,24 +194,25 @@ public class HHIR
 		if(!(currNode instanceof ASTSTATEMENTS))
 			currNode = (SimpleNode) astFunction.jjtGetChild(++argumentsIndex);
 
-		createStatementsHHIR((ASTSTATEMENTS) currNode, function);
+			createStatementsHHIR((ASTSTATEMENTS) currNode, function);
 	}
 
 	private void createStatementsHHIR(ASTSTATEMENTS aststatements, IRMethod irmethod)
 	{
-		SimpleNode child = (SimpleNode) aststatements.jjtGetChild(0);
+		for(int i=0; i<aststatements.jjtGetNumChildren(); i++) {
+			SimpleNode child = (SimpleNode) aststatements.jjtGetChild(i);
 
-		switch (child.toString())
-		{
-			case "ASSIGN":
-				createAssignHHIR(child, irmethod);
-				break;
-			case "CALL":
-				createCallHHIR((ASTCALL) child, irmethod);
-				break;
-			default:
-				System.out.println("Not generating HHIR for " + child.toString() + " yet.");
-				break;
+			switch (child.toString()) {
+				case "ASSIGN":
+					createAssignHHIR(child, irmethod);
+					break;
+				case "CALL":
+					createCallHHIR((ASTCALL) child, irmethod);
+					break;
+				default:
+					System.out.println("Not generating HHIR for " + child.toString() + " yet.");
+					break;
+			}
 		}
 	}
 
@@ -218,22 +223,28 @@ public class HHIR
 	 */
 	private void createAssignHHIR(SimpleNode child, IRMethod irmethod) {
 		String name = null;
-		Integer index = -1;
 		Integer value = -1;
 		Type type = null;
-		Integer size = -1;
+		String size = null;
+		String operator;
 
 		ASTLHS astlhs = (ASTLHS) child.jjtGetChild(0);
 		ASTRHS astrhs = (ASTRHS) child.jjtGetChild(1);
 
+		ArrayList<String> operands = new ArrayList<>();
+
 		SimpleNode lhchild = (SimpleNode) astlhs.jjtGetChild(0);
 		switch(lhchild.toString()) {
 			case "ARRAYACCESS":
-				ASTARRAYACCESS astarrayaccess = (ASTARRAYACCESS) lhchild.jjtGetChild(0);
-				/*if(astarrayaccess.jjtGetNumChildren() == 1) {
-				//TODO: Index can also be a variable
-					index = ((INDEX) astarrayaccess).jjtGetChild(0)
-				}*/
+				ASTARRAYACCESS astarrayaccess = (ASTARRAYACCESS) lhchild;
+				ASTINDEX astindex = (ASTINDEX) astarrayaccess.jjtGetChild(0);
+
+				if(astindex.indexID != null) {
+					name = astarrayaccess.arrayID + "[" + astindex.indexID + "]";
+				}
+				else {
+					name = astarrayaccess.arrayID + "[" + astindex.indexValue + "]";
+				}
 				break;
 			case "SCALARACCESS":
 				ASTSCALARACCESS astscalaraccess = (ASTSCALARACCESS) lhchild;
@@ -241,48 +252,64 @@ public class HHIR
 				break;
 		}
 
-		SimpleNode rhchild = (SimpleNode) astrhs.jjtGetChild(0);
-		switch (rhchild.toString()) {
-			case "TERM":
-				ASTTERM term = (ASTTERM) rhchild;
+		operator=astrhs.operator;
+		int numChildren = astrhs.jjtGetNumChildren();
+		for(int i=0; i<numChildren; i++) {
+			SimpleNode rhchild = (SimpleNode) astrhs.jjtGetChild(i);
+			switch (rhchild.toString()) {
+				case "TERM":
+					ASTTERM term = (ASTTERM) rhchild;
 
-				if(term.operator == null && term.integer!= null) {
-					type = Type.INTEGER;
-					value = term.integer;
-				}
-				else if(term.operator != null && term.integer!= null) {
-					type = Type.INTEGER;
-					String str_value = term.operator + term.integer;
-					value = Integer.parseInt(str_value);
-				}
+					if(term.integer != null) {
+						type = Type.INTEGER;
+						String str_value = term.operator + term.integer;
+						value = Integer.parseInt(str_value);
+						operands.add(str_value);
+					}
 
+					if (term.jjtGetNumChildren() == 1) {
+						SimpleNode termChild = (SimpleNode) term.jjtGetChild(0);
 
-				//TODO: Term call, arrayaccess and scalaraccess
-				/*if(term.operator != null) {
-					//Term has an operator
-				}
+						switch (termChild.toString()) {
+							case "CALL":
+								//TODO: How to proceed in this case?
+								break;
+							case "ARRAYACCESS":
+								ASTARRAYACCESS astarrayaccess = ((ASTARRAYACCESS)termChild);
+								ASTINDEX astindex = (ASTINDEX) termChild.jjtGetChild(0);
+								String arrayaccess = term.operator + astarrayaccess.arrayID + "[" + (astindex.indexID!=null ? astindex.indexID : astindex.indexValue.toString()) + "]";
+								operands.add(arrayaccess);
+								break;
+							case "SCALARACCESS":
+								operands.add(term.operator + ((ASTSCALARACCESS) termChild).id);
+								break;
+						}
+					}
+					break;
+				case "ARRAYSIZE":
+					ASTARRAYSIZE astarraysize = (ASTARRAYSIZE) rhchild;
 
-				if(astrhs.jjtGetNumChildren() == 2) {
-					ASTTERM newTerm = (ASTTERM) astrhs.jjtGetChild(1);
-				}*/
-				break;
-			case "ARRAYSIZE":
-				ASTARRAYSIZE astarraysize = (ASTARRAYSIZE) rhchild;
-				if(astarraysize.jjtGetNumChildren() == 0) {
-					size = astarraysize.integer;
-				}
-				else {
-					ASTSCALARACCESS astscalaraccess = (ASTSCALARACCESS) astarraysize.jjtGetChild(0);
-					//TODO: Retrieve variable value
-				}
-				break;
+					if (astarraysize.jjtGetNumChildren() == 0) {
+						size = astarraysize.integer.toString();
+					} else {
+						ASTSCALARACCESS astscalaraccess = (ASTSCALARACCESS) astarraysize.jjtGetChild(0);
+						size = astscalaraccess.id;
+					}
+					break;
+			}
 		}
 
 		//TODO: Debug
-		System.out.println("\nname= " + name);
-		System.out.println("type= " + type.toString());
-		System.out.println("index= " + index);
-		System.out.println("value= " + value + "\n");
+		if(assignDebug) {
+			System.out.println();
+			System.out.println(name!=null ? "name = " + name : "null");
+			for (String operand: operands) {
+				System.out.println("operand = " + operand);
+			}
+			System.out.println(!operator.equals("") ? "operator = " + operator : "null");
+			System.out.println(size!=null ? "size = " + size : "null");
+			System.out.println();
+		}
 
 		if(type == Type.INTEGER) {
 			irmethod.addChild(new IRAllocate(name, type, value));
@@ -340,35 +367,45 @@ public class HHIR
      */
 	private void createDeclarationHHIR(ASTDECLARATION astdeclaration) {
 
-	    SimpleNode id = (SimpleNode) astdeclaration.jjtGetChild(0);
+	    SimpleNode simpleNode = (SimpleNode) astdeclaration.jjtGetChild(0);
+
 	    String name = null;
 	    Type type = null;
+	    String variable = null;
+	    boolean isSize = false;
 	    int value = -1;
 	    int size = -1;
 
-	    switch (id.toString()) {
+	    switch (simpleNode.toString()) {
 			case "SCALARELEMENT":
-				ASTSCALARELEMENT astscalarelement = (ASTSCALARELEMENT) id;
+				ASTSCALARELEMENT astscalarelement = (ASTSCALARELEMENT) simpleNode;
 				name = astscalarelement.id;
 
 				if(astdeclaration.jjtGetNumChildren() == 2) {
 					ASTARRAYSIZE astarraysize = (ASTARRAYSIZE) astdeclaration.jjtGetChild(1);
-					size = astarraysize.integer;
+
+					if(astarraysize.jjtGetNumChildren() == 0) {
+						size = astarraysize.integer;
+					}
+					else {
+						ASTSCALARACCESS astscalaraccess = (ASTSCALARACCESS) astarraysize.jjtGetChild(0);
+						variable = astdeclaration.operator + astscalaraccess.id;
+
+						if(variable.contains(".size")) {
+							isSize = true;
+						}
+					}
+
 					type = Type.ARRAY;
 				}
 				else {
 					type = Type.INTEGER;
-					if(astdeclaration.operator == null && astdeclaration.integer!= null) {
-						value = astdeclaration.integer;
-					}
-					else if(astdeclaration.operator != null && astdeclaration.integer!= null) {
-						String str_value = astdeclaration.operator + astdeclaration.integer;
-						value = Integer.parseInt(str_value);
-					}
+					String str_value = astdeclaration.operator + astdeclaration.integer;
+					value = Integer.parseInt(str_value);
 				}
 				break;
 			case "ARRAYELEMENT":
-				ASTARRAYELEMENT astarrayelement = (ASTARRAYELEMENT) id;
+				ASTARRAYELEMENT astarrayelement = (ASTARRAYELEMENT) simpleNode;
 				name = astarrayelement.id;
 				type = Type.ARRAY;
 
@@ -379,7 +416,11 @@ public class HHIR
 					}
 					else {
 						ASTSCALARACCESS astscalaraccess = (ASTSCALARACCESS) astarraysize.jjtGetChild(0);
-						//TODO: Retrieve variable value
+						variable = astscalaraccess.id;
+
+						if(variable.contains(".size")) {
+							isSize = true;
+						}
 					}
 				}
 				else {
@@ -389,6 +430,18 @@ public class HHIR
 				break;
 		}
 
+		if(declarationDebug) {
+			System.out.println();
+			System.out.println(name!=null ? "name = " + name : "null");
+			System.out.println(type!=null ? "type = " + type : "null");
+			System.out.println(isSize ? "isSize = true" : "isSize = false");
+			System.out.println(variable!=null ? "variable = " + variable : "null");
+			System.out.println(value!=-1 ? "value = " + value : "null");
+			System.out.println(size!=-1 ? "size = " + size : "null");
+			System.out.println();
+		}
+
+		assert type != null;
 		switch (type) {
 			case INTEGER:
 				root.addChild(new IRGlobal(name, type, value));

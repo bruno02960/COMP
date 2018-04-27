@@ -352,7 +352,7 @@ public abstract class Analysis
             if(declarationTree.integer != null)
             {
                 initialized = true;
-                if(symbol.getType().equals("ARRAY") && symbol.isSizeSet() == false)
+                if(symbol!= null && symbol.getType().equals("ARRAY") && symbol.isSizeSet() == false)
                 {
                     System.out.println("Line " + declarationTree.getBeginLine() + ": Variable " +
                             symbol.getId() + " has the size not defined." + "Error assigning " +
