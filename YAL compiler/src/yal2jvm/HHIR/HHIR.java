@@ -401,7 +401,8 @@ public class HHIR
 				else {
 					type = Type.INTEGER;
 					String str_value = astdeclaration.operator + astdeclaration.integer;
-					value = Integer.parseInt(str_value);
+					if(str_value.equals("null") == false)
+						value = Integer.parseInt(str_value);
 				}
 				break;
 			case "ARRAYELEMENT":
@@ -425,7 +426,8 @@ public class HHIR
 				}
 				else {
 					String str_value = astdeclaration.operator + astdeclaration.integer;
-					value = Integer.parseInt(str_value);
+					if(str_value.equals("null") == false)
+						value = Integer.parseInt(str_value);
 				}
 				break;
 		}
