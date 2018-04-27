@@ -115,8 +115,8 @@ public class IRMethod extends IRNode
 		
 		inst.add(".limit locals " + localsCount);
 		
-		if (getChildren().size() > 1)
-			inst.add(".limit stack 0");
+		//if (getChildren().size() > 1)
+			inst.add(".limit stack 20");
 		
 		for (int i = 0; i < getChildren().size(); i++)
 		{
@@ -151,7 +151,10 @@ public class IRMethod extends IRNode
 		for (int i = 0; i < children.size(); i++)
 		{
 			if (children.get(i).toString().equals("Allocate"))
-				return ((IRAllocate)children.get(i)).getRegister();
+			{
+				if (((IRAllocate)children.get(i)).getName().equals(name))
+					return ((IRAllocate)children.get(i)).getRegister();
+			}
 		}
 		return -1;
 	}

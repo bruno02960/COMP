@@ -46,6 +46,8 @@ public class IRLoad extends IRNode
 		if (register == -1)
 			register = method.getArgumentRegister(name);
 		
+		System.out.print("LOAD VARIABLE " + name + " reg: " + register);
+		
 		if (register > -1)	//variable is local
 		{
 			inst.add("iload " + register);

@@ -17,7 +17,7 @@ public class IRStoreArith extends IRNode
 
 	@Override
 	public ArrayList<String> getInstructions()
-	{
+	{	
 		ArrayList<String> inst = new ArrayList<>();
 		
 		ArrayList<String> rhsInst = rhs.getInstructions();
@@ -72,7 +72,7 @@ public class IRStoreArith extends IRNode
 				{
 					IRAllocate storeVar = new IRAllocate(name, Type.INTEGER, 0);
 					parent.addChild(storeVar);
-					storeVar.getRegister();
+					storeReg = storeVar.getRegister();
 				}
 				
 				inst.add("istore " + storeReg);

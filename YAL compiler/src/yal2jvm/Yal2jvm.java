@@ -104,7 +104,7 @@ public class Yal2jvm
         	hhir.optimize();
         hhir.dataflowAnalysis();
         hhir.allocateRegisters(this.localVars);
-   
+        
         ArrayList<String> instructions = hhir.selectInstructions();
         String moduleName = hhir.getModuleName();
         

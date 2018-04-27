@@ -104,4 +104,14 @@ public class IRAllocate extends IRNode
 		this.register = register;
 	}
 
+	public String getName() 
+	{
+		return name;
+	}
+
+	public void setName(String name) 
+	{
+		this.name = name;
+	}
+
 }

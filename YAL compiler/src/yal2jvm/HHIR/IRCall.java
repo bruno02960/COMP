@@ -1,7 +1,5 @@
 package yal2jvm.HHIR;
 
-import javafx.util.Pair;
-
 import java.util.ArrayList;
 
 public class IRCall extends IRNode
@@ -25,5 +23,4 @@ public class IRCall extends IRNode
 		
 		return inst;
 	}
-
 }

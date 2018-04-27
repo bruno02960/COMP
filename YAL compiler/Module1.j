@@ -10,7 +10,7 @@
 
 .method public static method1(III)V
 .limit locals 255
-.limit stack 0
+.limit stack 1
 ldc 0
 istore 3
 iload 3
@@ -23,6 +23,7 @@ return
 
 .method public static method2(III)V
 .limit locals 255
+.limit stack 3
 iload 1
 iload 2
 imul
@@ -33,5 +34,6 @@ return
 
 .method public static main([Ljava/lang/String;)V
 .limit locals 255
+.limit stack 20
 return
 .end method
