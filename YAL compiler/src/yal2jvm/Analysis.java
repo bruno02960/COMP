@@ -344,13 +344,8 @@ public abstract class Analysis
 
             if(symbol != null)
             {
-                if(!symbol.isInitialized() && declarationTree.integer != null) {
-                    symbol.setInitialized(true);
-                    return symbol;
-                }
-
                 System.out.println("Line " + astscalarelement.getBeginLine() + ": Variable " + astscalarelement.id +
-                        " already initialized.");
+                        " already declared.");
                 return null;
             }
 
