@@ -14,7 +14,7 @@ public class HHIR
 	boolean functionDebug = false;
 	boolean assignDebug = true;
 	boolean callDebug = false;
-	
+
 	public HHIR(SimpleNode ast)
 	{
 		this.ast = ast;
