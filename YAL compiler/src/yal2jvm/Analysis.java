@@ -1,5 +1,6 @@
 package yal2jvm;
 
+import yal2jvm.HHIR.Type;
 import yal2jvm.SemanticAnalysis.IfAnalysis;
 import yal2jvm.SemanticAnalysis.ModuleAnalysis;
 import yal2jvm.SemanticAnalysis.WhileAnalysis;
@@ -350,9 +351,24 @@ public abstract class Analysis
 
             if(symbol != null)
             {
-                System.out.println("Line " + astscalarelement.getBeginLine() + ": Variable " + astscalarelement.id +
-                        " already declared.");
-                return null;
+                //if it has already been declared and its not just a initialization
+                if( declarationTree.integer == null)
+                {
+                    System.out.println("Line " + astscalarelement.getBeginLine() + ": Variable " + astscalarelement.id +
+                            " already declared.");
+                    return null;
+                }
+
+                symbol.setInitialized(true);
+                if(symbol.getType().equals(Type.ARRAY.toString()) && symbol.isSizeSet() == false)
+                {
+                    System.out.println("Line " + declarationTree.getBeginLine() + ": Variable " +
+                            symbol.getId() + " has the size not defined." + " Error assigning " +
+                            declarationTree.integer + " to all elements of " + symbol.getId() + ".");
+                    return null;
+                }
+
+                return symbol;
             }
 
             //parse right hand side if existent
@@ -369,7 +385,8 @@ public abstract class Analysis
             {
                 child = declarationTree.jjtGetChild(1);
                 ASTARRAYSIZE astarraysize = (ASTARRAYSIZE)child;
-                if(astarraysize.integer == null) {
+                if(astarraysize.integer == null)
+                {
                     ASTSCALARACCESS astScalarAccess = (ASTSCALARACCESS) astarraysize.jjtGetChild(0);
                     VarSymbol scalarAccessSymbol = parseScalarAccess(astScalarAccess);
 
@@ -378,7 +395,6 @@ public abstract class Analysis
                 }
 
                 varSymbol.setType(SymbolType.ARRAY.toString());
-                varSymbol.setInitialized(true);
                 varSymbol.setSizeSet(true);
             }
 
@@ -389,14 +405,29 @@ public abstract class Analysis
         else if(child instanceof ASTARRAYELEMENT)
         {
             ASTARRAYELEMENT astarrayelement = (ASTARRAYELEMENT)child;
-            Symbol symbol = hasAccessToSymbol(astarrayelement.id);
+            VarSymbol symbol = (VarSymbol) hasAccessToSymbol(astarrayelement.id);
 
             //if it has already been declared and its not just a initialization
-            if(symbol != null && declarationTree.integer == null)
+            if(symbol != null)
             {
-                System.out.println("Line " + astarrayelement.getBeginLine() + ": Variable " + astarrayelement.id +
-                        " already declared.");
-                return null;
+                if(declarationTree.integer == null)
+                {
+                    System.out.println("Line " + astarrayelement.getBeginLine() + ": Variable " + astarrayelement.id +
+                            " already declared.");
+                    return null;
+                }
+
+                symbol.setInitialized(true);
+                if(symbol.getType().equals(Type.ARRAY.toString()) && symbol.isSizeSet() == false)
+                {
+                    System.out.println("Line " + declarationTree.getBeginLine() + ": Variable " +
+                            symbol.getId() + " has the size not defined." + " Error assigning " +
+                            declarationTree.integer + " to all elements of " + symbol.getId() + ".");
+                    return null;
+                }
+
+                return symbol;
+
             }
 
             boolean initialized;
@@ -412,26 +443,18 @@ public abstract class Analysis
                     if(scalarAccessSymbol == null)
                         return null;
                 }
-                initialized = true;
+                initialized = false;
                 sizeSet = true;
             }
             else
             {
-                if(declarationTree.integer != null) //if is from type a[]=CONST
+                //if from type a[] = CONST; and variable array has no size set (its not declared even)
+                if(declarationTree.integer != null)
                 {
-                    if (symbol != null) //if is from type a[]=CONST and a[] have been previously defined
-                    {
-                        VarSymbol varSymbol = (VarSymbol) symbol;
-                        if(varSymbol.isSizeSet() == false)
-                        {
-                            System.out.println("Line " + declarationTree.getBeginLine() + ": Variable " +
-                                    astarrayelement.id + " has the size not defined." + "Error assigning " +
-                                    declarationTree.integer + " to all elements of " + astarrayelement.id + ".");
-                            return null;
-                        }
-                        varSymbol.setInitialized(true);
-                        return varSymbol;
-                    }
+                    System.out.println("Line " + declarationTree.getBeginLine() + ": Variable " +
+                            astarrayelement.id + " has the size not defined." + " Error assigning " +
+                            declarationTree.integer + " to all elements of " + astarrayelement.id + ".");
+                    return null;
                 }
 
                 //if from type a[]; variable not initialized and size = -1
@@ -464,10 +487,17 @@ public abstract class Analysis
 
        if(rhsSymbol.getType().equals("ARRAYSIZE"))
        {
-           if (lhsSymbol.getType().equals(SymbolType.ARRAY.toString()))
+           if (lhsSymbol.getType().equals(SymbolType.ARRAY.toString())) // if is from type A = [VALUE] with A already declared
+           {
+               System.out.println("Line " + rhsTree.getBeginLine() + ": Variable " + lhsSymbol.getId() + " already declared.");
+               return false;
+           }
+           else if(lhsSymbol.getType().equals(SymbolType.UNDEFINED.toString())) // if is from type A = [VALUE] with A still not declared
+           {
+               lhsSymbol.setType(SymbolType.ARRAY.toString());
+               lhsSymbol.setSizeSet(true);
                return addToSymbolTable(lhsSymbol);
-           else
-               rhsSymbol.setType(SymbolType.ARRAY.toString());
+           }
        }
 
        if(lhsSymbol.getType().equals(SymbolType.UNDEFINED.toString()))
@@ -478,17 +508,23 @@ public abstract class Analysis
                lhsSymbol.setType(rhsSymbol.getType());
        }
 
+        String lhsSymbolType = lhsSymbol.getType();
+        String rhsSymbolType = rhsSymbol.getType();
+
+        if(lhsSymbolType.equals(rhsSymbolType) && !(rhsSymbol instanceof ImmediateSymbol)) //if both lhs and rhs have same type
+        {
+            lhsSymbol = rhsSymbol.getCopy();
+            return addToSymbolTable(lhsSymbol);
+        }
+
         //for the case in which the array as not the size defined yet
-        if(lhsSymbol.getType().equals(SymbolType.ARRAY.toString()) && rhsSymbol.getType().equals("INTEGER")
+        if(lhsSymbolType.equals(SymbolType.ARRAY.toString()) && rhsSymbolType.equals("INTEGER")
                 && lhsSymbol.isSizeSet() == false)
         {
             System.out.println("Line " + lhsTree.getBeginLine() + ": Variable " + lhsSymbol.getId() +
                     " has the size not defined." + " Error assigning right hand side to all elements of " + lhsSymbol.getId() + ".");
             return false;
         }
-
-        String lhsSymbolType = lhsSymbol.getType();
-        String rhsSymbolType = rhsSymbol.getType();
 
         if(! (lhsSymbolType.equals(SymbolType.ARRAY.toString()) && rhsSymbolType.equals(SymbolType.INTEGER.toString()))) //for A=5; in which A is an array and all its elements are set to 5
             if(!rhsSymbolType.equals(SymbolType.UNDEFINED.toString())) //for A=m.f(); in which m.f() function is from another module that we not know the return value, so it can be INTEGER or ARRAY
