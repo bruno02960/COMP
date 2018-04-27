@@ -172,7 +172,7 @@ public abstract class Analysis
         }
 
         ArrayList<VarSymbol> functionArguments = functionSymbol.getArguments();
-        VarSymbol returnSymbol = null;
+        VarSymbol returnSymbol = functionSymbol.getReturnValue();
 
         if(callTree.jjtGetNumChildren() == 0) {
             if(callTree.jjtGetNumChildren() != functionArguments.size()){
@@ -196,7 +196,6 @@ public abstract class Analysis
                 return null;
             }
 
-            returnSymbol = functionSymbol.getReturnValue();
             for(int i = 0; i < functionArguments.size(); i++)
             {
                 String argumentType = argumentsTypes.get(i);

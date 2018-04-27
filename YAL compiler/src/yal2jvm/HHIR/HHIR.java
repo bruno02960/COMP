@@ -406,6 +406,7 @@ public class HHIR
 
 						if(variable.contains(".size")) {
 							isSize = true;
+							variable = variable.split(".size")[0];
 						}
 					}
 
@@ -434,6 +435,7 @@ public class HHIR
 
 						if(variable.contains(".size")) {
 							isSize = true;
+							variable = variable.split(".size")[0];
 						}
 					}
 				}
@@ -449,8 +451,8 @@ public class HHIR
 			System.out.println();
 			System.out.println(name!=null ? "name = " + name : "null");
 			System.out.println(type!=null ? "type = " + type : "null");
-			System.out.println(isSize ? "isSize = true" : "isSize = false");
-			System.out.println(variable!=null ? "variable = " + variable : "null");
+			System.out.print(variable!=null ? "variable = " + variable : "null");
+			System.out.println(isSize ? " .size" : "");
 			System.out.println(value!=-1 ? "value = " + value : "null");
 			System.out.println(size!=-1 ? "size = " + size : "null");
 			System.out.println();
