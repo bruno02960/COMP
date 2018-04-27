@@ -71,8 +71,11 @@ public abstract class Analysis
     private VarSymbol parseRhs(SimpleNode rhsTree)
     {
         Node firstChild = rhsTree.jjtGetChild(0);
-        if(firstChild.toString().equals("ARRAYSIZE")) {
+        if(firstChild.toString().equals("ARRAYSIZE"))
+        {
             VarSymbol retVal = parseArraySize((ASTARRAYSIZE) firstChild);
+            if(retVal == null)
+                return null;
             retVal = retVal.getCopy();
             retVal.setType("ARRAYSIZE");
             return retVal;

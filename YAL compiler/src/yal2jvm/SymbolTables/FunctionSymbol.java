@@ -86,7 +86,7 @@ public class FunctionSymbol extends Symbol
                 else
                 {
                     ASTARRAYELEMENT astarrayelement = (ASTARRAYELEMENT)child;
-                    varSymbol = new VarSymbol(astarrayelement.id, SymbolType.ARRAY.toString(), true, false);
+                    varSymbol = new VarSymbol(astarrayelement.id, SymbolType.ARRAY.toString(), true, true);
                 }
                 arguments.add(varSymbol);
             }
