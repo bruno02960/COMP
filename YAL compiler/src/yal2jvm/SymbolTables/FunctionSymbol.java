@@ -81,12 +81,41 @@ public class FunctionSymbol extends Symbol
                 if(child instanceof ASTSCALARELEMENT)
                 {
                     ASTSCALARELEMENT astscalarelement = (ASTSCALARELEMENT)child;
-                    varSymbol = new VarSymbol(astscalarelement.id, SymbolType.INTEGER.toString(), true);
+                    String astScalarElementId = astscalarelement.id;
+                    String astScalarElementType = SymbolType.INTEGER.toString();
+                    if(returnValue.getId().equals(astScalarElementId))
+                    {
+                        if(returnValue.getType().equals(astScalarElementType) == false)
+                        {
+                            System.out.println("Line " + astscalarelement.getBeginLine() + ": Argument " + astscalarelement.id +
+                                    " already declared as " + returnValue.getType() + ".");
+                        }
+                        else
+                            returnValue.setInitialized(true);
+                        continue;
+                    }
+                    varSymbol = new VarSymbol(astScalarElementId, astScalarElementType, true);
                 }
                 else
                 {
                     ASTARRAYELEMENT astarrayelement = (ASTARRAYELEMENT)child;
-                    varSymbol = new VarSymbol(astarrayelement.id, SymbolType.ARRAY.toString(), true, true);
+                    String astArrayElementId = astarrayelement.id;
+                    String astArrayElementType = SymbolType.ARRAY.toString();
+                    if(returnValue.getId().equals(astArrayElementId))
+                    {
+                        if(returnValue.getType().equals(astArrayElementType) == false)
+                        {
+                            System.out.println("Line " + astarrayelement.getBeginLine() + ": Argument " + astarrayelement.id +
+                                    " already declared as " + returnValue.getType() + ".");
+                        }
+                        else
+                        {
+                            returnValue.setSizeSet(true);
+                            returnValue.setInitialized(true);
+                        }
+                        continue;
+                    }
+                    varSymbol = new VarSymbol(astArrayElementId, astArrayElementType, true, true);
                 }
                 arguments.add(varSymbol);
             }
