@@ -30,10 +30,10 @@ public abstract class Analysis
     protected HashMap<String, Symbol> getUnifiedSymbolTable()
     {
         HashMap<String, Symbol> unifiedSymbolTable = new HashMap<>();
-        if(mySymbols != null)
-            unifiedSymbolTable.putAll(mySymbols);
         if(inheritedSymbols != null)
             unifiedSymbolTable.putAll(inheritedSymbols);
+        if(mySymbols != null)
+            unifiedSymbolTable.putAll(mySymbols);
 
         return unifiedSymbolTable;
     }
@@ -122,7 +122,7 @@ public abstract class Analysis
     private VarSymbol parseTerm(ASTTERM termTree)
     {
         if(termTree.integer != null)
-            return new ImmediateSymbol(termTree.integer);
+            return new ImmediateSymbol("[" + termTree.integer + "]");
 
         Node child = termTree.jjtGetChild(0);
         switch(child.toString())
@@ -291,12 +291,12 @@ public abstract class Analysis
         VarSymbol indexSymbol = (VarSymbol) hasAccessToSymbol(symbolId);
         if(indexSymbol == null)
         {
-            System.out.println("Line " + ast.getBeginLine() + ": Access to undeclared variable " + symbolId + ".");
+            System.out.println("Line " + ast.getBeginLine() + ": Variable " + symbolId + " might not have been declared.");
             return null;
         }
         if(!indexSymbol.isInitialized())
         {
-            System.out.println("Line " + ast.getBeginLine() + ": Access to uninitialized variable " + symbolId + ".");
+            System.out.println("Line " + ast.getBeginLine() + ": Variable " + symbolId + " might not have been initialized.");
             return null;
         }
 
