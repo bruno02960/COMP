@@ -257,7 +257,7 @@ public abstract class Analysis
 
         if(!arraySymbol.getType().equals(SymbolType.ARRAY.toString()))
         {
-            System.out.println("Line " + arrayAccessTree.getBeginLine() + ": Access to index of variable +" + arrayId
+            System.out.println("Line " + arrayAccessTree.getBeginLine() + ": Access to index of variable " + arrayId
                     + " that is not an array.");
             return null;
         }
