@@ -270,16 +270,19 @@ public abstract class Analysis
         }
 
         ASTINDEX astindex = (ASTINDEX) arrayAccessTree.jjtGetChild(0);
+        String indexValue = astindex.indexValue.toString();
         String indexSymbolId = astindex.indexID;
         if(indexSymbolId != null)
         {
             VarSymbol indexSymbol = (VarSymbol)checkSymbolExistsAndIsInitialized(astindex, indexSymbolId);
             if(indexSymbol == null)
                 return null;
+            indexValue = indexSymbol.getId();
         }
 
         arraySymbol = arraySymbol.getCopy();
         arraySymbol.setType(SymbolType.INTEGER.toString());
+        arraySymbol.setId(arraySymbol.getId() + "[" + indexValue + "]");
 
         return arraySymbol;
     }
