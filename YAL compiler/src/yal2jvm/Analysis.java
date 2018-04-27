@@ -321,19 +321,30 @@ public abstract class Analysis
             id = id.substring(0, dotIdx);
         }
 
-        VarSymbol varSymbol = (VarSymbol) checkSymbolExistsAndIsInitialized(scalarAccessTree, id);
+        VarSymbol varSymbol;
+        if(sizeAccess)
+            varSymbol = (VarSymbol) hasAccessToSymbol(id);
+        else
+            varSymbol = (VarSymbol) checkSymbolExistsAndIsInitialized(scalarAccessTree, id);
         if(varSymbol == null)
             return null;
 
-        if (varSymbol.getType().equals("INTEGER") && sizeAccess)
-        {
-            System.out.println("Line " + scalarAccessTree.getBeginLine() + ": Access to size of variable " + id +
-                    " that is not an array.");
-            return null;
-        }
-
         if(sizeAccess)
         {
+            if (varSymbol.getType().equals("INTEGER"))
+            {
+                System.out.println("Line " + scalarAccessTree.getBeginLine() + ": Access to size of variable " + id +
+                        " that is not an array.");
+                return null;
+            }
+
+            if (varSymbol.getType().equals("ARRAY") && varSymbol.isSizeSet() == false)
+            {
+                System.out.println("Line " + scalarAccessTree.getBeginLine() + ": Cannot access to array " + id +
+                        " size, because size is undefined.");
+                return null;
+            }
+
             varSymbol = varSymbol.getCopy();
             varSymbol.setType(SymbolType.INTEGER.toString());
         }
@@ -485,6 +496,12 @@ public abstract class Analysis
         if(lhsSymbol == null)
             return false;
 
+        if(lhsSymbol.getId().contains(".size"))
+        {
+            System.out.println("Line " + rhsTree.getBeginLine() + ": Impossible to set a variable size.");
+            return false;
+        }
+
        if(rhsSymbol.getType().equals("ARRAYSIZE"))
        {
            if (lhsSymbol.getType().equals(SymbolType.ARRAY.toString())) // if is from type A = [VALUE] with A already declared
@@ -536,11 +553,6 @@ public abstract class Analysis
                 }
 
         lhsSymbol.setInitialized(true);
-
-        if(lhsSymbol.getId().contains(".size")) {
-            System.out.println("Impossible to assign a value to " + lhsSymbol.getId());
-            return false;
-        }
 
         return addToSymbolTable(lhsSymbol);
     }
