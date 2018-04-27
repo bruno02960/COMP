@@ -387,8 +387,7 @@ public abstract class Analysis
     private VarSymbol createSymbolForDeclarationAstScalarElement(ASTDECLARATION declarationTree, ASTSCALARELEMENT astscalarelement)
     {
         boolean initialized = false;
-        //if is from type a=CONST;
-        if(declarationTree.integer != null)
+        if(declarationTree.integer != null) //if is from type a=CONST;
             initialized = true;
 
         VarSymbol varSymbol = new VarSymbol(astscalarelement.id, SymbolType.INTEGER.toString(), initialized, false);
