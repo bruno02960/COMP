@@ -133,9 +133,9 @@ public class Yal2jvm
 	    SimpleNode root = null;
 		try
 		{
-			root = parser.Module();
+			root = YalParser.Module();
 
-			int noErrors = parser.errorCounter.getNoErrors();
+			int noErrors = YalParser.errorCounter.getNoErrors();
 
 			if(noErrors > 0) {
 				if(noErrors == 10) {

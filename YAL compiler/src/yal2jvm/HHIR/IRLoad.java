@@ -55,7 +55,7 @@ public class IRLoad extends IRNode
 		else				//variable is global
 		{
 			IRModule module = ((IRModule)method.getParent());
-			IRGlobal global = ((IRGlobal)module.getGlobal(name));
+			IRGlobal global = module.getGlobal(name);
 			
 			String in = "getfield " + module.getName() + "/" + global.getName() + " ";
 			in += global.getType() == Type.INTEGER ? "I" : "A";

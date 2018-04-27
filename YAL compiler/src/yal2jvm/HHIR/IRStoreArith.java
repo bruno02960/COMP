@@ -93,7 +93,7 @@ public class IRStoreArith extends IRNode
 	public void setRhs(IRNode rhs)
 	{
 		this.rhs = rhs;
-		this.rhs.setParent((IRNode)this);
+		this.rhs.setParent(this);
 	}
 
 	public IRNode getLhs()
@@ -104,6 +104,6 @@ public class IRStoreArith extends IRNode
 	public void setLhs(IRNode lhs)
 	{
 		this.lhs = lhs;
-		this.lhs.setParent((IRNode)this);
+		this.lhs.setParent(this);
 	}
 }
