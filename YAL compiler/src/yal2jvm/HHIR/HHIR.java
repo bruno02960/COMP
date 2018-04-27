@@ -225,11 +225,16 @@ public class HHIR
 		Type type = null;
 		String size = null;
 		String operator;
+		boolean call = false;
+		String at_name = null;
+		boolean arraysize = false;
 
 		ASTLHS astlhs = (ASTLHS) child.jjtGetChild(0);
 		ASTRHS astrhs = (ASTRHS) child.jjtGetChild(1);
 
 		ArrayList<String> operands = new ArrayList<>();
+		ArrayList<String> at_op = new ArrayList<>();
+		ArrayList<Boolean> isSize = new ArrayList<>();
 
 		SimpleNode lhchild = (SimpleNode) astlhs.jjtGetChild(0);
 		switch(lhchild.toString()) {
@@ -237,11 +242,13 @@ public class HHIR
 				ASTARRAYACCESS astarrayaccess = (ASTARRAYACCESS) lhchild;
 				ASTINDEX astindex = (ASTINDEX) astarrayaccess.jjtGetChild(0);
 
+				name = astarrayaccess.arrayID;
+
 				if(astindex.indexID != null) {
-					name = astarrayaccess.arrayID + "[" + astindex.indexID + "]";
+					at_name = astindex.indexID;
 				}
 				else {
-					name = astarrayaccess.arrayID + "[" + astindex.indexValue + "]";
+					at_name = astindex.indexValue.toString();
 				}
 				break;
 			case "SCALARACCESS":
@@ -263,6 +270,8 @@ public class HHIR
 						String str_value = term.operator + term.integer;
 						value = Integer.parseInt(str_value);
 						operands.add(str_value);
+						at_op.add("-1");
+						isSize.add(false);
 					}
 
 					if (term.jjtGetNumChildren() == 1) {
@@ -270,16 +279,31 @@ public class HHIR
 
 						switch (termChild.toString()) {
 							case "CALL":
+								call = true;
 								//TODO: How to proceed in this case?
 								break;
 							case "ARRAYACCESS":
 								ASTARRAYACCESS astarrayaccess = ((ASTARRAYACCESS)termChild);
 								ASTINDEX astindex = (ASTINDEX) termChild.jjtGetChild(0);
-								String arrayaccess = term.operator + astarrayaccess.arrayID + "[" + (astindex.indexID!=null ? astindex.indexID : astindex.indexValue.toString()) + "]";
+								String arrayaccess = term.operator + astarrayaccess.arrayID;
+								at_op.add((astindex.indexID!=null ? astindex.indexID : astindex.indexValue.toString()));
+								if(astindex.indexID!=null && astindex.indexID.contains(".size"))
+									isSize.add(true);
+								else
+									isSize.add(false);
 								operands.add(arrayaccess);
 								break;
 							case "SCALARACCESS":
-								operands.add(term.operator + ((ASTSCALARACCESS) termChild).id);
+								String id = ((ASTSCALARACCESS) termChild).id;
+								at_op.add("-1");
+								if(((ASTSCALARACCESS) termChild).id.contains(".size")) {
+									isSize.add(true);
+									id = id.split(".size")[0];
+								}
+								else {
+									isSize.add(false);
+								}
+								operands.add(term.operator + id);
 								break;
 						}
 					}
@@ -292,6 +316,11 @@ public class HHIR
 					} else {
 						ASTSCALARACCESS astscalaraccess = (ASTSCALARACCESS) astarraysize.jjtGetChild(0);
 						size = astscalaraccess.id;
+
+						if(size.contains(".size")) {
+							arraysize = true;
+							size = size.split(".size")[0];
+						}
 					}
 					break;
 			}
@@ -301,11 +330,16 @@ public class HHIR
 		if(assignDebug) {
 			System.out.println();
 			System.out.println(name!=null ? "name = " + name : "null");
-			for (String operand: operands) {
-				System.out.println("operand = " + operand);
+			System.out.println(at_name!=null ? "at = " + at_name : "null");
+			System.out.println(call ? "call result" : "immediate");
+			for (int i=0; i< operands.size(); i++) {
+				System.out.print("operand = " + operands.get(i));
+				System.out.println(isSize.get(i) ? " .size" : "");
+				System.out.println(!at_op.get(i).equals("-1") ?"at = " + at_op.get(i) : "null");
 			}
 			System.out.println(!operator.equals("") ? "operator = " + operator : "null");
-			System.out.println(size!=null ? "size = " + size : "null");
+			System.out.print(size!=null ? "size = " + size : "null");
+			System.out.println(arraysize ? " .size" : "");
 			System.out.println();
 		}
 

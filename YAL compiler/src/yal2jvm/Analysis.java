@@ -270,7 +270,11 @@ public abstract class Analysis
         }
 
         ASTINDEX astindex = (ASTINDEX) arrayAccessTree.jjtGetChild(0);
-        String indexValue = astindex.indexValue.toString();
+        String indexValue = null;
+
+        if(astindex.indexValue != null)
+            indexValue = astindex.indexValue.toString();
+
         String indexSymbolId = astindex.indexID;
         if(indexSymbolId != null)
         {
