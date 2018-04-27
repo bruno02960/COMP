@@ -350,31 +350,23 @@ public abstract class Analysis
                 }
 
                 System.out.println("Line " + astscalarelement.getBeginLine() + ": Variable " + astscalarelement.id +
-                        " already declared.");
+                        " already initialized.");
                 return null;
             }
 
             //parse right hand side if existent
             boolean initialized = false;
             boolean sizeSet = false;
+
             //if is from type a=CONST;
             if(declarationTree.integer != null)
-            {
                 initialized = true;
-                if(symbol!= null && symbol.getType().equals("ARRAY") && symbol.isSizeSet() == false)
-                {
-                    System.out.println("Line " + declarationTree.getBeginLine() + ": Variable " +
-                            symbol.getId() + " has the size not defined." + "Error assigning " +
-                            declarationTree.integer + " to all elements of " + symbol.getId() + ".");
-                    return null;
-                }
-            }
+
 
             VarSymbol varSymbol = new VarSymbol(astscalarelement.id, SymbolType.INTEGER.toString(), initialized, sizeSet);
 
-            if(declarationTree.jjtGetNumChildren() > 1)
+            if(declarationTree.jjtGetNumChildren() > 1) //if is from type a=[CONST];
             {
-                //if is from type a=[CONST];
                 child = declarationTree.jjtGetChild(1);
                 ASTARRAYSIZE astarraysize = (ASTARRAYSIZE)child;
                 if(astarraysize.integer == null) {
@@ -398,6 +390,7 @@ public abstract class Analysis
         {
             ASTARRAYELEMENT astarrayelement = (ASTARRAYELEMENT)child;
             Symbol symbol = hasAccessToSymbol(astarrayelement.id);
+
             //if it has already been declared and its not just a initialization
             if(symbol != null && declarationTree.integer == null)
             {
@@ -408,9 +401,8 @@ public abstract class Analysis
 
             boolean initialized;
             boolean sizeSet;
-            if(declarationTree.jjtGetNumChildren() > 1)
+            if(declarationTree.jjtGetNumChildren() > 1) //if is from type a[]=[CONST];
             {
-                //if is from type a[]=[CONST];
                 child = declarationTree.jjtGetChild(1);
                 ASTARRAYSIZE astarraysize = (ASTARRAYSIZE)child;
                 if(astarraysize.integer == null)
@@ -425,7 +417,7 @@ public abstract class Analysis
             }
             else
             {
-                if(declarationTree.integer != null) //if is from type a[]=CONST and a[] have not been previously defined, it cannot happen
+                if(declarationTree.integer != null) //if is from type a[]=CONST
                 {
                     if (symbol != null) //if is from type a[]=CONST and a[] have been previously defined
                     {
