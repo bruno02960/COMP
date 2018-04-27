@@ -10,20 +10,22 @@
 
 .method public static method1(III)V
 .limit locals 255
-.limit stack 1
+.limit stack 20
 ldc 0
 istore 3
 iload 3
-iload 3
+iload 2
 imul
-istore 3
+istore 4
+ldc 0
+istore 4
 return
 .end method
 
 
 .method public static method2(III)V
 .limit locals 255
-.limit stack 3
+.limit stack 20
 iload 1
 iload 2
 imul
