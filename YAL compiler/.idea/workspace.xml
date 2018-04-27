@@ -16,11 +16,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="HHIR.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="HHIR.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/yal2jvm/HHIR/HHIR.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="261">
-              <caret line="454" column="42" lean-forward="false" selection-start-line="454" selection-start-column="42" selection-end-line="454" selection-end-column="42" />
+            <state relative-caret-position="238">
+              <caret line="16" column="4" lean-forward="true" selection-start-line="16" selection-start-column="4" selection-end-line="16" selection-end-column="4" />
               <folding>
                 <element signature="method#createHardcoded#0;class#HHIR#0" expanded="false" />
                 <element signature="e#2504#2505#0" expanded="true" />
@@ -113,7 +113,7 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="testModule1.yal" pinned="false" current-in-tab="true">
+      <file leaf-file-name="testModule1.yal" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/examples/testModule1.yal">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="0">
@@ -212,8 +212,8 @@
         <option value="$PROJECT_DIR$/examples/aval6.yal" />
         <option value="$PROJECT_DIR$/examples/aval8.yal" />
         <option value="$PROJECT_DIR$/src/yal2jvm/Analysis.java" />
-        <option value="$PROJECT_DIR$/src/yal2jvm/HHIR/HHIR.java" />
         <option value="$PROJECT_DIR$/examples/test.yal" />
+        <option value="$PROJECT_DIR$/src/yal2jvm/HHIR/HHIR.java" />
       </list>
     </option>
   </component>
@@ -511,9 +511,6 @@
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="MyClassTest - 2018.04.27 at 17h 58m 54s.xml">
-      <configuration name="MyClassTest" configurationId="JUnit" />
-    </history-entry>
     <history-entry file="MyClassTest - 2018.04.27 at 18h 05m 55s.xml">
       <configuration name="MyClassTest" configurationId="JUnit" />
     </history-entry>
@@ -539,6 +536,9 @@
       <configuration name="MyClassTest" configurationId="JUnit" />
     </history-entry>
     <history-entry file="MyClassTest - 2018.04.27 at 18h 44m 25s.xml">
+      <configuration name="MyClassTest" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="MyClassTest - 2018.04.27 at 18h 49m 41s.xml">
       <configuration name="MyClassTest" configurationId="JUnit" />
     </history-entry>
   </component>
@@ -956,21 +956,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/yal2jvm/HHIR/HHIR.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="261">
-          <caret line="454" column="42" lean-forward="false" selection-start-line="454" selection-start-column="42" selection-end-line="454" selection-end-column="42" />
-          <folding>
-            <element signature="method#createHardcoded#0;class#HHIR#0" expanded="false" />
-            <element signature="e#2504#2505#0" expanded="true" />
-            <element signature="e#2540#2541#0" expanded="true" />
-            <element signature="method#createModuleHHIR#0;class#HHIR#0" expanded="false" />
-            <element signature="method#createStatementsHHIR#0;class#HHIR#0" expanded="false" />
-            <element signature="method#createAssignHHIR#0;class#HHIR#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/examples/moodle.yal">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="204">
@@ -1032,6 +1017,21 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/yal2jvm/HHIR/HHIR.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="238">
+          <caret line="16" column="4" lean-forward="true" selection-start-line="16" selection-start-column="4" selection-end-line="16" selection-end-column="4" />
+          <folding>
+            <element signature="method#createHardcoded#0;class#HHIR#0" expanded="false" />
+            <element signature="e#2504#2505#0" expanded="true" />
+            <element signature="e#2540#2541#0" expanded="true" />
+            <element signature="method#createModuleHHIR#0;class#HHIR#0" expanded="false" />
+            <element signature="method#createStatementsHHIR#0;class#HHIR#0" expanded="false" />
+            <element signature="method#createAssignHHIR#0;class#HHIR#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
