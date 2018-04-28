@@ -11,16 +11,17 @@ import java.util.HashMap;
 
 public class FunctionAnalysis extends Analysis
 {
+
     FunctionAnalysis(SimpleNode ast, HashMap<String, Symbol> inheritedSymbols,
-                     HashMap<String, Symbol> functionNameToFunctionSymbolOfModule)
+            HashMap<String, Symbol> functionNameToFunctionSymbolOfModule)
     {
-       super(ast, inheritedSymbols, functionNameToFunctionSymbolOfModule);
+        super(ast, inheritedSymbols, functionNameToFunctionSymbolOfModule);
     }
 
     @Override
     protected void parse()
     {
-        FunctionSymbol astFunction = (FunctionSymbol) functionNameToFunctionSymbol.get(((ASTFUNCTION)ast).id);
+        FunctionSymbol astFunction = (FunctionSymbol) functionNameToFunctionSymbol.get(((ASTFUNCTION) ast).id);
 
         addArgumentsToMySymbols(astFunction);
         addReturnValueToMySymbols(astFunction);
@@ -31,12 +32,12 @@ public class FunctionAnalysis extends Analysis
 
         //verify return value is defined if exists
         VarSymbol returnValue = astFunction.getReturnValue();
-        if(returnValue != null)
+        if (returnValue != null)
         {
-            if(!returnValue.isInitialized())
+            if (!returnValue.isInitialized())
             {
-                System.out.println("Line " + astFunction.getFunctionAST().getBeginLine() + ": Return variable " + returnValue.getId() +
-                        " might not have been initialized. Function " + astFunction.getId() + " must have return variable initialized.");
+                System.out.println("Line " + astFunction.getFunctionAST().getBeginLine() + ": Return variable " + returnValue.getId()
+                        + " might not have been initialized. Function " + astFunction.getId() + " must have return variable initialized.");
                 ModuleAnalysis.hasErrors = true;
             }
         }
@@ -45,15 +46,15 @@ public class FunctionAnalysis extends Analysis
     private void addArgumentsToMySymbols(FunctionSymbol astFunction)
     {
         ArrayList<VarSymbol> arguments = astFunction.getArguments();
-        for (VarSymbol argument : arguments) mySymbols.put(argument.getId(), argument);
+        for (VarSymbol argument : arguments)
+            mySymbols.put(argument.getId(), argument);
     }
 
     private void addReturnValueToMySymbols(FunctionSymbol astFunction)
     {
-       VarSymbol returnValue = astFunction.getReturnValue();
-       if(returnValue != null)
-           mySymbols.put(returnValue.getId(), returnValue);
+        VarSymbol returnValue = astFunction.getReturnValue();
+        if (returnValue != null)
+            mySymbols.put(returnValue.getId(), returnValue);
     }
-
 
 }

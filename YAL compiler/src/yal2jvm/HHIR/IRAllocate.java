@@ -4,37 +4,38 @@ import java.util.ArrayList;
 
 public class IRAllocate extends IRNode
 {
-	private String name;
-	private Type type;
-	private int value;
-	private int register = -1;
-	int size = -1;
 
-	public IRAllocate(String name, Type type, Integer value)
-	{
-		this.nodeType = "Allocate";
-		this.name = name;
-		assert type==Type.INTEGER;
-		this.type = type;
-		this.value = value == null ? 0 : value;
-	}
+    private String name;
+    private Type type;
+    private int value;
+    private int register = -1;
+    int size = -1;
 
-	public IRAllocate(String name, Type type, Integer value, Integer size)
-	{
-		this.nodeType = "Allocate";
-		this.name = name;
-		assert type==Type.ARRAY;
-		this.type = type;
-		this.value = value == null ? 0 : value;
-		this.size = size;
-	}
+    public IRAllocate(String name, Type type, Integer value)
+    {
+        this.nodeType = "Allocate";
+        this.name = name;
+        assert type == Type.INTEGER;
+        this.type = type;
+        this.value = value == null ? 0 : value;
+    }
 
-	@Override
-	public ArrayList<String> getInstructions()
-	{
-		ArrayList<String> inst = new ArrayList<>();
-		
-		/*
+    public IRAllocate(String name, Type type, Integer value, Integer size)
+    {
+        this.nodeType = "Allocate";
+        this.name = name;
+        assert type == Type.ARRAY;
+        this.type = type;
+        this.value = value == null ? 0 : value;
+        this.size = size;
+    }
+
+    @Override
+    public ArrayList<String> getInstructions()
+    {
+        ArrayList<String> inst = new ArrayList<>();
+
+        /*
 		String label1 = "Label" + ((IRMethod)parent).labelN;
 		((IRMethod)parent).labelN++;
 		String label2 = "Label" + ((IRMethod)parent).labelN;
@@ -64,54 +65,54 @@ public class IRAllocate extends IRNode
 		inst.add(inst2);
 		inst.add(inst3);
 		inst.add(inst4);*/
-		
-		initRegister();
-		
-		switch(type)
-		{
-			case INTEGER:
-			{
-				inst.add("ldc " + this.value);
-				inst.add("istore " + this.register);
-				break;
-			}
-			case ARRAY: break;
+        initRegister();
 
-			default:
-				break;
-		}
-		
-		return inst;
-	}
+        switch (type)
+        {
+            case INTEGER:
+            {
+                inst.add("ldc " + this.value);
+                inst.add("istore " + this.register);
+                break;
+            }
+            case ARRAY:
+                break;
 
-	private void initRegister()
-	{
-		if (register == -1)
-		{
-			this.register = ((IRMethod)parent).getRegN();
-			((IRMethod)parent).incrementRegN();
-		}
-	}
-	
-	public int getRegister() 
-	{
-		initRegister();
-		return register;
-	}
+            default:
+                break;
+        }
 
-	public void setRegister(int register) 
-	{
-		this.register = register;
-	}
+        return inst;
+    }
 
-	public String getName() 
-	{
-		return name;
-	}
+    private void initRegister()
+    {
+        if (register == -1)
+        {
+            this.register = ((IRMethod) parent).getRegN();
+            ((IRMethod) parent).incrementRegN();
+        }
+    }
 
-	public void setName(String name) 
-	{
-		this.name = name;
-	}
+    public int getRegister()
+    {
+        initRegister();
+        return register;
+    }
+
+    public void setRegister(int register)
+    {
+        this.register = register;
+    }
+
+    public String getName()
+    {
+        return name;
+    }
+
+    public void setName(String name)
+    {
+        this.name = name;
+    }
 
 }

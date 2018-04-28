@@ -2,6 +2,7 @@ package yal2jvm.SymbolTables;
 
 public class VarSymbol extends Symbol
 {
+
     private String type;
     private boolean initialized;
     private boolean sizeSet;
@@ -61,7 +62,7 @@ public class VarSymbol extends Symbol
     @Override
     public boolean equals(Object other)
     {
-        return id.equals(((VarSymbol)other).getId());
+        return id.equals(((VarSymbol) other).getId());
     }
 
     public VarSymbol getCopy()

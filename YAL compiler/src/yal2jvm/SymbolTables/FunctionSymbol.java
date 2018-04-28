@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 public class FunctionSymbol extends Symbol
 {
+
     private SimpleNode functionAST;
     private ArrayList<VarSymbol> arguments;
     private VarSymbol returnValue;
@@ -45,22 +46,21 @@ public class FunctionSymbol extends Symbol
 
         //get return value if existent
         SimpleNode returnValueNode = (SimpleNode) functionAST.jjtGetChild(0);
-        if(returnValueNode instanceof ASTSTATEMENTS)
+        if (returnValueNode instanceof ASTSTATEMENTS)
             return;
 
-        if(!(returnValueNode instanceof ASTVARS))
+        if (!(returnValueNode instanceof ASTVARS))
         {
             argumentsIndex++;
             statementsChildNumber++;
-            if(returnValueNode instanceof ASTSCALARELEMENT)
+            if (returnValueNode instanceof ASTSCALARELEMENT)
             {
-                ASTSCALARELEMENT astscalarelement = (ASTSCALARELEMENT)returnValueNode;
+                ASTSCALARELEMENT astscalarelement = (ASTSCALARELEMENT) returnValueNode;
                 String returnValueId = astscalarelement.id;
                 returnValue = new VarSymbol(returnValueId, SymbolType.INTEGER.toString(), false);
-            }
-            else
+            } else
             {
-                ASTARRAYELEMENT astarrayelement = (ASTARRAYELEMENT)returnValueNode;
+                ASTARRAYELEMENT astarrayelement = (ASTARRAYELEMENT) returnValueNode;
                 String returnValueId = astarrayelement.id;
                 returnValue = new VarSymbol(returnValueId, SymbolType.ARRAY.toString(), false, false);
             }
@@ -68,48 +68,45 @@ public class FunctionSymbol extends Symbol
 
         //get arguments if existent
         SimpleNode argumentsNode = (SimpleNode) functionAST.jjtGetChild(argumentsIndex);
-        if(argumentsNode == null || !(argumentsNode instanceof ASTVARS))
+        if (argumentsNode == null || !(argumentsNode instanceof ASTVARS))
             return;
 
         statementsChildNumber++;
-        for(int i = 0; i < argumentsNode.jjtGetNumChildren(); i++)
+        for (int i = 0; i < argumentsNode.jjtGetNumChildren(); i++)
         {
             SimpleNode child = (SimpleNode) argumentsNode.jjtGetChild(i);
-            if( child != null)
+            if (child != null)
             {
                 VarSymbol varSymbol;
-                if(child instanceof ASTSCALARELEMENT)
+                if (child instanceof ASTSCALARELEMENT)
                 {
-                    ASTSCALARELEMENT astscalarelement = (ASTSCALARELEMENT)child;
+                    ASTSCALARELEMENT astscalarelement = (ASTSCALARELEMENT) child;
                     String astScalarElementId = astscalarelement.id;
                     String astScalarElementType = SymbolType.INTEGER.toString();
-                    if(returnValue != null && returnValue.getId().equals(astScalarElementId))
+                    if (returnValue != null && returnValue.getId().equals(astScalarElementId))
                     {
-                        if(!returnValue.getType().equals(astScalarElementType))
+                        if (!returnValue.getType().equals(astScalarElementType))
                         {
-                            System.out.println("Line " + astscalarelement.getBeginLine() + ": Argument " + astscalarelement.id +
-                                    " already declared as " + returnValue.getType() + ".");
+                            System.out.println("Line " + astscalarelement.getBeginLine() + ": Argument " + astscalarelement.id
+                                    + " already declared as " + returnValue.getType() + ".");
                             continue;
-                        }
-                        else
+                        } else
                             returnValue.setInitialized(true);
                     }
                     varSymbol = new VarSymbol(astScalarElementId, astScalarElementType, true);
-                }
-                else
+                } else
                 {
-                    ASTARRAYELEMENT astarrayelement = (ASTARRAYELEMENT)child;
+                    ASTARRAYELEMENT astarrayelement = (ASTARRAYELEMENT) child;
                     String astArrayElementId = astarrayelement.id;
                     String astArrayElementType = SymbolType.ARRAY.toString();
-                    if(returnValue != null && returnValue.getId().equals(astArrayElementId))
+                    if (returnValue != null && returnValue.getId().equals(astArrayElementId))
                     {
-                        if(!returnValue.getType().equals(astArrayElementType))
+                        if (!returnValue.getType().equals(astArrayElementType))
                         {
-                            System.out.println("Line " + astarrayelement.getBeginLine() + ": Argument " + astarrayelement.id +
-                                    " already declared as " + returnValue.getType() + ".");
+                            System.out.println("Line " + astarrayelement.getBeginLine() + ": Argument " + astarrayelement.id
+                                    + " already declared as " + returnValue.getType() + ".");
                             continue;
-                        }
-                        else
+                        } else
                         {
                             returnValue.setSizeSet(true);
                             returnValue.setInitialized(true);

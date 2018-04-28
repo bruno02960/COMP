@@ -1,6 +1,7 @@
 package yal2jvm.SymbolTables;
 
-public enum SymbolType {
+public enum SymbolType
+{
     INTEGER,
     ARRAY,
     UNDEFINED

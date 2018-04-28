@@ -2,6 +2,7 @@ package yal2jvm.HHIR;
 
 public class PairStringType
 {
+
     private Type type;
     private String string;
 

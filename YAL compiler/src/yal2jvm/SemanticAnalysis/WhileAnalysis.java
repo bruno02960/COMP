@@ -11,8 +11,9 @@ import java.util.HashMap;
 
 public class WhileAnalysis extends Analysis
 {
+
     public WhileAnalysis(SimpleNode ast, HashMap<String, Symbol> inheritedSymbols,
-                         HashMap<String, Symbol> functionNameToFunctionSymbolOfModule)
+            HashMap<String, Symbol> functionNameToFunctionSymbolOfModule)
     {
         super(ast, inheritedSymbols, functionNameToFunctionSymbolOfModule);
     }

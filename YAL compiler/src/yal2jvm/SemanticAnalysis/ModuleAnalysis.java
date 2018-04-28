@@ -11,6 +11,7 @@ import java.util.*;
 
 public class ModuleAnalysis extends Analysis
 {
+
     public static String moduleName;
     public static boolean hasErrors;
 
@@ -28,7 +29,7 @@ public class ModuleAnalysis extends Analysis
         HashMap<String, Symbol> unifiedSymbolTable = getUnifiedSymbolTable();
         for (HashMap.Entry<String, Symbol> o : functionNameToFunctionSymbol.entrySet())
         {
-        	HashMap.Entry<String, Symbol> pair = o;
+            HashMap.Entry<String, Symbol> pair = o;
             FunctionSymbol functionSymbol = (FunctionSymbol) pair.getValue();
 
             SimpleNode functionAST = functionSymbol.getFunctionAST();
@@ -41,7 +42,7 @@ public class ModuleAnalysis extends Analysis
     private void initiateGlobalSymbolTable()
     {
         int numChildren = ast.jjtGetNumChildren();
-        for(int i = 0; i < numChildren; i++)
+        for (int i = 0; i < numChildren; i++)
         {
             SimpleNode child = (SimpleNode) ast.jjtGetChild(i);
             addSymbolToSymbolTable(child);
@@ -52,10 +53,10 @@ public class ModuleAnalysis extends Analysis
     {
         for (HashMap.Entry<String, Symbol> o : mySymbols.entrySet())
         {
-        	HashMap.Entry<String, Symbol> pair = o;
+            HashMap.Entry<String, Symbol> pair = o;
             VarSymbol symbol = (VarSymbol) pair.getValue();
             symbol.setInitialized(true);
-            if(symbol.getType().equals(Type.ARRAY.toString()))
+            if (symbol.getType().equals(Type.ARRAY.toString()))
                 symbol.setSizeSet(true);
         }
     }
