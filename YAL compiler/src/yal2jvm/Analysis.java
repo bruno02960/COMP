@@ -211,6 +211,11 @@ public abstract class Analysis
             }
         }
 
+        returnSymbol = returnSymbol.getCopy();
+        returnSymbol.setInitialized(true);
+        if(returnSymbol.getType().equals(Type.ARRAY.toString()))
+            returnSymbol.setSizeSet(true);
+
         return returnSymbol;
     }
 
@@ -507,7 +512,7 @@ public abstract class Analysis
 
        if(rhsSymbol.getType().equals("ARRAYSIZE"))
        {
-           if (lhsSymbol.getType().equals(SymbolType.ARRAY.toString())) // if is from type A = [VALUE] with A already declared
+           if (lhsSymbol.getType().equals(SymbolType.ARRAY.toString()) && lhsSymbol.isSizeSet()) // if is from type A = [VALUE] with A already declared
            {
                System.out.println("Line " + rhsTree.getBeginLine() + ": Variable " + lhsSymbol.getId() + " already declared.");
                return false;
@@ -533,7 +538,8 @@ public abstract class Analysis
 
         if(lhsSymbolType.equals(rhsSymbolType) && !(rhsSymbol instanceof ImmediateSymbol)) //if both lhs and rhs have same type
         {
-            lhsSymbol = rhsSymbol.getCopy();
+            lhsSymbol.setSizeSet(rhsSymbol.isSizeSet());
+            lhsSymbol.setInitialized(rhsSymbol.isInitialized());
             return addToSymbolTable(lhsSymbol);
         }
 
@@ -546,9 +552,16 @@ public abstract class Analysis
             return false;
         }
 
+        //for A=[N] in which N is an integer. Used when assigning size to an array
+        if(lhsSymbolType.equals(SymbolType.ARRAY.toString()) && rhsSymbolType.equals("ARRAYSIZE"))
+        {
+            lhsSymbol.setSizeSet(true);
+            return addToSymbolTable(lhsSymbol);
+        }
+
         if(! (lhsSymbolType.equals(SymbolType.ARRAY.toString()) && rhsSymbolType.equals(SymbolType.INTEGER.toString()))) //for A=5; in which A is an array and all its elements are set to 5
             if(!rhsSymbolType.equals(SymbolType.UNDEFINED.toString())) //for A=m.f(); in which m.f() function is from another module that we not know the return value, so it can be INTEGER or ARRAY
-                if(!lhsSymbolType.equals(rhsSymbolType))
+                if(!lhsSymbolType.equals(rhsSymbolType)) //checks both have types that match
                 {
                     System.out.println("Line " + lhsTree.getBeginLine() + ": Variable " + lhsSymbol.getId() +
                             " has been declared as " + lhsSymbolType + ". Cannot redeclare it as " + rhsSymbolType + ".");
@@ -587,8 +600,6 @@ public abstract class Analysis
                 ASTINDEX astindex = (ASTINDEX) child.jjtGetChild(0);
                 if(!parseIndex(astindex))
                     return null;
-                symbol = symbol.getCopy(); //symbol type will be altered but only for this case, so we need a copy
-                symbol.setType(SymbolType.INTEGER.toString());
                 break;
 
             case "SCALARACCESS":
