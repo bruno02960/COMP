@@ -1,8 +1,10 @@
 package yal2jvm.SemanticAnalysis;
 
 import yal2jvm.Analysis;
+import yal2jvm.HHIR.Type;
 import yal2jvm.SymbolTables.FunctionSymbol;
 import yal2jvm.SymbolTables.Symbol;
+import yal2jvm.SymbolTables.VarSymbol;
 import yal2jvm.ast.*;
 
 import java.util.*;
@@ -17,6 +19,24 @@ public class ModuleAnalysis extends Analysis
         moduleName = ((ASTMODULE) ast).name;
     }
 
+    public void parse()
+    {
+        initiateGlobalSymbolTable();
+        setGlobalVariablesAsInitialized();
+
+        HashMap<String, Symbol> unifiedSymbolTable = getUnifiedSymbolTable();
+        for (Object o : functionNameToFunctionSymbol.entrySet())
+        {
+            Map.Entry pair = (Map.Entry) o;
+            FunctionSymbol functionSymbol = (FunctionSymbol) pair.getValue();
+
+            SimpleNode functionAST = functionSymbol.getFunctionAST();
+            FunctionAnalysis functionAnalysis = new FunctionAnalysis(functionAST, unifiedSymbolTable,
+                    functionNameToFunctionSymbol);
+            functionAnalysis.parse();
+        }
+    }
+
     private void initiateGlobalSymbolTable()
     {
         int numChildren = ast.jjtGetNumChildren();
@@ -27,19 +47,15 @@ public class ModuleAnalysis extends Analysis
         }
     }
 
-    public void parse()
+    private void setGlobalVariablesAsInitialized()
     {
-        initiateGlobalSymbolTable();
-
-        HashMap<String, Symbol> unifiedSymbolTable = getUnifiedSymbolTable();
-        for (Object o : functionNameToFunctionSymbol.entrySet()) {
+        for (Object o : mySymbols.entrySet())
+        {
             Map.Entry pair = (Map.Entry) o;
-            FunctionSymbol functionSymbol = (FunctionSymbol) pair.getValue();
-
-            SimpleNode functionAST = functionSymbol.getFunctionAST();
-            FunctionAnalysis functionAnalysis = new FunctionAnalysis(functionAST, unifiedSymbolTable,
-                    functionNameToFunctionSymbol);
-            functionAnalysis.parse();
+            VarSymbol symbol = (VarSymbol) pair.getValue();
+            symbol.setInitialized(true);
+            if(symbol.getType().equals(Type.ARRAY.toString()))
+                symbol.setSizeSet(true);
         }
     }
 
@@ -54,12 +70,13 @@ public class ModuleAnalysis extends Analysis
                 String functionId = astfunctionNode.id;
                 FunctionSymbol functionSymbol = new FunctionSymbol(astfunctionNode, functionId);
                 functionSymbol.parseFunctionHeader();
-
                 functionNameToFunctionSymbol.put(functionSymbol.getId(), functionSymbol);
                 break;
+
             case "DECLARATION":
                 parseDeclaration((ASTDECLARATION) child);
                 break;
+
             default:
                 System.out.println("Line " + child.getBeginLine() + ": Unexpected node" + child.toString());
                 System.exit(-1);

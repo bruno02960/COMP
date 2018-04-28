@@ -185,10 +185,8 @@ public abstract class Analysis
         else {
             ASTARGUMENTS astarguments = (ASTARGUMENTS) callTree.jjtGetChild(0);
             ArrayList<String> argumentsTypes = parseArgumentList(astarguments);
-            if (argumentsTypes == null) {
-
+            if (argumentsTypes == null)
                 return null;
-            }
 
             if(functionArguments.size() != argumentsTypes.size())
             {
@@ -210,6 +208,10 @@ public abstract class Analysis
                 }
             }
         }
+
+
+        if(returnSymbol == null)
+            return null;
 
         returnSymbol = returnSymbol.getCopy();
         returnSymbol.setInitialized(true);
