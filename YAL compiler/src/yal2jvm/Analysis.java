@@ -498,13 +498,23 @@ public abstract class Analysis
         SimpleNode rhsTree = (SimpleNode) assignTree.jjtGetChild(1);
         if(rhsTree != null)
             rhsSymbol = parseRhs(rhsTree);
-        if(rhsSymbol == null)
-            return false;
+
 
         SimpleNode lhsTree = (SimpleNode) assignTree.jjtGetChild(0);
         VarSymbol lhsSymbol = getLhsVariable(lhsTree);
         if(lhsSymbol == null)
             return false;
+
+        //if rhs has an error, but lhs is correct, we assume that lhs is initialized
+        if(rhsSymbol == null)
+        {
+            lhsSymbol.setInitialized(true);
+            if(lhsSymbol.getType().equals("ARRAY"))
+                lhsSymbol.setSizeSet(true);
+            addToSymbolTable(lhsSymbol);
+
+            return false;
+        }
 
         if(lhsSymbol.getId().contains(".size"))
         {
