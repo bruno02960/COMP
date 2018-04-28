@@ -107,7 +107,7 @@ public class Yal2jvm
         ModuleAnalysis moduleAnalysis = new ModuleAnalysis(ast);
         moduleAnalysis.parse();
 		System.out.println("Completed semantic analysis");
-        if(moduleAnalysis.hasErrors)
+        if(ModuleAnalysis.hasErrors)
         	return;
 
 
@@ -196,7 +196,7 @@ public class Yal2jvm
 		{
 			Runtime.getRuntime().exec("java -jar jasmin.jar " + fileName).waitFor();
 			File file = new File(fileName);
-			//file.delete();
+			// TODO: file.delete();
 		} 
         catch (IOException | InterruptedException e)
 		{

@@ -55,9 +55,9 @@ public class IfAnalysis extends Analysis
             ArrayList<Symbol> mySymbolsStatesAfterElse = new ArrayList<>(Utils.copyHashMap(mySymbols).values());
 
             ArrayList<Symbol> commonInitializedSymbols = getCommonInitializedSymbols(inheritedSymbolsStatesAfterIf, inheritedSymbolsStatesAfterElse);
-            for (Object o : originalInheritedSymbols.entrySet())
+            for (HashMap.Entry<String, Symbol> o : originalInheritedSymbols.entrySet())
             {
-                HashMap.Entry pair = (HashMap.Entry) o;
+                HashMap.Entry<String, Symbol> pair = o;
                 VarSymbol symbol = (VarSymbol) pair.getValue();
                 if (commonInitializedSymbols.contains(symbol))
                     symbol.setInitialized(true);
@@ -81,8 +81,8 @@ public class IfAnalysis extends Analysis
     {
         HashMap<String, Symbol> symbolsInitialized = new HashMap<>();
 
-        for (Object o : symbols.entrySet()) {
-            HashMap.Entry pair = (HashMap.Entry) o;
+        for (HashMap.Entry<String, Symbol> o : symbols.entrySet()) {
+        	HashMap.Entry<String, Symbol> pair = o;
             VarSymbol symbol = (VarSymbol) pair.getValue();
             if (commonDeclaredSymbols.contains(symbol)) {
                 String symbolName = (String) pair.getKey();

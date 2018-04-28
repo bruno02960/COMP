@@ -9,6 +9,7 @@ import yal2jvm.ast.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map.Entry;
 
 public abstract class Analysis
 {
@@ -730,8 +731,8 @@ public abstract class Analysis
     {
         HashMap<String, Symbol> symbolsNotInitialized = new HashMap<>();
 
-        for (Object o : symbols.entrySet()) {
-            HashMap.Entry pair = (HashMap.Entry) o;
+        for (Entry<String, Symbol> o : symbols.entrySet()) {
+            HashMap.Entry<String, Symbol> pair = o;
             String symbolName = (String) pair.getKey();
             VarSymbol symbol = (VarSymbol) pair.getValue();
             symbol.setInitialized(false);

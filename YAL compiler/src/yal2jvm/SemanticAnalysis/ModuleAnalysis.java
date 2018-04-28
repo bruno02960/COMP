@@ -26,9 +26,9 @@ public class ModuleAnalysis extends Analysis
         setGlobalVariablesAsInitialized();
 
         HashMap<String, Symbol> unifiedSymbolTable = getUnifiedSymbolTable();
-        for (Object o : functionNameToFunctionSymbol.entrySet())
+        for (HashMap.Entry<String, Symbol> o : functionNameToFunctionSymbol.entrySet())
         {
-            Map.Entry pair = (Map.Entry) o;
+        	HashMap.Entry<String, Symbol> pair = o;
             FunctionSymbol functionSymbol = (FunctionSymbol) pair.getValue();
 
             SimpleNode functionAST = functionSymbol.getFunctionAST();
@@ -50,9 +50,9 @@ public class ModuleAnalysis extends Analysis
 
     private void setGlobalVariablesAsInitialized()
     {
-        for (Object o : mySymbols.entrySet())
+        for (HashMap.Entry<String, Symbol> o : mySymbols.entrySet())
         {
-            Map.Entry pair = (Map.Entry) o;
+        	HashMap.Entry<String, Symbol> pair = o;
             VarSymbol symbol = (VarSymbol) pair.getValue();
             symbol.setInitialized(true);
             if(symbol.getType().equals(Type.ARRAY.toString()))
