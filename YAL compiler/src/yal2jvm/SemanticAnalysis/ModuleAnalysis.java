@@ -12,6 +12,7 @@ import java.util.*;
 public class ModuleAnalysis extends Analysis
 {
     public static String moduleName;
+    public static boolean hasErrors;
 
     public ModuleAnalysis(SimpleNode ast)
     {

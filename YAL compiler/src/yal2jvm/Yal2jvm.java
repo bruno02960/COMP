@@ -93,14 +93,25 @@ public class Yal2jvm
 	public void run()
 	{
 		FileInputStream inputStream = getFileStream();
-		
+
+		System.out.println("Initiating syntatic analysis");
 		ast = createAst(inputStream);
+		System.out.println("Completed syntatic analysis");
+		if(ast == null)
+			return;
+		System.out.println("Printing abstract syntatic tree");
 		ast.dump("");
 
+
+		System.out.println("Initiating semantic analysis");
         ModuleAnalysis moduleAnalysis = new ModuleAnalysis(ast);
         moduleAnalysis.parse();
+		System.out.println("Completed semantic analysis");
+        if(moduleAnalysis.hasErrors)
+        	return;
 
 
+		System.out.println("Initiating JVM code generation");
         HHIR hhir = new HHIR(ast);
         if (this.optimize)
         	hhir.optimize();
@@ -109,9 +120,11 @@ public class Yal2jvm
         
         ArrayList<String> instructions = hhir.selectInstructions();
         String moduleName = hhir.getModuleName();
-        
+
+		System.out.println("JVM code generation completed");
         saveToJasminFile(instructions, moduleName);
         compileToBytecode(moduleName + ".j");
+		System.out.println("Bytecode generated");
 	}
 
 	private FileInputStream getFileStream()
@@ -131,22 +144,21 @@ public class Yal2jvm
 
 	private SimpleNode createAst(FileInputStream inputStream)
 	{
-		YalParser parser = new YalParser(inputStream);
+		new YalParser(inputStream);
 	    SimpleNode root = null;
 		try
 		{
 			root = YalParser.Module();
 
 			int noErrors = YalParser.errorCounter.getNoErrors();
-
-			if(noErrors > 0) {
-				if(noErrors == 10) {
+			if(noErrors > 0)
+			{
+				if(noErrors == 10)
 					System.err.println("At least 10 errors found!");
-				}
-				else {
+				else
 					System.err.println(noErrors + " errors found!");
-				}
-				System.exit(-1);
+
+				return null;
 			}
 		}
 		catch (ParseException e)

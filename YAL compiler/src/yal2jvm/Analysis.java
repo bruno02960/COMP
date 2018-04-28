@@ -103,6 +103,7 @@ public abstract class Analysis
                 System.out.println("Line " + child.getBeginLine() + ": Variables dont match! Variable "
                         + previousSymbol.getId() + " has type " + previousSymbol.getType() +
                         " and " + symbol.getId() + " has type " + symbol.getType() + ".");
+                ModuleAnalysis.hasErrors = true;
                 return null;
             }
         }
@@ -156,8 +157,10 @@ public abstract class Analysis
                     return null;
             }
 
-            if (argumentsTypes.contains("STRING") && !module.equals("io")) {
+            if (argumentsTypes.contains("STRING") && !module.equals("io"))
+            {
                 System.out.println("Line " + callTree.getBeginLine() + ": Only module io can have string type arguments.");
+                ModuleAnalysis.hasErrors = true;
             }
 
             return new VarSymbol("", SymbolType.UNDEFINED.toString(), true);
@@ -169,16 +172,20 @@ public abstract class Analysis
         if(functionSymbol == null)
         {
             System.out.println("Line " + callTree.getBeginLine() + ": Method " + method + " can´t be found.");
+            ModuleAnalysis.hasErrors = true;
             return null;
         }
 
         ArrayList<VarSymbol> functionArguments = functionSymbol.getArguments();
         VarSymbol returnSymbol = functionSymbol.getReturnValue();
 
-        if(callTree.jjtGetNumChildren() == 0) {
-            if(callTree.jjtGetNumChildren() != functionArguments.size()){
+        if(callTree.jjtGetNumChildren() == 0)
+        {
+            if(callTree.jjtGetNumChildren() != functionArguments.size())
+            {
                 System.out.println("Line " + callTree.getBeginLine() + ": Method " + method + " arguments number(0)" +
                         "does not match expected number(" + functionArguments.size() + ") of arguments");
+                ModuleAnalysis.hasErrors = true;
                 return null;
             }
         }
@@ -192,6 +199,7 @@ public abstract class Analysis
             {
                 System.out.println("Line " + astarguments.getBeginLine() + ": Method " + method + " arguments number("
                         + argumentsTypes.size() + ") does not match expected number(" + functionArguments.size() + ") of arguments");
+                ModuleAnalysis.hasErrors = true;
                 return null;
             }
 
@@ -204,6 +212,7 @@ public abstract class Analysis
                     System.out.println("Line " + astarguments.getBeginLine() + ": Type " + argumentType +
                             " of argument " + i+1 + " of method " + method +
                             " call does not match expected type " + expectedArgumentType + ".");
+                    ModuleAnalysis.hasErrors = true;
                     returnSymbol = null;
                 }
             }
@@ -237,6 +246,7 @@ public abstract class Analysis
             {
                 System.out.println("Line " + astargument.getBeginLine() + ": Argument " + i + " is neither a variable,"
                         + "a string or an integer.");
+                ModuleAnalysis.hasErrors = true;
                 return null;
             }
 
@@ -274,6 +284,7 @@ public abstract class Analysis
         {
             System.out.println("Line " + arrayAccessTree.getBeginLine() + ": Access to index of variable " + arrayId
                     + " that is not an array.");
+            ModuleAnalysis.hasErrors = true;
             return null;
         }
 
@@ -305,11 +316,13 @@ public abstract class Analysis
         if(indexSymbol == null)
         {
             System.out.println("Line " + ast.getBeginLine() + ": Variable " + symbolId + " might not have been declared.");
+            ModuleAnalysis.hasErrors = true;
             return null;
         }
         if(!indexSymbol.isInitialized())
         {
             System.out.println("Line " + ast.getBeginLine() + ": Variable " + symbolId + " might not have been initialized.");
+            ModuleAnalysis.hasErrors = true;
             return null;
         }
 
@@ -342,6 +355,7 @@ public abstract class Analysis
             {
                 System.out.println("Line " + scalarAccessTree.getBeginLine() + ": Access to size of variable " + id +
                         " that is not an array.");
+                ModuleAnalysis.hasErrors = true;
                 return null;
             }
 
@@ -349,6 +363,7 @@ public abstract class Analysis
             {
                 System.out.println("Line " + scalarAccessTree.getBeginLine() + ": Cannot access to array " + id +
                         " size, because size is undefined.");
+                ModuleAnalysis.hasErrors = true;
                 return null;
             }
 
@@ -459,6 +474,7 @@ public abstract class Analysis
                 System.out.println("Line " + declarationTree.getBeginLine() + ": Variable " +
                         astarrayelement.id + " has the size not defined." + " Error assigning " +
                         declarationTree.integer + " to all elements of " + astarrayelement.id + ".");
+                ModuleAnalysis.hasErrors = true;
                 return null;
             }
 
@@ -477,6 +493,7 @@ public abstract class Analysis
         {
             System.out.println("Line " + declarationTree.getBeginLine() + ": Variable " + symbol.getId() +
                     " already declared.");
+            ModuleAnalysis.hasErrors = true;
             return null;
         }
 
@@ -486,6 +503,7 @@ public abstract class Analysis
             System.out.println("Line " + declarationTree.getBeginLine() + ": Variable " +
                     symbol.getId() + " has the size not defined." + " Error assigning " +
                     declarationTree.integer + " to all elements of " + symbol.getId() + ".");
+            ModuleAnalysis.hasErrors = true;
             return null;
         }
 
@@ -519,6 +537,7 @@ public abstract class Analysis
         if(lhsSymbol.getId().contains(".size"))
         {
             System.out.println("Line " + rhsTree.getBeginLine() + ": Impossible to set a variable size.");
+            ModuleAnalysis.hasErrors = true;
             return false;
         }
 
@@ -527,6 +546,7 @@ public abstract class Analysis
            if (lhsSymbol.getType().equals(SymbolType.ARRAY.toString()) && lhsSymbol.isSizeSet()) // if is from type A = [VALUE] with A already declared
            {
                System.out.println("Line " + rhsTree.getBeginLine() + ": Variable " + lhsSymbol.getId() + " already declared.");
+               ModuleAnalysis.hasErrors = true;
                return false;
            }
            else if(lhsSymbol.getType().equals(SymbolType.UNDEFINED.toString())) // if is from type A = [VALUE] with A still not declared
@@ -561,6 +581,7 @@ public abstract class Analysis
         {
             System.out.println("Line " + lhsTree.getBeginLine() + ": Variable " + lhsSymbol.getId() +
                     " has the size not defined." + " Error assigning right hand side to all elements of " + lhsSymbol.getId() + ".");
+            ModuleAnalysis.hasErrors = true;
             return false;
         }
 
@@ -577,6 +598,7 @@ public abstract class Analysis
                 {
                     System.out.println("Line " + lhsTree.getBeginLine() + ": Variable " + lhsSymbol.getId() +
                             " has been declared as " + lhsSymbolType + ". Cannot redeclare it as " + rhsSymbolType + ".");
+                    ModuleAnalysis.hasErrors = true;
                     return false;
                 }
 
@@ -656,6 +678,7 @@ public abstract class Analysis
             System.out.println("Line " + astLhs.getBeginLine() + ": Variables must have same type to be compared." +
                     "Variable " + lhsSymbol.getId() + " has type " + lhsSymbol.getType() + " and variable " +
                     rhsSymbol.getId() + " has type " + rhsSymbol.getType() + ".");
+            ModuleAnalysis.hasErrors = true;
             return false;
         }
 
@@ -664,6 +687,7 @@ public abstract class Analysis
             System.out.println("Line " + astLhs.getBeginLine() + ": Variables must be INTEGER to be compared. Variable "
                     + lhsSymbol.getId() + " has type " + lhsSymbol.getType() + " and variable " + rhsSymbol.getId() +
                     " has type " + rhsSymbol.getType() + ".");
+            ModuleAnalysis.hasErrors = true;
             return false;
         }
 
