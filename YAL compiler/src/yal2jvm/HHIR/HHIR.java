@@ -178,6 +178,7 @@ public class HHIR
         }
         IRMethod function = new IRMethod(functionId, returnType, returnName, argumentsTypes, argumentsNames);
 
+        //TODO: debug
         if (functionDebug)
         {
             System.out.println("name= " + functionId);
@@ -304,8 +305,10 @@ public class HHIR
                         {
                             case "CALL":
                                 call = true;
-                                //TODO: How to proceed in this case?
+                                IRStoreCall irStoreCall = new IRStoreCall(name);
+                                createCallHHIR((ASTCALL) termChild, irStoreCall);
                                 break;
+
                             case "ARRAYACCESS":
                                 ASTARRAYACCESS astarrayaccess = ((ASTARRAYACCESS) termChild);
                                 ASTINDEX astindex = (ASTINDEX) termChild.jjtGetChild(0);
@@ -317,6 +320,7 @@ public class HHIR
                                     isSize.add(false);
                                 operands.add(arrayaccess);
                                 break;
+
                             case "SCALARACCESS":
                                 String id = ((ASTSCALARACCESS) termChild).id;
                                 at_op.add("-1");
@@ -333,6 +337,7 @@ public class HHIR
                         }
                     }
                     break;
+
                 case "ARRAYSIZE":
                     ASTARRAYSIZE astarraysize = (ASTARRAYSIZE) rhchild;
 
@@ -523,6 +528,7 @@ public class HHIR
                 break;
         }
 
+        //TODO:DEBUG
         if (declarationDebug)
         {
             System.out.println();
