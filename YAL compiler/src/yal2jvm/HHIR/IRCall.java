@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 public class IRCall extends IRNode
 {
-
     private String method;
     private String module;
     private ArrayList<PairStringType> arguments;
@@ -100,12 +99,17 @@ public class IRCall extends IRNode
     		}
     	}
         callInst += ")";
-        
+
         if (this.module != null)
-        	callInst += "I";
+        {
+            if (this.module.equals("io"))
+                callInst += "V";
+            else
+                callInst += "I";
+        }
         else
         {
-            IRModule mod = null;
+            IRModule mod;
             IRNode par = this.parent;
             while (true)
             {

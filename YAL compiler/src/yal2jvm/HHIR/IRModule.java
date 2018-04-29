@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 public class IRModule extends IRNode
 {
-
     private String name;
 
     public IRModule(String name)

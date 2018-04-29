@@ -27,7 +27,8 @@ public class IRReturn extends IRNode
             case INTEGER:
                 IRMethod irMethod = (IRMethod) getParent();
                 int registerNumber = irMethod.getVarRegister(name);
-                inst.add(getInstructionToLoadRegisterToStack(registerNumber));
+                String loadInst = getInstructionToLoadRegisterToStack(registerNumber);
+                inst.add(loadInst);
                 break;
 
             case ARRAY:
