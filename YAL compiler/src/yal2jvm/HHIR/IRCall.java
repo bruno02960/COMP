@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 public class IRCall extends IRNode
 {
-
     private String method;
     private String module;
     private ArrayList<PairStringType> arguments;
