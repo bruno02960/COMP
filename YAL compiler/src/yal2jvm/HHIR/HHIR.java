@@ -13,7 +13,7 @@ public class HHIR
     //TODO: Debug
     boolean declarationDebug = false;
     boolean functionDebug = false;
-    boolean assignDebug = false;
+    boolean assignDebug = true;
     boolean callDebug = false;
 
     public HHIR(SimpleNode ast)
