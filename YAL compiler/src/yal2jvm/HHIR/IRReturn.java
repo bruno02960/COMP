@@ -25,10 +25,10 @@ public class IRReturn extends IRNode
                 break;
 
             case INTEGER:
-                IRMethod irMethod = (IRMethod) getParent();
-                int registerNumber = irMethod.getVarRegister(name);
-                String loadInst = getInstructionToLoadRegisterToStack(registerNumber);
-                inst.add(loadInst);
+                IRLoad irLoad = new IRLoad(name);
+                addChild(irLoad);
+                inst.addAll(irLoad.getInstructions());
+                inst.add("ireturn");
                 break;
 
             case ARRAY:

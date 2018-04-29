@@ -45,7 +45,7 @@ public class IRCall extends IRNode
  	        	}
          		case INTEGER:
          		{
-         			IRNode var = null;
+         			IRNode var;
          			if (arg.getString().matches("-?\\d+"))
          			{
          				var = new IRConstant(arg.getString(), arg.getType());

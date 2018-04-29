@@ -24,11 +24,7 @@ public class IRStoreCall extends IRStore
         ArrayList<IRNode> childs = getChildren(); //one and only one child, an IRCall
         IRCall irCall = (IRCall) childs.get(0);
         inst.addAll(irCall.getInstructions());
-
-        IRMethod parent = (IRMethod) this.getParent();
-        int registerNumber = parent.getVarRegister(name);
-        String storeInst = getInstructionToStoreRegisterToStack(registerNumber);
-        inst.add(storeInst);
+        inst.addAll(getInstForStoring());
 
         return inst;
     }

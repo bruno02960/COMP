@@ -550,7 +550,7 @@ public class HHIR
             }
             if (astArgument.idArg != null)
             {
-                PairStringType pair = new PairStringType(astArgument.idArg, Type.VARIABLE);
+                PairStringType pair = new PairStringType(astArgument.idArg, Type.INTEGER);
                 arguments.add(pair);
             }
         }

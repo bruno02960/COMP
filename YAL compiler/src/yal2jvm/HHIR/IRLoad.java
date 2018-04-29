@@ -29,7 +29,7 @@ public class IRLoad extends IRNode
     {
         ArrayList<String> inst = new ArrayList<>();
 
-        IRMethod method = null;
+        IRMethod method;
         IRNode par = this.parent;
         while (true)
         {
@@ -44,16 +44,19 @@ public class IRLoad extends IRNode
         int register = method.getVarRegister(name);
         if (register == -1)
             register = method.getArgumentRegister(name);
-
         if (register > -1)	//variable is local
         {
-            inst.add("iload " + register);
-        } else				//variable is global
+            inst.add(getInstructionToLoadRegisterToStack(register));
+        }
+        else  //variable is global
         {
             IRModule module = ((IRModule) method.getParent());
             IRGlobal global = module.getGlobal(name);
             if (global == null)
-            	return null;
+            {
+                System.out.println("Internal error! The program will be closed.");
+                System.exit(-1);
+            }
 
             String in = "getstatic " + module.getName() + "/" + global.getName() + " ";
             in += global.getType() == Type.INTEGER ? "I" : "A";
