@@ -458,20 +458,20 @@ public class HHIR
             }
 
             if(type2.equals("CALL")) {           // a = f1() + X
-                irStoreArith.setLhs(calls.get(0));
+                irStoreArith.setLhs(calls.get(1));
 
                 //TODO:Debug
                 System.out.println("Assign Call Rhs Operation");
             }
             else {
                 if(type2.equals("INTEGER")) {    // a = 3
-                    irStoreArith.setRhs(new IRConstant(operands.get(0), Type.INTEGER));
+                    irStoreArith.setRhs(new IRConstant(operands.get(1), Type.INTEGER));
 
                     //TODO:Debug
                     System.out.println("Assign Integer Rhs Operation");
                 }
                 else {                          // a = b
-                    irStoreArith.setRhs(new IRLoad(operands.get(0)));
+                    irStoreArith.setRhs(new IRLoad(operands.get(1)));
 
                     //TODO:Debug
                     System.out.println("Assign Variable Rhs Operation");

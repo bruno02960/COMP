@@ -139,7 +139,8 @@ public class IRMethod extends IRNode
         {
             if (children.get(i).toString().equals("Allocate"))
             {
-                if (((IRAllocate) children.get(i)).getName().equals(name))
+                IRAllocate irAllocate = ((IRAllocate) children.get(i));
+                if (irAllocate.getName().equals(name))
                     return ((IRAllocate) children.get(i)).getRegister();
             }
         }

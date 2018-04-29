@@ -10,18 +10,22 @@
 .limit locals 255
 .limit stack 20
 ldc ""arg1 = ""
-invokestatic io/println(Ljava/lang/String;)V
+iload_0
+invokestatic io/println(Ljava/lang/String;I)V
 ldc ""arg2 = ""
-invokestatic io/println(Ljava/lang/String;)V
-iload 0
-iload 0
+iload_1
+invokestatic io/println(Ljava/lang/String;I)V
+iload_1
+iload_0
 iadd
-istore 3
+istore_3
 ldc ""ret in funcAbove = ""
-invokestatic io/println(Ljava/lang/String;)V
+iload_3
+invokestatic io/println(Ljava/lang/String;I)V
 ldc 0
 istore 3
 iload_3
+ireturn
 .end method
 
 
@@ -29,52 +33,65 @@ iload_3
 .limit locals 255
 .limit stack 20
 ldc ""a = ""
-invokestatic io/println(Ljava/lang/String;)V
+getstatic all/a I
+invokestatic io/println(Ljava/lang/String;I)V
 ldc ""b = ""
-invokestatic io/println(Ljava/lang/String;)V
+getstatic all/b I
+invokestatic io/println(Ljava/lang/String;I)V
 ldc ""1 = ""
 ldc 1
 invokestatic io/println(Ljava/lang/String;I)V
-getfield all/a I
-getfield all/a I
+getstatic all/b I
+getstatic all/a I
 iadd
-istore 0
-getfield all/a I
-getfield all/a I
+istore_0
+getstatic all/b I
+getstatic all/a I
 isub
-istore 1
-getfield all/a I
-getfield all/a I
+istore_1
+getstatic all/b I
+getstatic all/a I
 imul
-istore 2
-getfield all/a I
-getfield all/a I
+istore_2
+getstatic all/b I
+getstatic all/a I
 idiv
-istore 3
+istore_3
 ldc ""sum = ""
-invokestatic io/println(Ljava/lang/String;)V
+iload_0
+invokestatic io/println(Ljava/lang/String;I)V
 ldc ""dif = ""
-invokestatic io/println(Ljava/lang/String;)V
+iload_1
+invokestatic io/println(Ljava/lang/String;I)V
 ldc ""mul = ""
-invokestatic io/println(Ljava/lang/String;)V
+iload_2
+invokestatic io/println(Ljava/lang/String;I)V
 ldc ""div = ""
-invokestatic io/println(Ljava/lang/String;)V
+iload_3
+invokestatic io/println(Ljava/lang/String;I)V
 invokestatic io/println()V
-getfield all/a I
-getfield all/a I
+getstatic all/b I
+getstatic all/a I
 iadd
 istore 4
 ldc ""c = ""
-invokestatic io/println(Ljava/lang/String;)V
+iload 4
+invokestatic io/println(Ljava/lang/String;I)V
 invokestatic io/println()V
-invokestatic funcAbove()I
-istore_-1
-invokestatic funcBelow()I
-istore_-1
+getstatic all/b I
+iload 4
+invokestatic funcAbove(II)I
+istore 5
+getstatic all/b I
+iload 4
+invokestatic funcBelow(II)I
+istore 6
 ldc ""funcAbove of b c = ""
-invokestatic io/println(Ljava/lang/String;)V
+iload 5
+invokestatic io/println(Ljava/lang/String;I)V
 ldc ""funcBelow of b c = ""
-invokestatic io/println(Ljava/lang/String;)V
+iload 6
+invokestatic io/println(Ljava/lang/String;I)V
 ldc 0
 istore 0
 ldc 0
@@ -85,6 +102,10 @@ ldc 0
 istore 3
 ldc 0
 istore 4
+ldc 0
+istore 5
+ldc 0
+istore 6
 return
 .end method
 
@@ -93,16 +114,20 @@ return
 .limit locals 255
 .limit stack 20
 ldc ""arg1 = ""
-invokestatic io/println(Ljava/lang/String;)V
+iload_0
+invokestatic io/println(Ljava/lang/String;I)V
 ldc ""arg2 = ""
-invokestatic io/println(Ljava/lang/String;)V
-iload 0
-iload 0
+iload_1
+invokestatic io/println(Ljava/lang/String;I)V
+iload_1
+iload_0
 iadd
-istore 3
+istore_3
 ldc ""ret in funcBelow = ""
-invokestatic io/println(Ljava/lang/String;)V
+iload_3
+invokestatic io/println(Ljava/lang/String;I)V
 ldc 0
 istore 3
 iload_3
+ireturn
 .end method
