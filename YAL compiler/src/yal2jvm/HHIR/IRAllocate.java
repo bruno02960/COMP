@@ -68,7 +68,7 @@ public class IRAllocate extends IRNode
             		}
             	}
             	else
-            		inst.add("ldc " + this.value);
+            		inst.add(IRConstant.getLoadConstantInstruction(this.value));
             	
                 inst.add("istore " + this.register);
                 break;
