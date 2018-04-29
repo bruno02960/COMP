@@ -12,8 +12,6 @@
 .limit stack 20
 ldc 0
 istore 1
-ldc 1
-istore 2
 return
 .end method
 
@@ -21,5 +19,10 @@ return
 .method public static main([Ljava/lang/String;)V
 .limit locals 255
 .limit stack 20
+invokestatic det()V
+ldc "max: "
+invokestatic io/println(Ljava/lang/String;)I
+ldc "min: "
+invokestatic io/println(Ljava/lang/String;)I
 return
 .end method

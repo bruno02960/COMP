@@ -268,8 +268,10 @@ public class HHIR
         SimpleNode lhchild = (SimpleNode) astlhs.jjtGetChild(0);
         switch (lhchild.toString())
         {
-            /*case "ARRAYACCESS":
-                ASTARRAYACCESS astarrayaccess = (ASTARRAYACCESS) lhchild;
+            case "ARRAYACCESS":
+                System.out.println("Not generating HHIR for " + lhchild.toString() + " yet.");
+                return;
+                /*ASTARRAYACCESS astarrayaccess = (ASTARRAYACCESS) lhchild;
                 ASTINDEX astindex = (ASTINDEX) astarrayaccess.jjtGetChild(0);
 
                 lhsName = astarrayaccess.arrayID;
@@ -286,8 +288,6 @@ public class HHIR
                 ASTSCALARACCESS astscalaraccess = (ASTSCALARACCESS) lhchild;
                 lhsName = astscalaraccess.id;
                 break;
-            default:
-                System.out.println("Not generating HHIR for " + lhchild.toString() + " yet.");
         }
 
         operator = astrhs.operator; /* operator == null? IRAllocate : IRStoreArith */
@@ -325,8 +325,10 @@ public class HHIR
                                 calls.add(irCall);
                                 break;
 
-                            /*case "ARRAYACCESS":
-                                ASTARRAYACCESS astarrayaccess = ((ASTARRAYACCESS) termChild);
+                            case "ARRAYACCESS":
+                                System.out.println("Not generating HHIR for " + termChild.toString() + " yet.");
+                                return;
+                                /*ASTARRAYACCESS astarrayaccess = ((ASTARRAYACCESS) termChild);
                                 ASTINDEX astindex = (ASTINDEX) termChild.jjtGetChild(0);
                                 String arrayaccess = term.operator + astarrayaccess.arrayID;
                                 at_op.add((astindex.indexID != null ? astindex.indexID : astindex.indexValue.toString()));
@@ -343,7 +345,7 @@ public class HHIR
                                 if (id.contains(".size"))
                                 {
                                     System.out.println("Not generating HHIR for " + id + " yet.");
-                                    break;
+                                    return;
                                     /*isSize.add(true);
                                     id = id.split(".size")[0];*/
                                 } else
@@ -353,16 +355,13 @@ public class HHIR
                                 types.add("VAR");
                                 operands.add(term.operator + id);
                                 break;
-                            default:
-                                System.out.println("Not generating HHIR for " + termChild.toString() + " yet.");
                         }
                     }
                     break;
-                default:
+                case "ARRAYSIZE":
                     System.out.println("Not generating HHIR for " + rhchild.toString() + " yet.");
-
-/*                case "ARRAYSIZE":
-                    ASTARRAYSIZE astarraysize = (ASTARRAYSIZE) rhchild;
+                    return;
+                    /*ASTARRAYSIZE astarraysize = (ASTARRAYSIZE) rhchild;
 
                     if (astarraysize.jjtGetNumChildren() == 0)
                     {
@@ -407,13 +406,22 @@ public class HHIR
                 IRStoreCall irStoreCall = new IRStoreCall(lhsName);
                 irStoreCall.addChild(calls.get(0));
                 irmethod.addChild(irStoreCall);
+
+                //TODO:Debug
+                System.out.println("Assign Call");
             }
             else {
                 if(type.equals("INTEGER")) {    // a = 3
                     irmethod.addChild(new IRAllocate(lhsName, Type.INTEGER, Integer.parseInt(operands.get(0))));
+
+                    //TODO:Debug
+                    System.out.println("Assign Integer");
                 }
                 else {                          // a = b
                     irmethod.addChild(new IRAllocate(lhsName, Type.INTEGER, operands.get(0)));
+
+                    //TODO:Debug
+                    System.out.println("Assign Variable");
                 }
             }
         }
@@ -425,30 +433,45 @@ public class HHIR
 
             if(type1.equals("CALL")) {           // a = f1() + X
                 irStoreArith.addLhs(calls.get(0));
+
+                //TODO:Debug
+                System.out.println("Assign Call Lhs Operation");
             }
             else {
                 if(type1.equals("INTEGER")) {    // a = 3
                     irStoreArith.addLhs(new IRAllocate(lhsName, Type.INTEGER, Integer.parseInt(operands.get(0))));
+
+                    //TODO:Debug
+                    System.out.println("Assign Integer Lhs Operation");
                 }
                 else {                          // a = b
                     irStoreArith.addLhs(new IRAllocate(lhsName, Type.INTEGER, operands.get(0)));
+
+                    //TODO:Debug
+                    System.out.println("Assign Variable Lhs Operation");
                 }
             }
 
             if(type2.equals("CALL")) {           // a = f1() + X
                 irStoreArith.addLhs(calls.get(0));
+
+                //TODO:Debug
+                System.out.println("Assign Call Rhs Operation");
             }
             else {
                 if(type2.equals("INTEGER")) {    // a = 3
                     irStoreArith.addRhs(new IRAllocate(lhsName, Type.INTEGER, Integer.parseInt(operands.get(0))));
+
+                    //TODO:Debug
+                    System.out.println("Assign Integer Rhs Operation");
                 }
                 else {                          // a = b
                     irStoreArith.addRhs(new IRAllocate(lhsName, Type.INTEGER, operands.get(0)));
+
+                    //TODO:Debug
+                    System.out.println("Assign Variable Rhs Operation");
                 }
             }
-
-
-            //if(type1.equals(""))
         }
     }
 

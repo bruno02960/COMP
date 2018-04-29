@@ -14,6 +14,7 @@ import java.util.Objects;
 
 public class MyClassTest {
     static Yal2jvm instance = null;
+
     @Test
     public void testSomething() throws FileNotFoundException {
         File folder = new File("examples");
