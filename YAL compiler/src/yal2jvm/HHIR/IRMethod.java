@@ -73,32 +73,18 @@ public class IRMethod extends IRNode
         }
 
         ArrayList<String> methodBody = getMethodBody();
-        ArrayList<String> instReturn = getReturn();
+
+        //parse return
+        IRReturn irReturn = new IRReturn(returnVar, returnType);
+        this.addChild(irReturn);
+        ArrayList<String> instReturn = irReturn.getInstructions();
+
         String instFinal = ".end method";
 
         inst.add(inst1);
         inst.addAll(methodBody);
         inst.addAll(instReturn);
         inst.add(instFinal);
-        return inst;
-    }
-
-    private ArrayList<String> getReturn()
-    {
-        ArrayList<String> inst = new ArrayList<>();
-        switch (this.returnType)
-        {
-            case INTEGER:
-            {
-                inst.add("iload " + this.argsNames.length + 1);
-                break;
-            }
-            case ARRAY:
-                break;
-            case VOID:
-                break;
-        }
-        inst.add("return");
         return inst;
     }
 

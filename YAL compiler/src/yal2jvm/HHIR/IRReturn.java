@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 public class IRReturn extends IRNode
 {
-
     private String name;
     private Type type;
 
@@ -19,7 +18,22 @@ public class IRReturn extends IRNode
     public ArrayList<String> getInstructions()
     {
         ArrayList<String> inst = new ArrayList<>();
-        inst.add("return");
+        switch (type)
+        {
+            case VOID:
+                inst.add("return");
+                break;
+
+            case INTEGER:
+                IRMethod irMethod = (IRMethod) getParent();
+                int registerNumber = irMethod.getVarRegister(name);
+                inst.add(getInstructionToLoadRegisterToStack(registerNumber));
+                break;
+
+            case ARRAY:
+                System.out.println("Not generating HHIR for return value ARRAY yet.");
+        }
+
         return inst;
     }
 
