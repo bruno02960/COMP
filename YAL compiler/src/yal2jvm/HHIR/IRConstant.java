@@ -5,13 +5,14 @@ import java.util.ArrayList;
 public class IRConstant extends IRNode
 {
 
-    String value;
-    Type type;
+    private String value;
+    private Type type;
 
-    public IRConstant(String value, Type type)
+    IRConstant(String value, Type type)
     {
         this.value = value;
         this.nodeType = "Constant";
+        this.type = type;
     }
 
     @Override

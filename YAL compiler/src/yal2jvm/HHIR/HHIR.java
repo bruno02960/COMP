@@ -431,20 +431,20 @@ public class HHIR
             IRStoreArith irStoreArith = new IRStoreArith(lhsName, Operation.parseOperator(operator));
 
             if(type1.equals("CALL")) {           // a = f1() + X
-                irStoreArith.addLhs(calls.get(0));
+                irStoreArith.setLhs(calls.get(0));
 
                 //TODO:Debug
                 System.out.println("Assign Call Lhs Operation");
             }
             else {
                 if(type1.equals("INTEGER")) {    // a = 3
-                    irStoreArith.addLhs(new IRAllocate(lhsName, Type.INTEGER, Integer.parseInt(operands.get(0))));
+                    irStoreArith.setLhs(new IRConstant(operands.get(0), Type.INTEGER));
 
                     //TODO:Debug
                     System.out.println("Assign Integer Lhs Operation");
                 }
                 else {                          // a = b
-                    irStoreArith.addLhs(new IRAllocate(lhsName, Type.INTEGER, operands.get(0)));
+                    irStoreArith.setLhs(new IRLoad(operands.get(0)));
 
                     //TODO:Debug
                     System.out.println("Assign Variable Lhs Operation");
@@ -452,32 +452,34 @@ public class HHIR
             }
 
             if(type2.equals("CALL")) {           // a = f1() + X
-                irStoreArith.addLhs(calls.get(0));
+                irStoreArith.setLhs(calls.get(0));
 
                 //TODO:Debug
                 System.out.println("Assign Call Rhs Operation");
             }
             else {
                 if(type2.equals("INTEGER")) {    // a = 3
-                    irStoreArith.addRhs(new IRAllocate(lhsName, Type.INTEGER, Integer.parseInt(operands.get(0))));
+                    irStoreArith.setRhs(new IRConstant(operands.get(0), Type.INTEGER));
 
                     //TODO:Debug
                     System.out.println("Assign Integer Rhs Operation");
                 }
                 else {                          // a = b
-                    irStoreArith.addRhs(new IRAllocate(lhsName, Type.INTEGER, operands.get(0)));
+                    irStoreArith.setRhs(new IRLoad(operands.get(0)));
 
                     //TODO:Debug
                     System.out.println("Assign Variable Rhs Operation");
                 }
             }
+
+            irmethod.addChild(irStoreArith);
         }
     }
 
     private IRCall getIRCall(ASTCALL astCall) {
         String moduleId = astCall.module;
         String methodId = astCall.method;
-        ArrayList<PairStringType> arguments = new ArrayList<PairStringType>();
+        ArrayList<PairStringType> arguments = new ArrayList<>();
 
         if (astCall.jjtGetNumChildren() > 0)
         {
@@ -640,7 +642,7 @@ public class HHIR
             System.out.println(type != null ? "type = " + type : "null");
             System.out.print(variable != null ? "variable = " + variable : "null");
             System.out.println(isSize ? " .size" : "");
-            System.out.println(value != -1 ? "value = " + value : "null");
+            System.out.println(value != null ? "value = " + value : "null");
             System.out.println(size != -1 ? "size = " + size : "null");
             System.out.println();
         }
