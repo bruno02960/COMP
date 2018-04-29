@@ -31,20 +31,20 @@ public class IRMethod extends IRNode
     {
         ArrayList<String> inst = new ArrayList<>();
 
-        String inst1 = ".method public static ";
+        String methodDeclarationInst = ".method public static ";
 
         if (name.equals("main"))
-            inst1 += "main([Ljava/lang/String;)V";
+            methodDeclarationInst += "main([Ljava/lang/String;)V";
         else
         {
-            inst1 += name + "(";
+            methodDeclarationInst += name + "(";
             for (int i = 0; i < argsType.length; i++)
             {
                 switch (argsType[i])
                 {
                     case INTEGER:
                     {
-                        inst1 += "I";
+                        methodDeclarationInst += "I";
                         break;
                     }
                     case ARRAY:
@@ -53,19 +53,19 @@ public class IRMethod extends IRNode
                         break;
                 }
             }
-            inst1 += ")";
+            methodDeclarationInst += ")";
 
             switch (returnType)
             {
                 case INTEGER:
                 {
-                    inst1 += "I";
+                    methodDeclarationInst += "I";
                     break;
                 }
                 case ARRAY:
                     break;
                 case VOID:
-                    inst1 += "V";
+                    methodDeclarationInst += "V";
                     break;
                 default:
                     break;
@@ -79,12 +79,12 @@ public class IRMethod extends IRNode
         this.addChild(irReturn);
         ArrayList<String> instReturn = irReturn.getInstructions();
 
-        String instFinal = ".end method";
+        String endMethodInst = ".end method";
 
-        inst.add(inst1);
+        inst.add(methodDeclarationInst);
         inst.addAll(methodBody);
         inst.addAll(instReturn);
-        inst.add(instFinal);
+        inst.add(endMethodInst);
         return inst;
     }
 
@@ -102,10 +102,7 @@ public class IRMethod extends IRNode
         localsCount += this.argsType.length;
 
         localsCount = 255;
-
         inst.add(".limit locals " + localsCount);
-
-        //if (getChildren().size() > 1)
         inst.add(".limit stack 20");
 
         for (int i = 0; i < getChildren().size(); i++)
@@ -148,4 +145,24 @@ public class IRMethod extends IRNode
         }
         return -1;
     }
+
+	public String getName()
+	{
+		return name;
+	}
+
+	public void setName(String name)
+	{
+		this.name = name;
+	}
+
+	public Type getReturnType()
+	{
+		return returnType;
+	}
+
+	public void setReturnType(Type returnType)
+	{
+		this.returnType = returnType;
+	}
 }
