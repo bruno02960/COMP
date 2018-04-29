@@ -162,4 +162,24 @@ public class IRMethod extends IRNode
         }
         return -1;
     }
+
+	public String getName()
+	{
+		return name;
+	}
+
+	public void setName(String name)
+	{
+		this.name = name;
+	}
+
+	public Type getReturnType()
+	{
+		return returnType;
+	}
+
+	public void setReturnType(Type returnType)
+	{
+		this.returnType = returnType;
+	}
 }

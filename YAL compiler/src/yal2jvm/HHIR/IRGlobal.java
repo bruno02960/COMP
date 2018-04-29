@@ -57,6 +57,8 @@ public class IRGlobal extends IRNode
                 inst1 += " I ";
                 if (initVal != null)
                     inst1 += "= " + initVal;
+                else
+                	inst1 += "= 0";
                 break;
             }
             case ARRAY:

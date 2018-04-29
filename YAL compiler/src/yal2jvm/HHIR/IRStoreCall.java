@@ -7,10 +7,11 @@ public class IRStoreCall extends IRNode
 
     private String name;
 
-    public IRStoreCall(String name)
+    public IRStoreCall(String name, IRCall call)
     {
         this.name = name;
         this.nodeType = "StoreCall";
+        addChild(call);
     }
 
     @Override

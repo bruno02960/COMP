@@ -5,9 +5,10 @@ import java.util.ArrayList;
 public class IRConstant extends IRNode
 {
 
-    int value;
+    String value;
+    Type type;
 
-    public IRConstant(int value)
+    public IRConstant(String value, Type type)
     {
         this.value = value;
         this.nodeType = "Constant";
@@ -18,7 +19,8 @@ public class IRConstant extends IRNode
     {
         ArrayList<String> inst = new ArrayList<>();
 
-        String inst1 = "ldc " + value;
+        String inst1 = "ldc ";
+        inst1 += this.type == Type.STRING ? "\"" + value + "\"" : value;
 
         inst.add(inst1);
         return inst;

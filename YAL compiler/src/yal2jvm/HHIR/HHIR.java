@@ -72,6 +72,10 @@ public class HHIR
         arith2.setLhs(new IRLoad("var3"));
         m2.addChild(arith2);
         module.addChild(m2);
+        ArrayList<PairStringType> lis = new ArrayList<>();
+        lis.add(new PairStringType("var1 = ", Type.STRING));
+        lis.add(new PairStringType("var1", Type.INTEGER));
+        module.addChild(new IRCall("println", "io", lis));
 
         IRMethod main = new IRMethod("main", Type.VOID, "ret", null, null);
         module.addChild(main);
