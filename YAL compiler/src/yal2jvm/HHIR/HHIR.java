@@ -248,7 +248,7 @@ public class HHIR
         ASTLHS astlhs = (ASTLHS) child.jjtGetChild(0);
         ASTRHS astrhs = (ASTRHS) child.jjtGetChild(1);
 
-        ArrayList<ASTCALL> calls = new ArrayList<>();
+        ArrayList<IRCall> calls = new ArrayList<>();
         ArrayList<String> operands = new ArrayList<>();
         ArrayList<String> types = new ArrayList<>();
         ArrayList<String> at_op = new ArrayList<>();
@@ -305,9 +305,14 @@ public class HHIR
                         switch (termChild.toString())
                         {
                             case "CALL":
+                                ASTCALL astcall = (ASTCALL) termChild;
+
                                 isSize.add(false);
                                 types.add("CALL");
-                                calls.add((ASTCALL) termChild);
+
+                                IRCall irCall = getIRCall(astcall);
+
+                                calls.add(irCall);
                                 break;
 
                             /*case "ARRAYACCESS":
@@ -333,7 +338,7 @@ public class HHIR
                                     id = id.split(".size")[0];*/
                                 } else
                                 {
-                                    isSize.add(false);
+                                    //isSize.add(false);
                                 }
                                 types.add("VAR");
                                 operands.add(term.operator + id);
@@ -386,15 +391,11 @@ public class HHIR
             System.out.println();
         }
 
-
-        /*IRStoreCall irStoreCall = new IRStoreCall(name);
-        createCallHHIR((ASTCALL) termChild, irStoreCall);*/
-
-        if(operator == null) {                  // a = IMMEDIATE
+        if(operator.equals("")) {                  // a = IMMEDIATE
             String type = types.get(0);
             if(type.equals("CALL")) {           // a = f1();
                 IRStoreCall irStoreCall = new IRStoreCall(name);
-                createCallHHIR(calls.get(0), irStoreCall);
+                irStoreCall.addChild(calls.get(0));
                 irmethod.addChild(irStoreCall);
             }
             else {
@@ -412,15 +413,47 @@ public class HHIR
 
             IRStoreArith irStoreArith = new IRStoreArith(name, Operation.parseOperator(operator));
 
-            
+            if(type1.equals("CALL")) {           // a = f1() + X
+                irStoreArith.addLhs(calls.get(0));
+            }
+            else {
+                if(type1.equals("INTEGER")) {    // a = 3
+                    irStoreArith.addLhs(new IRAllocate(name, Type.INTEGER, Integer.parseInt(operands.get(0))));
+                }
+                else {                          // a = b
+                    irStoreArith.addLhs(new IRAllocate(name, Type.INTEGER, operands.get(0)));
+                }
+            }
+
+            if(type2.equals("CALL")) {           // a = f1() + X
+                irStoreArith.addLhs(calls.get(0));
+            }
+            else {
+                if(type2.equals("INTEGER")) {    // a = 3
+                    irStoreArith.addRhs(new IRAllocate(name, Type.INTEGER, Integer.parseInt(operands.get(0))));
+                }
+                else {                          // a = b
+                    irStoreArith.addRhs(new IRAllocate(name, Type.INTEGER, operands.get(0)));
+                }
+            }
+
 
             //if(type1.equals(""))
         }
+    }
 
-        /*if (type == Type.INTEGER)
+    private IRCall getIRCall(ASTCALL astCall) {
+        String moduleId = astCall.module;
+        String methodId = astCall.method;
+        ArrayList<PairStringType> arguments = null;
+
+        if (astCall.jjtGetNumChildren() > 0)
         {
-            irmethod.addChild(new IRAllocate(name, type, value));
-        }*/
+            ASTARGUMENTS astarguments = (ASTARGUMENTS) astCall.jjtGetChild(0);
+            arguments = getFunctionCallArgumentsIds(astarguments);
+        }
+        
+        return new IRCall(methodId, moduleId, arguments);
     }
 
     private void createCallHHIR(ASTCALL astCall, IRNode irNode)
@@ -435,7 +468,7 @@ public class HHIR
             arguments = getFunctionCallArgumentsIds(astarguments);
         }
 
-        IRCall irCall = new IRCall(methodId, moduleId, arguments);
+        IRCall irCall = getIRCall(astCall);
 
         if (callDebug)
         {

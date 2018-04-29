@@ -16,6 +16,14 @@ public class IRStoreArith extends IRNode
         this.nodeType = "StoreArith";
     }
 
+    public void addRhs(IRNode rhs) {
+        this.rhs = rhs;
+    }
+
+    public void addLhs(IRNode lhs) {
+        this.lhs = lhs;
+    }
+
     @Override
     public ArrayList<String> getInstructions()
     {
