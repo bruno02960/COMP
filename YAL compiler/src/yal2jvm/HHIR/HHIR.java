@@ -390,9 +390,9 @@ public class HHIR
             //System.out.println(at_name != null ? "at = " + at_name : "null");
             for (int i = 0; i < operands.size(); i++)
             {
-                System.out.print("operand = " + operands.get(i));
-                System.out.println(isSize.get(i) ? " .size" : "");
-                System.out.println(!at_op.get(i).equals("-1") ? "at = " + at_op.get(i) : "null");
+                System.out.println("operand = " + operands.get(i));
+//                System.out.println(isSize.get(i) ? " .size" : "");
+//                System.out.println(!at_op.get(i).equals("-1") ? "at = " + at_op.get(i) : "null");
             }
             System.out.println(!operator.equals("") ? "operator = " + operator : "null");
             //System.out.print(size != null ? "size = " + size : "null");
