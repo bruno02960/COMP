@@ -49,16 +49,12 @@ public class IRGlobal extends IRNode
     {
         ArrayList<String> inst = new ArrayList<>();
 
-        String inst1 = ".field private static " + name;
+        String inst1 = ".field public static " + name;
         switch (type)
         {
             case INTEGER:
             {
-                inst1 += " I ";
-                if (initVal != null)
-                    inst1 += "= " + initVal;
-                else
-                	inst1 += "= 0";
+                inst1 += " I = " + (initVal != null ? initVal : 0);
                 break;
             }
             case ARRAY:

@@ -11,6 +11,7 @@ public class IRConstant extends IRNode
     public IRConstant(String value, Type type)
     {
         this.value = value;
+        this.type = type;
         this.nodeType = "Constant";
     }
 

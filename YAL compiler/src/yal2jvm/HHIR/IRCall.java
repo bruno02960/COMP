@@ -22,42 +22,56 @@ public class IRCall extends IRNode
     {
         ArrayList<String> inst = new ArrayList<>();
 
-        for (int i = 0; i < arguments.size(); i++)
-        {
-        	PairStringType arg = arguments.get(i);
-        	
-        	switch (arg.getType())
-        	{
-        		case STRING:
-	        	{
-	        		IRConstant stringConst = new IRConstant(arg.getString(), arg.getType());
-	        		inst.addAll(stringConst.getInstructions());
-	        		break;
-	        	}
-        		case INTEGER:
-        		{
-        			IRNode var = null;
-        			if (arg.getString().matches("-?\\d+"))
-        			{
-        				var = new IRConstant(arg.getString(), arg.getType());
-        			}
-        			else
-        			{
-        				var = new IRLoad(arg.getString());
-        				this.addChild(var);
-        			}
-        			inst.addAll(var.getInstructions());
-        			break;
-        		}
-        		case ARRAY:
-        		{
-        			break;
-        		}
-        		default:
-        			break;
-        	}
-        }
+        inst.addAll(getArgumentsInstructions()); 
+		inst.add(getCallInstruction());
         
+        return inst;
+    }
+    
+    private ArrayList<String> getArgumentsInstructions()
+    {
+    	 ArrayList<String> inst = new ArrayList<>();
+
+         for (int i = 0; i < arguments.size(); i++)
+         {
+         	PairStringType arg = arguments.get(i);
+         	
+         	switch (arg.getType())
+         	{
+         		case STRING:
+ 	        	{
+ 	        		IRConstant stringConst = new IRConstant(arg.getString(), arg.getType());
+ 	        		inst.addAll(stringConst.getInstructions());
+ 	        		break;
+ 	        	}
+         		case INTEGER:
+         		{
+         			IRNode var = null;
+         			if (arg.getString().matches("-?\\d+"))
+         			{
+         				var = new IRConstant(arg.getString(), arg.getType());
+         			}
+         			else
+         			{
+         				var = new IRLoad(arg.getString());
+         				this.addChild(var);
+         			}
+         			inst.addAll(var.getInstructions());
+         			break;
+         		}
+         		case ARRAY:
+         		{
+         			break;
+         		}
+         		default:
+         			break;
+         	}
+         }
+         return inst;
+    }
+    
+    private String getCallInstruction()
+    {
        	String callInst = "invokestatic ";
     	if (this.module != null)
     		callInst += this.module + "/";
@@ -131,8 +145,6 @@ public class IRCall extends IRNode
 	            	break;
             }
         }
-        
-    	inst.add(callInst);
-        return inst;
+        return callInst;
     }
 }

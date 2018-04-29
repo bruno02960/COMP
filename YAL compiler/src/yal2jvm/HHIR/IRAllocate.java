@@ -7,7 +7,7 @@ public class IRAllocate extends IRNode
 
     private String name;
     private Type type;
-    private int value;
+    private Integer value;
     private int register = -1;
     int size = -1;
     private String variable;
@@ -47,44 +47,29 @@ public class IRAllocate extends IRNode
     public ArrayList<String> getInstructions()
     {
         ArrayList<String> inst = new ArrayList<>();
-
-        /*
-		String label1 = "Label" + ((IRMethod)parent).labelN;
-		((IRMethod)parent).labelN++;
-		String label2 = "Label" + ((IRMethod)parent).labelN;
-		((IRMethod)parent).labelN++;
-		
-		String inst1 = ".var " + ((IRMethod)parent).varN + " is " + name;
-		switch(type)
-		{
-			case INTEGER:
-			{
-				inst1 += " I ";
-				break;
-			}
-			case ARRAY: break;
-
-			default:
-				break;
-		}
-		inst1 += " from " + label1 + " to " + label2;
-		String inst2 = label1 + ":";
-		String inst3 = "ldc " + (value == null? 0 : value);
-		String inst4 = label2 + ":";
-		
-		((IRMethod)parent).incrementRegN();
-		
-		inst.add(inst1);
-		inst.add(inst2);
-		inst.add(inst3);
-		inst.add(inst4);*/
+        
+        this.register = getVarIfExists(this.name);
         initRegister();
-
+ 
         switch (type)
         {
             case INTEGER:
             {
-                inst.add("ldc " + this.value);
+            	if (this.variable != null)
+            	{
+            		int otherReg = getVarIfExists(this.variable);
+            		if (otherReg != -1)
+            			inst.add("iload " + otherReg);
+            		else
+            		{
+            			IRLoad global = new IRLoad(this.variable);
+            			this.addChild(global);
+            			inst.addAll(global.getInstructions());
+            		}
+            	}
+            	else
+            		inst.add("ldc " + this.value);
+            	
                 inst.add("istore " + this.register);
                 break;
             }
@@ -98,9 +83,25 @@ public class IRAllocate extends IRNode
         return inst;
     }
 
-    private void initRegister()
+	private int getVarIfExists(String varName)
+	{
+		IRMethod method = (IRMethod)this.parent;
+		ArrayList<IRNode> children = method.getChildren();
+		for (int i = 0; i < children.size(); i++)
+		{
+			if (children.get(i).toString().equals("Allocate"))
+			{
+				IRAllocate alloc = (IRAllocate)children.get(i);
+				if (alloc.getName().equals(varName) && alloc.getRegister() != -1)
+					return alloc.getRegister();
+			}
+		}
+		return -1;
+	}
+
+	private void initRegister()
     {
-        if (register == -1)
+        if (this.register == -1)
         {
             this.register = ((IRMethod) parent).getRegN();
             ((IRMethod) parent).incrementRegN();

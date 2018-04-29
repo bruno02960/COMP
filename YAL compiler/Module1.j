@@ -2,22 +2,24 @@
 .super java/lang/Object
 
 
-.field private static a
-.field private static b I 
-.field private static c I = 12
-.field private static d I = 12345
+.field public static a I = 0
+.field public static b I = 0
+.field public static c I = 12
+.field public static d I = 12345
 
 
 .method public static method1(III)V
 .limit locals 255
 .limit stack 20
-ldc 0
+ldc 20
 istore 3
-iload 3
-iload 2
-imul
+ldc 50
 istore 4
-ldc 0
+iload 4
+istore 3
+ldc 30
+istore 3
+getstatic Module1/a I
 istore 4
 return
 .end method
@@ -30,6 +32,9 @@ iload 1
 iload 2
 imul
 istore 0
+ldc "var1 = "
+ldc 2
+invokestatic io/println(Ljava/lang/String;I)I
 return
 .end method
 

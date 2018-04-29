@@ -38,7 +38,7 @@ public class HHIR
     public IRModule createHardcoded()
     {
         IRModule module = new IRModule("Module1");
-        module.addChild(new IRGlobal("a", Type.ARRAY, null));
+        module.addChild(new IRGlobal("a", Type.INTEGER, null));
         module.addChild(new IRGlobal("b", Type.INTEGER, null));
         module.addChild(new IRGlobal("c", Type.INTEGER, 12));
         module.addChild(new IRGlobal("d", Type.INTEGER, 12345));
@@ -52,11 +52,16 @@ public class HHIR
         {
             "var1", "var2", "var3"
         });
-        m1.addChild(new IRAllocate("newVar1", Type.INTEGER, (Integer) null));
-        IRStoreArith arith1 = new IRStoreArith("newVar2", Operation.MULT);
-        arith1.setRhs(new IRLoad("newVar1"));
-        arith1.setLhs(new IRLoad("var3"));
-        m1.addChild(arith1);
+        //test1 = 20;
+        //test2 = 50;
+        //test1 = test2;
+        //test1 = 30;
+        //test2 = a;
+        m1.addChild(new IRAllocate("test1", Type.INTEGER, 20));
+        m1.addChild(new IRAllocate("test2", Type.INTEGER, 50));
+        m1.addChild(new IRAllocate("test1", Type.INTEGER, "test2"));
+        m1.addChild(new IRAllocate("test1", Type.INTEGER, 30));
+        m1.addChild(new IRAllocate("test2", Type.INTEGER, "a"));
         module.addChild(m1);
 
         //var1 = var2 * var3;
@@ -71,11 +76,12 @@ public class HHIR
         arith2.setRhs(new IRLoad("var2"));
         arith2.setLhs(new IRLoad("var3"));
         m2.addChild(arith2);
-        module.addChild(m2);
         ArrayList<PairStringType> lis = new ArrayList<>();
         lis.add(new PairStringType("var1 = ", Type.STRING));
-        lis.add(new PairStringType("var1", Type.INTEGER));
-        module.addChild(new IRCall("println", "io", lis));
+        lis.add(new PairStringType("2", Type.INTEGER));
+        m2.addChild(new IRCall("println", "io", lis));
+        module.addChild(m2);
+
 
         IRMethod main = new IRMethod("main", Type.VOID, "ret", null, null);
         module.addChild(main);
@@ -406,7 +412,7 @@ public class HHIR
         if(operator.equals("")) {                  // a = IMMEDIATE
             String type = types.get(0);
             if(type.equals("CALL")) {           // a = f1();
-                IRStoreCall irStoreCall = new IRStoreCall(name);
+                IRStoreCall irStoreCall = new IRStoreCall(name, (IRCall)null);
                 irStoreCall.addChild(calls.get(0));
                 irmethod.addChild(irStoreCall);
             }
