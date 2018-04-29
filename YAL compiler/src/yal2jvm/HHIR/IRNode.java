@@ -44,10 +44,18 @@ public abstract class IRNode
 
     protected String getInstructionToLoadRegisterToStack(int registerNumber)
     {
-        if(registerNumber < 3)
+        if(registerNumber < 4)
             return "iload_" + registerNumber;
         else
             return "iload " + registerNumber;
+    }
+
+    protected String getInstructionToStoreRegisterToStack(int registerNumber)
+    {
+        if(registerNumber < 4)
+            return "istore_" + registerNumber;
+        else
+            return "istore " + registerNumber;
     }
 
     @Override

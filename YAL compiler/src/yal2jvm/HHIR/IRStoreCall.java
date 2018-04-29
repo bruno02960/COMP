@@ -21,10 +21,14 @@ public class IRStoreCall extends IRStore
     {
         ArrayList<String> inst = new ArrayList<>();
 
-        ArrayList<IRNode> childs = getChildren(); //one and only one child
+        ArrayList<IRNode> childs = getChildren(); //one and only one child, an IRCall
         IRCall irCall = (IRCall) childs.get(0);
         inst.addAll(irCall.getInstructions());
 
+        IRMethod parent = (IRMethod) this.getParent();
+        int registerNumber = parent.getVarRegister(name);
+        String storeInst = getInstructionToStoreRegisterToStack(registerNumber);
+        inst.add(storeInst);
 
         return inst;
     }
