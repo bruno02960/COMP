@@ -19,10 +19,10 @@ public class IRStoreArith extends IRStore
     {
         ArrayList<String> inst = new ArrayList<>();
 
-        ArrayList<String> rhsInst = rhs.getInstructions();
         ArrayList<String> lhsInst = lhs.getInstructions();
-        String opInst = null;
+        ArrayList<String> rhsInst = rhs.getInstructions();
 
+        String opInst = null;
         //TODO: add iinc later + add NOT
         switch (op)
         {
@@ -60,8 +60,8 @@ public class IRStoreArith extends IRStore
 
         ArrayList<String> storeInst = getInstForStoring();
 
-        inst.addAll(rhsInst);
         inst.addAll(lhsInst);
+        inst.addAll(rhsInst);
         inst.add(opInst);
         inst.addAll(storeInst);
         return inst;
