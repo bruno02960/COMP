@@ -452,7 +452,7 @@ public class HHIR
             ASTARGUMENTS astarguments = (ASTARGUMENTS) astCall.jjtGetChild(0);
             arguments = getFunctionCallArgumentsIds(astarguments);
         }
-        
+
         return new IRCall(methodId, moduleId, arguments);
     }
 
