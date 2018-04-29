@@ -12,7 +12,7 @@ public class HHIR
     //TODO: Debug
     boolean declarationDebug = false;
     boolean functionDebug = false;
-    boolean assignDebug = true;
+    boolean assignDebug = false;
     boolean callDebug = false;
 
     public HHIR(SimpleNode ast)
@@ -411,22 +411,13 @@ public class HHIR
                 IRStoreCall irStoreCall = new IRStoreCall(lhsName);
                 irStoreCall.addChild(calls.get(0));
                 irmethod.addChild(irStoreCall);
-
-                //TODO:Debug
-                System.out.println("Assign Call");
             }
             else {
                 if(type.equals("INTEGER")) {    // a = 3
                     irmethod.addChild(new IRAllocate(lhsName, Type.INTEGER, Integer.parseInt(operands.get(0))));
-
-                    //TODO:Debug
-                    System.out.println("Assign Integer");
                 }
                 else {                          // a = b
                     irmethod.addChild(new IRAllocate(lhsName, Type.INTEGER, operands.get(0)));
-
-                    //TODO:Debug
-                    System.out.println("Assign Variable");
                 }
             }
         }
@@ -438,43 +429,25 @@ public class HHIR
 
             if(type1.equals("CALL")) {           // a = f1() + X
                 irStoreArith.setLhs(calls.get(0));
-
-                //TODO:Debug
-                System.out.println("Assign Call Lhs Operation");
             }
             else {
                 if(type1.equals("INTEGER")) {    // a = 3
                     irStoreArith.setLhs(new IRConstant(operands.get(0)));
-
-                    //TODO:Debug
-                    System.out.println("Assign Integer Lhs Operation");
                 }
                 else {                          // a = b
                     irStoreArith.setLhs(new IRLoad(operands.get(0)));
-
-                    //TODO:Debug
-                    System.out.println("Assign Variable Lhs Operation");
                 }
             }
 
             if(type2.equals("CALL")) {           // a = f1() + X
                 irStoreArith.setRhs(calls.get(1));
-
-                //TODO:Debug
-                System.out.println("Assign Call Rhs Operation");
             }
             else {
                 if(type2.equals("INTEGER")) {    // a = 3
                     irStoreArith.setRhs(new IRConstant(operands.get(1)));
-
-                    //TODO:Debug
-                    System.out.println("Assign Integer Rhs Operation");
                 }
                 else {                          // a = b
                     irStoreArith.setRhs(new IRLoad(operands.get(1)));
-
-                    //TODO:Debug
-                    System.out.println("Assign Variable Rhs Operation");
                 }
             }
 
