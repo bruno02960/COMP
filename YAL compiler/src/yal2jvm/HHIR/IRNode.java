@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 public abstract class IRNode
 {
-
     protected IRNode parent;
     protected ArrayList<IRNode> children;
     protected String nodeType;

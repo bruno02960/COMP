@@ -23,7 +23,7 @@ public class IRMethod extends IRNode
         this.argsType = argsTypes == null ? this.argsType = new Type[0] : argsTypes;
         this.argsNames = argsNames == null ? this.argsNames = new String[0] : argsNames;
         this.nodeType = "Method";
-        this.regN += this.argsNames.length + (returnVar == null ? 0 : 1);
+        this.regN += this.argsNames.length;
     }
 
     @Override

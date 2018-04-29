@@ -10,11 +10,8 @@ public abstract class IRStore extends IRNode
     {
         ArrayList<String> inst = new ArrayList<>();
 
-        int storeReg = -1;
-        ArrayList<IRNode> methodChildren = parent.getChildren();
-
         //check if storage variable exists, and if so get its register
-        storeReg = ((IRMethod) parent).getVarRegister(name);
+        int storeReg = ((IRMethod) parent).getVarRegister(name);
 
         //if not, check if it is one of the method's arguments
         if (storeReg == -1)
