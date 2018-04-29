@@ -4,16 +4,12 @@ import java.util.ArrayList;
 
 public class IRConstant extends IRNode
 {
-
     private String value;
-    private Type type;
 
-    IRConstant(String value, Type type)
+    IRConstant(String value)
     {
         this.value = value;
-        this.type = type;
         this.nodeType = "Constant";
-        this.type = type;
     }
 
     @Override
@@ -22,7 +18,7 @@ public class IRConstant extends IRNode
         ArrayList<String> inst = new ArrayList<>();
 
         String inst1 = "ldc ";
-        inst1 += this.type == Type.STRING ? "\"" + value + "\"" : value;
+        inst1 += value;
 
         inst.add(inst1);
         return inst;

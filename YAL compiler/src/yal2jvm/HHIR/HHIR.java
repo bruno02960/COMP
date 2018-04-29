@@ -444,7 +444,7 @@ public class HHIR
             }
             else {
                 if(type1.equals("INTEGER")) {    // a = 3
-                    irStoreArith.setLhs(new IRConstant(operands.get(0), Type.INTEGER));
+                    irStoreArith.setLhs(new IRConstant(operands.get(0)));
 
                     //TODO:Debug
                     System.out.println("Assign Integer Lhs Operation");
@@ -465,7 +465,7 @@ public class HHIR
             }
             else {
                 if(type2.equals("INTEGER")) {    // a = 3
-                    irStoreArith.setRhs(new IRConstant(operands.get(1), Type.INTEGER));
+                    irStoreArith.setRhs(new IRConstant(operands.get(1)));
 
                     //TODO:Debug
                     System.out.println("Assign Integer Rhs Operation");
