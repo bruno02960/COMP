@@ -6,11 +6,10 @@ public class IRStoreCall extends IRNode
 {
     private String name;
 
-    public IRStoreCall(String name, IRCall call)
+    public IRStoreCall(String name)
     {
         this.name = name;
         this.nodeType = "StoreCall";
-        addChild(call);
     }
 
     public IRStoreCall(String name, String index) //for arrays
@@ -23,6 +22,8 @@ public class IRStoreCall extends IRNode
     public ArrayList<String> getInstructions()
     {
         ArrayList<String> inst = new ArrayList<>();
+
+
 
         return inst;
     }
