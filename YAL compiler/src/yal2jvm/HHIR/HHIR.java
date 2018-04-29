@@ -52,7 +52,7 @@ public class HHIR
         {
             "var1", "var2", "var3"
         });
-        m1.addChild(new IRAllocate("newVar1", Type.INTEGER, null));
+        m1.addChild(new IRAllocate("newVar1", Type.INTEGER, (Integer) null));
         IRStoreArith arith1 = new IRStoreArith("newVar2", Operation.MULT);
         arith1.setRhs(new IRLoad("newVar1"));
         arith1.setLhs(new IRLoad("var3"));
@@ -148,10 +148,15 @@ public class HHIR
             {
                 returnType = Type.INTEGER;
                 returnName = ((ASTSCALARELEMENT) currNode).id;
-            } else
+            }
+            else if (currNode instanceof ASTARRAYELEMENT)
             {
                 returnType = Type.ARRAY;
                 returnName = ((ASTARRAYELEMENT) currNode).id;
+            }
+            else
+            {
+                returnType = Type.VOID;
             }
         }
 
@@ -182,12 +187,14 @@ public class HHIR
         }
         IRMethod function = new IRMethod(functionId, returnType, returnName, argumentsTypes, argumentsNames);
 
+        //TODO: debug
         if (functionDebug)
         {
             System.out.println("name= " + functionId);
             System.out.println("return type= " + returnType.toString());
             if (returnName != null)
                 System.out.println("return name= " + returnName);
+
             if (argumentsTypes != null)
             {
                 System.out.println("argumentsTypes= ");
@@ -205,9 +212,9 @@ public class HHIR
 
         root.addChild(function);
 
+        //parse statements
         if (!(currNode instanceof ASTSTATEMENTS))
             currNode = (SimpleNode) astFunction.jjtGetChild(++argumentsIndex);
-
         createStatementsHHIR((ASTSTATEMENTS) currNode, function);
     }
 
@@ -222,9 +229,11 @@ public class HHIR
                 case "ASSIGN":
                     createAssignHHIR(child, irmethod);
                     break;
+
                 case "CALL":
                     createCallHHIR((ASTCALL) child, irmethod);
                     break;
+
                 default:
                     System.out.println("Not generating HHIR for " + child.toString() + " yet.");
                     break;
@@ -242,8 +251,6 @@ public class HHIR
     private void createAssignHHIR(SimpleNode child, IRMethod irmethod)
     {
         String name = null;
-        Integer value = -1;
-        Type type = null;
         String size = null;
         String operator;
         boolean call = false;
@@ -253,14 +260,16 @@ public class HHIR
         ASTLHS astlhs = (ASTLHS) child.jjtGetChild(0);
         ASTRHS astrhs = (ASTRHS) child.jjtGetChild(1);
 
+        ArrayList<IRCall> calls = new ArrayList<>();
         ArrayList<String> operands = new ArrayList<>();
+        ArrayList<String> types = new ArrayList<>();
         ArrayList<String> at_op = new ArrayList<>();
         ArrayList<Boolean> isSize = new ArrayList<>();
 
         SimpleNode lhchild = (SimpleNode) astlhs.jjtGetChild(0);
         switch (lhchild.toString())
         {
-            case "ARRAYACCESS":
+            /*case "ARRAYACCESS":
                 ASTARRAYACCESS astarrayaccess = (ASTARRAYACCESS) lhchild;
                 ASTINDEX astindex = (ASTINDEX) astarrayaccess.jjtGetChild(0);
 
@@ -273,14 +282,16 @@ public class HHIR
                 {
                     at_name = astindex.indexValue.toString();
                 }
-                break;
+                break;*/
             case "SCALARACCESS":
                 ASTSCALARACCESS astscalaraccess = (ASTSCALARACCESS) lhchild;
                 name = astscalaraccess.id;
                 break;
+            default:
+                System.out.println("Not generating HHIR for " + lhchild.toString() + " yet.");
         }
 
-        operator = astrhs.operator;
+        operator = astrhs.operator; /* operator == null? IRAllocate : IRStoreArith */
         int numChildren = astrhs.jjtGetNumChildren();
         for (int i = 0; i < numChildren; i++)
         {
@@ -292,9 +303,8 @@ public class HHIR
 
                     if (term.integer != null)
                     {
-                        type = Type.INTEGER;
+                        types.add("INTEGER");
                         String str_value = term.operator + term.integer;
-                        value = Integer.parseInt(str_value);
                         operands.add(str_value);
                         at_op.add("-1");
                         isSize.add(false);
@@ -307,10 +317,17 @@ public class HHIR
                         switch (termChild.toString())
                         {
                             case "CALL":
-                                call = true;
-                                //TODO: How to proceed in this case?
+                                ASTCALL astcall = (ASTCALL) termChild;
+
+                                isSize.add(false);
+                                types.add("CALL");
+
+                                IRCall irCall = getIRCall(astcall);
+
+                                calls.add(irCall);
                                 break;
-                            case "ARRAYACCESS":
+
+                            /*case "ARRAYACCESS":
                                 ASTARRAYACCESS astarrayaccess = ((ASTARRAYACCESS) termChild);
                                 ASTINDEX astindex = (ASTINDEX) termChild.jjtGetChild(0);
                                 String arrayaccess = term.operator + astarrayaccess.arrayID;
@@ -320,24 +337,33 @@ public class HHIR
                                 else
                                     isSize.add(false);
                                 operands.add(arrayaccess);
-                                break;
+                                break;*/
+
                             case "SCALARACCESS":
                                 String id = ((ASTSCALARACCESS) termChild).id;
                                 at_op.add("-1");
-                                if (((ASTSCALARACCESS) termChild).id.contains(".size"))
+                                if (id.contains(".size"))
                                 {
-                                    isSize.add(true);
-                                    id = id.split(".size")[0];
+                                    System.out.println("Not generating HHIR for " + id + " yet.");
+                                    break;
+                                    /*isSize.add(true);
+                                    id = id.split(".size")[0];*/
                                 } else
                                 {
-                                    isSize.add(false);
+                                    //isSize.add(false);
                                 }
+                                types.add("VAR");
                                 operands.add(term.operator + id);
                                 break;
+                            default:
+                                System.out.println("Not generating HHIR for " + termChild.toString() + " yet.");
                         }
                     }
                     break;
-                case "ARRAYSIZE":
+                default:
+                    System.out.println("Not generating HHIR for " + rhchild.toString() + " yet.");
+
+/*                case "ARRAYSIZE":
                     ASTARRAYSIZE astarraysize = (ASTARRAYSIZE) rhchild;
 
                     if (astarraysize.jjtGetNumChildren() == 0)
@@ -354,7 +380,7 @@ public class HHIR
                             size = size.split(".size")[0];
                         }
                     }
-                    break;
+                    break;*/
             }
         }
 
@@ -377,10 +403,69 @@ public class HHIR
             System.out.println();
         }
 
-        if (type == Type.INTEGER)
-        {
-            irmethod.addChild(new IRAllocate(name, type, value));
+        if(operator.equals("")) {                  // a = IMMEDIATE
+            String type = types.get(0);
+            if(type.equals("CALL")) {           // a = f1();
+                IRStoreCall irStoreCall = new IRStoreCall(name);
+                irStoreCall.addChild(calls.get(0));
+                irmethod.addChild(irStoreCall);
+            }
+            else {
+                if(type.equals("INTEGER")) {    // a = 3
+                    irmethod.addChild(new IRAllocate(name, Type.INTEGER, Integer.parseInt(operands.get(0))));
+                }
+                else {                          // a = b
+                    irmethod.addChild(new IRAllocate(name, Type.INTEGER, operands.get(0)));
+                }
+            }
         }
+        else {                                  // a = OPERATION
+            String type1 = types.get(0);
+            String type2 = types.get(1);
+
+            IRStoreArith irStoreArith = new IRStoreArith(name, Operation.parseOperator(operator));
+
+            if(type1.equals("CALL")) {           // a = f1() + X
+                irStoreArith.addLhs(calls.get(0));
+            }
+            else {
+                if(type1.equals("INTEGER")) {    // a = 3
+                    irStoreArith.addLhs(new IRAllocate(name, Type.INTEGER, Integer.parseInt(operands.get(0))));
+                }
+                else {                          // a = b
+                    irStoreArith.addLhs(new IRAllocate(name, Type.INTEGER, operands.get(0)));
+                }
+            }
+
+            if(type2.equals("CALL")) {           // a = f1() + X
+                irStoreArith.addLhs(calls.get(0));
+            }
+            else {
+                if(type2.equals("INTEGER")) {    // a = 3
+                    irStoreArith.addRhs(new IRAllocate(name, Type.INTEGER, Integer.parseInt(operands.get(0))));
+                }
+                else {                          // a = b
+                    irStoreArith.addRhs(new IRAllocate(name, Type.INTEGER, operands.get(0)));
+                }
+            }
+
+
+            //if(type1.equals(""))
+        }
+    }
+
+    private IRCall getIRCall(ASTCALL astCall) {
+        String moduleId = astCall.module;
+        String methodId = astCall.method;
+        ArrayList<PairStringType> arguments = null;
+
+        if (astCall.jjtGetNumChildren() > 0)
+        {
+            ASTARGUMENTS astarguments = (ASTARGUMENTS) astCall.jjtGetChild(0);
+            arguments = getFunctionCallArgumentsIds(astarguments);
+        }
+
+        return new IRCall(methodId, moduleId, arguments);
     }
 
     private void createCallHHIR(ASTCALL astCall, IRNode irNode)
@@ -395,7 +480,7 @@ public class HHIR
             arguments = getFunctionCallArgumentsIds(astarguments);
         }
 
-        IRCall irCall = new IRCall(methodId, moduleId, arguments);
+        IRCall irCall = getIRCall(astCall);
 
         if (callDebug)
         {
@@ -527,6 +612,7 @@ public class HHIR
                 break;
         }
 
+        //TODO:DEBUG
         if (declarationDebug)
         {
             System.out.println();

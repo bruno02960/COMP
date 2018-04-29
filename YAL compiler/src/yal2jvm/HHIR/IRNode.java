@@ -42,6 +42,14 @@ public abstract class IRNode
 
     public abstract ArrayList<String> getInstructions();
 
+    protected String getInstructionToLoadRegisterToStack(int registerNumber)
+    {
+        if(registerNumber < 3)
+            return "iload_" + registerNumber;
+        else
+            return "iload " + registerNumber;
+    }
+
     @Override
     public String toString()
     {
