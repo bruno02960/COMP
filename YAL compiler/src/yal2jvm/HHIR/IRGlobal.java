@@ -49,7 +49,7 @@ public class IRGlobal extends IRNode
     {
         ArrayList<String> inst = new ArrayList<>();
 
-        String inst1 = ".field private static " + name;
+        String inst1 = ".field public static " + name;
         switch (type)
         {
             case INTEGER:

@@ -2,8 +2,8 @@
 .super java/lang/Object
 
 
-.field private static a I = 0
-.field private static b I = 1
+.field public static a I = 0
+.field public static b I = 1
 
 
 .method public static funcAbove(II)I
@@ -42,7 +42,9 @@ ldc "c = "
 invokestatic io/println(Ljava/lang/String;)I
 invokestatic io/println()I
 invokestatic funcAbove()I
+istore_-1
 invokestatic funcBelow()I
+istore_-1
 ldc "funcAbove of b c = "
 invokestatic io/println(Ljava/lang/String;)I
 ldc "funcBelow of b c = "
