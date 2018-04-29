@@ -85,12 +85,17 @@ public class IRCall extends IRNode
     		}
     	}
         callInst += ")";
-        
+
         if (this.module != null)
-        	callInst += "I";
+        {
+            if (this.module.equals("io"))
+                callInst += "V";
+            else
+                callInst += "I";
+        }
         else
         {
-            IRModule mod = null;
+            IRModule mod;
             IRNode par = this.parent;
             while (true)
             {

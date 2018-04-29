@@ -6,7 +6,6 @@ import yal2jvm.ast.*;
 
 public class HHIR
 {
-
     private IRModule root;
     private SimpleNode ast;
 
