@@ -63,6 +63,9 @@ public class IRStoreArith extends IRNode
             case OR:
                 opInst = "ior";
                 break;
+            case XOR:
+                opInst = "lxor";
+                break;
         }
 
         ArrayList<String> storeInst = getInstForStoring();

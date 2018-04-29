@@ -144,10 +144,15 @@ public class HHIR
             {
                 returnType = Type.INTEGER;
                 returnName = ((ASTSCALARELEMENT) currNode).id;
-            } else
+            }
+            else if (currNode instanceof ASTARRAYELEMENT)
             {
                 returnType = Type.ARRAY;
                 returnName = ((ASTARRAYELEMENT) currNode).id;
+            }
+            else
+            {
+                returnType = Type.VOID;
             }
         }
 
@@ -185,6 +190,7 @@ public class HHIR
             System.out.println("return type= " + returnType.toString());
             if (returnName != null)
                 System.out.println("return name= " + returnName);
+
             if (argumentsTypes != null)
             {
                 System.out.println("argumentsTypes= ");
@@ -202,9 +208,9 @@ public class HHIR
 
         root.addChild(function);
 
+        //parse statements
         if (!(currNode instanceof ASTSTATEMENTS))
             currNode = (SimpleNode) astFunction.jjtGetChild(++argumentsIndex);
-
         createStatementsHHIR((ASTSTATEMENTS) currNode, function);
     }
 
@@ -219,9 +225,11 @@ public class HHIR
                 case "ASSIGN":
                     createAssignHHIR(child, irmethod);
                     break;
+
                 case "CALL":
                     createCallHHIR((ASTCALL) child, irmethod);
                     break;
+
                 default:
                     System.out.println("Not generating HHIR for " + child.toString() + " yet.");
                     break;
