@@ -16,20 +16,20 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="HHIR.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="HHIR.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/yal2jvm/HHIR/HHIR.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="166">
-              <caret line="327" column="67" lean-forward="false" selection-start-line="327" selection-start-column="67" selection-end-line="327" selection-end-column="67" />
+            <state relative-caret-position="196">
+              <caret line="465" column="18" lean-forward="true" selection-start-line="465" selection-start-column="18" selection-end-line="465" selection-end-column="18" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="all.yal" pinned="false" current-in-tab="true">
+      <file leaf-file-name="all.yal" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/examples/all.yal">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
+            <state relative-caret-position="-441">
               <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
               <folding />
             </state>
@@ -49,8 +49,8 @@
       <file leaf-file-name="IRConstant.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/yal2jvm/HHIR/IRConstant.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-90">
-              <caret line="7" column="25" lean-forward="false" selection-start-line="7" selection-start-column="25" selection-end-line="7" selection-end-column="25" />
+            <state relative-caret-position="-107">
+              <caret line="6" column="25" lean-forward="false" selection-start-line="6" selection-start-column="25" selection-end-line="6" selection-end-column="25" />
               <folding />
             </state>
           </provider>
@@ -59,11 +59,9 @@
       <file leaf-file-name="IRAllocate.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/yal2jvm/HHIR/IRAllocate.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="488">
-              <caret line="105" column="42" lean-forward="false" selection-start-line="105" selection-start-column="42" selection-end-line="105" selection-end-column="42" />
-              <folding>
-                <marker date="1525027405534" expanded="true" signature="2533:2682" ph="{...}" />
-              </folding>
+            <state relative-caret-position="689">
+              <caret line="70" column="30" lean-forward="false" selection-start-line="70" selection-start-column="30" selection-end-line="70" selection-end-column="30" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -131,7 +129,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>functionDebug</find>
       <find>argume</find>
       <find>index</find>
       <find>parseRhs</find>
@@ -161,6 +158,7 @@
       <find>getVarRegister</find>
       <find>iload</find>
       <find>Assign</find>
+      <find>ldc</find>
     </findStrings>
     <replaceStrings>
       <replace>NonTerminals.MODULE.toString()</replace>
@@ -209,7 +207,6 @@
         <option value="$PROJECT_DIR$/examples/test.yal" />
         <option value="$PROJECT_DIR$/src/yal2jvm/Analysis.java" />
         <option value="$PROJECT_DIR$/examples/array1.yal" />
-        <option value="$PROJECT_DIR$/src/yal2jvm/HHIR/IRAllocate.java" />
         <option value="$PROJECT_DIR$/src/yal2jvm/HHIR/Operation.java" />
         <option value="$PROJECT_DIR$/coverage/MyClassTest.java" />
         <option value="$PROJECT_DIR$/src/yal2jvm/HHIR/IRGlobal.java" />
@@ -217,12 +214,13 @@
         <option value="$PROJECT_DIR$/src/yal2jvm/HHIR/IRLoad.java" />
         <option value="$PROJECT_DIR$/src/yal2jvm/HHIR/IRConstant.java" />
         <option value="$PROJECT_DIR$/src/yal2jvm/HHIR/IRMethod.java" />
-        <option value="$PROJECT_DIR$/src/yal2jvm/HHIR/HHIR.java" />
         <option value="$PROJECT_DIR$/examples/all.yal" />
+        <option value="$PROJECT_DIR$/src/yal2jvm/HHIR/IRAllocate.java" />
+        <option value="$PROJECT_DIR$/src/yal2jvm/HHIR/HHIR.java" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="7">
+  <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="-8" />
     <option name="y" value="-8" />
     <option name="width" value="1380" />
@@ -544,7 +542,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1382" height="744" extended-state="7" />
+    <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
@@ -948,20 +946,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/yal2jvm/HHIR/IRAllocate.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="488">
-          <caret line="105" column="42" lean-forward="false" selection-start-line="105" selection-start-column="42" selection-end-line="105" selection-end-column="42" />
-          <folding>
-            <marker date="1525027405534" expanded="true" signature="2533:2682" ph="{...}" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/yal2jvm/HHIR/IRConstant.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-90">
-          <caret line="7" column="25" lean-forward="false" selection-start-line="7" selection-start-column="25" selection-end-line="7" selection-end-column="25" />
+        <state relative-caret-position="-107">
+          <caret line="6" column="25" lean-forward="false" selection-start-line="6" selection-start-column="25" selection-end-line="6" selection-end-column="25" />
           <folding />
         </state>
       </provider>
@@ -990,18 +978,26 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/yal2jvm/HHIR/HHIR.java">
+    <entry file="file://$PROJECT_DIR$/src/yal2jvm/HHIR/IRAllocate.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="166">
-          <caret line="327" column="67" lean-forward="false" selection-start-line="327" selection-start-column="67" selection-end-line="327" selection-end-column="67" />
+        <state relative-caret-position="689">
+          <caret line="70" column="30" lean-forward="false" selection-start-line="70" selection-start-column="30" selection-end-line="70" selection-end-column="30" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/examples/all.yal">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
+        <state relative-caret-position="-441">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/yal2jvm/HHIR/HHIR.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="196">
+          <caret line="465" column="18" lean-forward="true" selection-start-line="465" selection-start-column="18" selection-end-line="465" selection-end-column="18" />
           <folding />
         </state>
       </provider>

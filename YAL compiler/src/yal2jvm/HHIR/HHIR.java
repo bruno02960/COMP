@@ -458,7 +458,7 @@ public class HHIR
             }
 
             if(type2.equals("CALL")) {           // a = f1() + X
-                irStoreArith.setLhs(calls.get(1));
+                irStoreArith.setRhs(calls.get(1));
 
                 //TODO:Debug
                 System.out.println("Assign Call Rhs Operation");
