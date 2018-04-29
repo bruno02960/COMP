@@ -2,10 +2,8 @@ package yal2jvm.HHIR;
 
 import java.util.ArrayList;
 
-public class IRStoreCall extends IRNode
+public class IRStoreCall extends IRStore
 {
-    private String name;
-
     public IRStoreCall(String name)
     {
         this.name = name;
@@ -23,6 +21,9 @@ public class IRStoreCall extends IRNode
     {
         ArrayList<String> inst = new ArrayList<>();
 
+        ArrayList<IRNode> childs = getChildren(); //one and only one child
+        IRCall irCall = (IRCall) childs.get(0);
+        inst.addAll(irCall.getInstructions());
 
 
         return inst;
