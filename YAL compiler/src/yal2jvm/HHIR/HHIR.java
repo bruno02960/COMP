@@ -455,7 +455,7 @@ public class HHIR
     private IRCall getIRCall(ASTCALL astCall) {
         String moduleId = astCall.module;
         String methodId = astCall.method;
-        ArrayList<PairStringType> arguments = null;
+        ArrayList<PairStringType> arguments = new ArrayList<PairStringType>();
 
         if (astCall.jjtGetNumChildren() > 0)
         {
