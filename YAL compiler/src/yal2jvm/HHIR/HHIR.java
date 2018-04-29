@@ -565,7 +565,7 @@ public class HHIR
         Type type = null;
         String variable = null;
         boolean isSize = false;
-        int value = -1;
+        Integer value = null;
         int size = -1;
 
         switch (simpleNode.toString())

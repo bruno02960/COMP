@@ -2,7 +2,7 @@
 .super java/lang/Object
 
 
-.field private static a I = -1
+.field private static a I = 0
 .field private static b I = 1
 
 
@@ -41,6 +41,8 @@ invokestatic io/println()I
 ldc "c = "
 invokestatic io/println(Ljava/lang/String;)I
 invokestatic io/println()I
+invokestatic funcAbove()I
+invokestatic funcBelow()I
 ldc "funcAbove of b c = "
 invokestatic io/println(Ljava/lang/String;)I
 ldc "funcBelow of b c = "
