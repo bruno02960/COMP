@@ -643,10 +643,21 @@ public abstract class Analysis
         switch (child.toString())
         {
             case "ARRAYACCESS":
-                id = ((ASTARRAYACCESS) child).arrayID;
+                ASTARRAYACCESS astArrayAccess = (ASTARRAYACCESS) child;
+                id = astArrayAccess.arrayID;
                 symbol = (VarSymbol) hasAccessToSymbol(id);
                 if (symbol == null)
+                {
+                    System.out.println("Line " + astArrayAccess.getBeginLine() + ": Variable " + id + " might not have been declared.");
                     return null;
+                }
+
+                if (symbol.getType().equals(Type.ARRAY.toString()) == false)
+                {
+                    System.out.println("Line " + astArrayAccess.getBeginLine() + ": Cannot access to an index of variable "
+                            + symbol.getId() + " because it has type " + symbol.getType() + ".");
+                    return null;
+                }
 
                 ASTINDEX astindex = (ASTINDEX) child.jjtGetChild(0);
                 if (!parseIndex(astindex))
