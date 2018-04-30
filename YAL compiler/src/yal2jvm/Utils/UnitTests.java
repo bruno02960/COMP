@@ -1,4 +1,4 @@
-package test;
+package yal2jvm.Utils;
 
 import static org.junit.Assert.*;
 
@@ -14,7 +14,7 @@ public class UnitTests
 	@Test
 	public void compileAndRunCompiledClass()
 	{
-		Yal2jvm compiler = new Yal2jvm(255, false, "test/test2.yal");
+		Yal2jvm compiler = new Yal2jvm(255, false, "examples/all.yal");
 		compiler.run();
 
 		int retVal = -1;
