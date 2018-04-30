@@ -76,13 +76,10 @@ public abstract class Analysis
         Node firstChild = rhsTree.jjtGetChild(0);
         if (firstChild.toString().equals("ARRAYSIZE"))
         {
-            VarSymbol retVal = parseArraySize((ASTARRAYSIZE) firstChild);
-
+            ASTARRAYSIZE astArraySize = (ASTARRAYSIZE) firstChild;
+            VarSymbol retVal = parseArraySize(astArraySize);
             if (retVal == null)
-            {
-                //TODO: Shouldn't be an error message here?
                 return null;
-            }
 
             retVal = retVal.getCopy();
             retVal.setType("ARRAYSIZE");
@@ -110,6 +107,13 @@ public abstract class Analysis
                 ModuleAnalysis.hasErrors = true;
                 return null;
             }
+            else if (previousType.equals(Type.ARRAY.toString()) && symbolType.equals(Type.ARRAY.toString()))
+            {
+                System.out.println("Line " + child.getBeginLine() + ": Cannot make operations between arrays.");
+                ModuleAnalysis.hasErrors = true;
+                return null;
+            }
+
         }
 
         return symbol;
@@ -323,6 +327,7 @@ public abstract class Analysis
             ModuleAnalysis.hasErrors = true;
             return null;
         }
+
         if (!indexSymbol.isInitialized())
         {
             System.out.println("Line " + ast.getBeginLine() + ": Variable " + symbolId + " might not have been initialized.");
@@ -345,17 +350,16 @@ public abstract class Analysis
             id = id.substring(0, dotIdx);
         }
 
-        VarSymbol varSymbol;
-        if (sizeAccess)
-            varSymbol = (VarSymbol) hasAccessToSymbol(id);
-        else
-            varSymbol = (VarSymbol) checkSymbolExistsAndIsInitialized(scalarAccessTree, id);
-
-        if (varSymbol == null)
-            return null;
-
         if (sizeAccess)
         {
+            VarSymbol varSymbol = (VarSymbol) hasAccessToSymbol(id);
+            if(varSymbol == null)
+            {
+                System.out.println("Line " + scalarAccessTree.getBeginLine() + ": Variable " + id + " might not have been declared.");
+                ModuleAnalysis.hasErrors = true;
+                return null;
+            }
+
             if (varSymbol.getType().equals("INTEGER"))
             {
                 System.out.println("Line " + scalarAccessTree.getBeginLine() + ": Access to size of variable " + id
@@ -374,8 +378,10 @@ public abstract class Analysis
 
             varSymbol = varSymbol.getCopy();
             varSymbol.setType(SymbolType.INTEGER.toString());
+            return varSymbol;
         }
 
+        VarSymbol varSymbol = (VarSymbol) checkSymbolExistsAndIsInitialized(scalarAccessTree, id);
         return varSymbol;
     }
 

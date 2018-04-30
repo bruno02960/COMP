@@ -312,6 +312,7 @@ public class HHIR
                         String str_value = term.operator + term.integer;
                         operands.add(str_value);
                         at_op.add("-1");
+                        calls.add(null);
                         isSize.add(false);
                     }
                     else
@@ -325,6 +326,7 @@ public class HHIR
 
                                 isSize.add(false);
                                 types.add("CALL");
+                                operands.add(null);
 
                                 IRCall irCall = getIRCall(astcall);
 
@@ -348,6 +350,7 @@ public class HHIR
                             case "SCALARACCESS":
                                 String id = ((ASTSCALARACCESS) termChild).id;
                                 at_op.add("-1");
+                                calls.add(null);
                                 if (id.contains(".size"))
                                 {
                                     System.out.println("Not generating HHIR for " + id + " yet.");
