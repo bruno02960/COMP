@@ -8,9 +8,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import yal2jvm.HHIR.HHIR;
-import yal2jvm.SemanticAnalysis.ModuleAnalysis;
 import yal2jvm.ast.*;
+import yal2jvm.hhir.HHIR;
+import yal2jvm.semantic_analysis.ModuleAnalysis;
 
 public class Yal2jvm
 {
