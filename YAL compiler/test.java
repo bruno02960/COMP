@@ -8,7 +8,7 @@ public class test
 	public static void doSomething()
 	{
 		System.out.println("Do something");
-	}
+	} 
 	
 	public static int sqrt(int x)
 	{
