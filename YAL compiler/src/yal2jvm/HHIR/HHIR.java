@@ -460,7 +460,7 @@ public class HHIR
         String moduleId = astCall.module;
         String methodId = astCall.method;
         if(methodId == null)
-            methodId = ModuleAnalysis.moduleName;
+            methodId = root.getName();
         ArrayList<PairStringType> arguments = new ArrayList<>();
 
         if (astCall.jjtGetNumChildren() > 0)
