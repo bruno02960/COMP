@@ -91,6 +91,7 @@ public class ModuleAnalysis extends Analysis
         FunctionSymbol retValue = (FunctionSymbol) functionNameToFunctionSymbol.put(functionSymbol.getId(), functionSymbol);
         if(retValue != null)
         {
+            functionNameToFunctionSymbol.put(retValue.getId(), retValue);
             System.out.println("Line " + astfunctionNode.getBeginLine() + ": Function " + functionSymbol.getId()
                 + " already declared.");
             ModuleAnalysis.hasErrors = true;
