@@ -2,6 +2,7 @@ package yal2jvm.HHIR;
 
 import java.util.ArrayList;
 
+import yal2jvm.SemanticAnalysis.ModuleAnalysis;
 import yal2jvm.ast.*;
 
 public class HHIR
@@ -458,6 +459,8 @@ public class HHIR
     private IRCall getIRCall(ASTCALL astCall) {
         String moduleId = astCall.module;
         String methodId = astCall.method;
+        if(moduleId == null)
+            moduleId = root.getName();
         ArrayList<PairStringType> arguments = new ArrayList<>();
 
         if (astCall.jjtGetNumChildren() > 0)
