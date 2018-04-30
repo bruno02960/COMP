@@ -110,6 +110,13 @@ public abstract class Analysis
                 ModuleAnalysis.hasErrors = true;
                 return null;
             }
+            else if (previousType.equals(Type.ARRAY.toString()) && symbolType.equals(Type.ARRAY.toString()))
+            {
+                System.out.println("Line " + child.getBeginLine() + ": Cannot make operations between arrays.");
+                ModuleAnalysis.hasErrors = true;
+                return null;
+            }
+
         }
 
         return symbol;
