@@ -498,7 +498,17 @@ public abstract class Analysis
             return null;
         }
 
+        if (symbol.getType().equals(Type.INTEGER.toString()) && symbol.isInitialized())
+        {
+            System.out.println("Line " + declarationTree.getBeginLine() + ": Variable "
+                    + symbol.getId() + " was already initialized." + " Error assigning "
+                    + declarationTree.integer + " to the variable " + symbol.getId() + ".");
+            ModuleAnalysis.hasErrors = true;
+            return null;
+        }
+
         symbol.setInitialized(true);
+
         if (symbol.getType().equals(Type.ARRAY.toString()) && symbol.isSizeSet() == false)
         {
             System.out.println("Line " + declarationTree.getBeginLine() + ": Variable "

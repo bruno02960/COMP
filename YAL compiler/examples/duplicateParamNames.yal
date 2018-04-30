@@ -1,0 +1,6 @@
+module semantictest {
+
+    function param(a, a[], bad, let, bad[]) {           // err21 err22 duplicate param names
+        io.println("hello");
+    }
+}

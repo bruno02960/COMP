@@ -114,9 +114,16 @@ public class FunctionSymbol extends Symbol
                     }
                     varSymbol = new VarSymbol(astArrayElementId, astArrayElementType, true, true);
                 }
+
+                for (VarSymbol argument:
+                     arguments) {
+                        if(argument.getId().equals(varSymbol.getId())) {
+                            System.out.println("Line " + child.getBeginLine() + ": Argument " + varSymbol.getId()
+                                    + " already declared.");
+                        }
+                }
                 arguments.add(varSymbol);
             }
         }
     }
-
 }

@@ -118,6 +118,10 @@ public class SimpleNode implements Node
     {
         this.beginLine = beginLine;
     }
+
+    public int getId() {
+        return id;
+    }
 }
 
 /* JavaCC - OriginalChecksum=6b77298fe96954feb69b7e0ff03aa57b (do not edit this line) */
