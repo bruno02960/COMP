@@ -82,7 +82,7 @@ public class UnitTests
 			
 			if (retVal != 0)
 			{
-				log.add(file + ": error during .class execution\n");
+				log.add(file + ": error during .class execution " + retVal + " \n");
 				continue;
 			}
 			log.add(file + ": successful compilation and execution\n");
@@ -101,7 +101,7 @@ public class UnitTests
 		ArrayList<String> log = testAllFilesInFolder("examples/semantic_no_errors");
 			
 		for (int i = 0; i < log.size(); i++)
-			assertEquals(false, log.get(i).contains("error"));
+			assertEquals(true, log.get(i).contains("semantic analysis successful"));
 	}
 	
 	@Test
