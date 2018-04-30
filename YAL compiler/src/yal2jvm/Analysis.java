@@ -80,6 +80,7 @@ public abstract class Analysis
 
             if (retVal == null)
             {
+                //TODO: Shouldn't be an error message here?
                 return null;
             }
 
@@ -349,6 +350,7 @@ public abstract class Analysis
             varSymbol = (VarSymbol) hasAccessToSymbol(id);
         else
             varSymbol = (VarSymbol) checkSymbolExistsAndIsInitialized(scalarAccessTree, id);
+
         if (varSymbol == null)
             return null;
 

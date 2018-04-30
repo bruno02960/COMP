@@ -1,5 +1,6 @@
 package yal2jvm.SymbolTables;
 
+import yal2jvm.SemanticAnalysis.ModuleAnalysis;
 import yal2jvm.ast.*;
 
 import java.util.ArrayList;
@@ -120,6 +121,7 @@ public class FunctionSymbol extends Symbol
                         if(argument.getId().equals(varSymbol.getId())) {
                             System.out.println("Line " + child.getBeginLine() + ": Argument " + varSymbol.getId()
                                     + " already declared.");
+                            ModuleAnalysis.hasErrors = true;
                         }
                 }
                 arguments.add(varSymbol);
