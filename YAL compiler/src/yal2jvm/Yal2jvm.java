@@ -81,6 +81,7 @@ public class Yal2jvm
         {
             System.out.println("Insufficient or incorrect arguments for the Yal2jvm compiler");
             System.out.println("\nUsage:\tjava Yal2jvm [-r=<0..255>] [-o] <input_file.yal>\n");
+            System.exit(-5);
         } else
         {
             Yal2jvm instance = new Yal2jvm(localVars, optimize, inputFile);
@@ -96,7 +97,7 @@ public class Yal2jvm
         ast = createAst(inputStream);
         System.out.println("Completed syntatic analysis");
         if (ast == null)
-            return;
+            System.exit(-2);
         System.out.println("Printing abstract syntatic tree");
         ast.dump("");
 
@@ -106,7 +107,7 @@ public class Yal2jvm
         System.out.println("Completed semantic analysis");
 
         if (ModuleAnalysis.hasErrors)
-            return;
+            System.exit(-3);
         
         System.out.println("Initiating JVM code generation");
         HHIR hhir = new HHIR(ast);
@@ -133,7 +134,7 @@ public class Yal2jvm
         } catch (FileNotFoundException e)
         {
             System.out.println("Error: file " + inputFile + " not found.\n");
-            System.exit(-1);
+            System.exit(-4);
         }
         return inputStream;
     }
@@ -159,7 +160,7 @@ public class Yal2jvm
         } catch (ParseException e)
         {
             System.out.println("Error: fatal error during parsing stage\n");
-            System.exit(-1);
+            System.exit(-2);
         }
 
         return root;
@@ -181,6 +182,7 @@ public class Yal2jvm
         } catch (IOException e)
         {
             e.printStackTrace();
+            System.exit(-4);
         }
     }
 
@@ -190,10 +192,11 @@ public class Yal2jvm
         {
             Runtime.getRuntime().exec("java -jar jasmin.jar " + fileName).waitFor();
             File file = new File(fileName);
-            // TODO: file.delete();
+            file.delete();
         } catch (IOException | InterruptedException e)
         {
             System.out.println("Unable to find or execute jasmin.jar");
+            System.exit(-1);
         }
     }
 
