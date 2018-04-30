@@ -72,7 +72,7 @@ public class ModuleAnalysis extends Analysis
                 String functionId = astfunctionNode.id;
                 FunctionSymbol functionSymbol = new FunctionSymbol(astfunctionNode, functionId);
                 functionSymbol.parseFunctionHeader();
-                functionNameToFunctionSymbol.put(functionSymbol.getId(), functionSymbol);
+                addFunctionToHashMap(astfunctionNode, functionSymbol);
                 break;
 
             case "DECLARATION":
@@ -84,5 +84,19 @@ public class ModuleAnalysis extends Analysis
                 System.exit(-1);
                 break;
         }
+    }
+
+    private boolean addFunctionToHashMap(ASTFUNCTION astfunctionNode, FunctionSymbol functionSymbol)
+    {
+        FunctionSymbol retValue = (FunctionSymbol) functionNameToFunctionSymbol.put(functionSymbol.getId(), functionSymbol);
+        if(retValue != null)
+        {
+            System.out.println("Line " + astfunctionNode.getBeginLine() + ": Function " + functionSymbol.getId()
+                + " already declared.");
+            ModuleAnalysis.hasErrors = true;
+            return false;
+        }
+
+        return true;
     }
 }
