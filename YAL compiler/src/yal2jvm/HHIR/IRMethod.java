@@ -105,7 +105,8 @@ public class IRMethod extends IRNode
         inst.add(".limit locals " + localsCount);
         inst.add(".limit stack 20");
 
-        for (int i = 0; i < getChildren().size(); i++)
+        int numChilds = getChildren().size();
+        for (int i = 0; i < numChilds; i++)
         {
             IRNode node = getChildren().get(i);
             inst.addAll(node.getInstructions());
