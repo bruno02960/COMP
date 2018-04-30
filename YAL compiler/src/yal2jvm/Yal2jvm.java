@@ -104,9 +104,9 @@ public class Yal2jvm
         ModuleAnalysis moduleAnalysis = new ModuleAnalysis(ast);
         moduleAnalysis.parse();
         System.out.println("Completed semantic analysis");
-        /*
+
         if (ModuleAnalysis.hasErrors)
-            return;*/
+            return;
         
         System.out.println("Initiating JVM code generation");
         HHIR hhir = new HHIR(ast);
