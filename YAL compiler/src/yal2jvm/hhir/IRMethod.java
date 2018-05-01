@@ -34,7 +34,10 @@ public class IRMethod extends IRNode
         String methodDeclarationInst = ".method public static ";
 
         if (name.equals("main"))
+        {
             methodDeclarationInst += "main([Ljava/lang/String;)V";
+            this.regN++; // the main as the argument String args[], however is it not use in yal
+        }
         else
         {
             methodDeclarationInst += name + "(";
