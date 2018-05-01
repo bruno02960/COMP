@@ -1,5 +1,7 @@
 package yal2jvm.hhir;
 
+import yal2jvm.utils.Utils;
+
 import java.util.ArrayList;
 
 public class IRCall extends IRNode
@@ -21,9 +23,14 @@ public class IRCall extends IRNode
     {
         ArrayList<String> inst = new ArrayList<>();
 
-        inst.addAll(getArgumentsInstructions()); 
-		inst.add(getCallInstruction());
-        
+        inst.addAll(getArgumentsInstructions());
+
+        String callInstructions = getCallInstruction();
+		inst.add(callInstructions);
+
+        if((getParent() instanceof IRStore) == false && Utils.isLastCharacterOfString("I", callInstructions))
+            inst.add("\npop");
+
         return inst;
     }
     

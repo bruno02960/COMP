@@ -459,7 +459,8 @@ public class HHIR
         }
     }
 
-    private IRCall getIRCall(ASTCALL astCall) {
+    private IRCall getIRCall(ASTCALL astCall)
+    {
         String moduleId = astCall.module;
         String methodId = astCall.method;
         if(moduleId == null)
@@ -488,6 +489,7 @@ public class HHIR
         }
 
         IRCall irCall = getIRCall(astCall);
+        irNode.addChild(irCall);
 
         if (callDebug)
         {
@@ -504,8 +506,6 @@ public class HHIR
                             + "   type: " + argument.getType().toString());
             }
         }
-
-        irNode.addChild(irCall);
     }
 
     private ArrayList<PairStringType> getFunctionCallArgumentsIds(ASTARGUMENTS astArguments)

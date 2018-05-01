@@ -7,7 +7,6 @@ import yal2jvm.symbol_tables.Symbol;
 
 public class Utils
 {
-
     public static HashMap<String, Symbol> copyHashMap(HashMap<String, Symbol> original)
     {
         HashMap<String, Symbol> copy = new HashMap<String, Symbol>();
@@ -15,5 +14,10 @@ public class Utils
             copy.put(entry.getKey(), entry.getValue().getCopy());
 
         return copy;
+    }
+
+    public static boolean isLastCharacterOfString(String character, String string)
+    {
+       return string.lastIndexOf(character) == string.length() - 1;
     }
 }
