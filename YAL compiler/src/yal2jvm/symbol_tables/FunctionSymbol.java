@@ -54,25 +54,20 @@ public class FunctionSymbol extends Symbol
         {
             argumentsIndex++;
             statementsChildNumber++;
-            if (returnValueNode instanceof ASTSCALARELEMENT)
-            {
-                ASTSCALARELEMENT astscalarelement = (ASTSCALARELEMENT) returnValueNode;
-                String returnValueId = astscalarelement.id;
-                returnValue = new VarSymbol(returnValueId, SymbolType.INTEGER.toString(), false);
-            } else
-            {
-                ASTARRAYELEMENT astarrayelement = (ASTARRAYELEMENT) returnValueNode;
-                String returnValueId = astarrayelement.id;
-                returnValue = new VarSymbol(returnValueId, SymbolType.ARRAY.toString(), false, false);
-            }
+            parseFunctionReturnValue(returnValueNode);
         }
 
         //get arguments if existent
         SimpleNode argumentsNode = (SimpleNode) functionAST.jjtGetChild(argumentsIndex);
-        if (argumentsNode == null || !(argumentsNode instanceof ASTVARS))
+        if (!(argumentsNode instanceof ASTVARS))
             return;
 
         statementsChildNumber++;
+        parseArguments(argumentsNode);
+    }
+
+    private void parseArguments(SimpleNode argumentsNode)
+    {
         for (int i = 0; i < argumentsNode.jjtGetNumChildren(); i++)
         {
             SimpleNode child = (SimpleNode) argumentsNode.jjtGetChild(i);
@@ -80,52 +75,82 @@ public class FunctionSymbol extends Symbol
             {
                 VarSymbol varSymbol;
                 if (child instanceof ASTSCALARELEMENT)
-                {
-                    ASTSCALARELEMENT astscalarelement = (ASTSCALARELEMENT) child;
-                    String astScalarElementId = astscalarelement.id;
-                    String astScalarElementType = SymbolType.INTEGER.toString();
-                    if (returnValue != null && returnValue.getId().equals(astScalarElementId))
-                    {
-                        if (!returnValue.getType().equals(astScalarElementType))
-                        {
-                            System.out.println("Line " + astscalarelement.getBeginLine() + ": Argument " + astscalarelement.id
-                                    + " already declared as " + returnValue.getType() + ".");
-                            continue;
-                        } else
-                            returnValue.setInitialized(true);
-                    }
-                    varSymbol = new VarSymbol(astScalarElementId, astScalarElementType, true);
-                } else
-                {
-                    ASTARRAYELEMENT astarrayelement = (ASTARRAYELEMENT) child;
-                    String astArrayElementId = astarrayelement.id;
-                    String astArrayElementType = SymbolType.ARRAY.toString();
-                    if (returnValue != null && returnValue.getId().equals(astArrayElementId))
-                    {
-                        if (!returnValue.getType().equals(astArrayElementType))
-                        {
-                            System.out.println("Line " + astarrayelement.getBeginLine() + ": Argument " + astarrayelement.id
-                                    + " already declared as " + returnValue.getType() + ".");
-                            continue;
-                        } else
-                        {
-                            returnValue.setSizeSet(true);
-                            returnValue.setInitialized(true);
-                        }
-                    }
-                    varSymbol = new VarSymbol(astArrayElementId, astArrayElementType, true, true);
-                }
+                    varSymbol = parseScalarElementArgument((ASTSCALARELEMENT) child);
+                else
+                    varSymbol = parseArrayElementArgument((ASTARRAYELEMENT) child);
 
-                for (VarSymbol argument:
-                     arguments) {
-                        if(argument.getId().equals(varSymbol.getId())) {
-                            System.out.println("Line " + child.getBeginLine() + ": Argument " + varSymbol.getId()
-                                    + " already declared.");
-                            ModuleAnalysis.hasErrors = true;
-                        }
+                if (varSymbol == null)
+                    continue;
+
+                for (VarSymbol argument: arguments)
+                {
+                    if(argument.getId().equals(varSymbol.getId()))
+                    {
+                        System.out.println("Line " + child.getBeginLine() + ": Argument " +
+                                varSymbol.getId() + " already declared.");
+                        ModuleAnalysis.hasErrors = true;
+                    }
                 }
                 arguments.add(varSymbol);
             }
+        }
+    }
+
+    private VarSymbol parseArrayElementArgument(ASTARRAYELEMENT child)
+    {
+        ASTARRAYELEMENT astarrayelement = child;
+        String astArrayElementId = astarrayelement.id;
+        String astArrayElementType = SymbolType.ARRAY.toString();
+        if (returnValue != null && returnValue.getId().equals(astArrayElementId))
+        {
+            if (!returnValue.getType().equals(astArrayElementType))
+            {
+                System.out.println("Line " + astarrayelement.getBeginLine() + ": Argument " + astarrayelement.id
+                        + " already declared as " + returnValue.getType() + ".");
+                return null;
+            }
+            else
+            {
+                returnValue.setSizeSet(true);
+                returnValue.setInitialized(true);
+            }
+        }
+
+        return new VarSymbol(astArrayElementId, astArrayElementType, true, true);
+    }
+
+    private VarSymbol parseScalarElementArgument(ASTSCALARELEMENT child)
+    {
+        ASTSCALARELEMENT astscalarelement = child;
+        String astScalarElementId = astscalarelement.id;
+        String astScalarElementType = SymbolType.INTEGER.toString();
+        if (returnValue != null && returnValue.getId().equals(astScalarElementId))
+        {
+            if (!returnValue.getType().equals(astScalarElementType))
+            {
+                System.out.println("Line " + astscalarelement.getBeginLine() + ": Argument " + astscalarelement.id
+                        + " already declared as " + returnValue.getType() + ".");
+                return null;
+            }
+            else
+                returnValue.setInitialized(true);
+        }
+
+        return new VarSymbol(astScalarElementId, astScalarElementType, true);
+    }
+
+    private void parseFunctionReturnValue(SimpleNode returnValueNode)
+    {
+        if (returnValueNode instanceof ASTSCALARELEMENT)
+        {
+            ASTSCALARELEMENT astscalarelement = (ASTSCALARELEMENT) returnValueNode;
+            String returnValueId = astscalarelement.id;
+            returnValue = new VarSymbol(returnValueId, SymbolType.INTEGER.toString(), false);
+        } else
+        {
+            ASTARRAYELEMENT astarrayelement = (ASTARRAYELEMENT) returnValueNode;
+            String returnValueId = astarrayelement.id;
+            returnValue = new VarSymbol(returnValueId, SymbolType.ARRAY.toString(), false, false);
         }
     }
 }
