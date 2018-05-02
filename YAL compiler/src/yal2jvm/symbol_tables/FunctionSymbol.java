@@ -82,16 +82,21 @@ public class FunctionSymbol extends Symbol
                 if (varSymbol == null)
                     continue;
 
-                for (VarSymbol argument: arguments)
-                {
-                    if(argument.getId().equals(varSymbol.getId()))
-                    {
-                        System.out.println("Line " + child.getBeginLine() + ": Argument " +
-                                varSymbol.getId() + " already declared.");
-                        ModuleAnalysis.hasErrors = true;
-                    }
-                }
+                checkArgumentAlreadyExists(child, varSymbol);
                 arguments.add(varSymbol);
+            }
+        }
+    }
+
+    private void checkArgumentAlreadyExists(SimpleNode child, VarSymbol varSymbol)
+    {
+        for (VarSymbol argument: arguments)
+        {
+            if(argument.getId().equals(varSymbol.getId()))
+            {
+                System.out.println("Line " + child.getBeginLine() + ": Argument " +
+                        varSymbol.getId() + " already declared.");
+                ModuleAnalysis.hasErrors = true;
             }
         }
     }
