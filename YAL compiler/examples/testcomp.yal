@@ -1,0 +1,15 @@
+module Test
+{
+	function a = f1(b[], c[])
+	{
+		if (b == c)
+		{
+			a = 1;
+		}
+		else
+		{
+			a = 2;
+		}
+		a = 3;
+	}
+}

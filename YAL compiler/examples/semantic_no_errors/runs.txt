@@ -1,0 +1,22 @@
+examples/semantic_no_errors
+
+array1.yal	Line 21: Variable a might not have been initialized.
+array2.yal	Line 28: Variable a might not have been initialized.
+aval2.yal	Line 4: Return variable c might not have been initialized. Function f must have return variable initialized.
+aval3.yal	Sem erros semânticos, falha ao gerar a HHIR (provavelmente por causa de ifs/whiles)
+aval4.yal	Line 5: Return variable c might not have been initialized. Function f must have return variable initialized.
+aval6.yal	Line 10: Variable I might not have been declared.
+aval8.yal	Sem erros semânticos, falha ao gerar a HHIR (provavelmente por causa de ifs/whiles)
+library1.yal	Sem erros semânticos, falha ao gerar a HHIR (provavelmente por causa de ifs/whiles)
+max_array.yal	Line 26: Variable a might not have been initialized.
+programa2.yal	Line 3: Return variable a might not have been initialized. Function f1 must have return variable initialized.
+programa3.yal	Line 3: Return variable a might not have been initialized. Function f1 must have return variable initialized.
+sqrt.yal	Line 13: Variable I might not have been declared.
+test.yal	Line 8: Function f2 already declared.
+		Line 19: Variable a might not have been declared.
+		Line 20: Variable a might not have been declared.
+test2.yal	Line 15: Variable i might not have been declared.
+		Line 16: Variable i might not have been declared.
+		Line 16: Variable i might not have been declared.
+test3.yal	Line 3: Return variable a might not have been initialized. Function f1 must have return variable initialized.
+

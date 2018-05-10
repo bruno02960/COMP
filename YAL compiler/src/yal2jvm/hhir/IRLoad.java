@@ -4,9 +4,9 @@ import java.util.ArrayList;
 
 public class IRLoad extends IRNode
 {
-
     private String name;
     private int register = -1;
+    private Type type;
 
     public IRLoad(String name)
     {
@@ -66,4 +66,13 @@ public class IRLoad extends IRNode
         return inst;
     }
 
+	public Type getType()
+	{
+		return type;
+	}
+
+	public void setType(Type type)
+	{
+		this.type = type;
+	}
 }

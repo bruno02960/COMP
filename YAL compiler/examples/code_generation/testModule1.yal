@@ -16,6 +16,6 @@ module testModule1
 		x = method1(a, b);
 		c = method1(b, x);
 		io.println("x = ", x);	//x = 11
-		io.println("c = ", c);	//c = 12
+		io.println("c = ", c);	//c = 20
 	}
 }
