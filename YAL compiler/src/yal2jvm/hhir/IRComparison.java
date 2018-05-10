@@ -21,55 +21,44 @@ public class IRComparison extends IRNode
 	{
 		ArrayList<String> inst = new ArrayList<>();
 		
-		inst.addAll(rhs.getInstructions());
-		inst.addAll(lhs.getInstructions());
-		
 		String branchInst = "";
 		
-		if (useArrayOperations())
+		if (isConstantZero(rhs) || isConstantZero(lhs))
 		{
-			switch(comp)
-			{
-			case EQ:
-				branchInst = "if_acmpeq";
-				break;
-			case NEQ:
-				branchInst = "if_acmpne";
-				break;
-			default:
-				break;
-			}
+			ArrayList<String> loadInst = isConstantZero(rhs) ? lhs.getInstructions() : rhs.getInstructions();
+			inst.addAll(loadInst);
+			
+			branchInst = getZeroComparison();
+		}
+		else if (useArrayOperations())
+		{
+			inst.addAll(rhs.getInstructions());
+			inst.addAll(lhs.getInstructions());
+			
+			branchInst = getArrayComparison();
 		}
 		else
 		{
-			switch(comp)
-			{
-			case EQ:
-				branchInst += "if_icmpeq";
-				break;
-			case GT:
-				branchInst += "if_icmpgt";
-				break;
-			case GTE:
-				branchInst += "if_icmpge";
-				break;
-			case NEQ:
-				branchInst += "if_icmpne";
-				break;
-			case ST:
-				branchInst += "if_icmplt";
-				break;
-			case STE:
-				branchInst += "if_icmple";
-				break;
-			default:
-				break;
-			}
+			inst.addAll(rhs.getInstructions());
+			inst.addAll(lhs.getInstructions());
+			
+			branchInst = getIntegerComparison();
 		}
 		branchInst += " " + label;
 		
 		inst.add(branchInst);
 		return inst;
+	}
+	
+	boolean isConstantZero(IRNode node)
+	{
+		if (node.nodeType.equals("Constant"))
+		{
+			IRConstant constant = (IRConstant)node;
+			if (constant.getValue().equals("0"))
+				return true;
+		}
+		return false;
 	}
 
 	private boolean useArrayOperations()
@@ -91,6 +80,81 @@ public class IRComparison extends IRNode
 				return true;
 		}
 		return false;
+	}
+	
+	public String getZeroComparison()
+	{
+		String branchInst = "";
+		switch(comp)
+		{
+		case EQ:
+			branchInst = "ifeq";
+			break;
+		case GT:
+			branchInst = "ifgt";
+			break;
+		case GTE:
+			branchInst = "ifge";
+			break;
+		case NEQ:
+			branchInst = "ifne";
+			break;
+		case ST:
+			branchInst = "iflt";
+			break;
+		case STE:
+			branchInst = "ifle";
+			break;
+		default:
+			break;
+		}
+		return branchInst;
+	}
+	
+	public String getArrayComparison()
+	{
+		String branchInst = "";
+		switch(comp)
+		{
+		case EQ:
+			branchInst = "if_acmpeq";
+			break;
+		case NEQ:
+			branchInst = "if_acmpne";
+			break;
+		default:
+			break;
+		}
+		return branchInst;
+	}
+	
+	public String getIntegerComparison()
+	{
+		String branchInst = "";
+		switch(comp)
+		{
+		case EQ:
+			branchInst += "if_icmpeq";
+			break;
+		case GT:
+			branchInst += "if_icmpgt";
+			break;
+		case GTE:
+			branchInst += "if_icmpge";
+			break;
+		case NEQ:
+			branchInst += "if_icmpne";
+			break;
+		case ST:
+			branchInst += "if_icmplt";
+			break;
+		case STE:
+			branchInst += "if_icmple";
+			break;
+		default:
+			break;
+		}
+		return branchInst;
 	}
 
 	public IRNode getRhs()
