@@ -9,9 +9,9 @@ public class IRComparison extends IRNode
 	private IRNode lhs;
 	private String label;
 
-	public IRComparison(Comparator comp, String label)
+	public IRComparison(Comparator comp, String label, boolean invert)
 	{
-		this.comp = comp;
+		this.comp = invert ? Comparator.invert(comp) : comp;
 		this.label = label;
 		this.nodeType = "Comparison";
 	}

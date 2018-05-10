@@ -1,15 +1,16 @@
 module Test
 {
-	function a = f1(b[], c[])
+	function a = f1(b, c)
 	{
 		if (b == c)
 		{
-			a = 1;
+			d = 2;
 		}
 		else
 		{
-			a = 2;
+			f = 1;
 		}
-		a = 3;
+		e = d;
+		a = 1;
 	}
 }
