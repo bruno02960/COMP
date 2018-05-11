@@ -3,7 +3,6 @@ package yal2jvm.hhir;
 import java.util.ArrayList;
 
 import yal2jvm.ast.*;
-import yal2jvm.semantic_analysis.ModuleAnalysis;
 
 public class HHIR
 {
@@ -20,15 +19,11 @@ public class HHIR
     {
         this.ast = ast;
         this.root = createHHIR();
-
-        //hardcoded
-        //this.root = createHardcoded();
     }
 
     private IRModule createHHIR()
     {
         //create HHIR from AST
-        //hardcoded example for now
         ASTMODULE astModule = (ASTMODULE) ast;
         createModuleHHIR(astModule);
 
@@ -240,11 +235,29 @@ public class HHIR
                     createCallHHIR((ASTCALL) child, irmethod);
                     break;
 
-                default:
-                    System.out.println("Not generating HHIR for " + child.toString() + " yet.");
+                case "IF":
+                    createIfHHIR((ASTIF) child, irmethod);
                     break;
+
+                case "WHILE":
+                    createWhileHHIR((ASTWHILE) child, irmethod);
+                    break;
+
+                default:
+                    System.out.println("Undefined statement. The compiler will terminate.");
+                    System.exit(-1);
             }
         }
+    }
+
+    private void createIfHHIR(ASTIF child, IRMethod irmethod)
+    {
+
+    }
+
+    private void createWhileHHIR(ASTWHILE child, IRMethod irmethod)
+    {
+
     }
 
     /**
