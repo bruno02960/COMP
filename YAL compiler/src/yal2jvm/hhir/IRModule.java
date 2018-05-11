@@ -5,6 +5,7 @@ import java.util.ArrayList;
 public class IRModule extends IRNode
 {
     private String name;
+    private int currLabelNumber = 1;
 
     public IRModule(String name)
     {
@@ -44,6 +45,12 @@ public class IRModule extends IRNode
     {
         this.name = name;
     }
+
+    public int getAndIncrementCurrLabelNumber()
+    {
+        return ++currLabelNumber;
+    }
+
 
     public IRGlobal getGlobal(String name)
     {

@@ -250,14 +250,60 @@ public class HHIR
         }
     }
 
-    private void createIfHHIR(ASTIF child, IRMethod irmethod)
+    private void createIfHHIR(ASTIF astIf, IRMethod irmethod)
     {
+        /* using template:
 
+                    <do the test>
+                    boper …, lab_true
+                    <false_body>
+                    jump lab_end
+            lab_true:
+                    <true_body>
+            lab_end:
+         */
+
+
+        ASTEXPRTEST astExprtest = (ASTEXPRTEST) astIf.jjtGetChild(0);
+        String labelTrue = "if_" + irmethod.getName() + "_true" + root.getAndIncrementCurrLabelNumber();
+
+        //comparison
+        IRComparison irComparison = new IRComparison(astExprtest.operation, labelTrue, false);
+
+        //false body
+        if(astIf.jjtGetNumChildren() > 2)
+        {
+            ASTELSE astElse = (ASTELSE) astIf.jjtGetChild(2);
+            ASTSTATEMENTS astElseStatements = (ASTSTATEMENTS) astElse.jjtGetChild(0);
+            createStatementsHHIR(astElseStatements, irmethod);
+        }
+
+        //jump end
+        String labelEnd = "if_" + irmethod.getName() + "_end" + root.getAndIncrementCurrLabelNumber();
+        IRJump irJump = new IRJump(labelEnd);
+        irmethod.addChild(irJump);
+
+        //label true
+        IRLabel irLabelTrue = new IRLabel(labelTrue);
+        irmethod.addChild(irLabelTrue);
+
+        //true body
+        ASTSTATEMENTS astIfStatements = (ASTSTATEMENTS) astIf.jjtGetChild(1);
+        createStatementsHHIR(astIfStatements, irmethod);
+
+        //label true
+        IRLabel irLabelEnd = new IRLabel(labelEnd);
+        irmethod.addChild(irLabelEnd);
     }
 
-    private void createWhileHHIR(ASTWHILE child, IRMethod irmethod)
+    private void createWhileHHIR(ASTWHILE astWhile, IRMethod irmethod)
     {
+        //TODO ver ainda que template usar
+       /* ASTEXPRTEST astExprtest = (ASTEXPRTEST) astWhile.jjtGetChild(0);
+       IRComparison irComparison = new IRComparison(astExprtest.operation, );
 
+        ASTSTATEMENTS astStatements = (ASTSTATEMENTS) astWhile.jjtGetChild(1);
+        createStatementsHHIR(astStatements, irmethod);*/
     }
 
     /**

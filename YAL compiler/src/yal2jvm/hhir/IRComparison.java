@@ -15,7 +15,45 @@ public class IRComparison extends IRNode
 		this.label = label;
 		this.nodeType = "Comparison";
 	}
-	
+
+	public IRComparison(String operator, String label, boolean invert)
+	{
+		Comparator comp = getComparatorGivenOperator(operator);
+		this.comp = invert ? Comparator.invert(comp) : comp;
+		this.label = label;
+		this.nodeType = "Comparison";
+	}
+
+	private Comparator getComparatorGivenOperator(String operator)
+	{
+		switch (operator)
+		{
+			case ">":
+				return Comparator.GT;
+
+			case "<":
+				return Comparator.ST;
+
+			case "<=":
+				return Comparator.STE;
+
+			case ">=":
+				return Comparator.GTE;
+
+			case "==":
+				return Comparator.EQ;
+
+			case "!=":
+				return Comparator.NEQ;
+
+			default:
+				System.out.println("Unrecognized relational operator " + operator + ". Compile program will terminate.");
+				System.exit(-1);
+		}
+
+		return null; //unreachable
+	}
+
 	@Override
 	public ArrayList<String> getInstructions()
 	{
