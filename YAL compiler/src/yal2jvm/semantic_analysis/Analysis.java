@@ -707,13 +707,17 @@ public abstract class Analysis
             return false;
         }
 
+        //if operands being tested are both array type and the comparison operator is not == or !=, semantic error.
         if (lhsSymbol.getType().equals(SymbolType.ARRAY.toString()))
         {
-            System.out.println("Line " + astLhs.getBeginLine() + ": Variables must be INTEGER to be compared. Variable "
-                    + lhsSymbol.getId() + " has type " + lhsSymbol.getType() + " and variable " + rhsSymbol.getId()
-                    + " has type " + rhsSymbol.getType() + ".");
-            ModuleAnalysis.hasErrors = true;
-            return false;
+            if(astExprtest.operation != "==" && astExprtest.operation != "!=")
+            {
+                System.out.println("Line " + astLhs.getBeginLine() + ": Variables must be INTEGER to be compared. Variable "
+                        + lhsSymbol.getId() + " has type " + lhsSymbol.getType() + " and variable " + rhsSymbol.getId()
+                        + " has type " + rhsSymbol.getType() + ".");
+                ModuleAnalysis.hasErrors = true;
+                return false;
+            }
         }
 
         return true;
