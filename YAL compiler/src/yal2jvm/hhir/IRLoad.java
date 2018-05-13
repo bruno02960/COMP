@@ -7,11 +7,19 @@ public class IRLoad extends IRNode
     private String name;
     private int register = -1;
     private Type type;
+    private IRNode index;
 
     public IRLoad(String name)
     {
         this.name = name;
         this.nodeType = "Load";
+    }
+
+    public IRLoad(String name, IRNode index)
+    {
+        this.name = name;
+        this.nodeType = "Load";
+        this.index = index;
     }
 
     public int getRegister()

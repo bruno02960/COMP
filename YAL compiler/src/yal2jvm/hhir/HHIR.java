@@ -269,6 +269,14 @@ public class HHIR
 
         //comparison
         IRComparison irComparison = new IRComparison(astExprtest.operation, labelTrue, false);
+        ASTLHS astLhs = (ASTLHS) astExprtest.jjtGetChild(0);
+        IRNode lhsIrNode = getLhsIrNode(astLhs);
+        irComparison.setLhs(lhsIrNode);
+        //TODO ver se exprteste tem de ter 2 lados, pde ser if(1)?
+        ASTRHS astRhs = (ASTRHS) astExprtest.jjtGetChild(1);
+        IRNode rhsIrNode = getRhsIrNode(astRhs);
+        irComparison.setRhs(rhsIrNode);
+        irmethod.addChild(irComparison);
 
         //false body
         if(astIf.jjtGetNumChildren() > 2)
@@ -294,6 +302,54 @@ public class HHIR
         //label true
         IRLabel irLabelEnd = new IRLabel(labelEnd);
         irmethod.addChild(irLabelEnd);
+    }
+
+    private IRNode getLhsIrNode(ASTLHS astLhs)
+    {
+        Node child = astLhs.jjtGetChild(0);
+        if(child instanceof ASTARRAYACCESS)
+        {
+            ASTARRAYACCESS astArrayAccess = (ASTARRAYACCESS) child;
+            IRNode indexNode = getIndexIrNode((ASTINDEX) child.jjtGetChild(0));
+            return new IRLoad(astArrayAccess.arrayID, indexNode);
+        }
+        else
+        {
+            //TODO VER O QUE FAZER SE FôR .size
+            ASTSCALARACCESS astScalarAccess = (ASTSCALARACCESS) child;
+            return new IRLoad(astScalarAccess.id);
+        }
+    }
+
+    private IRNode getRhsIrNode(ASTRHS astRhs)
+    {
+        Node child = astRhs.jjtGetChild(0);
+        if(child instanceof ASTARRAYSIZE)
+        {
+            //TODO: ARRAY SIZE
+        }
+        else
+        {
+            //TODO terms
+        }
+        return new IRNode()
+        {
+            @Override
+            public ArrayList<String> getInstructions()
+            {
+                return null;
+            }
+        };
+    }
+
+    private IRNode getIndexIrNode(ASTINDEX astIndex)
+    {
+        Integer indexValue = astIndex.indexValue;
+        if(indexValue != null)
+            return new IRConstant(indexValue.toString());
+
+        String indexID = astIndex.indexID;
+        return new IRLoad(indexID);
     }
 
     private void createWhileHHIR(ASTWHILE astWhile, IRMethod irmethod)

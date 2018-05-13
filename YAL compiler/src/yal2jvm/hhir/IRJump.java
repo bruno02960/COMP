@@ -9,6 +9,7 @@ public class IRJump extends IRNode
 	public IRJump(String label)
 	{
 		this.label = label;
+		this.nodeType = "Jump";
 	}
 	
 	@Override

@@ -9,6 +9,7 @@ public class IRLabel extends IRNode
 	public IRLabel(String label)
 	{
 		this.label = label;
+		this.nodeType = "Label";
 	}
 	
 	@Override
