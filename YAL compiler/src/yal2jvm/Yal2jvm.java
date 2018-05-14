@@ -192,7 +192,7 @@ public class Yal2jvm
         {
             Runtime.getRuntime().exec("java -jar jasmin.jar " + fileName).waitFor();
             File file = new File(fileName);
-            file.delete();
+            //file.delete();
         } catch (IOException | InterruptedException e)
         {
             System.out.println("Unable to find or execute jasmin.jar");
