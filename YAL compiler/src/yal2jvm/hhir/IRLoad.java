@@ -8,11 +8,19 @@ public class IRLoad extends IRNode
     private int register = -1;
     private Type type;
     private IRNode index;
+    private boolean arraySizeAccess;
 
     public IRLoad(String name)
     {
         this.name = name;
         this.nodeType = "Load";
+    }
+
+    public IRLoad(String name, boolean arraySizeAccess)
+    {
+        this.name = name;
+        this.nodeType = "Load";
+        this.arraySizeAccess = arraySizeAccess;
     }
 
     public IRLoad(String name, IRNode index)

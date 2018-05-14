@@ -272,7 +272,7 @@ public class HHIR
         ASTLHS astLhs = (ASTLHS) astExprtest.jjtGetChild(0);
         IRNode lhsIrNode = getLhsIrNode(astLhs);
         irComparison.setLhs(lhsIrNode);
-        //TODO ver se exprteste tem de ter 2 lados, pde ser if(1)?
+
         ASTRHS astRhs = (ASTRHS) astExprtest.jjtGetChild(1);
         IRNode rhsIrNode = getRhsIrNode(astRhs);
         irComparison.setRhs(rhsIrNode);
@@ -315,9 +315,16 @@ public class HHIR
         }
         else
         {
-            //TODO VER O QUE FAZER SE FôR .size
             ASTSCALARACCESS astScalarAccess = (ASTSCALARACCESS) child;
-            return new IRLoad(astScalarAccess.id);
+            String id = astScalarAccess.id;
+            int indexOfSize = id.indexOf(".size");
+            if(indexOfSize != -1)
+            {
+                id = id.substring(0, indexOfSize);
+                return new IRLoad(id, true);
+            }
+
+            return new IRLoad(id);
         }
     }
 
