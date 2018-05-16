@@ -261,22 +261,11 @@ public class HHIR
             lab_true:
                     <true_body>
             lab_end:
+
          */
 
-
-        ASTEXPRTEST astExprtest = (ASTEXPRTEST) astIf.jjtGetChild(0);
         String labelTrue = "if_" + irmethod.getName() + "_true" + root.getAndIncrementCurrLabelNumber();
-
-        //comparison
-        IRComparison irComparison = new IRComparison(astExprtest.operation, labelTrue, false);
-        ASTLHS astLhs = (ASTLHS) astExprtest.jjtGetChild(0);
-        IRNode lhsIrNode = getLhsIrNode(astLhs);
-        irComparison.setLhs(lhsIrNode);
-
-        ASTRHS astRhs = (ASTRHS) astExprtest.jjtGetChild(1);
-        IRNode rhsIrNode = getRhsIrNode(astRhs);
-        irComparison.setRhs(rhsIrNode);
-        irmethod.addChild(irComparison);
+        createExprTestHHIR(astIf, irmethod, labelTrue);
 
         //false body
         if(astIf.jjtGetNumChildren() > 2)
@@ -288,8 +277,7 @@ public class HHIR
 
         //jump end
         String labelEnd = "if_" + irmethod.getName() + "_end" + root.getAndIncrementCurrLabelNumber();
-        IRJump irJump = new IRJump(labelEnd);
-        irmethod.addChild(irJump);
+        createJumpEndHHIR(irmethod, "if");
 
         //label true
         IRLabel irLabelTrue = new IRLabel(labelTrue);
@@ -362,11 +350,58 @@ public class HHIR
     private void createWhileHHIR(ASTWHILE astWhile, IRMethod irmethod)
     {
         //TODO ver ainda que template usar
-       /* ASTEXPRTEST astExprtest = (ASTEXPRTEST) astWhile.jjtGetChild(0);
-       IRComparison irComparison = new IRComparison(astExprtest.operation, );
+        /* using template:
 
+            lab_init: <test>
+                      boper …, lab_end
+                      <body>
+                      jump lab_init
+            lab_end:
+         */
+
+        //label init
+        String labelInit = "while_" + irmethod.getName() + "_init" + root.getAndIncrementCurrLabelNumber();
+        IRLabel irLabelInit = new IRLabel(labelInit);
+        irmethod.addChild(irLabelInit);
+
+        //test
+        String labelEnd = "while_" + irmethod.getName() + "_end" + root.getAndIncrementCurrLabelNumber();
+        createExprTestHHIR(astWhile, irmethod, labelEnd);
+
+        //jump end
+        createJumpEndHHIR(irmethod, labelEnd);
+
+        //body
         ASTSTATEMENTS astStatements = (ASTSTATEMENTS) astWhile.jjtGetChild(1);
-        createStatementsHHIR(astStatements, irmethod);*/
+        createStatementsHHIR(astStatements, irmethod);
+
+        //jump init
+        createJumpEndHHIR(irmethod, labelInit);
+
+        IRLabel irLabelEnd = new IRLabel(labelEnd);
+        irmethod.addChild(irLabelEnd);
+    }
+
+    private void createJumpEndHHIR(IRMethod irmethod, String labelEnd)
+    {
+        IRJump irJump = new IRJump(labelEnd);
+        irmethod.addChild(irJump);
+    }
+
+    private void createExprTestHHIR(Node astNode, IRMethod irmethod, String label)
+    {
+        ASTEXPRTEST astExprtest = (ASTEXPRTEST) astNode.jjtGetChild(0);
+        IRComparison irComparison = new IRComparison(astExprtest.operation, label, false);
+
+        ASTLHS astLhs = (ASTLHS) astExprtest.jjtGetChild(0);
+        IRNode lhsIrNode = getLhsIrNode(astLhs);
+        irComparison.setLhs(lhsIrNode);
+
+        ASTRHS astRhs = (ASTRHS) astExprtest.jjtGetChild(1);
+        IRNode rhsIrNode = getRhsIrNode(astRhs);
+        irComparison.setRhs(rhsIrNode);
+
+        irmethod.addChild(irComparison);
     }
 
     /**
