@@ -19,6 +19,7 @@ public class Yal2jvm
 
     private int localVars;
     private boolean optimize;
+    private boolean keepJFile = false;
     private String inputFile;
     private SimpleNode ast;
 
@@ -191,9 +192,13 @@ public class Yal2jvm
         try
         {
             Runtime.getRuntime().exec("java -jar jasmin.jar " + fileName).waitFor();
-            File file = new File(fileName);
-            //file.delete();
-        } catch (IOException | InterruptedException e)
+            if(!keepJFile)
+            {
+                File file = new File(fileName);
+                file.delete();
+            }
+        }
+        catch (IOException | InterruptedException e)
         {
             System.out.println("Unable to find or execute jasmin.jar");
             System.exit(-1);
