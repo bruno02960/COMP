@@ -168,7 +168,7 @@ public abstract class Analysis
         FunctionSymbol functionSymbol = (FunctionSymbol) functionNameToFunctionSymbol.get(method);
         if (functionSymbol == null)
         {
-            System.out.println("Line " + callTree.getBeginLine() + ": Method " + method + " can´t be found.");
+            System.out.println("Line " + callTree.getBeginLine() + ": Method " + method + " can't be found.");
             ModuleAnalysis.hasErrors = true;
             return null;
         }
