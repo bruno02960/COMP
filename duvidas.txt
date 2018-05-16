@@ -24,3 +24,14 @@ o nosso codigo tambem nao corre
 Otimizaçoes - 2 indicadas  + 1 escolha mas so no 3ºcheclpoint
 
 registos- com -r NUM, num indica o numero de registos que se pode usar para o codigo, ,mas so no 3ºcheclpoint
+
+
+Qual o template mais efiente para os loops? print1 ou print2? e ja agora usa-se o melhor no trabalho certo?
+e para alem do melhor ainda se pode fazer something sobre repetir o codigo ou coisa assim? ver com o prof
+
+
+E possivel expressoes em ExprTest, tipo a < b+c? permite, mas a < a+b+c n?o
+E a < f1()? permite
+Ver se ta tudo direito na analise semantica para isso
+
+

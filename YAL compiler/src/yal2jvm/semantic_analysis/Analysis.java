@@ -154,24 +154,14 @@ public abstract class Analysis
         String module = callTree.module;
         if (module != null && !module.equals(ModuleAnalysis.moduleName))
         {
-            ArrayList<String> argumentsTypes = new ArrayList<>();
             if (callTree.jjtGetNumChildren() > 0)
             {
                 ASTARGUMENTS astarguments = (ASTARGUMENTS) callTree.jjtGetChild(0);
-                argumentsTypes = parseArgumentList(astarguments);
-
-                if (argumentsTypes == null)
+                if (parseArgumentList(astarguments) == null)
                     return null;
             }
 
-            if (argumentsTypes.contains("STRING") && !module.equals("io"))
-            {
-                System.out.println("Line " + callTree.getBeginLine() + ": Only module io can have string type arguments.");
-                ModuleAnalysis.hasErrors = true;
-            }
-
             return new VarSymbol("", SymbolType.UNDEFINED.toString(), true);
-
         }
 
         String method = callTree.method;
