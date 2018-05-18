@@ -1,26 +1,12 @@
-function a[]=det(d[]) 
-{
-	data[5] = 7;
-	i=a;
-}
 
-Isto é possivel?
+ver feeback 2 , ponto 3
 
------//-----
+Qual o template mais efiente para os loops? print1 ou print2? e ja agora usa-se o melhor no trabalho certo?
+e para alem do melhor ainda se pode fazer something sobre repetir o codigo ou coisa assim? ver com o prof
 
-function main()
-{
-	a=[100];
-	a=1;
-	a=2;
-}
 
-Isto é possivel?
+E possivel expressoes em ExprTest, tipo a < b+c? permite, mas a < a+b+c n?o
+E a < f1()? permite
+Ver se ta tudo direito na analise semantica para isso
 
------//-----
 
-o nosso codigo tambem nao corre
-
-Otimizaçoes - 2 indicadas  + 1 escolha mas so no 3ºcheclpoint
-
-registos- com -r NUM, num indica o numero de registos que se pode usar para o codigo, ,mas so no 3ºcheclpoint

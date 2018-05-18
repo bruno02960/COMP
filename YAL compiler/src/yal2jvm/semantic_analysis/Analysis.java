@@ -154,31 +154,21 @@ public abstract class Analysis
         String module = callTree.module;
         if (module != null && !module.equals(ModuleAnalysis.moduleName))
         {
-            ArrayList<String> argumentsTypes = new ArrayList<>();
             if (callTree.jjtGetNumChildren() > 0)
             {
                 ASTARGUMENTS astarguments = (ASTARGUMENTS) callTree.jjtGetChild(0);
-                argumentsTypes = parseArgumentList(astarguments);
-
-                if (argumentsTypes == null)
+                if (parseArgumentList(astarguments) == null)
                     return null;
             }
 
-            if (argumentsTypes.contains("STRING") && !module.equals("io"))
-            {
-                System.out.println("Line " + callTree.getBeginLine() + ": Only module io can have string type arguments.");
-                ModuleAnalysis.hasErrors = true;
-            }
-
             return new VarSymbol("", SymbolType.UNDEFINED.toString(), true);
-
         }
 
         String method = callTree.method;
         FunctionSymbol functionSymbol = (FunctionSymbol) functionNameToFunctionSymbol.get(method);
         if (functionSymbol == null)
         {
-            System.out.println("Line " + callTree.getBeginLine() + ": Method " + method + " can´t be found.");
+            System.out.println("Line " + callTree.getBeginLine() + ": Method " + method + " can't be found.");
             ModuleAnalysis.hasErrors = true;
             return null;
         }
