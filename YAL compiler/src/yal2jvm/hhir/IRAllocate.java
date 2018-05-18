@@ -11,6 +11,7 @@ public class IRAllocate extends IRNode
     private int register = -1;
     int size = -1;
     private String variable;
+    private String index;
 
     public IRAllocate(String name, Type type, Integer value)
     {
@@ -41,6 +42,16 @@ public class IRAllocate extends IRNode
         this.type = type;
         this.value = value == null ? 0 : value;
         this.size = size;
+    }
+
+    public IRAllocate(String name, Type type, Integer value, String index)
+    {
+        this.nodeType = "Allocate";
+        this.name = name;
+        assert type == Type.ARRAY;
+        this.type = type;
+        this.value = value == null ? 0 : value;
+        this.index = index;
     }
 
     @Override

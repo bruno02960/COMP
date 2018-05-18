@@ -12,7 +12,7 @@ public class HHIR
     //TODO: Debug
     boolean declarationDebug = false;
     boolean functionDebug = false;
-    boolean assignDebug = false;
+    boolean assignDebug = true;
     boolean callDebug = false;
 
     public HHIR(SimpleNode ast)
@@ -372,10 +372,10 @@ public class HHIR
     private void createAssignHHIR(SimpleNode child, IRMethod irmethod)
     {
         String lhsName = null;
-        //String size = null;
+        String size = null;
         String operator;
-        //String at_name = null;
-        //boolean arraySize = false;
+        String at_name = null;
+        boolean arraySize = false;
 
         ASTLHS astlhs = (ASTLHS) child.jjtGetChild(0);
         ASTRHS astrhs = (ASTRHS) child.jjtGetChild(1);
@@ -390,9 +390,7 @@ public class HHIR
         switch (lhchild.toString())
         {
             case "ARRAYACCESS":
-                System.out.println("Not generating HHIR for " + lhchild.toString() + " yet.");
-                return;
-                /*ASTARRAYACCESS astarrayaccess = (ASTARRAYACCESS) lhchild;
+                ASTARRAYACCESS astarrayaccess = (ASTARRAYACCESS) lhchild;
                 ASTINDEX astindex = (ASTINDEX) astarrayaccess.jjtGetChild(0);
 
                 lhsName = astarrayaccess.arrayID;
@@ -404,7 +402,7 @@ public class HHIR
                 {
                     at_name = astindex.indexValue.toString();
                 }
-                break;*/
+                break;
             case "SCALARACCESS":
                 ASTSCALARACCESS astscalaraccess = (ASTSCALARACCESS) lhchild;
                 lhsName = astscalaraccess.id;
@@ -449,9 +447,7 @@ public class HHIR
                                 break;
 
                             case "ARRAYACCESS":
-                                System.out.println("Not generating HHIR for " + termChild.toString() + " yet.");
-                                return;
-                                /*ASTARRAYACCESS astarrayaccess = ((ASTARRAYACCESS) termChild);
+                                ASTARRAYACCESS astarrayaccess = ((ASTARRAYACCESS) termChild);
                                 ASTINDEX astindex = (ASTINDEX) termChild.jjtGetChild(0);
                                 String arrayaccess = term.operator + astarrayaccess.arrayID;
                                 at_op.add((astindex.indexID != null ? astindex.indexID : astindex.indexValue.toString()));
@@ -460,21 +456,18 @@ public class HHIR
                                 else
                                     isSize.add(false);
                                 operands.add(arrayaccess);
-                                break;*/
-
+                                break;
                             case "SCALARACCESS":
                                 String id = ((ASTSCALARACCESS) termChild).id;
                                 at_op.add("-1");
                                 calls.add(null);
                                 if (id.contains(".size"))
                                 {
-                                    System.out.println("Not generating HHIR for " + id + " yet.");
-                                    return;
-                                    /*isSize.add(true);
-                                    id = id.split(".size")[0];*/
+                                    isSize.add(true);
+                                    id = id.split(".size")[0];
                                 } else
                                 {
-                                    //isSize.add(false);
+                                    isSize.add(false);
                                 }
                                 types.add("VAR");
                                 operands.add(term.operator + id);
@@ -483,9 +476,7 @@ public class HHIR
                     }
                     break;
                 case "ARRAYSIZE":
-                    System.out.println("Not generating HHIR for " + rhchild.toString() + " yet.");
-                    return;
-                    /*ASTARRAYSIZE astarraysize = (ASTARRAYSIZE) rhchild;
+                    ASTARRAYSIZE astarraysize = (ASTARRAYSIZE) rhchild;
 
                     if (astarraysize.jjtGetNumChildren() == 0)
                     {
@@ -501,7 +492,7 @@ public class HHIR
                             size = size.split(".size")[0];
                         }
                     }
-                    break;*/
+                    break;
             }
         }
 
@@ -510,16 +501,16 @@ public class HHIR
         {
             System.out.println();
             System.out.println(lhsName != null ? "lhsName = " + lhsName : "null");
-            //System.out.println(at_name != null ? "at = " + at_name : "null");
+            System.out.println(at_name != null ? "at = " + at_name : "null");
             for (int i = 0; i < operands.size(); i++)
             {
                 System.out.println("operand = " + operands.get(i));
-//                System.out.println(isSize.get(i) ? " .size" : "");
-//                System.out.println(!at_op.get(i).equals("-1") ? "at = " + at_op.get(i) : "null");
+                System.out.println(isSize.get(i) ? " .size" : "");
+                System.out.println(!at_op.get(i).equals("-1") ? "at = " + at_op.get(i) : "null");
             }
             System.out.println(!operator.equals("") ? "operator = " + operator : "null");
-            //System.out.print(size != null ? "size = " + size : "null");
-            //System.out.println(arraySize ? " .size" : "");
+            System.out.print(size != null ? "size = " + size : "null");
+            System.out.println(arraySize ? " .size" : "");
             System.out.println();
         }
 
@@ -535,7 +526,7 @@ public class HHIR
                 if(type.equals("INTEGER")) {    // a = 3
                     irmethod.addChild(new IRAllocate(lhsName, Type.INTEGER, Integer.parseInt(operands.get(0))));
                 }
-                else {                          // a = b
+                else {                            // a = b
                     irmethod.addChild(new IRAllocate(lhsName, Type.INTEGER, operands.get(0)));
                 }
             }

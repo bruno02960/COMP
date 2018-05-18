@@ -98,7 +98,7 @@ public class UnitTests
 	@Test
 	public void semanticNoErrors()
 	{
-		ArrayList<String> log = testAllFilesInFolder("YAL compiler/examples/semantic_no_errors");
+		ArrayList<String> log = testAllFilesInFolder("examples/semantic_no_errors");
 			
 		for (int i = 0; i < log.size(); i++)
 			assertEquals(true, log.get(i).contains("semantic analysis successful"));
@@ -107,7 +107,7 @@ public class UnitTests
 	@Test
 	public void semanticWithErrors()
 	{
-		ArrayList<String> log = testAllFilesInFolder("YAL compiler/examples/semantic_errors");
+		ArrayList<String> log = testAllFilesInFolder("examples/semantic_errors");
 		
 		for (int i = 0; i < log.size(); i++)
 			assertEquals(true, log.get(i).contains("error"));
@@ -116,7 +116,7 @@ public class UnitTests
 	@Test
 	public void compileAndRunNoErrors()
 	{
-		ArrayList<String> log = testAllFilesInFolder("YAL compiler/examples/code_generation");
+		ArrayList<String> log = testAllFilesInFolder("examples/code_generation");
 		
 		for (int i = 0; i < log.size(); i++)
 			assertEquals(true, log.get(i).contains("successful compilation and execution"));
