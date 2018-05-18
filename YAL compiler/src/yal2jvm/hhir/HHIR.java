@@ -10,9 +10,9 @@ public class HHIR
     private SimpleNode ast;
 
     //TODO: Debug
-    boolean declarationDebug = false;
+    boolean declarationDebug = true;
     boolean functionDebug = false;
-    boolean assignDebug = true;
+    boolean assignDebug = false;
     boolean callDebug = false;
 
     public HHIR(SimpleNode ast)
@@ -417,7 +417,6 @@ public class HHIR
         String size = null;
         String operator;
         String at_name = null;
-        String at_type = null;
         String lhsType = null;
 
         ASTLHS astlhs = (ASTLHS) child.jjtGetChild(0);
@@ -441,11 +440,9 @@ public class HHIR
                 if (astindex.indexID != null)
                 {
                     at_name = astindex.indexID;
-                    at_type = "VAR";
                 } else
                 {
                     at_name = astindex.indexValue.toString();
-                    at_type = "INTEGER";
                 }
                 lhsType = "ARRAY";
                 break;
@@ -567,109 +564,137 @@ public class HHIR
             System.out.println();
         }
 
+        createAssignIR(operator, types, lhsType, lhsName, calls, irmethod, size, operands, at_name, isSize, at_op);
+    }
 
-        if(operator.equals("")) {                   // a = IMMEDIATE
-            String type = types.get(0);
-            assert lhsType != null;
+    private void createAssignImmediateIR(ArrayList<String> types, String lhsType, String lhsName, ArrayList<IRCall> calls, IRMethod irmethod, String size, ArrayList<String> operands, String at_name, ArrayList<Boolean> isSize, ArrayList<String> at_op) {
+        IRStoreCall irStoreCall = null;
+
+        String type = types.get(0);
+        assert lhsType != null;
+        if (type.equals("CALL")) {          // a = f1();
             if (lhsType.equals("VAR")) {
-                if ("CALL".equals(type)) {          // a = f1();
-                    IRStoreCall irStoreCall = new IRStoreCall(lhsName);
-                    irStoreCall.addChild(calls.get(0));
-                    irmethod.addChild(irStoreCall);
-                } else {
-                    if (type.equals("INTEGER")) {   // a = 3
-                        irmethod.addChild(new IRAllocate(lhsName, Type.INTEGER, Integer.parseInt(operands.get(0))));
-                    } else {
-                        if(type.equals("VAR")) {
-                            if (size == null) {       // a = b
-                                irmethod.addChild(new IRAllocate(lhsName, Type.INTEGER, operands.get(0)));
-                            } else {                      // a = b.size
-                                //TODO: IR that accepts array size as rhs
-                            }
-                        }
-                        else {                          // a = [X]
-                                //TODO: IR that accepts size as rhs
-                        }
-                    }
-                }
+                irStoreCall = new IRStoreCall(lhsName);
+                irStoreCall.addChild(calls.get(0));
+                irmethod.addChild(irStoreCall);
             }
             else {
-                if (type.equals("CALL")) {           // a[X] = f1();
-
+                if(at_name.contains(".size")) {
+                    String index = at_name.split(".size")[0];
+                    irStoreCall = new IRStoreCall(lhsName, index, true);
                 } else {
-                    if (type.equals("INTEGER")) {    // a[X] = 3
-                        irmethod.addChild(new IRAllocate(lhsName, Type.ARRAY, Integer.parseInt(operands.get(0)), at_name));
-                    } else {
-                        if(type.equals("VAR")) {
-                            if (size == null) {
-                                irmethod.addChild(new IRAllocate(lhsName, Type.ARRAY, operands.get(0), at_name));
-                            } else {                  // a[b.size] = X
-                                //TODO: IR that accepts array size as rhs
-                            }
+                    irStoreCall = new IRStoreCall(lhsName, at_name);
+                }
+
+                irStoreCall.addChild(calls.get(0));
+                irmethod.addChild(irStoreCall);
+            }
+        } else {
+            if (type.equals("INTEGER")) {   // a = 3
+                if (lhsType.equals("VAR")) {
+                    irmethod.addChild(new IRAllocate(lhsName, Type.INTEGER, Integer.parseInt(operands.get(0))));
+                }
+                else {                      // a[X] = 3
+                    irmethod.addChild(new IRAllocate(lhsName, Type.ARRAY, Integer.parseInt(operands.get(0)), at_name));
+                }
+            } else {
+                if(type.equals("VAR")) {
+                    if (!isSize.get(0)) {       // a = b
+                        if (lhsType.equals("VAR")) {
+                            irmethod.addChild(new IRAllocate(lhsName, Type.INTEGER, operands.get(0)));
                         }
+                        else {                  // a[X] = b
+                            irmethod.addChild(new IRAllocate(lhsName, Type.ARRAY, operands.get(0), at_name));
+                        }
+                    } else {                    // a = b.size
+                        irmethod.addChild(new IRAllocate(lhsName, Type.INTEGER, operands.get(0), true));
+                    }
+                }
+                else {                          // a = [X]
+                    //TODO: IR that accepts size as rhs
+                }
+            }
+        }
+    }
+
+    private void createAssignOperationIR(String operator, ArrayList<String> types, String lhsType, String lhsName, ArrayList<IRCall> calls, IRMethod irmethod, String size, ArrayList<String> operands, String at_name, ArrayList<Boolean> isSize, ArrayList<String> at_op) {
+        IRStoreArith irStoreArith = null;
+
+        String type1 = types.get(0);
+        String type2 = types.get(1);
+
+        if (lhsType.equals("VAR")) {
+            irStoreArith = new IRStoreArith(lhsName, Operation.parseOperator(operator));
+        }
+        else {
+            if(at_name.contains(".size")) {
+                String index = at_name.split(".size")[0];
+                irStoreArith = new IRStoreArith(lhsName, Operation.parseOperator(operator), index, true);
+            } else {
+                irStoreArith = new IRStoreArith(lhsName, Operation.parseOperator(operator), at_name);
+            }
+        }
+
+        if(type1.equals("CALL")) {           // a = f1() + X
+            irStoreArith.setRhs(calls.get(0));
+        } else {
+            if(type1.equals("INTEGER")) {    // a = 3
+                irStoreArith.setRhs(new IRConstant(operands.get(0)));
+            }
+            else {
+                if(type1.equals("VAR")) {
+                    if(isSize.get(0)) {         // a = b.size
+                        irStoreArith.setRhs(new IRLoad(operands.get(0), true));
+                    } else {                   // a = b
+                        irStoreArith.setRhs(new IRLoad(operands.get(0)));
+                    }
+                }
+                else {
+                    if(isSize.get(0)) {    // a = b[c.size]
+                        irStoreArith.setRhs(new IRLoad(operands.get(0), at_op.get(0), true));
+                    }
+                    else {                  // a = b[X]
+                        irStoreArith.setRhs(new IRLoad(operands.get(0), at_op.get(0)));
                     }
                 }
             }
         }
-        else {                                  // a = OPERATION
-            String type1 = types.get(0);
-            String type2 = types.get(1);
 
-            IRStoreArith irStoreArith = new IRStoreArith(lhsName, Operation.parseOperator(operator));
-
-            if(type1.equals("CALL")) {           // a = f1() + X
-                irStoreArith.setRhs(calls.get(0));
+        if(type2.equals("CALL")) {           // a = f1() + X
+            irStoreArith.setRhs(calls.get(1));
+        }
+        else {
+            if(type2.equals("INTEGER")) {    // a = 3
+                irStoreArith.setRhs(new IRConstant(operands.get(1)));
             }
             else {
-                if(type1.equals("INTEGER")) {    // a = 3
-                    irStoreArith.setRhs(new IRConstant(operands.get(0)));
+                if(type2.equals("VAR")) {
+                    if(isSize.get(1)) {         // a = b.size
+                        irStoreArith.setRhs(new IRLoad(operands.get(1), true));
+                    } else {                   // a = b
+                        irStoreArith.setRhs(new IRLoad(operands.get(1)));
+                    }
                 }
                 else {
-                    if(type1.equals("VAR")) {
-                        if(isSize.get(0)) {         // a = b.size
-                            irStoreArith.setRhs(new IRLoad(operands.get(0), true));
-                        } else {                   // a = b
-                            irStoreArith.setRhs(new IRLoad(operands.get(0)));
-                        }
+                    if(isSize.get(1)) {    // a = b[c.size]
+                        irStoreArith.setRhs(new IRLoad(operands.get(1), at_op.get(1), true));
                     }
-                    else {
-                        if(isSize.get(0)) {    // a = b[c.size]
-                            //TODO
-                        }
-                        else {                  // a = b[X]
-                            //TODO
-                        }
+                    else {                  // a = b[X]
+                        irStoreArith.setRhs(new IRLoad(operands.get(1), at_op.get(1)));
                     }
                 }
             }
+        }
 
-            if(type2.equals("CALL")) {           // a = f1() + X
-                irStoreArith.setRhs(calls.get(1));
-            }
-            else {
-                if(type2.equals("INTEGER")) {    // a = 3
-                    irStoreArith.setRhs(new IRConstant(operands.get(1)));
-                }
-                else {
-                    if(type2.equals("VAR")) {
-                        if(isSize.get(1)) {         // a = b.size
-                            irStoreArith.setRhs(new IRLoad(operands.get(1), true));
-                        } else {                   // a = b
-                            irStoreArith.setRhs(new IRLoad(operands.get(1)));
-                        }
-                    }
-                    else {
-                        if(isSize.get(1)) {    // a = b[c.size]
-                            //TODO
-                        }
-                        else {                  // a = b[X]
-                            //TODO
-                        }
-                    }
-                }
-            }
+        irmethod.addChild(irStoreArith);
+    }
 
-            irmethod.addChild(irStoreArith);
+    private void createAssignIR(String operator, ArrayList<String> types, String lhsType, String lhsName, ArrayList<IRCall> calls, IRMethod irmethod, String size, ArrayList<String> operands, String at_name, ArrayList<Boolean> isSize, ArrayList<String> at_op) {
+        if(operator.equals("")) {                   // a = IMMEDIATE
+            createAssignImmediateIR(types, lhsType, lhsName, calls, irmethod, size, operands, at_name, isSize, at_op);
+        }
+        else {                                      // a = OPERATION
+            createAssignOperationIR(operator, types, lhsType, lhsName, calls, irmethod, size, operands, at_name, isSize, at_op);
         }
     }
 

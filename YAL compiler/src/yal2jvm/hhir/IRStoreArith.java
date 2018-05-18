@@ -14,6 +14,18 @@ public class IRStoreArith extends IRStore
         this.nodeType = "StoreArith";
     }
 
+    public IRStoreArith(String name, Operation op, String index) //for arrays
+    {
+        this.name = name;
+        this.nodeType = "StoreCall";
+    }
+
+    public IRStoreArith(String name, Operation op, String index, boolean arraySizeAccess) //for arrays
+    {
+        this.name = name;
+        this.nodeType = "StoreCall";
+    }
+
     @Override
     public ArrayList<String> getInstructions()
     {

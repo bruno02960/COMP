@@ -7,7 +7,8 @@ public class IRLoad extends IRNode
     private String name;
     private int register = -1;
     private Type type;
-    private IRNode index;
+    private String index;
+    private IRNode indexNode;
     private boolean arraySizeAccess;
 
     public IRLoad(String name)
@@ -16,18 +17,33 @@ public class IRLoad extends IRNode
         this.nodeType = "Load";
     }
 
-    public IRLoad(String name, boolean arraySizeAccess)
+    public IRLoad(String name, IRNode indexNode)
+    {
+        this.name = name;
+        this.nodeType = "Load";
+        this.indexNode = indexNode;
+    }
+
+    public IRLoad(String name, String index)
+    {
+        this.name = name;
+        this.nodeType = "Load";
+        this.index = index;
+    }
+
+    IRLoad(String name, boolean arraySizeAccess)
     {
         this.name = name;
         this.nodeType = "Load";
         this.arraySizeAccess = arraySizeAccess;
     }
 
-    public IRLoad(String name, IRNode index)
+    IRLoad(String name, String index, boolean arraySizeAccess)
     {
         this.name = name;
         this.nodeType = "Load";
         this.index = index;
+        this.arraySizeAccess = arraySizeAccess;
     }
 
     public int getRegister()
