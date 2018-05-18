@@ -8,7 +8,7 @@ public class IRGlobal extends IRNode
     private String name;
     private Type type;
     private Integer initVal;
-    private Integer size;
+    private String size;
 
     /**
      * Used for global variables of type integer
@@ -17,7 +17,7 @@ public class IRGlobal extends IRNode
      * @param type	integer type
      * @param initVal	integer initial value
      */
-    public IRGlobal(String name, Type type, Integer initVal)
+    public IRGlobal(String name, Type type, Integer initVal, boolean arraySizeAccess)
     {
         this.name = name;
         assert type == Type.INTEGER;
@@ -34,7 +34,7 @@ public class IRGlobal extends IRNode
      * @param initVal	array initial value
      * @param size	array size
      */
-    public IRGlobal(String name, Type type, Integer initVal, Integer size)
+    public IRGlobal(String name, Type type, Integer initVal, String size, boolean arraySizeAccess)
     {
         this.name = name;
         assert type == Type.ARRAY;

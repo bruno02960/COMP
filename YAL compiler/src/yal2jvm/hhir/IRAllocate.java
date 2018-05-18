@@ -26,14 +26,6 @@ public class IRAllocate extends IRNode
     /*
     TODO: Generate code for this
      */
-    public IRAllocate(String name, Type type, String variable)
-    {
-        this.nodeType = "Allocate";
-        this.name = name;
-        assert type == Type.INTEGER;
-        this.type = type;
-        this.variable = variable;
-    }
 
     public IRAllocate(String name, Type type, String variable, boolean arraySizeAccess)
     {
@@ -54,23 +46,13 @@ public class IRAllocate extends IRNode
         this.size = size;
     }
 
-    public IRAllocate(String name, Type type, Integer value, String index)
+    public IRAllocate(String name, Type type, Integer value, String index, boolean arraySizeAccess)
     {
         this.nodeType = "Allocate";
         this.name = name;
         assert type == Type.ARRAY;
         this.type = type;
         this.value = value == null ? 0 : value;
-        this.index = index;
-    }
-
-    public IRAllocate(String name, Type type, String variable, String index)
-    {
-        this.nodeType = "Allocate";
-        this.name = name;
-        assert type == Type.ARRAY;
-        this.type = type;
-        this.variable = variable;
         this.index = index;
     }
 

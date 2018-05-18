@@ -33,10 +33,10 @@ public class HHIR
     public IRModule createHardcoded()
     {
         IRModule module = new IRModule("Module1");
-        module.addChild(new IRGlobal("a", Type.INTEGER, null));
-        module.addChild(new IRGlobal("b", Type.INTEGER, null));
-        module.addChild(new IRGlobal("c", Type.INTEGER, 12));
-        module.addChild(new IRGlobal("d", Type.INTEGER, 12345));
+        module.addChild(new IRGlobal("a", Type.INTEGER, null, false));
+        module.addChild(new IRGlobal("b", Type.INTEGER, null, false));
+        module.addChild(new IRGlobal("c", Type.INTEGER, 12, false));
+        module.addChild(new IRGlobal("d", Type.INTEGER, 12345, false));
 
         //newVar1;
         //newVar2 = newVar1 * var3;
@@ -54,9 +54,9 @@ public class HHIR
         //test2 = a;
         m1.addChild(new IRAllocate("test1", Type.INTEGER, 20));
         m1.addChild(new IRAllocate("test2", Type.INTEGER, 50));
-        m1.addChild(new IRAllocate("test1", Type.INTEGER, "test2"));
+        m1.addChild(new IRAllocate("test1", Type.INTEGER, "test2", false));
         m1.addChild(new IRAllocate("test1", Type.INTEGER, 30));
-        m1.addChild(new IRAllocate("test2", Type.INTEGER, "a"));
+        m1.addChild(new IRAllocate("test2", Type.INTEGER, "a", false));
         module.addChild(m1);
 
         //var1 = var2 * var3;
@@ -595,19 +595,17 @@ public class HHIR
                     irmethod.addChild(new IRAllocate(lhsName, Type.INTEGER, Integer.parseInt(operands.get(0))));
                 }
                 else {                      // a[X] = 3
-                    irmethod.addChild(new IRAllocate(lhsName, Type.ARRAY, Integer.parseInt(operands.get(0)), at_name));
+                    irmethod.addChild(new IRAllocate(lhsName, Type.ARRAY, Integer.parseInt(operands.get(0)), at_name, isSize.get(0)));
                 }
             } else {
                 if(type.equals("VAR")) {
-                    if (!isSize.get(0)) {       // a = b
+                    if (!isSize.get(0)) {       // a = b    // a = b.size
                         if (lhsType.equals("VAR")) {
-                            irmethod.addChild(new IRAllocate(lhsName, Type.INTEGER, operands.get(0)));
+                            irmethod.addChild(new IRAllocate(lhsName, Type.INTEGER, operands.get(0), isSize.get(0)));
                         }
                         else {                  // a[X] = b
-                            irmethod.addChild(new IRAllocate(lhsName, Type.ARRAY, operands.get(0), at_name));
+                            irmethod.addChild(new IRAllocate(lhsName, Type.ARRAY, operands.get(0), at_name, isSize.get(0)));
                         }
-                    } else {                    // a = b.size
-                        irmethod.addChild(new IRAllocate(lhsName, Type.INTEGER, operands.get(0), true));
                     }
                 }
                 else {                          // a = [X]
@@ -642,20 +640,10 @@ public class HHIR
                 irStoreArith.setRhs(new IRConstant(operands.get(0)));
             }
             else {
-                if(type1.equals("VAR")) {
-                    if(isSize.get(0)) {         // a = b.size
-                        irStoreArith.setRhs(new IRLoad(operands.get(0), true));
-                    } else {                   // a = b
-                        irStoreArith.setRhs(new IRLoad(operands.get(0)));
-                    }
-                }
-                else {
-                    if(isSize.get(0)) {    // a = b[c.size]
-                        irStoreArith.setRhs(new IRLoad(operands.get(0), at_op.get(0), true));
-                    }
-                    else {                  // a = b[X]
-                        irStoreArith.setRhs(new IRLoad(operands.get(0), at_op.get(0)));
-                    }
+                if(type1.equals("VAR")) {   // a = b.size // a = b
+                    irStoreArith.setRhs(new IRLoad(operands.get(0), isSize.get(0)));
+                } else {                    // a = b[c.size] // a = b[c]
+                    irStoreArith.setRhs(new IRLoad(operands.get(0), at_op.get(0), isSize.get(0)));
                 }
             }
         }
@@ -668,20 +656,10 @@ public class HHIR
                 irStoreArith.setRhs(new IRConstant(operands.get(1)));
             }
             else {
-                if(type2.equals("VAR")) {
-                    if(isSize.get(1)) {         // a = b.size
-                        irStoreArith.setRhs(new IRLoad(operands.get(1), true));
-                    } else {                   // a = b
-                        irStoreArith.setRhs(new IRLoad(operands.get(1)));
-                    }
-                }
-                else {
-                    if(isSize.get(1)) {    // a = b[c.size]
-                        irStoreArith.setRhs(new IRLoad(operands.get(1), at_op.get(1), true));
-                    }
-                    else {                  // a = b[X]
-                        irStoreArith.setRhs(new IRLoad(operands.get(1), at_op.get(1)));
-                    }
+                if(type2.equals("VAR")) {       // a = b.size   // a = b
+                    irStoreArith.setRhs(new IRLoad(operands.get(1), isSize.get(1)));
+                } else {                  // a = b[c.size]
+                    irStoreArith.setRhs(new IRLoad(operands.get(1), at_op.get(1), isSize.get(1)));
                 }
             }
         }
@@ -783,7 +761,6 @@ public class HHIR
      */
     private void createDeclarationHHIR(ASTDECLARATION astdeclaration)
     {
-
         SimpleNode simpleNode = (SimpleNode) astdeclaration.jjtGetChild(0);
 
         String name = null;
@@ -864,7 +841,6 @@ public class HHIR
             System.out.println();
             System.out.println(name != null ? "name = " + name : "null");
             System.out.println(type != null ? "type = " + type : "null");
-            System.out.print(variable != null ? "variable = " + variable : "null");
             System.out.println(isSize ? " .size" : "");
             System.out.println(value != null ? "value = " + value : "null");
             System.out.println(size != -1 ? "size = " + size : "null");
@@ -875,10 +851,10 @@ public class HHIR
         switch (type)
         {
             case INTEGER:
-                root.addChild(new IRGlobal(name, type, value));
+                root.addChild(new IRGlobal(name, type, value, false));
                 break;
             case ARRAY:
-                root.addChild(new IRGlobal(name, type, value, size));
+                root.addChild(new IRGlobal(name, type, value, variable, isSize));
                 break;
         }
     }
