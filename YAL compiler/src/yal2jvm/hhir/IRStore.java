@@ -18,6 +18,8 @@ public abstract class IRStore extends IRNode
             storeReg = ((IRMethod) parent).getArgumentRegister(name);
 
         //code for global
+
+
         //if storage variable does not exist, allocate it
         if (storeReg == -1)
         {

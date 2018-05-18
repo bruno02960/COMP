@@ -107,12 +107,10 @@ public class IRCall extends IRNode
     	}
         callInst += ")";
 
+    	//TODO VERIFICAR
         if (this.module != null)
         {
-            if (this.module.equals("io"))
-                callInst += "V";
-            else
-                callInst += "I";
+        	callInst += "I";
         }
         else
         {
