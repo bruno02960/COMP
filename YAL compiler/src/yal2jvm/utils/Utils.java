@@ -20,4 +20,37 @@ public class Utils
     {
        return string.lastIndexOf(character) == string.length() - 1;
     }
+
+    public static int stringArrayContains(String[] array, String string)
+    {
+       for(int i = 0; i < array.length; i++)
+       {
+           if(array[i].equals(string))
+               return i;
+       }
+
+       return -1;
+    }
+
+    public static int stringArrayMatches(String[] array, String regex)
+    {
+        for(int i = 0; i < array.length; i++)
+        {
+            if(array[i].matches(regex))
+                return i;
+        }
+
+        return -1;
+    }
+
+    public static int stringArrayNotMatches(String[] array, String regex)
+    {
+        for(int i = 0; i < array.length; i++)
+        {
+            if(!array[i].matches(regex))
+                return i;
+        }
+
+        return -1;
+    }
 }
