@@ -417,7 +417,8 @@ public class HHIR
         String size = null;
         String operator;
         String at_name = null;
-        boolean arraySize = false;
+        String at_type = null;
+        String lhsType = null;
 
         ASTLHS astlhs = (ASTLHS) child.jjtGetChild(0);
         ASTRHS astrhs = (ASTRHS) child.jjtGetChild(1);
@@ -440,14 +441,18 @@ public class HHIR
                 if (astindex.indexID != null)
                 {
                     at_name = astindex.indexID;
+                    at_type = "VAR";
                 } else
                 {
                     at_name = astindex.indexValue.toString();
+                    at_type = "INTEGER";
                 }
+                lhsType = "ARRAY";
                 break;
             case "SCALARACCESS":
                 ASTSCALARACCESS astscalaraccess = (ASTSCALARACCESS) lhchild;
                 lhsName = astscalaraccess.id;
+                lhsType = "VAR";
                 break;
         }
 
@@ -482,6 +487,7 @@ public class HHIR
                                 isSize.add(false);
                                 types.add("CALL");
                                 operands.add(null);
+                                at_op.add("-1");
 
                                 IRCall irCall = getIRCall(astcall);
 
@@ -497,6 +503,7 @@ public class HHIR
                                     isSize.add(true);
                                 else
                                     isSize.add(false);
+                                types.add("ARRAY");
                                 operands.add(arrayaccess);
                                 break;
                             case "SCALARACCESS":
@@ -523,6 +530,7 @@ public class HHIR
                     if (astarraysize.jjtGetNumChildren() == 0)
                     {
                         size = astarraysize.integer.toString();
+                        operands.add(astarraysize.integer.toString());
                     } else
                     {
                         ASTSCALARACCESS astscalaraccess = (ASTSCALARACCESS) astarraysize.jjtGetChild(0);
@@ -530,10 +538,13 @@ public class HHIR
 
                         if (size.contains(".size"))
                         {
-                            arraySize = true;
+                            isSize.add(true);
                             size = size.split(".size")[0];
                         }
+                        operands.add(astscalaraccess.id);
                     }
+                    types.add("SIZE");
+                    at_op.add("-1");
                     break;
             }
         }
@@ -551,25 +562,51 @@ public class HHIR
                 System.out.println(!at_op.get(i).equals("-1") ? "at = " + at_op.get(i) : "null");
             }
             System.out.println(!operator.equals("") ? "operator = " + operator : "null");
-            System.out.print(size != null ? "size = " + size : "null");
-            System.out.println(arraySize ? " .size" : "");
+            System.out.print((size != null) ? ("size = " + size) : "null");
             System.out.println();
         }
 
 
-        if(operator.equals("")) {                  // a = IMMEDIATE
+        if(operator.equals("")) {                   // a = IMMEDIATE
             String type = types.get(0);
-            if(type.equals("CALL")) {           // a = f1();
-                IRStoreCall irStoreCall = new IRStoreCall(lhsName);
-                irStoreCall.addChild(calls.get(0));
-                irmethod.addChild(irStoreCall);
+            assert lhsType != null;
+            if (lhsType.equals("VAR")) {
+                if ("CALL".equals(type)) {          // a = f1();
+                    IRStoreCall irStoreCall = new IRStoreCall(lhsName);
+                    irStoreCall.addChild(calls.get(0));
+                    irmethod.addChild(irStoreCall);
+                } else {
+                    if (type.equals("INTEGER")) {   // a = 3
+                        irmethod.addChild(new IRAllocate(lhsName, Type.INTEGER, Integer.parseInt(operands.get(0))));
+                    } else {
+                        if(type.equals("VAR")) {
+                            if (size == null) {       // a = b
+                                irmethod.addChild(new IRAllocate(lhsName, Type.INTEGER, operands.get(0)));
+                            } else {                      // a = b.size
+                                //TODO: IR that accepts array size as rhs
+                            }
+                        }
+                        else {                          // a = [X]
+                                //TODO: IR that accepts size as rhs
+                        }
+                    }
+                }
             }
             else {
-                if(type.equals("INTEGER")) {    // a = 3
-                    irmethod.addChild(new IRAllocate(lhsName, Type.INTEGER, Integer.parseInt(operands.get(0))));
-                }
-                else {                            // a = b
-                    irmethod.addChild(new IRAllocate(lhsName, Type.INTEGER, operands.get(0)));
+                if (type.equals("CALL")) {           // a[X] = f1();
+                    
+                } else {
+                    if (type.equals("INTEGER")) {    // a[X] = 3
+                        irmethod.addChild(new IRAllocate(lhsName, Type.ARRAY, Integer.parseInt(operands.get(0)), at_name));
+                    } else {
+                        if(type.equals("VAR")) {
+                            if (size == null) {
+                                irmethod.addChild(new IRAllocate(lhsName, Type.ARRAY, operands.get(0), at_name));
+                            } else {                  // a[X] = b.size
+                                //TODO: IR that accepts array size as rhs
+                            }
+                        }
+                    }
                 }
             }
         }

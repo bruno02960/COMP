@@ -117,13 +117,13 @@ public class Yal2jvm
         hhir.dataflowAnalysis();
         hhir.allocateRegisters(this.localVars);
 
-        ArrayList<String> instructions = hhir.selectInstructions();
+        /*ArrayList<String> instructions = hhir.selectInstructions();
         String moduleName = hhir.getModuleName();
 
         System.out.println("JVM code generation completed");
         saveToJasminFile(instructions, moduleName);
         compileToBytecode(moduleName + ".j");
-        System.out.println("Bytecode generated");
+        System.out.println("Bytecode generated");*/
     }
 
     private FileInputStream getFileStream()

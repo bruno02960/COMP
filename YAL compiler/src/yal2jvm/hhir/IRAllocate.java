@@ -54,6 +54,16 @@ public class IRAllocate extends IRNode
         this.index = index;
     }
 
+    public IRAllocate(String name, Type type, String variable, String index)
+    {
+        this.nodeType = "Allocate";
+        this.name = name;
+        assert type == Type.ARRAY;
+        this.type = type;
+        this.variable = variable;
+        this.index = index;
+    }
+
     @Override
     public ArrayList<String> getInstructions()
     {
