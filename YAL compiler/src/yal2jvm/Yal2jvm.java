@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import yal2jvm.ast.*;
 import yal2jvm.hhir.HHIR;
 import yal2jvm.semantic_analysis.ModuleAnalysis;
+import yal2jvm.utils.Utils;
 
 public class Yal2jvm
 {
@@ -19,14 +20,15 @@ public class Yal2jvm
 
     private int localVars;
     private boolean optimize;
-    private boolean keepJFile = false;
+    private boolean keepJFile;
     private String inputFile;
     private SimpleNode ast;
 
-    public Yal2jvm(int localVars, boolean optimize, String inputFile)
+    public Yal2jvm(int localVars, boolean optimize, boolean keepJFile, String inputFile)
     {
         this.localVars = localVars;
         this.optimize = optimize;
+        this.keepJFile = keepJFile;
         this.inputFile = inputFile;
     }
 
@@ -34,58 +36,40 @@ public class Yal2jvm
     {
         String inputFile = null;
         boolean optimize = false;
+        boolean keepJFile = false;
         int localVars = MAX_LOCAL_VARS;
         boolean validInput = true;
 
-        switch (args.length)
-        {
-            case 0:
-                validInput = false;
-                break;
-            case 1:
-                inputFile = args[0];
-                break;
-            case 2:
-                if (args[0].equals("-o"))
-                    optimize = true;
-                else if (args[0].startsWith("-r"))
-                    localVars = Integer.parseInt(args[0].split("=")[1]);
-                else
-                    validInput = false;
-                inputFile = args[1];
-                break;
-            case 3:
-                if (args[0].equals("-o") && args[1].startsWith("-r"))
-                {
-                    optimize = true;
-                    localVars = Integer.parseInt(args[1].split("=")[1]);
-                } else if (args[1].equals("-o") && args[0].startsWith("-r"))
-                {
-                    optimize = true;
-                    localVars = Integer.parseInt(args[0].split("=")[1]);
-                } else
-                    validInput = false;
-                inputFile = args[1];
-                break;
-            default:
-                validInput = false;
-                break;
-        }
+        if(args.length == 0)
+            validInput = false;
+
+        if(Utils.stringArrayContains(args, "-o") != -1)
+            optimize = true;
+
+        if(Utils.stringArrayContains(args, "-S") != -1)
+            keepJFile = true;
+
+        String regexForNumberBetween0And255 = "\\b(1?[0-9]{1,2}|2[0-4][0-9]|25[0-5])\\b";
+        if(Utils.stringArrayMatches(args, "-r=" + regexForNumberBetween0And255) != -1)
+            localVars = Integer.parseInt(args[1].split("=")[1]);
+
+        String regexForFlag = "-r=" + regexForNumberBetween0And255 + "|-o|-S";
+        int inputFileIndex;
+        if((inputFileIndex = Utils.stringArrayNotMatches(args, regexForFlag)) != -1)
+            inputFile = args[inputFileIndex];
 
         if (inputFile != null && validInput)
             validInput = inputFile.endsWith(".yal");
 
-        if (localVars > 255)
-            validInput = false;
-
-        if (!validInput)
+        if (!validInput && inputFile != null)
         {
             System.out.println("Insufficient or incorrect arguments for the Yal2jvm compiler");
-            System.out.println("\nUsage:\tjava Yal2jvm [-r=<0..255>] [-o] <input_file.yal>\n");
+            System.out.println("\nUsage:\tjava Yal2jvm [-r=<0..255>] [-o] [-S] <input_file.yal>\n");
             System.exit(-5);
-        } else
+        }
+        else
         {
-            Yal2jvm instance = new Yal2jvm(localVars, optimize, inputFile);
+            Yal2jvm instance = new Yal2jvm(localVars, optimize, keepJFile, inputFile);
             instance.run();
         }
     }
@@ -117,13 +101,13 @@ public class Yal2jvm
         hhir.dataflowAnalysis();
         hhir.allocateRegisters(this.localVars);
 
-        /*ArrayList<String> instructions = hhir.selectInstructions();
+        ArrayList<String> instructions = hhir.selectInstructions();
         String moduleName = hhir.getModuleName();
 
         System.out.println("JVM code generation completed");
         saveToJasminFile(instructions, moduleName);
         compileToBytecode(moduleName + ".j");
-        System.out.println("Bytecode generated");*/
+        System.out.println("Bytecode generated");
     }
 
     private FileInputStream getFileStream()
@@ -195,7 +179,7 @@ public class Yal2jvm
             if(!keepJFile)
             {
                 File file = new File(fileName);
-                file.delete();
+                //file.delete();
             }
         }
         catch (IOException | InterruptedException e)

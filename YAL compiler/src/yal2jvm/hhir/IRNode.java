@@ -54,4 +54,27 @@ public abstract class IRNode
     {
         return this.nodeType;
     }
+    
+    public IRNode findParent(String nodeType)
+    {
+        IRNode res = null;
+        IRNode par = this.parent;
+        while (true)
+        {
+            if (par.toString().equals(nodeType))
+            {
+                res = par;
+                break;
+            } 
+            else
+            {
+                par = par.getParent();
+                if (par == null)
+                {
+                	return null;
+                }
+            }
+        }
+        return res;
+    }
 }
