@@ -18,6 +18,20 @@ public abstract class IRStore extends IRNode
             storeReg = ((IRMethod) parent).getArgumentRegister(name);
 
         //code for global
+        if (storeReg == -1)
+        {
+        	IRModule module = (IRModule)findParent("Module");
+        	IRGlobal global = module.getGlobal(name);
+        	if (global != null)
+        	{
+        		String type = global.getType() == Type.INTEGER ? "I" : "A";
+        		String moduleName = module.getName();
+        		
+        		String storeInst = "putstatic " + moduleName + "/" + name + " " + type;
+        		inst.add(storeInst);
+        		return inst;
+        	}
+        }
         //if storage variable does not exist, allocate it
         if (storeReg == -1)
         {

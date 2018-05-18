@@ -12,6 +12,7 @@ public class IRAllocate extends IRNode
     int size = -1;
     private String variable;
     private String index;
+	private boolean storeVarGlobal = false;
 
     public IRAllocate(String name, Type type, Integer value)
     {
@@ -69,8 +70,15 @@ public class IRAllocate extends IRNode
     {
         ArrayList<String> inst = new ArrayList<>();
         
-        this.register = getVarIfExists(this.name);
-        initRegister();
+        if (storeVarIsGlobal())
+    	{
+    		this.storeVarGlobal  = true;
+    	}
+        else
+        {
+		    this.register = getVarIfExists(this.name);
+		    initRegister();
+        }
  
         switch (type)
         {
@@ -91,7 +99,8 @@ public class IRAllocate extends IRNode
             	else
             		inst.add(IRConstant.getLoadConstantInstruction(this.value));
             	
-                inst.add("istore " + this.register);
+            	String storeInst = getStoreInst();
+            	inst.add(storeInst);
                 break;
             }
             case ARRAY:
@@ -103,6 +112,26 @@ public class IRAllocate extends IRNode
 
         return inst;
     }
+
+	private String getStoreInst()
+	{
+		if (this.storeVarGlobal)
+		{
+			IRModule module = (IRModule)findParent("Module");
+			String varType = type == Type.INTEGER ? "I" : "A";
+			return "putstatic " + module.getName() + "/" + name + " " + varType;
+		}
+		else
+		{
+            return "istore " + this.register;
+		}
+	}
+
+	private boolean storeVarIsGlobal()
+	{
+		IRModule module = (IRModule)findParent("Module");
+		return module.getGlobal(name) != null;
+	}
 
 	private int getVarIfExists(String varName)
 	{
@@ -122,7 +151,7 @@ public class IRAllocate extends IRNode
 
 	private void initRegister()
     {
-        if (this.register == -1)
+        if (!this.storeVarGlobal && this.register == -1)
         {
             this.register = ((IRMethod) parent).getRegN();
             ((IRMethod) parent).incrementRegN();
@@ -137,7 +166,8 @@ public class IRAllocate extends IRNode
 
     public void setRegister(int register)
     {
-        this.register = register;
+    	if (!this.storeVarGlobal)
+    		this.register = register;
     }
 
     public String getName()

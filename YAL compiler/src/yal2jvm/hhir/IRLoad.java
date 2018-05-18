@@ -45,6 +45,7 @@ public class IRLoad extends IRNode
     {
         ArrayList<String> inst = new ArrayList<>();
 
+        //TODO: replace by findParent("Method");
         IRMethod method;
         IRNode par = this.parent;
         while (true)
