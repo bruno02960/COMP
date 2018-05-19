@@ -4,26 +4,45 @@ import java.util.ArrayList;
 
 public class IRStoreArith extends IRStore
 {
-    private Operation op;
-    private IRNode rhs, lhs;
+    private IRArith irArith;
 
     public IRStoreArith(String name, Operation op)
     {
         this.name = name;
-        this.op = op;
         this.nodeType = "StoreArith";
+        irArith = new IRArith(op);
     }
 
-    public IRStoreArith(String name, Operation op, String index) //for arrays
+    public IRStoreArith(String name, Operation op, String index) //TODO for arrays
     {
         this.name = name;
         this.nodeType = "StoreCall";
     }
 
-    public IRStoreArith(String name, Operation op, String index, boolean arraySizeAccess) //for arrays
+    public IRStoreArith(String name, Operation op, String index, boolean arraySizeAccess) //TODO for arrays
     {
         this.name = name;
         this.nodeType = "StoreCall";
+    }
+
+    public IRNode getRhs()
+    {
+        return irArith.getRhs();
+    }
+
+    public void setRhs(IRNode rhs)
+    {
+        this.irArith.setRhs(rhs);
+    }
+
+    public IRNode getLhs()
+    {
+        return irArith.getLhs();
+    }
+
+    public void setLhs(IRNode lhs)
+    {
+        this.irArith.setLhs(lhs);
     }
 
     @Override
@@ -31,73 +50,12 @@ public class IRStoreArith extends IRStore
     {
         ArrayList<String> inst = new ArrayList<>();
 
-        ArrayList<String> lhsInst = lhs.getInstructions();
-        ArrayList<String> rhsInst = rhs.getInstructions();
-
-        String opInst = null;
-        //TODO: add iinc later + add NOT
-        switch (op)
-        {
-            case ADD:
-                opInst = "iadd";
-                break;
-            case SUB:
-                opInst = "isub";
-                break;
-            case MULT:
-                opInst = "imul";
-                break;
-            case DIV:
-                opInst = "idiv";
-                break;
-            case SHIFT_R:
-                opInst = "ishr";
-                break;
-            case SHIFT_L:
-                opInst = "ishl";
-                break;
-            case USHIFT_R:
-                opInst = "iushl";
-                break;
-            case AND:
-                opInst = "iand";
-                break;
-            case OR:
-                opInst = "ior";
-                break;
-            case XOR:
-                opInst = "lxor";
-                break;
-        }
-
+        ArrayList<String> arithInst = irArith.getInstructions();
         ArrayList<String> storeInst = getInstForStoring();
 
-        inst.addAll(lhsInst);
-        inst.addAll(rhsInst);
-        inst.add(opInst);
+        inst.addAll(arithInst);
         inst.addAll(storeInst);
         return inst;
     }
 
-    public IRNode getRhs()
-    {
-        return rhs;
-    }
-
-    public void setRhs(IRNode rhs)
-    {
-        this.rhs = rhs;
-        this.rhs.setParent(this);
-    }
-
-    public IRNode getLhs()
-    {
-        return lhs;
-    }
-
-    public void setLhs(IRNode lhs)
-    {
-        this.lhs = lhs;
-        this.lhs.setParent(this);
-    }
 }
