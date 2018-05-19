@@ -583,7 +583,7 @@ public class HHIR
                     String index = at_name.split(".size")[0];
                     irStoreCall = new IRStoreCall(lhsName, index, true);
                 } else {
-                    irStoreCall = new IRStoreCall(lhsName, at_name);
+                    irStoreCall = new IRStoreCall(lhsName, at_name, false);
                 }
 
                 irStoreCall.addChild(calls.get(0));
@@ -598,14 +598,12 @@ public class HHIR
                     irmethod.addChild(new IRAllocate(lhsName, Type.ARRAY, Integer.parseInt(operands.get(0)), at_name, isSize.get(0)));
                 }
             } else {
-                if(type.equals("VAR")) {
-                    if (!isSize.get(0)) {       // a = b    // a = b.size
-                        if (lhsType.equals("VAR")) {
-                            irmethod.addChild(new IRAllocate(lhsName, Type.INTEGER, operands.get(0), isSize.get(0)));
-                        }
-                        else {                  // a[X] = b
-                            irmethod.addChild(new IRAllocate(lhsName, Type.ARRAY, operands.get(0), at_name, isSize.get(0)));
-                        }
+                if(type.equals("VAR")) {  // a = b    // a = b.size
+                    if (lhsType.equals("VAR")) {
+                        irmethod.addChild(new IRAllocate(lhsName, Type.INTEGER, operands.get(0), isSize.get(0)));
+                    }
+                    else {                  // a[X] = b
+                        irmethod.addChild(new IRAllocate(lhsName, Type.ARRAY, operands.get(0), at_name, isSize.get(0)));
                     }
                 }
                 else {                          // a = [X]
