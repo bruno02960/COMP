@@ -232,7 +232,7 @@ public class HHIR
                     break;
 
                 case "CALL":
-                    createCallHHIR((ASTCALL) child, irmethod);
+                    irmethod.addChild(getCallHHIR((ASTCALL) child));
                     break;
 
                 case "IF":
@@ -292,13 +292,13 @@ public class HHIR
         irmethod.addChild(irLabelEnd);
     }
 
-    private IRNode getLhsIrNode(ASTLHS astLhs)
+    private IRNode getLhsIRNode(ASTLHS astLhs)
     {
         Node child = astLhs.jjtGetChild(0);
         if(child instanceof ASTARRAYACCESS)
         {
             ASTARRAYACCESS astArrayAccess = (ASTARRAYACCESS) child;
-            IRNode indexNode = getIndexIrNode((ASTINDEX) child.jjtGetChild(0));
+            IRNode indexNode = getIndexIRNode((ASTINDEX) child.jjtGetChild(0));
             return new IRLoad(astArrayAccess.arrayID, indexNode);
         }
         else
@@ -316,28 +316,73 @@ public class HHIR
         }
     }
 
-    private IRNode getRhsIrNode(ASTRHS astRhs)
+    private IRNode getRhsIRNodeOfExprtest(ASTRHS astRhs)
     {
-        Node child = astRhs.jjtGetChild(0);
-        if(child instanceof ASTARRAYSIZE)
+        ArrayList<IRNode> termNodes =  new ArrayList<>();
+        int numTerms = astRhs.jjtGetNumChildren();
+        for(int i = 0; i < numTerms; i++)
         {
-            //TODO: ARRAY SIZE
+            ASTTERM astTerm = (ASTTERM) astRhs.jjtGetChild(i);
+            termNodes.add(getTermIRNode(astTerm));
         }
-        else
-        {
-            //TODO terms
-        }
-        return new IRNode()
-        {
-            @Override
-            public ArrayList<String> getInstructions()
-            {
-                return null;
-            }
-        };
+
+        //case just one term, return the respective IRNode, an IRoad
+        if(numTerms == 1)
+            return termNodes.get(0);
+
+        //for multiples terms (2) return IRLoadArith
+        IRLoadArith irLoadArith = new IRLoadArith(Operation.parseOperator(astRhs.operator));
+        irLoadArith.addChild(termNodes.get(0));
+        irLoadArith.addChild(termNodes.get(1));
+        return irLoadArith;
     }
 
-    private IRNode getIndexIrNode(ASTINDEX astIndex)
+    private IRNode getTermIRNode(ASTTERM astTerm)
+    {
+        String operator = astTerm.operator;
+
+        Integer integer = astTerm.integer;
+        if(integer != null)
+        {
+            if(operator.equals("-"))
+                integer *= -1;
+            return new IRConstant(integer.toString());
+        }
+
+        Node astTermChild = astTerm.jjtGetChild(0);
+        if(astTermChild instanceof ASTCALL)
+            return getCallHHIR((ASTCALL) astTermChild);
+        else if(astTermChild instanceof ASTARRAYACCESS)
+            return getArrayAccessIRNode((ASTARRAYACCESS) astTermChild);
+        else
+            return getScalarAccessIRNode((ASTSCALARACCESS) astTermChild);
+    }
+
+    private IRNode getScalarAccessIRNode(ASTSCALARACCESS astScalarAccess)
+    {
+        String id = astScalarAccess.id;
+        boolean sizeAccess = false;
+        if (id.contains("."))
+        {
+            int dotIdx = id.indexOf(".");
+            if (id.substring(dotIdx + 1).equals("size"))
+                sizeAccess = true;
+            id = id.substring(0, dotIdx);
+        }
+
+        return new IRLoad(id, sizeAccess);
+    }
+
+    private IRNode getArrayAccessIRNode(ASTARRAYACCESS astArrayAccess)
+    {
+        String id = astArrayAccess.arrayID;
+        ASTINDEX astIndex = (ASTINDEX) astArrayAccess.jjtGetChild(0);
+        IRNode indexIRNode = getIndexIRNode(astIndex);
+
+        return new IRLoad(id, indexIRNode);
+    }
+
+    private IRNode getIndexIRNode(ASTINDEX astIndex)
     {
         Integer indexValue = astIndex.indexValue;
         if(indexValue != null)
@@ -394,11 +439,11 @@ public class HHIR
         IRComparison irComparison = new IRComparison(astExprtest.operation, label, false);
 
         ASTLHS astLhs = (ASTLHS) astExprtest.jjtGetChild(0);
-        IRNode lhsIrNode = getLhsIrNode(astLhs);
+        IRNode lhsIrNode = getLhsIRNode(astLhs);
         irComparison.setLhs(lhsIrNode);
 
         ASTRHS astRhs = (ASTRHS) astExprtest.jjtGetChild(1);
-        IRNode rhsIrNode = getRhsIrNode(astRhs);
+        IRNode rhsIrNode = getRhsIRNodeOfExprtest(astRhs);
         irComparison.setRhs(rhsIrNode);
 
         irmethod.addChild(irComparison);
@@ -691,7 +736,7 @@ public class HHIR
         return new IRCall(methodId, moduleId, arguments);
     }
 
-    private void createCallHHIR(ASTCALL astCall, IRNode irNode)
+    private IRCall getCallHHIR(ASTCALL astCall)
     {
         String moduleId = astCall.module;
         String methodId = astCall.method;
@@ -703,13 +748,10 @@ public class HHIR
             arguments = getFunctionCallArgumentsIds(astarguments);
         }
 
-        IRCall irCall = getIRCall(astCall);
-        irNode.addChild(irCall);
-
         if (callDebug)
         {
             //TODO debug
-            System.out.println("from createCallHHIR");
+            System.out.println("from getCallHHIR");
             System.out.println("moduleId= " + moduleId);
             System.out.println("methodId= " + methodId);
 
@@ -721,6 +763,9 @@ public class HHIR
                             + "   type: " + argument.getType().toString());
             }
         }
+
+        IRCall irCall = getIRCall(astCall);
+        return irCall;
     }
 
     private ArrayList<PairStringType> getFunctionCallArgumentsIds(ASTARGUMENTS astArguments)

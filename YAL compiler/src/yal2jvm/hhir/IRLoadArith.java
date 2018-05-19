@@ -2,24 +2,14 @@ package yal2jvm.hhir;
 
 import java.util.ArrayList;
 
-public class IRLoadArith extends IRLoad
+public class IRLoadArith extends IRNode
 {
     private IRArith irArith;
-    private boolean indexSizeAccess;
 
-    public IRLoadArith(String name, Operation op, boolean arraySizeAccess)
+    public IRLoadArith(Operation op)
     {
-        super(name, arraySizeAccess);
         this.nodeType = "LoadArith";
         irArith = new IRArith(op);
-    }
-
-    public IRLoadArith(String name, Operation op, String index, boolean indexSizeAccess) //TODO for arrays
-    {
-        super(name);
-        this.nodeType = "LoadArith";
-        irArith = new IRArith(op);
-        this.indexSizeAccess = indexSizeAccess;
     }
 
     public IRNode getRhs()
