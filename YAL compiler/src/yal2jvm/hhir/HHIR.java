@@ -748,19 +748,14 @@ public class HHIR
     private void createDeclarationHHIR(ASTDECLARATION astdeclaration)
     {
         SimpleNode simpleNode = (SimpleNode) astdeclaration.jjtGetChild(0);
-
-        String name = null;
-        Type type = null;
-        String variable = null;
-        boolean isSize = false;
-        Integer value = null;
-        int size = -1;
+        Variable variable = null;
+        Variable value = null;
 
         switch (simpleNode.toString())
         {
             case "SCALARELEMENT":
                 ASTSCALARELEMENT astscalarelement = (ASTSCALARELEMENT) simpleNode;
-                name = astscalarelement.id;
+                variable = new Variable(astscalarelement.id, Type.VARIABLE);
 
                 if (astdeclaration.jjtGetNumChildren() == 2)
                 {
@@ -768,55 +763,42 @@ public class HHIR
 
                     if (astarraysize.jjtGetNumChildren() == 0)
                     {
-                        size = astarraysize.integer;
+                        value = new Variable(astarraysize.integer.toString(), Type.INTEGER);
                     } else
                     {
                         ASTSCALARACCESS astscalaraccess = (ASTSCALARACCESS) astarraysize.jjtGetChild(0);
-                        variable = astdeclaration.operator + astscalaraccess.id;
-
-                        if (variable.contains(".size"))
-                        {
-                            isSize = true;
-                            variable = variable.split(".size")[0];
-                        }
+                        value = new Variable((astdeclaration.operator + astscalaraccess.id), Type.VARIABLE);
                     }
 
-                    type = Type.ARRAY;
+                    variable.setType(Type.ARRAY);
                 } else
                 {
-                    type = Type.INTEGER;
                     String str_value = astdeclaration.operator + astdeclaration.integer;
                     if (!str_value.equals("null"))
-                        value = Integer.parseInt(str_value);
+                        value = new Variable(str_value, Type.INTEGER);
+
                 }
                 break;
             case "ARRAYELEMENT":
                 ASTARRAYELEMENT astarrayelement = (ASTARRAYELEMENT) simpleNode;
-                name = astarrayelement.id;
-                type = Type.ARRAY;
+                variable = new Variable(astarrayelement.id, Type.ARRAY);
 
                 if (astdeclaration.jjtGetNumChildren() == 2)
                 {
                     ASTARRAYSIZE astarraysize = (ASTARRAYSIZE) astdeclaration.jjtGetChild(1);
                     if (astarraysize.jjtGetNumChildren() == 0)
                     {
-                        size = astarraysize.integer;
+                        value = new Variable(astarraysize.integer.toString(), Type.INTEGER);
                     } else
                     {
                         ASTSCALARACCESS astscalaraccess = (ASTSCALARACCESS) astarraysize.jjtGetChild(0);
-                        variable = astscalaraccess.id;
-
-                        if (variable.contains(".size"))
-                        {
-                            isSize = true;
-                            variable = variable.split(".size")[0];
-                        }
+                        value = new Variable(astscalaraccess.id, Type.VARIABLE);
                     }
                 } else
                 {
                     String str_value = astdeclaration.operator + astdeclaration.integer;
                     if (!str_value.equals("null"))
-                        value = Integer.parseInt(str_value);
+                        value = new Variable(str_value, Type.INTEGER);
                 }
                 break;
         }
@@ -825,22 +807,21 @@ public class HHIR
         if (declarationDebug)
         {
             System.out.println();
-            System.out.println(name != null ? "name = " + name : "null");
-            System.out.println(type != null ? "type = " + type : "null");
-            System.out.println(isSize ? " .size" : "");
-            System.out.println(value != null ? "value = " + value : "null");
-            System.out.println(size != -1 ? "size = " + size : "null");
+            assert variable != null;
+            System.out.println(variable.getVar() != null ? "name = " + variable.getVar() : "null");
+            System.out.println(variable.getType() != null ? "type = " + variable.getType() : "null");
+            assert value != null;
+            System.out.println(value.getVar() != null ? "value = " + value.getVar() : "null");
             System.out.println();
         }
 
-        assert type != null;
-        switch (type)
+        switch (variable.getType())
         {
             case INTEGER:
-                root.addChild(new IRGlobal(name, type, value, false));
+                root.addChild(new IRGlobal(variable, value));
                 break;
             case ARRAY:
-                root.addChild(new IRGlobal(name, type, value, variable, isSize));
+                root.addChild(new IRGlobal(variable, value));
                 break;
         }
     }
