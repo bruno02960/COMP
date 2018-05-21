@@ -220,8 +220,6 @@ public abstract class Analysis
 
         returnSymbol = returnSymbol.getCopy();
         returnSymbol.setInitialized(true);
-        if (returnSymbol.getType().equals(Type.ARRAY.toString()))
-            returnSymbol.setSizeSet(true);
 
         return returnSymbol;
     }
@@ -355,14 +353,6 @@ public abstract class Analysis
                 return null;
             }
 
-            if (varSymbol.getType().equals("ARRAY") && varSymbol.isSizeSet() == false)
-            {
-                System.out.println("Line " + scalarAccessTree.getBeginLine() + ": Cannot access to array " + id
-                        + " size, because size is undefined.");
-                ModuleAnalysis.hasErrors = true;
-                return null;
-            }
-
             varSymbol = varSymbol.getCopy();
             varSymbol.setType(SymbolType.INTEGER.toString());
             return varSymbol;
@@ -409,7 +399,7 @@ public abstract class Analysis
         if (declarationTree.integer != null) //if is from type a=CONST;
             initialized = true;
 
-        VarSymbol varSymbol = new VarSymbol(astscalarelement.id, SymbolType.INTEGER.toString(), initialized, false);
+        VarSymbol varSymbol = new VarSymbol(astscalarelement.id, SymbolType.INTEGER.toString(), initialized);
 
         if (declarationTree.jjtGetNumChildren() > 1) //if is from type a=[CONST];
         {
@@ -425,7 +415,7 @@ public abstract class Analysis
             }
 
             varSymbol.setType(SymbolType.ARRAY.toString());
-            varSymbol.setSizeSet(true);
+            varSymbol.setInitialized(true);
         }
 
         return varSymbol;
@@ -448,7 +438,6 @@ public abstract class Analysis
     private VarSymbol createSymbolForDeclarationAstArrayElement(ASTDECLARATION declarationTree, ASTARRAYELEMENT astarrayelement)
     {
         boolean initialized;
-        boolean sizeSet;
         if (declarationTree.jjtGetNumChildren() > 1) //if is from type a[]=[CONST];
         {
             Node child = declarationTree.jjtGetChild(1);
@@ -460,9 +449,9 @@ public abstract class Analysis
                 if (scalarAccessSymbol == null)
                     return null;
             }
-            initialized = false;
-            sizeSet = true;
-        } else
+            initialized = true;;
+        }
+        else
         {
             //if from type a[] = CONST; and variable array has no size set (its not declared even)
             if (declarationTree.integer != null)
@@ -476,10 +465,9 @@ public abstract class Analysis
 
             //if from type a[]; variable not initialized and size = -1
             initialized = false;
-            sizeSet = false;
         }
 
-        return new VarSymbol(astarrayelement.id, SymbolType.ARRAY.toString(), initialized, sizeSet);
+        return new VarSymbol(astarrayelement.id, SymbolType.ARRAY.toString(), initialized);
     }
 
     private VarSymbol parseDeclarationSymbol(ASTDECLARATION declarationTree, VarSymbol symbol)
@@ -504,7 +492,7 @@ public abstract class Analysis
 
         symbol.setInitialized(true);
 
-        if (symbol.getType().equals(Type.ARRAY.toString()) && symbol.isSizeSet() == false)
+        if (symbol.getType().equals(Type.ARRAY.toString()) && symbol.isInitialized() == false)
         {
             System.out.println("Line " + declarationTree.getBeginLine() + ": Variable "
                     + symbol.getId() + " has the size not defined." + " Error assigning "
@@ -532,10 +520,7 @@ public abstract class Analysis
         if (rhsSymbol == null)
         {
             lhsSymbol.setInitialized(true);
-            if (lhsSymbol.getType().equals("ARRAY"))
-                lhsSymbol.setSizeSet(true);
             addToSymbolTable(lhsSymbol);
-
             return false;
         }
 
@@ -556,7 +541,7 @@ public abstract class Analysis
             } else if (lhsSymbol.getType().equals(SymbolType.UNDEFINED.toString())) // if is from type A = [VALUE] with A still not declared
             {
                 lhsSymbol.setType(SymbolType.ARRAY.toString());
-                lhsSymbol.setSizeSet(true);
+                lhsSymbol.setInitialized(true);
                 return addToSymbolTable(lhsSymbol);
             }
         }
@@ -574,14 +559,13 @@ public abstract class Analysis
 
         if (lhsSymbolType.equals(rhsSymbolType) && !(rhsSymbol instanceof ImmediateSymbol)) //if both lhs and rhs have same type
         {
-            lhsSymbol.setSizeSet(rhsSymbol.isSizeSet());
             lhsSymbol.setInitialized(rhsSymbol.isInitialized());
             return addToSymbolTable(lhsSymbol);
         }
 
         //for the case in which the array as not the size defined yet
         if (lhsSymbolType.equals(SymbolType.ARRAY.toString()) && rhsSymbolType.equals("INTEGER")
-                && lhsSymbol.isSizeSet() == false)
+                && lhsSymbol.isInitialized() == false)
         {
             System.out.println("Line " + lhsTree.getBeginLine() + ": Variable " + lhsSymbol.getId()
                     + " has the size not defined." + " Error assigning right hand side to all elements of " + lhsSymbol.getId() + ".");
@@ -592,7 +576,7 @@ public abstract class Analysis
         //for A=[N] in which N is an integer. Used when assigning size to an array
         if (lhsSymbolType.equals(SymbolType.ARRAY.toString()) && rhsSymbolType.equals("ARRAYSIZE"))
         {
-            lhsSymbol.setSizeSet(true);
+            lhsSymbol.setInitialized(true);
             return addToSymbolTable(lhsSymbol);
         }
 

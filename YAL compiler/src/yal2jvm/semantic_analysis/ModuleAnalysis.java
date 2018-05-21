@@ -55,8 +55,6 @@ public class ModuleAnalysis extends Analysis
             HashMap.Entry<String, Symbol> pair = o;
             VarSymbol symbol = (VarSymbol) pair.getValue();
             symbol.setInitialized(true);
-            if (symbol.getType().equals(Type.ARRAY.toString()))
-                symbol.setSizeSet(true);
         }
     }
 

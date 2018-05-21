@@ -116,12 +116,11 @@ public class FunctionSymbol extends Symbol
             }
             else
             {
-                returnValue.setSizeSet(true);
                 returnValue.setInitialized(true);
             }
         }
 
-        return new VarSymbol(astArrayElementId, astArrayElementType, true, true);
+        return new VarSymbol(astArrayElementId, astArrayElementType, true);
     }
 
     private VarSymbol parseScalarElementArgument(ASTSCALARELEMENT child)
@@ -155,7 +154,7 @@ public class FunctionSymbol extends Symbol
         {
             ASTARRAYELEMENT astarrayelement = (ASTARRAYELEMENT) returnValueNode;
             String returnValueId = astarrayelement.id;
-            returnValue = new VarSymbol(returnValueId, SymbolType.ARRAY.toString(), false, false);
+            returnValue = new VarSymbol(returnValueId, SymbolType.ARRAY.toString(), false);
         }
     }
 }
