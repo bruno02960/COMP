@@ -13,20 +13,21 @@ public class IRAllocate extends IRNode
     private String variable;
     private String index;
 	private boolean storeVarGlobal = false;
+	private int allocateType;
+	private boolean arraySizeAccess = false;
 
+	//a = 1;
     public IRAllocate(String name, Type type, Integer value)
     {
         this.nodeType = "Allocate";
         this.name = name;
-        assert type == Type.INTEGER;
+//        assert type == Type.INTEGER;
         this.type = type;
         this.value = value == null ? 0 : value;
+        this.allocateType = 1;
     }
-
-    /*
-    TODO: Generate code for this
-     */
-
+    
+    //a = b.size
     public IRAllocate(String name, Type type, String variable, boolean arraySizeAccess)
     {
         this.nodeType = "Allocate";
@@ -34,8 +35,10 @@ public class IRAllocate extends IRNode
         assert type == Type.INTEGER;
         this.type = type;
         this.variable = variable;
+        this.arraySizeAccess  = arraySizeAccess;
     }
 
+    //a = [
     public IRAllocate(String name, Type type, Integer value, Integer size)
     {
         this.nodeType = "Allocate";
@@ -80,36 +83,38 @@ public class IRAllocate extends IRNode
 		    this.register = getVarIfExists(this.name);
 		    initRegister();
         }
- 
-        switch (type)
-        {
-            case INTEGER:
+ /*
+        //assign a variable
+    	if (this.variable != null)
+    	{
+            switch (type)
             {
-            	if (this.variable != null)
-            	{
-            		int otherReg = getVarIfExists(this.variable);
-            		if (otherReg != -1)
-            			inst.add("iload " + otherReg);
-            		else
-            		{
-            			IRLoad global = new IRLoad(this.variable);
-            			this.addChild(global);
-            			inst.addAll(global.getInstructions());
-            		}
-            	}
-            	else
-            		inst.add(IRConstant.getLoadConstantInstruction(this.value));
-            	
-            	String storeInst = getStoreInst();
-            	inst.add(storeInst);
-                break;
-            }
-            case ARRAY:
-                break;
 
-            default:
-                break;
-        }
+        		int otherReg = getVarIfExists(this.variable);
+        		if (otherReg != -1)
+        		{
+        			if (this.index == null && this.)
+        			inst.add("iload " + otherReg);
+        		}
+        		else
+        		{
+        			IRLoad var = new IRLoad(this.variable);
+        			this.addChild(var);
+        			inst.addAll(var.getInstructions());
+        		}
+            }
+    	}
+    	else	//assign a constant
+    	{
+    		switch(type)
+    		{
+    			
+    		}
+    		inst.add(IRConstant.getLoadConstantInstruction(this.value));
+    	}*/
+    	
+    	String storeInst = getStoreInst();
+    	inst.add(storeInst);
 
         return inst;
     }
