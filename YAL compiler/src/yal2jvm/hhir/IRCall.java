@@ -107,10 +107,23 @@ public class IRCall extends IRNode
     	}
         callInst += ")";
 
-    	//TODO VERIFICAR
         if (this.module != null)
         {
-        	callInst += "I";
+        	IRModule irModule = (IRModule) findParent("Module");
+        	IRMethod irMethod = (IRMethod) irModule.getChild("Method");
+			Type returnType = irMethod.getReturnType();
+			switch(returnType)
+			{
+				case INTEGER:
+					callInst += "I";
+					break;
+				case ARRAY:
+					callInst += "A";
+					break;
+				case VOID:
+					callInst += "V";
+					break;
+			}
         }
         else
         {
