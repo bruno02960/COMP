@@ -17,33 +17,12 @@ public class IRLoad extends IRNode
         this.nodeType = "Load";
     }
 
-    public IRLoad(String name, IRNode indexNode)
-    {
-        this.name = name;
-        this.nodeType = "Load";
-        this.indexNode = indexNode;
+    IRLoad(Variable value) {
+
     }
 
-    public IRLoad(String name, String index)
-    {
-        this.name = name;
-        this.nodeType = "Load";
-        this.index = index;
-    }
+    IRLoad(Variable value, Variable at) {
 
-    IRLoad(String name, boolean arraySizeAccess)
-    {
-        this.name = name;
-        this.nodeType = "Load";
-        this.arraySizeAccess = arraySizeAccess;
-    }
-
-    IRLoad(String name, String index, boolean arraySizeAccess)
-    {
-        this.name = name;
-        this.nodeType = "Load";
-        this.index = index;
-        this.arraySizeAccess = arraySizeAccess;
     }
 
     public int getRegister()

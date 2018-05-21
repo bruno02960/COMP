@@ -7,7 +7,7 @@ public class IRAllocate extends IRNode
 
     private String name;
     private Type type;
-    private Integer value;
+    private String value;
     private int register = -1;
     int size = -1;
     private String variable;
@@ -17,56 +17,23 @@ public class IRAllocate extends IRNode
 	private boolean arraySizeAccess = false;
 
 	//a = 1;
-    public IRAllocate(String name, Type type, Integer value)
+    public IRAllocate(String name, Variable value)
     {
         this.nodeType = "Allocate";
         this.name = name;
-//        assert type == Type.INTEGER;
-        this.type = type;
-        this.value = value == null ? 0 : value;
+        this.type = value.getType();
+        this.value = value.getVar();
         this.allocateType = 1;
     }
-    
-    //a = b.size
-    public IRAllocate(String name, Type type, String variable, boolean arraySizeAccess)
-    {
-        this.nodeType = "Allocate";
-        this.name = name;
-        assert type == Type.INTEGER;
-        this.type = type;
-        this.variable = variable;
-        this.arraySizeAccess  = arraySizeAccess;
-    }
 
-    //a = [
-    public IRAllocate(String name, Type type, Integer value, Integer size)
-    {
+    IRAllocate(String name, Variable at, Variable value) {
         this.nodeType = "Allocate";
         this.name = name;
-        assert type == Type.ARRAY;
-        this.type = type;
-        this.value = value == null ? 0 : value;
-        this.size = size;
-    }
+        this.type = value.getType();
+        this.value = value.getVar();
+        this.allocateType = 1;
 
-    public IRAllocate(String name, Type type, Integer value, String index, boolean arraySizeAccess)
-    {
-        this.nodeType = "Allocate";
-        this.name = name;
-        assert type == Type.ARRAY;
-        this.type = type;
-        this.value = value == null ? 0 : value;
-        this.index = index;
-    }
-
-    public IRAllocate(String name, Type type, String variable, String index, boolean arraySizeAccess)
-    {
-        this.nodeType = "Allocate";
-        this.name = name;
-        assert type == Type.ARRAY;
-        this.type = type;
-        this.variable = variable;
-        this.index = index;
+        //TODO: Process at
     }
 
     @Override

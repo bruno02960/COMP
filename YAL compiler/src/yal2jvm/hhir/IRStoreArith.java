@@ -13,13 +13,7 @@ public class IRStoreArith extends IRStore
         irArith = new IRArith(op);
     }
 
-    public IRStoreArith(String name, Operation op, String index) //TODO for arrays
-    {
-        this.name = name;
-        this.nodeType = "StoreCall";
-    }
-
-    public IRStoreArith(String name, Operation op, String index, boolean arraySizeAccess) //TODO for arrays
+    public IRStoreArith(String name, Operation op, Variable at) //TODO for arrays
     {
         this.name = name;
         this.nodeType = "StoreCall";

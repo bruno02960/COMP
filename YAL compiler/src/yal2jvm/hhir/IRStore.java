@@ -35,7 +35,7 @@ public abstract class IRStore extends IRNode
         //if storage variable does not exist, allocate it
         if (storeReg == -1)
         {
-            IRAllocate storeVar = new IRAllocate(name, Type.INTEGER, 0);
+            IRAllocate storeVar = new IRAllocate(name, new Variable("0", Type.INTEGER));
             parent.addChild(storeVar);
             storeReg = storeVar.getRegister();
         }
