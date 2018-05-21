@@ -533,17 +533,10 @@ public abstract class Analysis
 
         if (rhsSymbol.getType().equals("ARRAYSIZE"))
         {
-            if (lhsSymbol.getType().equals(SymbolType.ARRAY.toString()) && lhsSymbol.isSizeSet()) // if is from type A = [VALUE] with A already declared
-            {
-                System.out.println("Line " + rhsTree.getBeginLine() + ": Variable " + lhsSymbol.getId() + " already declared.");
-                ModuleAnalysis.hasErrors = true;
-                return false;
-            } else if (lhsSymbol.getType().equals(SymbolType.UNDEFINED.toString())) // if is from type A = [VALUE] with A still not declared
-            {
-                lhsSymbol.setType(SymbolType.ARRAY.toString());
-                lhsSymbol.setInitialized(true);
-                return addToSymbolTable(lhsSymbol);
-            }
+            // if is from type A = [VALUE] with A already declared or still not declared
+            lhsSymbol.setType(SymbolType.ARRAY.toString());
+            lhsSymbol.setInitialized(true);
+            return addToSymbolTable(lhsSymbol);
         }
 
         if (lhsSymbol.getType().equals(SymbolType.UNDEFINED.toString()))
