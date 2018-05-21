@@ -137,7 +137,15 @@ public abstract class Analysis
         switch (child.toString())
         {
             case "CALL":
-                return parseCall((ASTCALL) child);
+
+                ASTCALL astCall = (ASTCALL) child;
+                VarSymbol callRet = parseCall(astCall);
+                if(callRet == null)
+                {
+                    System.out.println("Line " + astCall.getBeginLine() + ": Method " + astCall.method + " is void. Expected return value.");
+                    ModuleAnalysis.hasErrors = true;
+                }
+                return callRet;
 
             case "ARRAYACCESS":
                 return parseArrayAccess((ASTARRAYACCESS) child);

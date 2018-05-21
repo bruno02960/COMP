@@ -107,7 +107,8 @@ public class IRCall extends IRNode
     	}
         callInst += ")";
 
-        if (this.module != null)
+    	//TODO if (this.module == null || this.module.equals())
+        if (this.module == null)
         {
         	IRModule irModule = (IRModule) findParent("Module");
         	IRMethod irMethod = (IRMethod) irModule.getChild("Method");
@@ -127,6 +128,7 @@ public class IRCall extends IRNode
         }
         else
         {
+        	//TODO  ver como fazer aqui
             IRModule mod;
             IRNode par = this.parent;
             while (true)
