@@ -77,4 +77,21 @@ public abstract class IRNode
         }
         return res;
     }
+
+    protected IRAllocate getVarIfExists(String varName)
+    {
+        IRMethod method = (IRMethod)this.parent;
+        ArrayList<IRNode> children = method.getChildren();
+        for (int i = 0; i < children.size(); i++)
+        {
+            if (children.get(i).toString().equals("Allocate"))
+            {
+                IRAllocate alloc = (IRAllocate)children.get(i);
+                if (alloc.getName().equals(varName) && alloc.getRegister() != -1)
+                    return alloc;
+            }
+        }
+
+        return null;
+    }
 }

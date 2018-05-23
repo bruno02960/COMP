@@ -476,7 +476,7 @@ public class HHIR
                             case "CALL":
 
                                 ASTCALL astcall = (ASTCALL) termChild;
-                                IRCall irCall = getIRCall(astcall);
+                                IRCall irCall = getIRCall(astcall, irAssign.lhs.getVar());
 
                                 irAssign.operands.add(new VariableCall(null, Type.CALL, irCall));
                                 break;
@@ -640,7 +640,7 @@ public class HHIR
         }
     }
 
-    private IRCall getIRCall(ASTCALL astCall)
+    private IRCall getIRCall(ASTCALL astCall, String lhsVarName)
     {
         String moduleId = astCall.module;
         String methodId = astCall.method;
@@ -654,7 +654,7 @@ public class HHIR
             arguments = getFunctionCallArgumentsIds(astarguments);
         }
 
-        return new IRCall(methodId, moduleId, arguments);
+        return new IRCall(methodId, moduleId, arguments, lhsVarName);
     }
 
     private IRCall getCallHHIR(ASTCALL astCall)
@@ -685,7 +685,7 @@ public class HHIR
             }
         }
 
-        return getIRCall(astCall);
+        return getIRCall(astCall, null);
     }
 
     private ArrayList<PairStringType> getFunctionCallArgumentsIds(ASTARGUMENTS astArguments)

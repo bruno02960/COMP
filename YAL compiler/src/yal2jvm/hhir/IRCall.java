@@ -8,13 +8,15 @@ public class IRCall extends IRNode
 {
     private String method;
     private String module;
+    private String lhsVarName;
     private ArrayList<PairStringType> arguments;
 
-    IRCall(String method, String module, ArrayList<PairStringType> arguments)
+    public IRCall(String method, String module, ArrayList<PairStringType> arguments, String lhsVarName)
     {
         this.method = method;
         this.module = module;
         this.arguments = arguments;
+        this.lhsVarName = lhsVarName;
         this.nodeType = "Call";
     }
 
@@ -126,48 +128,19 @@ public class IRCall extends IRNode
 					break;
 			}
         }
-        else
+        else //return undefined
         {
-        	//TODO  ver como fazer aqui
-            IRModule mod;
-            IRNode par = this.parent;
-            while (true)
-            {
-                if (par.toString().equals("Module"))
-                {
-                    mod = (IRModule) par;
-                    break;
-                } else
-                    par = par.getParent();
-            }
-            
-            Type retType = null;
-            for (int i = 0; i < mod.getChildren().size(); i++)
-            {
-            	if(mod.getChildren().get(i).toString().equals("Method"))
-            	{
-            		IRMethod met = ((IRMethod)mod.getChildren().get(i));
-            		if (met.getName().equals(this.method))
-            		{
-            			retType = met.getReturnType();
-            			break;
-            		}
-            	}
-            }
-            
-            switch(retType)
-            {
-	            case VOID:
-	            	callInst += "V";
-	            	break;
-	            case INTEGER:
-	            	callInst += "I";
-	            	break;
-	            case ARRAY:
-	            	break;
-	            default:
-	            	break;
-            }
+			//if call from statements, keep return undefined
+        	if(lhsVarName == null)
+				callInst += "V";
+
+			IRAllocate irAllocate = getVarIfExists(lhsVarName);
+			if(irAllocate == null || irAllocate.getRegister() == -1)//if lhs not defined yet, we assume int
+				callInst += "I";
+			else if(irAllocate.getType().equals(Type.INTEGER)) //otherwise lhs defined, and type equals lhs var type
+				callInst += "I";
+			else
+				callInst += "A";
         }
         return callInst;
     }
