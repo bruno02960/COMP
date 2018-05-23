@@ -41,12 +41,32 @@ public abstract class IRNode
 
     public abstract ArrayList<String> getInstructions();
 
-    protected String getInstructionToLoadRegisterToStack(int registerNumber)
+    private String getInstructionLoadOrStoreInstructionMoreEfficient(String instruction, int registerNumber)
     {
         if(registerNumber < 4)
-            return "iload_" + registerNumber;
+            return instruction + "_" + registerNumber;
         else
-            return "iload " + registerNumber;
+            return instruction + " " + registerNumber;
+    }
+
+    protected String getInstructionToLoadIntFromRegisterToStack(int registerNumber)
+    {
+        return getInstructionLoadOrStoreInstructionMoreEfficient("iload", registerNumber);
+    }
+
+    protected String getInstructionToStoreIntInRegister(int registerNumber)
+    {
+        return getInstructionLoadOrStoreInstructionMoreEfficient("istore", registerNumber);
+    }
+
+    protected String getInstructionToLoadArrayFromRegisterToStack(int registerNumber)
+    {
+        return getInstructionLoadOrStoreInstructionMoreEfficient("aload", registerNumber);
+    }
+
+    protected String getInstructionToStoreArrayInRegister(int registerNumber)
+    {
+        return getInstructionLoadOrStoreInstructionMoreEfficient("astore", registerNumber);
     }
 
     @Override

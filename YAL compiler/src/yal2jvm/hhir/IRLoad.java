@@ -55,7 +55,7 @@ public class IRLoad extends IRNode
             register = method.getArgumentRegister(name);
         if (register > -1)	//variable is local
         {
-            inst.add(getInstructionToLoadRegisterToStack(register));
+            inst.add(getInstructionToLoadIntFromRegisterToStack(register));
             if(arraySizeAccess)
                 inst.add("arraylength");
             else if(index != null)

@@ -152,7 +152,7 @@ public class IRAllocate extends IRNode
 		{
             String varType = getVarIfExists(name).nodeType;
             if(varType != null && varType.equals(Type.INTEGER.name())) // i = 5;
-                inst.add("istore " + this.register); //TODO _ para as primeirras 3
+                inst.add(getInstructionToStoreIntInRegister(this.register));
 
             if(varType == null)
                 varType = rhs.nodeType;
@@ -164,7 +164,7 @@ public class IRAllocate extends IRNode
                 if(lhsIndex != null) // a[i] = 5;
                     inst.addAll(setArrayElement());
                 else
-                    inst.add("astore " + this.register); // i = [5];
+                    inst.add(getInstructionToStoreArrayInRegister(this.register)); // i = [5];
             }
 		}
 
@@ -174,7 +174,7 @@ public class IRAllocate extends IRNode
     private ArrayList<String> setArrayElement()
     {
         ArrayList<String> inst = new ArrayList<>();
-        inst.add("aload " + this.register);
+        inst.add(getInstructionToLoadArrayFromRegisterToStack(this.register));
         inst.addAll(lhsIndex.getInstructions());
         inst.addAll(rhsIndex.getInstructions());
         inst.add("iastore");
