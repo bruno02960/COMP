@@ -43,6 +43,7 @@ public class IRAllocate extends IRNode
     {
         this.nodeType = "Allocate";
         this.name = name.getVar();
+        this.type = Type.ARRAY;
         this.lhsIndex = new IRLoad(name.getAt());
         if(value.getValue() != null)
             this.rhs = new IRConstant(value.getValue().toString());
@@ -55,6 +56,7 @@ public class IRAllocate extends IRNode
     {
         this.nodeType = "Allocate";
         this.name = name.getVar();
+        this.type = Type.INTEGER;
         this.rhs = new IRLoad(value);
     }
 
@@ -63,6 +65,7 @@ public class IRAllocate extends IRNode
     {
         this.nodeType = "Allocate";
         this.name = name.getVar();
+        this.type = Type.ARRAY;
         this.lhsIndex = new IRLoad(name.getAt());
         this.rhs = new IRLoad(value);
     }
@@ -96,6 +99,10 @@ public class IRAllocate extends IRNode
         {
             inst.addAll(rhs.getInstructions());
             inst.add("newarray int");
+        }
+        else
+        {
+            inst.addAll(rhs.getInstructions());
         }
  /*
         //assign a variable
@@ -144,20 +151,36 @@ public class IRAllocate extends IRNode
 		else
 		{
             String varType = getVarIfExists(name).nodeType;
-            if(varType != null && varType.equals(Type.INTEGER.name()))
+            if(varType != null && varType.equals(Type.INTEGER.name())) // i = 5;
                 inst.add("istore " + this.register); //TODO _ para as primeirras 3
 
             if(varType == null)
                 varType = rhs.nodeType;
 
             if(varType.equals(Type.INTEGER.name()))
-                inst.addAll(setAllArrayElements());
+                inst.addAll(setAllArrayElements()); // i = 5; com i array
             else
-                inst.add("astore " + this.register); //TODO set como o registo que vem de IRLoad
+            {
+                if(lhsIndex != null) // a[i] = 5;
+                    inst.addAll(setArrayElement());
+                else
+                    inst.add("astore " + this.register); // i = [5];
+            }
 		}
 
         return inst;
 	}
+
+    private ArrayList<String> setArrayElement()
+    {
+        ArrayList<String> inst = new ArrayList<>();
+        inst.add("aload " + this.register);
+        inst.addAll(lhsIndex.getInstructions());
+        inst.addAll(rhsIndex.getInstructions());
+        inst.add("iastore");
+
+        return inst;
+    }
 
     private ArrayList<String> setAllArrayElements()
     {

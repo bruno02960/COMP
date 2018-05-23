@@ -13,3 +13,7 @@ lINHA 543 do HHIR precisa de ver-se como fazer com ARRAY para o 3ºchekpoint
 E possivel expressoes em ExprTest, tipo a < b+c? permite, mas a < a+b+c n?o
 E a < f1()? permite
 Ver se ta tudo direito na analise semantica para isso
+
+ver se para chamar fun?ao do memso module pode ser moduleName.fun() e fun() --- ver
+
+ver todo's
