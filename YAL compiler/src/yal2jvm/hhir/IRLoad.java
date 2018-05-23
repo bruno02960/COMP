@@ -7,8 +7,7 @@ public class IRLoad extends IRNode
     private String name;
     private int register = -1;
     private Type type;
-    private String index;
-    private Type indexType;
+    private IRLoad index = null;
     private boolean arraySizeAccess;
 
     public IRLoad(String name)
@@ -19,7 +18,7 @@ public class IRLoad extends IRNode
 
     public IRLoad(Variable value)
     {
-        this.name = value.getVar();
+        this(value.getVar());
         this.type = Type.INTEGER; //assumes tpe is integer and changes if needed
         if(value.isSizeAccess())
         {
@@ -28,12 +27,11 @@ public class IRLoad extends IRNode
         }
     }
 
-    public IRLoad(VariableArray value) {
-        this.name = value.getVar();
+    public IRLoad(VariableArray value)
+    {
+        this(value.getVar());
         this.type = value.getType();
-        Variable atVar = value.getAt();
-        this.index = atVar.getVar();
-        this.indexType = atVar.getType();
+        index = new IRLoad(value.getAt());
     }
 
     public int getRegister()
@@ -51,25 +49,17 @@ public class IRLoad extends IRNode
     {
         ArrayList<String> inst = new ArrayList<>();
 
-        //TODO: replace by findParent("Method");
-        IRMethod method;
-        IRNode par = this.parent;
-        while (true)
-        {
-            if (par.toString().equals("Method"))
-            {
-                method = (IRMethod) par;
-                break;
-            } else
-                par = par.getParent();
-        }
-
+        IRMethod method = (IRMethod) findParent("Method");
         int register = method.getVarRegister(name);
         if (register == -1)
             register = method.getArgumentRegister(name);
         if (register > -1)	//variable is local
         {
             inst.add(getInstructionToLoadRegisterToStack(register));
+            if(arraySizeAccess)
+                inst.add("arraylength");
+            else if(index != null)
+                inst.addAll(index.getInstructions());
         }
         else  //variable is global
         {
@@ -85,6 +75,8 @@ public class IRLoad extends IRNode
             in += global.getType() == Type.INTEGER ? "I" : "A";
             inst.add(in);
         }
+
+
 
         return inst;
     }
