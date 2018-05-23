@@ -298,24 +298,14 @@ public class HHIR
         if(child instanceof ASTARRAYACCESS)
         {
             ASTARRAYACCESS astArrayAccess = (ASTARRAYACCESS) child;
-            //TODO IRNode indexNode = getIndexIRNode((ASTINDEX) child.jjtGetChild(0));
-            return new IRLoad(new VariableArray(astArrayAccess.arrayID,
-            new Variable(((ASTINDEX) child.jjtGetChild(0)).indexID, Type.VARIABLE)));
-
-            //TODO: What about integer indices?
+            Variable variable = getArrayAccessIRNode(astArrayAccess);
+            return new IRLoad(new VariableArray(astArrayAccess.arrayID, variable));
         }
         else
         {
             ASTSCALARACCESS astScalarAccess = (ASTSCALARACCESS) child;
-            String id = astScalarAccess.id;
-            int indexOfSize = id.indexOf(".size");
-            if(indexOfSize != -1)
-            {
-                id = id.substring(0, indexOfSize);
-                return new IRLoad(new Variable(id, Type.INTEGER));
-            }
-
-            return new IRLoad(id);
+            Variable variable = new Variable(astScalarAccess.id, Type.INTEGER);
+            return new IRLoad(variable);
         }
     }
 
@@ -356,7 +346,10 @@ public class HHIR
         if(astTermChild instanceof ASTCALL)
             return getCallHHIR((ASTCALL) astTermChild);
         else if(astTermChild instanceof ASTARRAYACCESS)
-            return getArrayAccessIRNode((ASTARRAYACCESS) astTermChild);
+        {
+            Variable variable = getArrayAccessIRNode((ASTARRAYACCESS) astTermChild);
+            return new IRLoad(variable);
+        }
         else
             return getScalarAccessIRNode((ASTSCALARACCESS) astTermChild);
     }
@@ -365,16 +358,6 @@ public class HHIR
     {
         String id = astScalarAccess.id;
         return new IRLoad(new Variable(id, Type.INTEGER));
-    }
-
-    private IRNode getArrayAccessIRNode(ASTARRAYACCESS astArrayAccess)
-    {
-        String id = astArrayAccess.arrayID;
-        ASTINDEX astIndex = (ASTINDEX) astArrayAccess.jjtGetChild(0);
-        Variable array = new VariableArray(id, new Variable(astIndex.indexID, Type.INTEGER));
-        //TODO  IRNode indexIRNode = getIndexIRNode(astIndex);
-
-        return new IRLoad(array);
     }
 
     private IRNode getIndexIRNode(ASTINDEX astIndex)
@@ -459,15 +442,9 @@ public class HHIR
         switch (lhchild.toString())
         {
             case "ARRAYACCESS":
-                ASTARRAYACCESS astarrayaccess = (ASTARRAYACCESS) lhchild;
-                ASTINDEX astindex = (ASTINDEX) astarrayaccess.jjtGetChild(0);
-
-                if (astindex.indexID != null)
-                    irAssign.lhs = new VariableArray(astarrayaccess.arrayID, new Variable(astindex.indexID, Type.VARIABLE));
-                else
-                    irAssign.lhs = new VariableArray(astarrayaccess.arrayID, new Variable(astindex.indexValue.toString(), Type.INTEGER));
-
+                irAssign.lhs =  getArrayAccessIRNode((ASTARRAYACCESS) lhchild);
                 break;
+
             case "SCALARACCESS":
                 ASTSCALARACCESS astscalaraccess = (ASTSCALARACCESS) lhchild;
 
@@ -553,6 +530,17 @@ public class HHIR
         }
 
         createAssignIR(irAssign, irmethod);
+    }
+
+    private Variable getArrayAccessIRNode(ASTARRAYACCESS child)
+    {
+        ASTARRAYACCESS astarrayaccess = child;
+        ASTINDEX astindex = (ASTINDEX) astarrayaccess.jjtGetChild(0);
+
+        if (astindex.indexID != null)
+            return new VariableArray(astarrayaccess.arrayID, new Variable(astindex.indexID, Type.VARIABLE));
+        else
+            return new VariableArray(astarrayaccess.arrayID, new Variable(astindex.indexValue.toString(), Type.INTEGER));
     }
 
     private void createAssignImmediateIR(IRAssign irAssign, IRMethod irmethod) {
