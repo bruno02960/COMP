@@ -7,16 +7,13 @@ import java.util.ArrayList;
 
 public class IRAssign {
     String operator;
-    Variable atlhs = null;
     boolean isSize = false;
 
     Variable lhs = null;
     ASTLHS astlhs;
     ASTRHS astrhs;
 
-    ArrayList<IRCall> calls = new ArrayList<>();
     ArrayList<Variable> operands = new ArrayList<>();
-    ArrayList<Variable> at_op = new ArrayList<>();
 
     IRAssign(ASTLHS astlhs, ASTRHS astrhs) {
         this.astlhs = astlhs;

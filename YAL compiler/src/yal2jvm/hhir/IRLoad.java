@@ -21,7 +21,7 @@ public class IRLoad extends IRNode
 
     }
 
-    IRLoad(Variable value, Variable at) {
+    IRLoad(VariableArray value) {
 
     }
 

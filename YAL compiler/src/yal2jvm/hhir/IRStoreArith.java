@@ -13,9 +13,9 @@ public class IRStoreArith extends IRStore
         irArith = new IRArith(op);
     }
 
-    public IRStoreArith(String name, Operation op, Variable at) //TODO for arrays
+    public IRStoreArith(VariableArray name, Operation op) //TODO for arrays
     {
-        this.name = name;
+        this.name = name.getVar();
         this.nodeType = "StoreCall";
     }
 

@@ -10,9 +10,9 @@ public class IRStoreCall extends IRStore
         this.nodeType = "StoreCall";
     }
 
-    public IRStoreCall(String name, Variable at) //for arrays
+    public IRStoreCall(VariableArray name) //for arrays
     {
-        this.name = name;
+        this.name = name.getVar();
         this.nodeType = "StoreCall";
     }
 

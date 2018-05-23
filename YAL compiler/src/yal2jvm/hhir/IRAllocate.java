@@ -22,26 +22,26 @@ public class IRAllocate extends IRNode
             rhs = new IRLoad(value);
     }
 
-    //a[i] = 5;     //a = b[5];
-    IRAllocate(Variable name, Variable at, Variable value)
+    //a[i] = 5;
+    IRAllocate(VariableArray name, Variable value) {
+        this.nodeType = "Allocate";
+        this.name = name.getVar();
+        //TODO
+    }
+
+    //a = b[5];
+    IRAllocate(Variable name, VariableArray value)
     {
-        if(name.getType().equals(Type.VARIABLE)) {
-            this.nodeType = "Allocate";
-            this.name = name.getVar();
-            rhs = new IRLoad(value, at);
-        }
-        else {
-            this.nodeType = "Allocate";
-            this.name = name.getVar();
-            //TODO
-        }
+        this.nodeType = "Allocate";
+        this.name = name.getVar();
+        rhs = new IRLoad(value, value.getAt());
     }
 
     //a[i] = b[5];
-    IRAllocate(String name, Variable varAt, Variable value, Variable valueAt)
+    IRAllocate(VariableArray name, VariableArray value)
     {
         this.nodeType = "Allocate";
-        this.name = name;
+        this.name = name.getVar();
 
     }
 
