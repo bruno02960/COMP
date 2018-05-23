@@ -9,7 +9,6 @@ public class Variable
 
     Variable(String var, Type type)
     {
-        this.var = var;
         this.type = type;
 
         //TODO: Verify if it is possible to use type to distinguish between variables and constants
@@ -17,19 +16,18 @@ public class Variable
         {
             try
             {
-                value = Integer.parseInt(this.var);
+                value = Integer.parseInt(var);
             }
-            catch (NumberFormatException ignored)
+            catch (NumberFormatException e)
             {
                 //case var is not a constant, is a variable
-                this.var = null;
+                this.var = var;
             }
 
-            assert this.var != null;
-            if(this.var.contains(".size"))
+            if(var.contains(".size"))
             {
                 sizeAccess = true;
-                this.var = this.var.split(".size")[0];
+                this.var = var.split(".size")[0];
             }
         }
     }

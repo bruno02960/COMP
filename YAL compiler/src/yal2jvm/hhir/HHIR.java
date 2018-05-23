@@ -298,8 +298,11 @@ public class HHIR
         if(child instanceof ASTARRAYACCESS)
         {
             ASTARRAYACCESS astArrayAccess = (ASTARRAYACCESS) child;
-            IRNode indexNode = getIndexIRNode((ASTINDEX) child.jjtGetChild(0));
-            return new IRLoad(astArrayAccess.arrayID, indexNode);
+            //TODO IRNode indexNode = getIndexIRNode((ASTINDEX) child.jjtGetChild(0));
+            return new IRLoad(new VariableArray(astArrayAccess.arrayID,
+            new Variable(((ASTINDEX) child.jjtGetChild(0)).indexID, Type.VARIABLE)));
+
+            //TODO: What about integer indices?
         }
         else
         {
@@ -309,7 +312,7 @@ public class HHIR
             if(indexOfSize != -1)
             {
                 id = id.substring(0, indexOfSize);
-                return new IRLoad(id, true);
+                return new IRLoad(new Variable(id, Type.INTEGER));
             }
 
             return new IRLoad(id);
@@ -361,25 +364,17 @@ public class HHIR
     private IRNode getScalarAccessIRNode(ASTSCALARACCESS astScalarAccess)
     {
         String id = astScalarAccess.id;
-        boolean sizeAccess = false;
-        if (id.contains("."))
-        {
-            int dotIdx = id.indexOf(".");
-            if (id.substring(dotIdx + 1).equals("size"))
-                sizeAccess = true;
-            id = id.substring(0, dotIdx);
-        }
-
-        return new IRLoad(id, sizeAccess);
+        return new IRLoad(new Variable(id, Type.INTEGER));
     }
 
     private IRNode getArrayAccessIRNode(ASTARRAYACCESS astArrayAccess)
     {
         String id = astArrayAccess.arrayID;
         ASTINDEX astIndex = (ASTINDEX) astArrayAccess.jjtGetChild(0);
-        IRNode indexIRNode = getIndexIRNode(astIndex);
+        Variable array = new VariableArray(id, new Variable(astIndex.indexID, Type.INTEGER));
+        //TODO  IRNode indexIRNode = getIndexIRNode(astIndex);
 
-        return new IRLoad(id, indexIRNode);
+        return new IRLoad(array);
     }
 
     private IRNode getIndexIRNode(ASTINDEX astIndex)
@@ -805,7 +800,7 @@ public class HHIR
             System.out.println(variable.getVar() != null ? "name = " + variable.getVar() : "null");
             System.out.println(variable.getType() != null ? "type = " + variable.getType() : "null");
             assert value != null;
-            System.out.println(value.getVar() != null ? "value = " + value.getVar() : "null");
+            //System.out.println(value.getVar() != null ? "value = " + value.getVar() : "null");
             System.out.println();
         }
 

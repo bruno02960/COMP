@@ -34,7 +34,7 @@ public class IRAllocate extends IRNode
     {
         this.nodeType = "Allocate";
         this.name = name.getVar();
-        rhs = new IRLoad(value, value.getAt());
+        rhs = new IRLoad(value);
     }
 
     //a[i] = b[5];
@@ -42,7 +42,7 @@ public class IRAllocate extends IRNode
     {
         this.nodeType = "Allocate";
         this.name = name.getVar();
-
+        rhs = new IRLoad(value);
     }
 
 

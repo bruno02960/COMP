@@ -6,6 +6,7 @@ public class IRStoreArith extends IRStore
 {
     private IRArith irArith;
 
+    //a = b + c
     public IRStoreArith(String name, Operation op)
     {
         this.name = name;
@@ -13,10 +14,12 @@ public class IRStoreArith extends IRStore
         irArith = new IRArith(op);
     }
 
+    //a[i] = b + c;
     public IRStoreArith(VariableArray name, Operation op) //TODO for arrays
     {
         this.name = name.getVar();
         this.nodeType = "StoreCall";
+        irArith = new IRArith(op);
     }
 
     public IRNode getRhs()
