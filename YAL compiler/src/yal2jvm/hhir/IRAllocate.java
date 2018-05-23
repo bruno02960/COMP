@@ -42,7 +42,7 @@ public class IRAllocate extends IRNode
     {
         this.nodeType = "Allocate";
         this.name = name;
-
+        rhs = new IRLoad(value, valueAt);
     }
 
 
