@@ -2,22 +2,7 @@
 Qual o template mais efiente para os loops? print1 ou print2? e ja agora usa-se o melhor no trabalho certo?
 e para alem do melhor ainda se pode fazer something sobre repetir o codigo ou coisa assim? ver com o prof
 
-ver se para chamar fun?ao do memso module pode ser moduleName.fun() e fun() --- ver se ja d?
+ver se para chamar fun?ao do memso module pode ser moduleName.fun() e fun() --- ver
 
-ver construtores do allocate
 
-ver :
-module all {
-	
-	function f()
-	{
-		a=5;
-	
-	}
-	
-	function f2()
-	{
-		a = f();
-	
-	}
-}
+ver todo's

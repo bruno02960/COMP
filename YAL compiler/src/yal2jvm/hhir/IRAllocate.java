@@ -4,37 +4,48 @@ import java.util.ArrayList;
 
 public class IRAllocate extends IRNode
 {
-
     private String name;
     private Type type;
-    private String value;
+    private IRNode rhs;
     private int register = -1;
-    int size = -1;
-    private String variable;
-    private String index;
 	private boolean storeVarGlobal = false;
-	private int allocateType;
-	private boolean arraySizeAccess = false;
+
 
 	//a = 1;
     public IRAllocate(String name, Variable value)
     {
         this.nodeType = "Allocate";
         this.name = name;
-        this.type = value.getType();
-        this.value = value.getVar();
-        this.allocateType = 1;
+        if(value.getValue() != null)
+            rhs = new IRConstant(value.getValue().toString());
+        else
+            rhs = new IRLoad(value);
     }
 
-    IRAllocate(String name, Variable at, Variable value) {
+    //a[i] = 5;
+    IRAllocate(Variable var, Variable at, Variable value)
+    {
         this.nodeType = "Allocate";
         this.name = name;
-        this.type = value.getType();
-        this.value = value.getVar();
-        this.allocateType = 1;
-
-        //TODO: Process at
+        //TODO
     }
+
+    //a = b[5];
+    IRAllocate(String name, Variable value, Variable at)
+    {
+        this.nodeType = "Allocate";
+        this.name = name;
+        rhs = new IRLoad(value, at);
+    }
+
+    //a[i] = b[5];
+    IRAllocate(Variable var, Variable varAt, Variable value, Variable valueAt)
+    {
+        this.nodeType = "Allocate";
+        this.name = name;
+
+    }
+
 
     @Override
     public ArrayList<String> getInstructions()
