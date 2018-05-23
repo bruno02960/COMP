@@ -467,8 +467,6 @@ public class HHIR
                 ASTARRAYACCESS astarrayaccess = (ASTARRAYACCESS) lhchild;
                 ASTINDEX astindex = (ASTINDEX) astarrayaccess.jjtGetChild(0);
 
-                irAssign.lhsName = astarrayaccess.arrayID;
-
                 if (astindex.indexID != null)
                 {
                     irAssign.atlhs = new Variable(astindex.indexID, Type.VARIABLE);
@@ -476,12 +474,13 @@ public class HHIR
                 {
                     irAssign.atlhs = new Variable(astindex.indexValue.toString(), Type.INTEGER);
                 }
-                irAssign.lhsType = Type.ARRAY;
+
+                irAssign.lhs = new Variable(astarrayaccess.arrayID, Type.ARRAY);
                 break;
             case "SCALARACCESS":
                 ASTSCALARACCESS astscalaraccess = (ASTSCALARACCESS) lhchild;
-                irAssign.lhsName = astscalaraccess.id;
-                irAssign.lhsType = Type.VARIABLE;
+
+                irAssign.lhs = new Variable(astscalaraccess.id, Type.VARIABLE);
                 break;
         }
 
@@ -562,7 +561,7 @@ public class HHIR
         if (assignDebug)
         {
             System.out.println();
-            System.out.println(irAssign.lhsName != null ? "lhsName = " + irAssign.lhsName : "null");
+            System.out.println(irAssign.lhs.getVar() != null ? "lhsName = " + irAssign.lhs.getVar() : "null");
             System.out.println(irAssign.atlhs != null ? "at = " + irAssign.atlhs.getVar() : "null");
             for (int i = 0; i < irAssign.operands.size(); i++)
             {
@@ -581,29 +580,35 @@ public class HHIR
         IRStoreCall irStoreCall;
         Variable variable = irAssign.operands.get(0);
 
-        assert irAssign.lhsType != null;
         if (variable.getType().equals(Type.CALL)) {          // a = f1();
-            if (irAssign.lhsType.equals(Type.VARIABLE)) {
-                irStoreCall = new IRStoreCall(irAssign.lhsName);
+            if (irAssign.lhs.getType().equals(Type.VARIABLE)) {
+                irStoreCall = new IRStoreCall(irAssign.lhs.getVar());
                 irStoreCall.addChild(irAssign.calls.get(0));
                 irmethod.addChild(irStoreCall);
             }
             else {
-                irStoreCall = new IRStoreCall(irAssign.lhsName, irAssign.atlhs);
-
+                irStoreCall = new IRStoreCall(irAssign.lhs.getVar(), irAssign.atlhs);
                 irStoreCall.addChild(irAssign.calls.get(0));
                 irmethod.addChild(irStoreCall);
             }
         } else {
-            if (!irAssign.isSize) {
-                if (irAssign.lhsType.equals(Type.VARIABLE)) {   // a = 3   // a = b     // a = b.size
-                    irmethod.addChild(new IRAllocate(irAssign.lhsName, variable));
-                }
-                else {                      // a[X] = 3     // a[X] = b
-                    irmethod.addChild(new IRAllocate(irAssign.lhsName, irAssign.atlhs, variable));
-                }
-            } else {                          // a = [X]
+            if (variable.getType().equals(Type.ARRAY)) {
+                irmethod.addChild(new IRAllocate(irAssign.lhs.getVar(), irAssign.atlhs, variable, irAssign.at_op.get(0)));
+            } else {
+                if (!irAssign.isSize) {
+                    if (irAssign.lhs.getType().equals(Type.VARIABLE)) {
+                        if(variable.getType().equals(Type.ARRAY)) {    // a = b[5]   // a = b[c]     // a = b[c.size]
+                            irmethod.addChild(new IRAllocate(irAssign.lhs, variable, irAssign.at_op.get(0)));
+                        }
+                        else {     // a = 3   // a = b     // a = b.size
+                            irmethod.addChild(new IRAllocate(irAssign.lhs.getVar(), variable));
+                        }
+                    } else {                      // a[X] = 3     // a[X] = b
+                        irmethod.addChild(new IRAllocate(irAssign.lhs, irAssign.atlhs, variable));
+                    }
+                } else {                          // a = [X]
                     //TODO: IR that accepts size as rhs
+                }
             }
         }
     }
@@ -614,11 +619,11 @@ public class HHIR
         Variable var1 = irAssign.operands.get(0);
         Variable var2 = irAssign.operands.get(1);
 
-        if (irAssign.lhsType.equals(Type.VARIABLE)) {
-            irStoreArith = new IRStoreArith(irAssign.lhsName, Operation.parseOperator(irAssign.operator));
+        if (irAssign.lhs.getType().equals(Type.VARIABLE)) {
+            irStoreArith = new IRStoreArith(irAssign.lhs.getVar(), Operation.parseOperator(irAssign.operator));
         }
         else {
-            irStoreArith = new IRStoreArith(irAssign.lhsName, Operation.parseOperator(irAssign.operator), irAssign.atlhs);
+            irStoreArith = new IRStoreArith(irAssign.lhs.getVar(), Operation.parseOperator(irAssign.operator), irAssign.atlhs);
         }
 
         if(var1.getType().equals(Type.CALL)) {           // a = f1() + X

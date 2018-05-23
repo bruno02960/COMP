@@ -6,12 +6,11 @@ import yal2jvm.ast.ASTRHS;
 import java.util.ArrayList;
 
 public class IRAssign {
-    String lhsName = null;
     String operator;
     Variable atlhs = null;
-    Type lhsType = null;
     boolean isSize = false;
 
+    Variable lhs = null;
     ASTLHS astlhs;
     ASTRHS astrhs;
 
