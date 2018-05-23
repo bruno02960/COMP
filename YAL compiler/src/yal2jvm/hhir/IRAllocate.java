@@ -5,7 +5,9 @@ import java.util.ArrayList;
 public class IRAllocate extends IRNode
 {
     private String name;
+    private IRLoad lhsIndex = null;
     private Type type;
+    private IRLoad rhsIndex = null;
     private IRNode rhs;
     private int register = -1;
 	private boolean storeVarGlobal = false;
@@ -17,16 +19,35 @@ public class IRAllocate extends IRNode
         this.nodeType = "Allocate";
         this.name = name;
         if(value.getValue() != null)
-            rhs = new IRConstant(value.getValue().toString());
+            this.rhs = new IRConstant(value.getValue().toString());
         else
-            rhs = new IRLoad(value);
+            this.rhs = new IRLoad(value);
+    }
+
+    //a = [5];
+    public IRAllocate(String name, Variable value, Type arraySize)
+    {
+        assert arraySize == Type.ARRAYSIZE;
+
+        this.nodeType = "Allocate";
+        this.name = name;
+        this.type = Type.ARRAYSIZE;
+        if(value.getValue() != null)
+            this.rhs = new IRConstant(value.getValue().toString());
+        else
+            this.rhs = new IRLoad(value);
     }
 
     //a[i] = 5;
-    IRAllocate(VariableArray name, Variable value) {
+    IRAllocate(VariableArray name, Variable value)
+    {
         this.nodeType = "Allocate";
         this.name = name.getVar();
-        //TODO
+        this.lhsIndex = new IRLoad(name.getAt());
+        if(value.getValue() != null)
+            this.rhs = new IRConstant(value.getValue().toString());
+        else
+            this.rhs = new IRLoad(value);
     }
 
     //a = b[5];
@@ -34,7 +55,7 @@ public class IRAllocate extends IRNode
     {
         this.nodeType = "Allocate";
         this.name = name.getVar();
-        rhs = new IRLoad(value);
+        this.rhs = new IRLoad(value);
     }
 
     //a[i] = b[5];
@@ -42,7 +63,13 @@ public class IRAllocate extends IRNode
     {
         this.nodeType = "Allocate";
         this.name = name.getVar();
-        rhs = new IRLoad(value);
+        this.lhsIndex = new IRLoad(name.getAt());
+        this.rhs = new IRLoad(value);
+    }
+
+    public Type getType()
+    {
+        return type;
     }
 
 
@@ -57,8 +84,18 @@ public class IRAllocate extends IRNode
     	}
         else
         {
-		    this.register = getVarIfExists(this.name);
-		    initRegister();
+            IRAllocate irAllocate = getVarIfExists(this.name);
+            if(irAllocate != null && irAllocate.register != -1)
+		        this.register = irAllocate.register;
+            else
+		        initRegister();
+        }
+
+        //TODO VER SE REALMETE INICILAIZA A 0 SOZINHO
+        if(type == Type.ARRAYSIZE)
+        {
+            inst.addAll(rhs.getInstructions());
+            inst.add("newarray int");
         }
  /*
         //assign a variable
@@ -89,34 +126,60 @@ public class IRAllocate extends IRNode
     		}
     		inst.add(IRConstant.getLoadConstantInstruction(this.value));
     	}*/
-    	
-    	String storeInst = getStoreInst();
-    	inst.add(storeInst);
+
+    	inst.addAll(getStoreInst());
 
         return inst;
     }
 
-	private String getStoreInst()
+	private ArrayList<String> getStoreInst()
 	{
+        ArrayList<String> inst = new ArrayList<>();
 		if (this.storeVarGlobal)
 		{
 			IRModule module = (IRModule)findParent("Module");
 			String varType = type == Type.INTEGER ? "I" : "A";
-			return "putstatic " + module.getName() + "/" + name + " " + varType;
+			inst.add("putstatic " + module.getName() + "/" + name + " " + varType);
 		}
 		else
 		{
-            return "istore " + this.register;
+            String varType = getVarIfExists(name).nodeType;
+            if(varType != null && varType.equals(Type.INTEGER.name()))
+                inst.add("istore " + this.register); //TODO _ para as primeirras 3
+
+            if(varType == null)
+                varType = rhs.nodeType;
+
+            if(varType.equals(Type.INTEGER.name()))
+                inst.addAll(setAllArrayElements());
+            else
+                inst.add("astore " + this.register); //TODO set como o registo que vem de IRLoad
 		}
+
+        return inst;
 	}
 
-	private boolean storeVarIsGlobal()
+    private ArrayList<String> setAllArrayElements()
+    {
+        ArrayList<String> inst = new ArrayList<>();
+        IRAllocate irAllocate = getVarIfExists(name);
+        if(irAllocate !=  null) // TODO ver o que fazer aqui, usar um for em jvm??
+        {
+            System.out.println("Internal error! The program will be closed.");
+            System.exit(-1);
+        }
+
+
+        return inst;
+    }
+
+    private boolean storeVarIsGlobal()
 	{
 		IRModule module = (IRModule)findParent("Module");
 		return module.getGlobal(name) != null;
 	}
 
-	private int getVarIfExists(String varName)
+	private IRAllocate getVarIfExists(String varName)
 	{
 		IRMethod method = (IRMethod)this.parent;
 		ArrayList<IRNode> children = method.getChildren();
@@ -126,13 +189,14 @@ public class IRAllocate extends IRNode
 			{
 				IRAllocate alloc = (IRAllocate)children.get(i);
 				if (alloc.getName().equals(varName) && alloc.getRegister() != -1)
-					return alloc.getRegister();
+					return alloc;
 			}
 		}
-		return -1;
+
+		return null;
 	}
 
-	private void initRegister()
+    private void initRegister()
     {
         if (!this.storeVarGlobal && this.register == -1)
         {

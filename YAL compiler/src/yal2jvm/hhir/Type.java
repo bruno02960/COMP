@@ -7,5 +7,6 @@ public enum Type
     STRING,
     VARIABLE,
     ARRAY,
-    VOID
+    VOID,
+    ARRAYSIZE
 }
