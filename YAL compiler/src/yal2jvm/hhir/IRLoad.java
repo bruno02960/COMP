@@ -8,7 +8,7 @@ public class IRLoad extends IRNode
     private int register = -1;
     private Type type;
     private String index;
-    private IRNode indexNode;
+    private Type indexType;
     private boolean arraySizeAccess;
 
     public IRLoad(String name)
@@ -17,12 +17,23 @@ public class IRLoad extends IRNode
         this.nodeType = "Load";
     }
 
-    IRLoad(Variable value) {
-
+    public IRLoad(Variable value)
+    {
+        this.name = value.getVar();
+        this.type = Type.INTEGER; //assumes tpe is integer and changes if needed
+        if(value.isSizeAccess())
+        {
+            arraySizeAccess = true;
+            this.type = Type.ARRAY;
+        }
     }
 
-    IRLoad(VariableArray value) {
-
+    public IRLoad(VariableArray value) {
+        this.name = value.getVar();
+        this.type = value.getType();
+        Variable atVar = value.getAt();
+        this.index = atVar.getVar();
+        this.indexType = atVar.getType();
     }
 
     public int getRegister()
