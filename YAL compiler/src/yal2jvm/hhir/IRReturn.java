@@ -32,6 +32,7 @@ public class IRReturn extends IRNode
                 break;
 
             case ARRAY:
+                //TODO
                 System.out.println("Not generating HHIR for return value ARRAY yet.");
         }
 

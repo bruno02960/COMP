@@ -1,15 +1,18 @@
 package yal2jvm.hhir;
 
+import yal2jvm.Yal2jvm;
+
 import java.util.ArrayList;
 
 public class IRGlobal extends IRNode
 {
-    private boolean arraySize = false;
     private String name;
     private Type type;
     private Variable value = null;
+    private boolean arraySize = false;
+    private ArrayList<String> staticArraysInstructions = new ArrayList<>();
 
-    public IRGlobal(Variable variable)
+    public IRGlobal(Variable variable) // a[]; ou a;
     {
         this.name = variable.getVar();
         this.type = variable.getType();
@@ -21,7 +24,7 @@ public class IRGlobal extends IRNode
         this.value = value;
     }
 
-    public IRGlobal(Variable variable, Variable value, Type arraySize)
+    public IRGlobal(Variable variable, Variable value, Type arraySize) // a[] = [50]; ou a = [50];
     {
         this(variable, value);
         assert arraySize == Type.ARRAYSIZE;
@@ -34,7 +37,7 @@ public class IRGlobal extends IRNode
         if(value == null)
         {
             if (type == Type.ARRAY) // a[];
-            return createGlobalArray();
+            return createGlobalArrayWithSize0();
         else // a;
             return createGlobalInteger();
         }
@@ -42,17 +45,17 @@ public class IRGlobal extends IRNode
         {
             if (type == Type.ARRAY) // a[] = ...
             {
-                if(value.getType() == Type.ARRAYSIZE) // a[] = [50];
+                if(arraySize) // a[] = [50];
                     return createGlobalArrayWithSize(value);
                 else // a[] = 50;
                     return assignAllArrayElements(value);
             }
             else // a = ...
             {
-                if(value.getType() == Type.ARRAYSIZE) // a = [50];
+                if(arraySize) // a = [50];
                     return createGlobalArrayWithSize(value);
                 else // a = 50;
-                    return assignVar(value);
+                    return createGlobalInteger();
             }
         }
     }
@@ -67,34 +70,65 @@ public class IRGlobal extends IRNode
         return insts;
     }
 
-    private ArrayList<String> createGlobalArray()
+    private ArrayList<String> createGlobalArray(ArrayList<String> sizeInstructions)
     {
+        //declare array as global
         ArrayList<String> insts = new ArrayList<>();
-        String inst = ".field public static " + name;
-        inst += " I = " + (value != null ? value.getVar() : 0);
+        String inst = ".field public static " + name + " A";
         insts.add(inst);
 
-        return insts;
-    }
-
-    private ArrayList<String> assignVar(Variable value)
-    {
-        ArrayList<String> insts = new ArrayList<>();
-
+        // instructions to static init method
+        staticArraysInstructions.addAll(sizeInstructions);
+        staticArraysInstructions.add("newarray int");
+        staticArraysInstructions.add("putstatic " + Yal2jvm.moduleName + "/" + name + " A");
 
         return insts;
     }
 
-    private ArrayList<String> assignAllArrayElements(Variable value)
+    private ArrayList<String> createGlobalArrayWithSize0()
     {
-        ArrayList<String> insts = new ArrayList<>();
+        ArrayList<String> sizeInstructions = new ArrayList<>();
+        sizeInstructions.add("iconst_0");
 
-
-        return insts;
+        return createGlobalArray(sizeInstructions);
     }
 
     private ArrayList<String> createGlobalArrayWithSize(Variable value)
     {
+        IRNode valueNode = getValueIRNode(value);
+        return createGlobalArray(valueNode.getInstructions());
+    }
+
+    private IRNode getValueIRNode(Variable value)
+    {
+        IRNode valueNode;
+        if(value.getType() == Type.INTEGER)
+            valueNode = new IRConstant(value.getVar());
+        else
+            valueNode = new IRLoad(value);
+        this.addChild(valueNode);
+        return valueNode;
+    }
+
+    private ArrayList<String> assignAllArrayElements(Variable value)
+    {
+        IRNode valueNode = getValueIRNode(value);
+
+        IRMethod method = (IRMethod) findParent("Method");
+        ArrayList<String> globalVariableJVMCode = getGlobalVariable(name, method);
+
+        staticArraysInstructions.addAll(valueNode.getInstructions());
+        staticArraysInstructions.addAll(globalVariableJVMCode);
+        staticArraysInstructions.addAll(globalVariableJVMCode);
+        staticArraysInstructions.add("arraylength");
+        staticArraysInstructions.add("ldc -1");
+        staticArraysInstructions.add("iinc");
+        staticArraysInstructions.addAll(globalVariableJVMCode);
+        staticArraysInstructions.add("iastore");
+        //TODO CONTINUE
+
+
+
         ArrayList<String> insts = new ArrayList<>();
 
 

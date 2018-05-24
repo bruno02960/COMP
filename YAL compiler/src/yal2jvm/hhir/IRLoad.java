@@ -62,26 +62,12 @@ public class IRLoad extends IRNode
                 inst.addAll(index.getInstructions());
         }
         else  //variable is global
-        {
-            IRModule module = ((IRModule) method.getParent());
-            IRGlobal global = module.getGlobal(name);
-            if (global == null)
-            {
-                System.out.println("Internal error! The program will be closed.");
-                System.exit(-1);
-            }
-
-            String in = "getstatic " + module.getName() + "/" + global.getName() + " ";
-            in += global.getType() == Type.INTEGER ? "I" : "A";
-            inst.add(in);
-        }
-
-
+            inst.addAll(getGlobalVariable(name, method));
 
         return inst;
     }
 
-	public Type getType()
+    public Type getType()
 	{
 		return type;
 	}

@@ -29,8 +29,7 @@ public abstract class IRStore extends IRNode
         	{
         		if(global.getType() == Type.INTEGER)
                 {
-                    String moduleName = module.getName();
-                    String storeInst = "putstatic " + moduleName + "/" + name + " I";
+                    String storeInst = "putstatic " + module.getName() + "/" + name + " I";
                     inst.add(storeInst);
                 }
                 else
@@ -53,7 +52,7 @@ public abstract class IRStore extends IRNode
         }
 
         if(arrayAccess)
-            inst.addAll(setArrayElement(index, register));
+            inst.addAll(setArrayElementByIRNode(index, register));
         else
             inst.add(getInstructionToStoreRegisterToStack(register));
 
