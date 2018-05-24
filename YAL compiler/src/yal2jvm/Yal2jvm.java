@@ -15,7 +15,6 @@ import yal2jvm.utils.Utils;
 
 public class Yal2jvm
 {
-
     private static final int MAX_LOCAL_VARS = 255;
 
     private int localVars;
@@ -61,7 +60,7 @@ public class Yal2jvm
         if (inputFile != null && validInput)
             validInput = inputFile.endsWith(".yal");
 
-        if (!validInput && inputFile != null)
+        if (!validInput || inputFile != null)
         {
             System.out.println("Insufficient or incorrect arguments for the Yal2jvm compiler");
             System.out.println("\nUsage:\tjava Yal2jvm [-r=<0..255>] [-o] [-S] <input_file.yal>\n");
@@ -135,7 +134,7 @@ public class Yal2jvm
             int noErrors = YalParser.errorCounter.getNoErrors();
             if (noErrors > 0)
             {
-                if (noErrors == 10)
+                if (noErrors >= 10)
                     System.err.println("At least 10 errors found!");
                 else
                     System.err.println(noErrors + " errors found!");
