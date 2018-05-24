@@ -16,6 +16,7 @@ public class IRAllocate extends IRNode
 	//a = 1;
     public IRAllocate(String name, Variable value)
     {
+
         this.nodeType = "Allocate";
         this.name = name;
         if(value.getValue() != null)

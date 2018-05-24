@@ -579,7 +579,7 @@ public class HHIR
                         irmethod.addChild(new IRAllocate((VariableArray) irAssign.lhs, variable));
                     }
                 } else {                          // a = [X]
-                    //TODO: IR that accepts size as rhs
+                    irmethod.addChild(new IRAllocate(irAssign.lhs.getVar(), variable, Type.ARRAYSIZE));
                 }
             }
         }
@@ -599,16 +599,16 @@ public class HHIR
         }
 
         if(var1.getType().equals(Type.CALL)) {           // a = f1() + X
-            irStoreArith.setRhs(((VariableCall) var1).getIrCall());
+            irStoreArith.setLhs(((VariableCall) var1).getIrCall());
         } else {
-            if(var1.getType().equals(Type.INTEGER)) {    // a = 3
-                irStoreArith.setRhs(new IRConstant(var1.getVar()));
+            if(var1.getType().equals(Type.INTEGER)) {    // a = 3 + X
+                irStoreArith.setLhs(new IRConstant(var1.getVar()));
             }
             else {
                 if(var1.getType().equals(Type.VARIABLE)) {   // a = b.size // a = b
-                    irStoreArith.setRhs(new IRLoad(var1));
+                    irStoreArith.setLhs(new IRLoad(var1));
                 } else {                    // a = b[c.size] // a = b[c]
-                    irStoreArith.setRhs(new IRLoad((VariableArray) var1));
+                    irStoreArith.setLhs(new IRLoad((VariableArray) var1));
                 }
             }
         }
@@ -792,6 +792,7 @@ public class HHIR
             System.out.println();
         }
 
+        assert variable != null;
         switch (variable.getType())
         {
             case INTEGER:
