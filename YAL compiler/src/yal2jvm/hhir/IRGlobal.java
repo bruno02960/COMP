@@ -6,41 +6,80 @@ public class IRGlobal extends IRNode
 {
     private String name;
     private Type type;
-    private Integer initVal;
-    private String size;
+    private Variable value = null;
 
-    IRGlobal(Variable variable, Variable value) 
+    public IRGlobal(Variable variable)
     {
-        if (variable.getType() == Type.ARRAY)
-        {
-        	//if assign is size
-        	//if assign is init value
-        }
+        this.name = variable.getVar();
+        this.type = variable.getType();
+    }
+
+    public IRGlobal(Variable variable, Variable value)
+    {
+        this(variable);
+        this.value = value;
     }
 
     @Override
     public ArrayList<String> getInstructions()
     {
-        ArrayList<String> inst = new ArrayList<>();
-
-        String inst1 = ".field public static " + name;
-        switch (type)
+        if(value == null)
         {
-            case INTEGER:
-            {
-                inst1 += " I = " + (initVal != null ? initVal : 0);
-                break;
-            }
-            case ARRAY:
-            {
-            	break;
-            }
-            default:
-                break;
+            if (type == Type.ARRAY) // a[];
+            return createGlobalArray();
+        else // a;
+            return createGlobalInteger();
         }
+        else
+        {
+            if (type == Type.ARRAY) // a[] = ...
+            {
+                if(value.getType() == Type.ARRAYSIZE) // a[] = [50];
+                    return createGlobalArrayWithSize(value);
+                else // a[] = 50;
+                    return assignAllArrayElements(value);
+            }
+            else // a = ...
+            {
+                if(value.getType() == Type.ARRAYSIZE) // a = [50];
+                    return createGlobalArrayWithSize(value);
+                else // a = 50;
+                    return assignVar(value);
+            }
+        }
+    }
 
-        inst.add(inst1);
-        return inst;
+    private ArrayList<String> createGlobalInteger()
+    {
+        ArrayList<String>
+        String inst = ".field public static " + name;
+        inst += " I = " + (value != null ? value.getValue() : 0);
+
+        return new ArrayList<String>().add(inst);
+    }
+
+    private ArrayList<String> assignVar(Variable value)
+    {
+
+        return null;
+    }
+
+    private ArrayList<String> assignAllArrayElements(Variable value)
+    {
+
+        return null;
+    }
+
+    private ArrayList<String> createGlobalArray()
+    {
+
+        return null;
+    }
+
+    private ArrayList<String> createGlobalArrayWithSize(Variable value)
+    {
+
+        return null;
     }
 
     public String getName()
