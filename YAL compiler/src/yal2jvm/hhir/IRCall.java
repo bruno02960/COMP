@@ -1,5 +1,6 @@
 package yal2jvm.hhir;
 
+import yal2jvm.Yal2jvm;
 import yal2jvm.utils.Utils;
 
 import java.util.ArrayList;
@@ -109,8 +110,7 @@ public class IRCall extends IRNode
     	}
         callInst += ")";
 
-    	//TODO if (this.module == null || this.module.equals())
-        if (this.module == null)
+        if (this.module == null || this.module.equals(Yal2jvm.moduleName))
         {
         	IRModule irModule = (IRModule) findParent("Module");
         	IRMethod irMethod = (IRMethod) irModule.getChild("Method");

@@ -727,6 +727,7 @@ public class HHIR
         SimpleNode simpleNode = (SimpleNode) astdeclaration.jjtGetChild(0);
         Variable variable = null;
         Variable value = null;
+        boolean arraySize = false;
 
         switch (simpleNode.toString())
         {
@@ -747,12 +748,14 @@ public class HHIR
                         value = new Variable((astdeclaration.operator + astscalaraccess.id), Type.VARIABLE);
                     }
 
+                    arraySize = true;
+
                     variable.setType(Type.ARRAY);
                 } else
                 {
                     String str_value = astdeclaration.operator + astdeclaration.integer;
-                    if (!str_value.equals("null"))
-                        value = new Variable(str_value, Type.INTEGER);
+
+                    value = new Variable(str_value, Type.INTEGER);
 
                 }
                 break;
@@ -771,11 +774,20 @@ public class HHIR
                         ASTSCALARACCESS astscalaraccess = (ASTSCALARACCESS) astarraysize.jjtGetChild(0);
                         value = new Variable(astscalaraccess.id, Type.VARIABLE);
                     }
+
+                    arraySize = true;
                 } else
                 {
-                    String str_value = astdeclaration.operator + astdeclaration.integer;
-                    if (!str_value.equals("null"))
-                        value = new Variable(str_value, Type.INTEGER);
+                    String str_value;
+
+                    if(astdeclaration.integer == null) {
+                        str_value = "0";
+                    }
+                    else {
+                        str_value = astdeclaration.operator + astdeclaration.integer;
+                    }
+
+                    value = new Variable(str_value, Type.INTEGER);
                 }
                 break;
         }
@@ -788,7 +800,7 @@ public class HHIR
             System.out.println(variable.getVar() != null ? "name = " + variable.getVar() : "null");
             System.out.println(variable.getType() != null ? "type = " + variable.getType() : "null");
             assert value != null;
-            //System.out.println(value.getVar() != null ? "value = " + value.getVar() : "null");
+            System.out.println(value.getVar() != null ? "value = " + value.getVar() : "null");
             System.out.println();
         }
 
@@ -799,7 +811,12 @@ public class HHIR
                 root.addChild(new IRGlobal(variable, value));
                 break;
             case ARRAY:
-                root.addChild(new IRGlobal(variable, value));
+                if(arraySize) {
+                    root.addChild(new IRGlobal(variable, value, Type.ARRAYSIZE));
+                }
+                else {
+                    root.addChild(new IRGlobal(variable, value));
+                }
                 break;
         }
     }

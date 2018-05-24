@@ -1,7 +1,7 @@
 package yal2jvm.semantic_analysis;
 
+import yal2jvm.Yal2jvm;
 import yal2jvm.ast.*;
-import yal2jvm.hhir.Type;
 import yal2jvm.symbol_tables.FunctionSymbol;
 import yal2jvm.symbol_tables.Symbol;
 import yal2jvm.symbol_tables.VarSymbol;
@@ -10,14 +10,12 @@ import java.util.*;
 
 public class ModuleAnalysis extends Analysis
 {
-
-    public static String moduleName;
     public static boolean hasErrors;
 
     public ModuleAnalysis(SimpleNode ast)
     {
         super(ast, null, new HashMap<>());
-        moduleName = ((ASTMODULE) ast).name;
+        Yal2jvm.moduleName = ((ASTMODULE) ast).name;
     }
 
     public void parse()

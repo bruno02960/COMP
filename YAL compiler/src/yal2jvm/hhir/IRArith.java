@@ -21,7 +21,7 @@ public class IRArith extends IRNode
         ArrayList<String> rhsInst = rhs.getInstructions();
 
         String opInst = null;
-        //TODO: add iinc later + add NOT
+        //TODO: add iinc later
         switch (op)
         {
             case ADD:

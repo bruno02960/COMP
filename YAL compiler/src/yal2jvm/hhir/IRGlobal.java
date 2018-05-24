@@ -6,16 +6,41 @@ public class IRGlobal extends IRNode
 {
     private String name;
     private Type type;
-    private Integer initVal;
-    private String size;
+    private IRNode rhs;
+    boolean arraySize = false;
 
     IRGlobal(Variable variable, Variable value) {
         switch (variable.getType()) {
             case ARRAY:
+                name = variable.getVar();
+                type = Type.ARRAY;
+                if(value.getType().equals(Type.INTEGER))
+                    this.rhs = new IRConstant(value.getVar());
+                else
+                    this.rhs = new IRLoad(value);
                 break;
             case VARIABLE:
+                name = variable.getVar();
+                type = Type.VARIABLE;
+                if(value.getType().equals(Type.INTEGER))
+                    this.rhs = new IRConstant(value.getVar());
+                else
+                    this.rhs = new IRLoad(value);
                 break;
         }
+    }
+
+    IRGlobal(Variable variable, Variable value, Type valueType) {
+
+        assert valueType == Type.ARRAYSIZE;
+
+        name = variable.getVar();
+        type = Type.ARRAY;
+        arraySize = true;
+        if(value.getType().equals(Type.INTEGER))
+            this.rhs = new IRConstant(value.getVar());
+        else
+            this.rhs = new IRLoad(value);
     }
 
     @Override
@@ -28,7 +53,7 @@ public class IRGlobal extends IRNode
         {
             case INTEGER:
             {
-                inst1 += " I = " + (initVal != null ? initVal : 0);
+                inst1 += " I = " + (rhs.initVal != null ? initVal : 0);
                 break;
             }
             case ARRAY:
