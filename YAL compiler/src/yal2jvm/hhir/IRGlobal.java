@@ -9,12 +9,12 @@ public class IRGlobal extends IRNode
     private Integer initVal;
     private String size;
 
-    IRGlobal(Variable variable, Variable value) {
-        switch (variable.getType()) {
-            case ARRAY:
-                break;
-            case VARIABLE:
-                break;
+    IRGlobal(Variable variable, Variable value) 
+    {
+        if (variable.getType() == Type.ARRAY)
+        {
+        	//if assign is size
+        	//if assign is init value
         }
     }
 
@@ -32,7 +32,9 @@ public class IRGlobal extends IRNode
                 break;
             }
             case ARRAY:
-                break;
+            {
+            	break;
+            }
             default:
                 break;
         }
@@ -54,5 +56,16 @@ public class IRGlobal extends IRNode
     public Type getType()
     {
         return this.type;
+    }
+    
+    public ArrayList<String>getInitializationInstructions()
+    {
+		ArrayList<String> inst = new ArrayList<>();
+		
+		//if size
+		
+		//else if init 
+		
+		return inst;
     }
 }
