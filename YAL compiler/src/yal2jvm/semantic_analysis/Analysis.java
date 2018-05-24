@@ -1,5 +1,6 @@
 package yal2jvm.semantic_analysis;
 
+import yal2jvm.Yal2jvm;
 import yal2jvm.ast.*;
 import yal2jvm.hhir.Type;
 import yal2jvm.symbol_tables.*;
@@ -160,7 +161,7 @@ public abstract class Analysis
     private VarSymbol parseCall(ASTCALL callTree)
     {
         String module = callTree.module;
-        if (module != null && !module.equals(ModuleAnalysis.moduleName))
+        if (module != null && !module.equals(Yal2jvm.moduleName))
         {
             if (callTree.jjtGetNumChildren() > 0)
             {

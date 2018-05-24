@@ -108,3 +108,4 @@ public class IRGlobal extends IRNode
 		return inst;
     }
 }
+
