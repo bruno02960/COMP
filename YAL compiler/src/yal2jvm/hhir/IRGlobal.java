@@ -59,35 +59,46 @@ public class IRGlobal extends IRNode
 
     private ArrayList<String> createGlobalInteger()
     {
-        ArrayList<String>
+        ArrayList<String> insts = new ArrayList<>();
         String inst = ".field public static " + name;
-        inst += " I = " + (value != null ? value.getValue() : 0);
+        inst += " I = " + (value != null ? value.getVar() : 0);
+        insts.add(inst);
 
-        return new ArrayList<String>().add(inst);
-    }
-
-    private ArrayList<String> assignVar(Variable value)
-    {
-
-        return null;
-    }
-
-    private ArrayList<String> assignAllArrayElements(Variable value)
-    {
-
-        return null;
+        return insts;
     }
 
     private ArrayList<String> createGlobalArray()
     {
+        ArrayList<String> insts = new ArrayList<>();
+        String inst = ".field public static " + name;
+        inst += " I = " + (value != null ? value.getVar() : 0);
+        insts.add(inst);
 
-        return null;
+        return insts;
+    }
+
+    private ArrayList<String> assignVar(Variable value)
+    {
+        ArrayList<String> insts = new ArrayList<>();
+
+
+        return insts;
+    }
+
+    private ArrayList<String> assignAllArrayElements(Variable value)
+    {
+        ArrayList<String> insts = new ArrayList<>();
+
+
+        return insts;
     }
 
     private ArrayList<String> createGlobalArrayWithSize(Variable value)
     {
+        ArrayList<String> insts = new ArrayList<>();
 
-        return null;
+
+        return insts;
     }
 
     public String getName()
