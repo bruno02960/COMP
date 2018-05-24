@@ -123,6 +123,9 @@ public class IRGlobal extends IRNode
         staticArraysInstructions.add("arraylength");
         staticArraysInstructions.add("ldc -1");
         staticArraysInstructions.add("iinc");
+        staticArraysInstructions.add("goto end");
+        staticArraysInstructions.add("goto end");
+        staticArraysInstructions.add("iflt");
         staticArraysInstructions.addAll(globalVariableJVMCode);
         staticArraysInstructions.add("iastore");
         //TODO CONTINUE
