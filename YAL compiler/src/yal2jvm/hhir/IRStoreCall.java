@@ -4,13 +4,15 @@ import java.util.ArrayList;
 
 public class IRStoreCall extends IRStore
 {
+    // a = f();
     public IRStoreCall(String name)
     {
         this.name = name;
         this.nodeType = "StoreCall";
     }
 
-    public IRStoreCall(VariableArray name) //for arrays
+    // a[i] = f();
+    public IRStoreCall(VariableArray name)
     {
         this.name = name.getVar();
         this.nodeType = "StoreCall";
@@ -24,7 +26,7 @@ public class IRStoreCall extends IRStore
         ArrayList<IRNode> childs = getChildren(); //one and only one child, an IRCall
         IRCall irCall = (IRCall) childs.get(0);
         inst.addAll(irCall.getInstructions());
-        inst.addAll(getInstForStoring());
+        inst.addAll(getInstForStoring(false, null));
 
         return inst;
     }

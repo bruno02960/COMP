@@ -15,9 +15,11 @@ public class IRStoreArith extends IRStore
     }
 
     //a[i] = b + c;
-    public IRStoreArith(VariableArray name, Operation op) //TODO for arrays
+    public IRStoreArith(VariableArray name, Operation op)
     {
         this.name = name.getVar();
+        this.arrayAccess = true;
+        this.index = new IRLoad(name.getAt());
         this.nodeType = "StoreArith";
         irArith = new IRArith(op);
     }
@@ -48,7 +50,7 @@ public class IRStoreArith extends IRStore
         ArrayList<String> inst = new ArrayList<>();
 
         ArrayList<String> arithInst = irArith.getInstructions();
-        ArrayList<String> storeInst = getInstForStoring();
+        ArrayList<String> storeInst = getInstForStoring(arrayAccess, index);
 
         inst.addAll(arithInst);
         inst.addAll(storeInst);
