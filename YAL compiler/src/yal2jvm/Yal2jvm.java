@@ -60,7 +60,7 @@ public class Yal2jvm
         if (inputFile != null && validInput)
             validInput = inputFile.endsWith(".yal");
 
-        if (!validInput || inputFile != null)
+        if (!validInput || inputFile == null)
         {
             System.out.println("Insufficient or incorrect arguments for the Yal2jvm compiler");
             System.out.println("\nUsage:\tjava Yal2jvm [-r=<0..255>] [-o] [-S] <input_file.yal>\n");
