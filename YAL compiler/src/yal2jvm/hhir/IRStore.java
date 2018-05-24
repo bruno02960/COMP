@@ -5,20 +5,23 @@ import java.util.ArrayList;
 public abstract class IRStore extends IRNode
 {
     protected String name;
+    protected boolean arrayAccess = false;
+    protected IRLoad index = null;
+    private int register;
 
-    protected ArrayList<String> getInstForStoring()
+    protected ArrayList<String> getInstForStoring(boolean arrayAccess, IRLoad index)
     {
         ArrayList<String> inst = new ArrayList<>();
 
         //check if storage variable exists, and if so get its register
-        int storeReg = ((IRMethod) parent).getVarRegister(name);
+        register = ((IRMethod) parent).getVarRegister(name);
 
         //if not, check if it is one of the method's arguments
-        if (storeReg == -1)
-            storeReg = ((IRMethod) parent).getArgumentRegister(name);
+        if (register == -1)
+            register = ((IRMethod) parent).getArgumentRegister(name);
 
         //code for global
-        if (storeReg == -1)
+        if (register == -1)
         {
         	IRModule module = (IRModule)findParent("Module");
         	IRGlobal global = module.getGlobal(name);
@@ -33,17 +36,22 @@ public abstract class IRStore extends IRNode
         	}
         }
         //if storage variable does not exist, allocate it
-        if (storeReg == -1)
+        if (register == -1)
         {
             IRAllocate storeVar = new IRAllocate(name, new Variable("0", Type.INTEGER));
             parent.addChild(storeVar);
-            storeReg = storeVar.getRegister();
+            register = storeVar.getRegister();
         }
 
-        inst.add(getInstructionToStoreRegisterToStack(storeReg));
+        if(arrayAccess)
+            inst.addAll(setArrayElement(index, register));
+        else
+            inst.add(getInstructionToStoreRegisterToStack(register));
 
         return inst;
     }
+
+
 
 
     protected String getInstructionToStoreRegisterToStack(int registerNumber)

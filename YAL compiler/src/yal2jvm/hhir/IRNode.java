@@ -114,4 +114,14 @@ public abstract class IRNode
 
         return null;
     }
+
+    protected ArrayList<String> setArrayElement(IRNode index, int register)
+    {
+        ArrayList<String> inst = new ArrayList<>();
+        inst.add(getInstructionToLoadArrayFromRegisterToStack(register));
+        inst.addAll(index.getInstructions());
+        inst.add("iastore");
+
+        return inst;
+    }
 }

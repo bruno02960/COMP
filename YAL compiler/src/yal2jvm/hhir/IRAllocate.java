@@ -95,7 +95,6 @@ public class IRAllocate extends IRNode
 		        initRegister();
         }
 
-        //TODO VER SE REALMETE INICILAIZA A 0 SOZINHO
         if(type == Type.ARRAYSIZE)
         {
             inst.addAll(rhs.getInstructions());
@@ -163,7 +162,7 @@ public class IRAllocate extends IRNode
             else
             {
                 if(lhsIndex != null) // a[i] = 5;
-                    inst.addAll(setArrayElement());
+                    inst.addAll(setArrayElement(lhsIndex, register));
                 else
                     inst.add(getInstructionToStoreArrayInRegister(this.register)); // i = [5];
             }
@@ -172,7 +171,8 @@ public class IRAllocate extends IRNode
         return inst;
 	}
 
-    private ArrayList<String> setArrayElement()
+	//TODO MOVED TO IRNode, mas aquele inst.addAll(rhsIndex.getInstructions()); acho que nao faz sen
+   /* private ArrayList<String> setArrayElement()
     {
         ArrayList<String> inst = new ArrayList<>();
         inst.add(getInstructionToLoadArrayFromRegisterToStack(this.register));
@@ -181,7 +181,7 @@ public class IRAllocate extends IRNode
         inst.add("iastore");
 
         return inst;
-    }
+    }*/
 
     private ArrayList<String> setAllArrayElements()
     {
@@ -192,6 +192,9 @@ public class IRAllocate extends IRNode
             System.out.println("Internal error! The program will be closed.");
             System.exit(-1);
         }
+
+        inst.add(getInstructionToLoadArrayFromRegisterToStack(irAllocate.getRegister()));
+
 
 
         return inst;
