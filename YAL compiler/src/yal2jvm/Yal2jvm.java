@@ -15,7 +15,6 @@ import yal2jvm.utils.Utils;
 
 public class Yal2jvm
 {
-
     private static final int MAX_LOCAL_VARS = 255;
 
 
@@ -137,7 +136,7 @@ public class Yal2jvm
             int noErrors = YalParser.errorCounter.getNoErrors();
             if (noErrors > 0)
             {
-                if (noErrors == 10)
+                if (noErrors >= 10)
                     System.err.println("At least 10 errors found!");
                 else
                     System.err.println(noErrors + " errors found!");
