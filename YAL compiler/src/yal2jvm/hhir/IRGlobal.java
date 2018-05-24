@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 public class IRGlobal extends IRNode
 {
+    private boolean arraySize = false;
     private String name;
     private Type type;
     private Variable value = null;
@@ -18,6 +19,13 @@ public class IRGlobal extends IRNode
     {
         this(variable);
         this.value = value;
+    }
+
+    public IRGlobal(Variable variable, Variable value, Type arraySize)
+    {
+        this(variable, value);
+        assert arraySize == Type.ARRAYSIZE;
+        this.arraySize = true;
     }
 
     @Override
