@@ -4,13 +4,15 @@ import java.util.ArrayList;
 
 public class IRStoreCall extends IRStore
 {
+    // a = f();
     public IRStoreCall(String name)
     {
         this.name = name;
         this.nodeType = "StoreCall";
     }
 
-    public IRStoreCall(VariableArray name) //for arrays
+    // a[i] = f();
+    public IRStoreCall(VariableArray name)
     {
         this.name = name.getVar();
         this.nodeType = "StoreCall";

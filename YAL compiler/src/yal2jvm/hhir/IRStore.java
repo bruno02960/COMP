@@ -27,15 +27,24 @@ public abstract class IRStore extends IRNode
         	IRGlobal global = module.getGlobal(name);
         	if (global != null)
         	{
-        		String type = global.getType() == Type.INTEGER ? "I" : "A";
-        		String moduleName = module.getName();
-        		
-        		String storeInst = "putstatic " + moduleName + "/" + name + " " + type;
-        		inst.add(storeInst);
+        		if(global.getType() == Type.INTEGER)
+                {
+                    String moduleName = module.getName();
+                    String storeInst = "putstatic " + moduleName + "/" + name + " I";
+                    inst.add(storeInst);
+                }
+                else
+                {
+                    inst.add(getInstructionToLoadArrayFromRegisterToStack(register)); // aload register
+                    inst.addAll(index.getInstructions()); //  ldc index
+                    inst.add("iastore");
+                }
+
         		return inst;
         	}
         }
-        //if storage variable does not exist, allocate it
+
+        //if storage variable does not exist (locally or globally), allocate it
         if (register == -1)
         {
             IRAllocate storeVar = new IRAllocate(name, new Variable("0", Type.INTEGER));
@@ -50,9 +59,6 @@ public abstract class IRStore extends IRNode
 
         return inst;
     }
-
-
-
 
     protected String getInstructionToStoreRegisterToStack(int registerNumber)
     {
