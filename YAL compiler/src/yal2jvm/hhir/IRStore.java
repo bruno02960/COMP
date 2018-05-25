@@ -9,7 +9,7 @@ public abstract class IRStore extends IRNode
     protected IRLoad index = null;
     private int register;
 
-    protected ArrayList<String> getInstForStoring(boolean arrayAccess, IRLoad index)
+    protected ArrayList<String> getInstForStoring(boolean arrayAccess, IRLoad index, IRNode value)
     {
         ArrayList<String> inst = new ArrayList<>();
 
@@ -34,6 +34,7 @@ public abstract class IRStore extends IRNode
                 }
                 else
                 {
+                    //VER AQUI É GLOBAL----CORRIGIR
                     inst.add(getInstructionToLoadArrayFromRegisterToStack(register)); // aload register
                     inst.addAll(index.getInstructions()); //  ldc index
                     inst.add("iastore");
@@ -52,7 +53,10 @@ public abstract class IRStore extends IRNode
         }
 
         if(arrayAccess)
-            inst.addAll(setArrayElementByIRNode(index, register));
+        {
+            inst.add("pop");
+            inst.addAll(setArrayElementByIRNode(index, register, value));
+        }
         else
             inst.add(getInstructionToStoreRegisterToStack(register));
 

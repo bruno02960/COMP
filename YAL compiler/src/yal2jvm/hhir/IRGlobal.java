@@ -16,6 +16,7 @@ public class IRGlobal extends IRNode
     {
         this.name = variable.getVar();
         this.type = variable.getType();
+        this.nodeType = "Global";
     }
 
     public IRGlobal(Variable variable, Variable value)
@@ -48,7 +49,10 @@ public class IRGlobal extends IRNode
                 if(arraySize) // a[] = [50];
                     return createGlobalArrayWithSize(value);
                 else // a[] = 50;
-                    return assignAllArrayElements(value);
+                {
+                    assignAllArrayElements(value);
+                    return new ArrayList<String>();
+                }
             }
             else // a = ...
             {
@@ -110,10 +114,9 @@ public class IRGlobal extends IRNode
         return valueNode;
     }
 
-    private ArrayList<String> assignAllArrayElements(Variable value)
+    private void assignAllArrayElements(Variable value)
     {
         IRNode valueNode = getValueIRNode(value);
-
         IRMethod method = (IRMethod) findParent("Method");
         ArrayList<String> globalVariableJVMCode = getGlobalVariable(name, method);
 
@@ -124,19 +127,12 @@ public class IRGlobal extends IRNode
         staticArraysInstructions.add("isub");
         staticArraysInstructions.add("dup");
         staticArraysInstructions.add("iflt end");
-        staticArraysInstructions.addAll(valueNode.getInstructions());
         staticArraysInstructions.addAll(globalVariableJVMCode);
+        staticArraysInstructions.add("swap");
+        staticArraysInstructions.addAll(valueNode.getInstructions());
         staticArraysInstructions.add("iastore");
         staticArraysInstructions.add("goto init");
         staticArraysInstructions.add("end:");
-        //TODO CONTINUE
-
-
-
-        ArrayList<String> insts = new ArrayList<>();
-
-
-        return insts;
     }
 
     public String getName()
@@ -152,6 +148,11 @@ public class IRGlobal extends IRNode
     public Type getType()
     {
         return this.type;
+    }
+
+    public ArrayList<String> getStaticArraysInstructions()
+    {
+        return staticArraysInstructions;
     }
     
     public ArrayList<String>getInitializationInstructions()

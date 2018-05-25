@@ -50,7 +50,7 @@ public class IRStoreArith extends IRStore
         ArrayList<String> inst = new ArrayList<>();
 
         ArrayList<String> arithInst = irArith.getInstructions();
-        ArrayList<String> storeInst = getInstForStoring(arrayAccess, index);
+        ArrayList<String> storeInst = getInstForStoring(arrayAccess, index, irArith);
 
         inst.addAll(arithInst);
         inst.addAll(storeInst);

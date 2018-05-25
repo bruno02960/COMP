@@ -115,16 +115,17 @@ public abstract class IRNode
         return null;
     }
 
-    protected ArrayList<String> setArrayElementByIRNode(IRNode index, int register)
+    protected ArrayList<String> setArrayElementByIRNode(IRNode index, int register, IRNode value)
     {
-      return  setArrayElement(index.getInstructions(), register);
+      return  setArrayElement(index.getInstructions(), register, value);
     }
 
-    protected ArrayList<String> setArrayElement(ArrayList<String> indexInstructions, int register)
+    protected ArrayList<String> setArrayElement(ArrayList<String> indexInstructions, int register, IRNode value)
     {
         ArrayList<String> inst = new ArrayList<>();
         inst.add(getInstructionToLoadArrayFromRegisterToStack(register));
         inst.addAll(indexInstructions);
+        inst.addAll(value.getInstructions());
         inst.add("iastore");
 
         return inst;
