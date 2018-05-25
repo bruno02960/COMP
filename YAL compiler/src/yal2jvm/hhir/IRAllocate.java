@@ -1,5 +1,7 @@
 package yal2jvm.hhir;
 
+import yal2jvm.Yal2jvm;
+
 import java.util.ArrayList;
 
 public class IRAllocate extends IRNode
@@ -158,9 +160,8 @@ public class IRAllocate extends IRNode
         ArrayList<String> inst = new ArrayList<>();
 		if (this.storeVarGlobal)
 		{
-			IRModule module = (IRModule)findParent("Module");
 			String varType = type == Type.INTEGER ? "I" : "A";
-			inst.add("putstatic " + module.getName() + "/" + name + " " + varType);
+			inst.add("putstatic " + Yal2jvm.moduleName + "/" + name + " " + varType);
 		}
 		else
 		{
@@ -176,7 +177,7 @@ public class IRAllocate extends IRNode
             else
             {
                 if(lhsIndex != null) // a[i] = 5;
-                    inst.addAll(setArrayElement(lhsIndex, register));
+                    inst.addAll(setArrayElementByIRNode(lhsIndex, register));
                 else
                     inst.add(getInstructionToStoreArrayInRegister(this.register)); // i = [5];
             }
@@ -186,7 +187,7 @@ public class IRAllocate extends IRNode
 	}
 
 	//TODO MOVED TO IRNode, mas aquele inst.addAll(rhsIndex.getInstructions()); acho que nao faz sen
-   /* private ArrayList<String> setArrayElement()
+   /* private ArrayList<String> setArrayElementByIRNode()
     {
         ArrayList<String> inst = new ArrayList<>();
         inst.add(getInstructionToLoadArrayFromRegisterToStack(this.register));

@@ -121,13 +121,38 @@ public abstract class IRNode
         return null;
     }
 
-    protected ArrayList<String> setArrayElement(IRNode index, int register)
+    protected ArrayList<String> setArrayElementByIRNode(IRNode index, int register)
+    {
+      return  setArrayElement(index.getInstructions(), register);
+    }
+
+    protected ArrayList<String> setArrayElement(ArrayList<String> indexInstructions, int register)
     {
         ArrayList<String> inst = new ArrayList<>();
         inst.add(getInstructionToLoadArrayFromRegisterToStack(register));
-        inst.addAll(index.getInstructions());
+        inst.addAll(indexInstructions);
         inst.add("iastore");
 
         return inst;
     }
+
+    protected ArrayList<String> getGlobalVariable(String name, IRMethod method)
+    {
+        ArrayList<String> inst = new ArrayList<>();
+        IRModule module = ((IRModule) method.getParent());
+        IRGlobal global = module.getGlobal(name);
+        if (global == null)
+        {
+            System.out.println("Internal error! The program will be closed.");
+            System.exit(-1);
+        }
+
+        String in = "getstatic " + module.getName() + "/" + global.getName() + " ";
+        in += global.getType() == Type.INTEGER ? "I" : "A";
+        inst.add(in);
+
+        return inst;
+    }
+
+
 }

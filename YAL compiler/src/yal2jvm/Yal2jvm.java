@@ -17,7 +17,6 @@ public class Yal2jvm
 {
     private static final int MAX_LOCAL_VARS = 255;
 
-
     public static String moduleName;
     private int localVars;
     private boolean optimize;

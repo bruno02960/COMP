@@ -18,21 +18,17 @@ public class IRReturn extends IRNode
     public ArrayList<String> getInstructions()
     {
         ArrayList<String> inst = new ArrayList<>();
-        switch (type)
+        if(type == Type.VOID)
+            inst.add("return");
+        else
         {
-            case VOID:
-                inst.add("return");
-                break;
-
-            case INTEGER:
-                IRLoad irLoad = new IRLoad(name);
-                addChild(irLoad);
-                inst.addAll(irLoad.getInstructions());
+            IRLoad irLoad = new IRLoad(name, type);
+            addChild(irLoad);
+            inst.addAll(irLoad.getInstructions());
+            if(type == Type.ARRAY)
+                inst.add("areturn");
+            else
                 inst.add("ireturn");
-                break;
-
-            case ARRAY:
-                System.out.println("Not generating HHIR for return value ARRAY yet.");
         }
 
         return inst;

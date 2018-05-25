@@ -12,14 +12,22 @@ public class IRLoad extends IRNode
 
     public IRLoad(String name)
     {
+        //TODO distinguir arrays de intgers mas como? informaçao interna?
         this.name = name;
         this.nodeType = "Load";
+    }
+
+    public IRLoad(String name, Type type)
+    {
+        //TODO distinguir arrays de intgers mas como? informaçao interna?
+        this(name);
+        this.type = type;
     }
 
     public IRLoad(Variable value)
     {
         this(value.getVar());
-        this.type = Type.INTEGER; //assumes tpe is integer and changes if needed
+        this.type = Type.INTEGER; //assumes type is integer and changes if needed
         if(value.isSizeAccess())
         {
             arraySizeAccess = true;
@@ -57,33 +65,25 @@ public class IRLoad extends IRNode
             register = method.getArgumentRegister(name);
         if (register > -1)	//variable is local
         {
-            inst.add(getInstructionToLoadIntFromRegisterToStack(register));
-            if(arraySizeAccess)
-                inst.add("arraylength");
-            else if(index != null)
-                inst.addAll(index.getInstructions());
-        }
-        else  //variable is global
-        {
-            IRModule module = ((IRModule) method.getParent());
-            IRGlobal global = module.getGlobal(name);
-            if (global == null)
+            if(type == Type.INTEGER)
+                inst.add(getInstructionToLoadIntFromRegisterToStack(register));
+            else
             {
-                System.out.println("Internal error! The program will be closed.");
-                System.exit(-1);
+                inst.add(getInstructionToLoadArrayFromRegisterToStack(register));
+                if(arraySizeAccess)
+                    inst.add("arraylength");
+                else if(index != null)
+                    inst.addAll(index.getInstructions());
             }
 
-            String in = "getstatic " + module.getName() + "/" + global.getName() + " ";
-            in += global.getType() == Type.INTEGER ? "I" : "A";
-            inst.add(in);
         }
-
-
+        else  //variable is global
+            inst.addAll(getGlobalVariable(name, method));
 
         return inst;
     }
 
-	public Type getType()
+    public Type getType()
 	{
 		return type;
 	}
