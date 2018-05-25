@@ -12,14 +12,14 @@ public class IRLoad extends IRNode
 
     public IRLoad(String name)
     {
-        //TODO distinguir arrays de intgers mas como? informaçao interna?
+        //TODO distinguir arrays de intgers mas como? informaçao interna? acho que ja nao ha prob
         this.name = name;
         this.nodeType = "Load";
     }
 
     public IRLoad(String name, Type type)
     {
-        //TODO distinguir arrays de intgers mas como? informaçao interna?
+        //TODO distinguir arrays de intgers mas como? informaçao interna? acho que ja nao ha prob
         this(name);
         this.type = type;
     }
@@ -73,7 +73,10 @@ public class IRLoad extends IRNode
                 if(arraySizeAccess)
                     inst.add("arraylength");
                 else if(index != null)
+                {
                     inst.addAll(index.getInstructions());
+                    inst.add("iaload");
+                }
             }
 
         }

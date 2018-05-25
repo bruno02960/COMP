@@ -117,10 +117,11 @@ public class IRAllocate extends IRNode
         {
             inst.addAll(rhs.getInstructions());
             inst.add("newarray int");
+            inst.addAll(getStoreInst());
         }
         else
         {
-            inst.addAll(rhs.getInstructions());
+            inst.addAll(getStoreInst());
         }
 
         //TODO: remove if not necessary
@@ -153,8 +154,6 @@ public class IRAllocate extends IRNode
     		}
     		inst.add(IRConstant.getLoadConstantInstruction(this.value));
     	}*/
-
-    	inst.addAll(getStoreInst());
 
         return inst;
     }
