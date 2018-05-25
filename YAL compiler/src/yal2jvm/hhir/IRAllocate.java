@@ -205,7 +205,7 @@ public class IRAllocate extends IRNode
     {
         ArrayList<String> inst = new ArrayList<>();
         IRAllocate irAllocate = getVarIfExists(name);
-        if(irAllocate !=  null) // TODO ver o que fazer aqui, usar um for em jvm??
+        if(irAllocate !=  null)
         {
             System.out.println("Internal error! The program will be closed.");
             System.exit(-1);

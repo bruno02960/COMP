@@ -155,5 +155,27 @@ public abstract class IRNode
         return inst;
     }
 
+    protected ArrayList<String> getCodeForSetAllArrayElements(ArrayList<String> arrayRefJVMCode,
+                                                              ArrayList<String> valueJVMCode )
+    {
+        ArrayList<String> inst = new ArrayList<>();
+
+        inst.addAll(arrayRefJVMCode);
+        inst.add("arraylength");
+        inst.add("init:");
+        inst.add("iconst_1");
+        inst.add("isub");
+        inst.add("dup");
+        inst.add("iflt end");
+        inst.addAll(arrayRefJVMCode);
+        inst.add("swap");
+        inst.addAll(valueJVMCode);
+        inst.add("iastore");
+        inst.add("goto init");
+        inst.add("end:");
+
+        return inst;
+    }
+
 
 }

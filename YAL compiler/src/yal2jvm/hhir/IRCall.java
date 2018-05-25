@@ -69,9 +69,11 @@ public class IRCall extends IRNode
          			break;
          		}
          		case ARRAY:
-         		{
-         			break;
-         		}
+                {
+                    IRLoad irLoad = new IRLoad(arg.getString(), Type.ARRAY);
+                    inst.addAll(irLoad.getInstructions());
+                    break;
+                }
          		default:
          			break;
          	}
