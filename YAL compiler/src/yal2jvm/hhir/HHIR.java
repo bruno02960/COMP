@@ -285,8 +285,8 @@ public class HHIR
 
          */
 
-        String labelTrue = "if_" + irmethod.getName() + "_true" + root.getAndIncrementCurrLabelNumber();
-        createExprTestHHIR(astIf, irmethod, labelTrue);
+        String labelTrue = "else_" + irmethod.getName() + root.getAndIncrementCurrLabelNumber();
+        createExprTestHHIR(astIf, irmethod, labelTrue, false);
 
         //false body
         if(astIf.jjtGetNumChildren() > 2)
@@ -298,7 +298,7 @@ public class HHIR
 
         //jump end
         String labelEnd = "if_" + irmethod.getName() + "_end" + root.getAndIncrementCurrLabelNumber();
-        createJumpEndHHIR(irmethod, "if");
+        createJumpEndHHIR(irmethod, labelEnd);
 
         //label true
         IRLabel irLabelTrue = new IRLabel(labelTrue);
@@ -410,10 +410,7 @@ public class HHIR
 
         //test
         String labelEnd = "while_" + irmethod.getName() + "_end" + root.getAndIncrementCurrLabelNumber();
-        createExprTestHHIR(astWhile, irmethod, labelEnd);
-
-        //jump end
-        createJumpEndHHIR(irmethod, labelEnd);
+        createExprTestHHIR(astWhile, irmethod, labelEnd, true);
 
         //body
         ASTSTATEMENTS astStatements = (ASTSTATEMENTS) astWhile.jjtGetChild(1);
@@ -432,10 +429,10 @@ public class HHIR
         irmethod.addChild(irJump);
     }
 
-    private void createExprTestHHIR(Node astNode, IRMethod irmethod, String label)
+    private void createExprTestHHIR(Node astNode, IRMethod irmethod, String label, boolean invert)
     {
         ASTEXPRTEST astExprtest = (ASTEXPRTEST) astNode.jjtGetChild(0);
-        IRComparison irComparison = new IRComparison(astExprtest.operation, label, false);
+        IRComparison irComparison = new IRComparison(astExprtest.operation, label, invert);
 
         ASTLHS astLhs = (ASTLHS) astExprtest.jjtGetChild(0);
         IRNode lhsIrNode = getLhsIRNode(astLhs);

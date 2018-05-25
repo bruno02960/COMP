@@ -61,24 +61,23 @@ public class IRComparison extends IRNode
 		
 		String branchInst = "";
 		
-		if (isConstantZero(rhs) || isConstantZero(lhs))
+		if (isConstantZero(rhs))
 		{
-			ArrayList<String> loadInst = isConstantZero(rhs) ? lhs.getInstructions() : rhs.getInstructions();
-			inst.addAll(loadInst);
+			inst.addAll(lhs.getInstructions());
 			
 			branchInst = getZeroComparison();
 		}
 		else if (useArrayOperations())
 		{
-			inst.addAll(rhs.getInstructions());
 			inst.addAll(lhs.getInstructions());
-			
+			inst.addAll(rhs.getInstructions());
+
 			branchInst = getArrayComparison();
 		}
 		else
 		{
-			inst.addAll(rhs.getInstructions());
 			inst.addAll(lhs.getInstructions());
+			inst.addAll(rhs.getInstructions());
 			
 			branchInst = getIntegerComparison();
 		}

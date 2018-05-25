@@ -176,9 +176,9 @@ public class Yal2jvm
         try
         {
             Runtime.getRuntime().exec("java -jar jasmin.jar " + fileName).waitFor();
-            File file = new File(fileName);
             if(!keepJFile)
             {
+                File file = new File(fileName);
                 file.delete();
             }
         }
