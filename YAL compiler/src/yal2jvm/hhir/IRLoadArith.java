@@ -10,6 +10,7 @@ public class IRLoadArith extends IRNode
     {
         this.nodeType = "LoadArith";
         irArith = new IRArith(op);
+        this.addChild(irArith);
     }
 
     public IRNode getRhs()

@@ -12,6 +12,7 @@ public class IRStoreArith extends IRStore
         this.name = name;
         this.nodeType = "StoreArith";
         irArith = new IRArith(op);
+        this.addChild(irArith);
     }
 
     //a[i] = b + c;
@@ -22,6 +23,8 @@ public class IRStoreArith extends IRStore
         this.index = new IRLoad(name.getAt());
         this.nodeType = "StoreArith";
         irArith = new IRArith(op);
+        this.addChild(index);
+        this.addChild(irArith);
     }
 
     public IRNode getRhs()

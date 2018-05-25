@@ -1,11 +1,5 @@
 module Test
 {
-	a[] = [3];
-	a = 4;
-	z[];
-	b = [a.size];
-	d = [3];
-	
 	function f1()
 	{
 		a[0] = 4;

@@ -23,6 +23,8 @@ public class IRAllocate extends IRNode
             this.rhs = new IRConstant(value.getVar());
         else
             this.rhs = new IRLoad(value);
+
+        this.addChild(this.rhs);
     }
 
     //a = [5];
@@ -37,6 +39,8 @@ public class IRAllocate extends IRNode
             this.rhs = new IRConstant(value.getVar());
         else
             this.rhs = new IRLoad(value);
+
+        this.addChild(this.rhs);
     }
 
     //a[i] = 5;
@@ -50,6 +54,9 @@ public class IRAllocate extends IRNode
             this.rhs = new IRConstant(value.getVar());
         else
             this.rhs = new IRLoad(value);
+
+        this.addChild(this.rhs);
+        this.addChild(this.lhsIndex);
     }
 
     //a = b[5];
@@ -59,6 +66,8 @@ public class IRAllocate extends IRNode
         this.name = name.getVar();
         this.type = Type.INTEGER;
         this.rhs = new IRLoad(value);
+
+        this.addChild(this.rhs);
     }
 
     //a[i] = b[5];
@@ -69,6 +78,9 @@ public class IRAllocate extends IRNode
         this.type = Type.ARRAY;
         this.lhsIndex = new IRLoad(name.getAt());
         this.rhs = new IRLoad(value);
+
+        this.addChild(this.lhsIndex);
+        this.addChild(this.rhs);
     }
 
     public Type getType()
@@ -104,6 +116,8 @@ public class IRAllocate extends IRNode
         {
             inst.addAll(rhs.getInstructions());
         }
+
+        //TODO: remove if not necessary
  /*
         //assign a variable
     	if (this.variable != null)
@@ -194,8 +208,6 @@ public class IRAllocate extends IRNode
         }
 
         inst.add(getInstructionToLoadArrayFromRegisterToStack(irAllocate.getRegister()));
-
-
 
         return inst;
     }

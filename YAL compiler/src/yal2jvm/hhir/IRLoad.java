@@ -32,6 +32,8 @@ public class IRLoad extends IRNode
         this(value.getVar());
         this.type = value.getType();
         index = new IRLoad(value.getAt());
+
+        this.addChild(index);
     }
 
     public int getRegister()

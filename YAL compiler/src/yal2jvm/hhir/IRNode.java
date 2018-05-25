@@ -100,7 +100,13 @@ public abstract class IRNode
 
     protected IRAllocate getVarIfExists(String varName)
     {
-        IRMethod method = (IRMethod)this.parent;
+        IRNode parent = this.parent;
+
+        while(parent.nodeType != "Method") {
+            parent = parent.parent;
+        }
+
+        IRMethod method = (IRMethod)parent;
         ArrayList<IRNode> children = method.getChildren();
         for (int i = 0; i < children.size(); i++)
         {

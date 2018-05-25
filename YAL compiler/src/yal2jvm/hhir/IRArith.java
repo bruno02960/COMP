@@ -10,6 +10,7 @@ public class IRArith extends IRNode
     public IRArith(Operation op)
     {
         this.op = op;
+        this.nodeType = "Arith";
     }
 
     @Override

@@ -728,6 +728,7 @@ public class HHIR
         Variable variable = null;
         Variable value = null;
         boolean arraySize = false;
+        boolean initialized = true;
 
         switch (simpleNode.toString())
         {
@@ -755,7 +756,12 @@ public class HHIR
                 {
                     String str_value = astdeclaration.operator + astdeclaration.integer;
 
-                    value = new Variable(str_value, Type.INTEGER);
+                    if(astdeclaration.integer == null) {
+                        initialized = false;
+                    }
+                    else {
+                        value = new Variable(str_value, Type.INTEGER);
+                    }
 
                 }
                 break;
@@ -781,13 +787,12 @@ public class HHIR
                     String str_value;
 
                     if(astdeclaration.integer == null) {
-                        str_value = "0";
+                        initialized = false;
                     }
                     else {
                         str_value = astdeclaration.operator + astdeclaration.integer;
+                        value = new Variable(str_value, Type.INTEGER);
                     }
-
-                    value = new Variable(str_value, Type.INTEGER);
                 }
                 break;
         }
@@ -799,9 +804,13 @@ public class HHIR
             assert variable != null;
             System.out.println(variable.getVar() != null ? "name = " + variable.getVar() : "null");
             System.out.println(variable.getType() != null ? "type = " + variable.getType() : "null");
-            assert value != null;
+            if (value != null)
             System.out.println(value.getVar() != null ? "value = " + value.getVar() : "null");
             System.out.println();
+        }
+
+        if(!initialized) {
+            root.addChild(new IRGlobal(variable));
         }
 
         assert variable != null;
