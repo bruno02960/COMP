@@ -31,10 +31,27 @@ public class IRConstant extends IRNode
 
     public static String getLoadConstantInstruction(int value)
     {
-        if(value < 6)
-            return "iconst_" + value;
-        else
-            return "ldc " + value;
+        if(value < 6 && value > -2) {
+            if(value == -1) {
+                return "iconst_m1";
+            }
+            else {
+                return "iconst_" + value;
+            }
+        }
+        else {
+            if (value < 32768 && value > -32769) {
+                if(value < 128 && value > -129 ) {
+                    return "bipush " + value;
+                }
+                else {
+                    return "sipush " + value;
+                }
+            }
+            else {
+                return "ldc " + value;
+            }
+        }
     }
 
 	public String getValue()

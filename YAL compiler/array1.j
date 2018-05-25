@@ -44,7 +44,7 @@ return
 .method public static main([Ljava/lang/String;)V
 .limit locals 255
 .limit stack 20
-ldc 10
+bipush 10
 invokestatic array1/print_array(I)V
 return
 .end method

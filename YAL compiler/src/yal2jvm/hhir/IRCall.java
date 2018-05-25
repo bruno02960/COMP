@@ -102,6 +102,7 @@ public class IRCall extends IRNode
 				}
 				case ARRAY:
 				{
+					callInst += "[I";
 					break;
 				}
 				default:
