@@ -18,7 +18,7 @@ public class IRAllocate extends IRNode
 	//a = 1;
     public IRAllocate(String name, Variable value)
     {
-
+        this.type = Type.INTEGER;
         this.nodeType = "Allocate";
         this.name = name;
         if(value.getType().equals(Type.INTEGER))
@@ -34,6 +34,7 @@ public class IRAllocate extends IRNode
     {
         assert arraySize == Type.ARRAYSIZE;
 
+        this.type = Type.ARRAY;
         this.nodeType = "Allocate";
         this.name = name;
         this.type = Type.ARRAYSIZE;
@@ -48,6 +49,7 @@ public class IRAllocate extends IRNode
     //a[i] = 5;
     IRAllocate(VariableArray name, Variable value)
     {
+        this.type = Type.ARRAY;
         this.nodeType = "Allocate";
         this.name = name.getVar();
         this.type = Type.ARRAY;
@@ -64,6 +66,7 @@ public class IRAllocate extends IRNode
     //a = b[5];
     IRAllocate(Variable name, VariableArray value)
     {
+        this.type = Type.ARRAY;
         this.nodeType = "Allocate";
         this.name = name.getVar();
         this.type = Type.INTEGER;
@@ -75,6 +78,7 @@ public class IRAllocate extends IRNode
     //a[i] = b[5];
     IRAllocate(VariableArray name, VariableArray value)
     {
+        this.type = Type.ARRAY;
         this.nodeType = "Allocate";
         this.name = name.getVar();
         this.type = Type.ARRAY;
@@ -165,9 +169,13 @@ public class IRAllocate extends IRNode
 		}
 		else
 		{
-            String varType = getVarIfExists(name).nodeType;
-            if(varType != null && varType.equals(Type.INTEGER.name())) // i = 5;
+            String varType = getVarIfExists(name).type.name();
+            if(varType != null && varType.equals(Type.INTEGER.name())) { // i = 5;
                 inst.add(getInstructionToStoreIntInRegister(this.register));
+                return inst;
+
+                //TODO: verify
+            }
 
             if(varType == null)
                 varType = rhs.nodeType;

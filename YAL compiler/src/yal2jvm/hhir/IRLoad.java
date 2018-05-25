@@ -92,4 +92,8 @@ public class IRLoad extends IRNode
 	{
 		this.type = type;
 	}
+
+	public String getName() {
+        return name;
+    }
 }

@@ -2,8 +2,7 @@ package yal2jvm.hhir;
 
 import java.util.ArrayList;
 
-public class IRArith extends IRNode
-{
+public class IRArith extends IRNode {
     private Operation op;
     private IRNode rhs, lhs;
 
@@ -84,5 +83,9 @@ public class IRArith extends IRNode
     {
         this.lhs = lhs;
         this.lhs.setParent(this);
+    }
+
+    public Operation getOp() {
+        return op;
     }
 }
