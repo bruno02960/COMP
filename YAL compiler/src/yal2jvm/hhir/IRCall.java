@@ -84,7 +84,7 @@ public class IRCall extends IRNode
     private String getCallInstruction()
     {
        	String callInst = "invokestatic ";
-    	if (this.module != null)
+    	if (this.module != null && this.module != Yal2jvm.moduleName)
     		callInst += this.module + "/";
     	callInst += this.method + "(";
     	
@@ -116,7 +116,7 @@ public class IRCall extends IRNode
         if (this.module == null || this.module.equals(Yal2jvm.moduleName))
         {
         	IRModule irModule = (IRModule) findParent("Module");
-        	IRMethod irMethod = (IRMethod) irModule.getChild("Method");
+        	IRMethod irMethod = irModule.getChildMethod(method);
 			Type returnType = irMethod.getReturnType();
 			switch(returnType)
 			{
