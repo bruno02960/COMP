@@ -185,7 +185,7 @@ public class IRAllocate extends IRNode
             else
             {
                 if(lhsIndex != null) // a[i] = 5;
-                    inst.addAll(setArrayElementByIRNode(lhsIndex, register));
+                    inst.addAll(setArrayElementByIRNode(lhsIndex, register, rhs));
                 else
                     inst.add(getInstructionToStoreArrayInRegister(this.register)); // i = [5];
             }

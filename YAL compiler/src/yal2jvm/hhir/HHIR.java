@@ -105,7 +105,28 @@ public class HHIR
 
     public ArrayList<String> selectInstructions()
     {
-        return root.getInstructions();
+        ArrayList<String> inst = new ArrayList<>();
+        inst.addAll(root.getInstructions());
+        inst.addAll(getAllIRGlobalStaticInstructions());
+        //TODO add metodo stuff
+        return inst;
+    }
+
+    private ArrayList<String> getAllIRGlobalStaticInstructions()
+    {
+        ArrayList<String> irGlobalsWithStaticInstructions = new ArrayList<>();
+
+       for(IRNode child : root.children)
+       {
+           if(child.nodeType.equals("Global"))
+           {
+               ArrayList<String> instructions = ((IRGlobal) child).getStaticArraysInstructions();
+               if(instructions.size() != 0)
+                   irGlobalsWithStaticInstructions.addAll(instructions);
+           }
+       }
+
+       return irGlobalsWithStaticInstructions;
     }
 
     public String getModuleName()
