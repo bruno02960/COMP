@@ -99,7 +99,7 @@ public class IRMethod extends IRNode
         for (int i = 0; i < getChildren().size(); i++)
         {
             IRNode node = getChildren().get(i);
-            if (node.toString() == "Allocate")
+            if (node.toString().equals("Allocate"))
                 localsCount++;
         }
         localsCount += this.argsType.length;

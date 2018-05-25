@@ -1,6 +1,7 @@
 package yal2jvm.hhir;
 
 import java.util.ArrayList;
+import java.util.Collection;
 
 import yal2jvm.ast.*;
 
@@ -107,8 +108,28 @@ public class HHIR
     {
         ArrayList<String> inst = new ArrayList<>();
         inst.addAll(root.getInstructions());
-        inst.addAll(getAllIRGlobalStaticInstructions());
-        //TODO add metodo stuff
+        inst.addAll(getMethodClInit());
+
+        return inst;
+    }
+
+    private ArrayList<String> getMethodClInit()
+    {
+        ArrayList<String> inst = new ArrayList<>();
+
+        ArrayList<String> globalStaticInstructions = getAllIRGlobalStaticInstructions();
+        if(globalStaticInstructions.size() != 0)
+        {
+            inst.add(".method static public <clinit>()V \n");
+            inst.add(".limit stack 255\n");  //TODO VER ESTES LIMIT
+            inst.add(".limit locals 255\n");  //TODO VER ESTES LIMIT
+
+            inst.addAll(globalStaticInstructions);
+
+            inst.add("return \n");
+            inst.add("end method\n");
+        }
+
         return inst;
     }
 
