@@ -51,41 +51,56 @@ public class IRStoreArith extends IRStore
     public ArrayList<String> getInstructions()
     {
         ArrayList<String> inst = new ArrayList<>();
+        boolean isIinc = false;
 
-        //TODO: check list of iinc use cases
-        if(irArith.getLhs().nodeType.equals("Load")) {
-            IRLoad arithLhs = ((IRLoad) irArith.getLhs());
+        if(irArith.getOp().equals(Operation.ADD) || irArith.getOp().equals(Operation.SUB)) {
+            if (irArith.getLhs().nodeType.equals("Load")) {
+                IRLoad arithLhs = ((IRLoad) irArith.getLhs());
 
-            if (getRhs().nodeType.equals("Constant") && arithLhs.getName().equals(name)) {
-                IRConstant irConstant = (IRConstant) getRhs();
-
-                if (irArith.getOp().equals(Operation.ADD)) {    /* pronto para ser incrementado */
-                    System.out.print("iinc ");
-
-                    //TODO: What are the mechanics behind finding the correct register?
-                    IRMethod method = (IRMethod) findParent("Method");
-                    int register = method.getVarRegister(name);
-                    if (register == -1)
-                        register = method.getArgumentRegister(name);
-                    System.out.print(register + " ");
-
-                    System.out.println(irConstant.getValue());
-                    //System.out.println("INC");
+                if (arithLhs.getType().equals(Type.INTEGER) && getRhs().nodeType.equals("Constant") && arithLhs.getName().equals(name)) {
+                    IRConstant irConstant = (IRConstant) getRhs();
+                    if(Integer.parseInt(irConstant.getValue()) > -32768 && Integer.parseInt(irConstant.getValue()) < 32768) {
+                        isIinc = true;
+                        inst.add(getIincInstruction(irConstant));
+                    }
                 }
-                else {  /* trocar operando para negativo */
-                    if(irArith.getOp().equals(Operation.SUB)) {
+            } else {
+                if (irArith.getRhs().nodeType.equals("Load")) {
+                    IRLoad arithRhs = ((IRLoad) irArith.getRhs());
 
+                    if (arithRhs.getType().equals(Type.INTEGER) && getLhs().nodeType.equals("Constant") && arithRhs.getName().equals(name)) {
+                        IRConstant irConstant = (IRConstant) getLhs();
+                        if(Integer.parseInt(irConstant.getValue()) > -32768 && Integer.parseInt(irConstant.getValue()) < 32768) {
+                            isIinc = true;
+                            inst.add(getIincInstruction(irConstant));
+                        }
                     }
                 }
             }
         }
 
-        ArrayList<String> arithInst = irArith.getInstructions();
-        ArrayList<String> storeInst = getInstForStoring(arrayAccess, index, irArith);
+        if(!isIinc) {
+            ArrayList<String> arithInst = irArith.getInstructions();
+            ArrayList<String> storeInst = getInstForStoring(arrayAccess, index, irArith);
 
-        inst.addAll(arithInst);
-        inst.addAll(storeInst);
+            inst.addAll(arithInst);
+            inst.addAll(storeInst);
+        }
+
         return inst;
+    }
+
+    private String getIincInstruction(IRConstant irConstant) {
+        String instruction = "iinc ";
+
+        IRMethod method = (IRMethod) findParent("Method");
+        int register = method.getVarRegister(name);
+        if (register == -1)
+            register = method.getArgumentRegister(name);
+
+        instruction += register + " " + (irArith.getOp().equals(Operation.SUB)? "-" : "") + irConstant.getValue();
+
+        return instruction;
     }
 
 }
