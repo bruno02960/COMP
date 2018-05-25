@@ -65,12 +65,16 @@ public class IRModule extends IRNode
         return null;
     }
 
-    public IRNode getChild(String name)
+    public IRMethod getChildMethod(String name)
     {
         for (int i = 0; i < children.size(); i++)
         {
-            if (children.get(i).toString().equals(name))
-                return children.get(i);
+            IRNode child = children.get(i);
+            if(child instanceof IRMethod)
+            {
+                if(((IRMethod) child).getName().equals(name))
+                    return ((IRMethod) child);
+            }
         }
         return null;
     }
