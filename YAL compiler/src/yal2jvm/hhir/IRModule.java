@@ -48,9 +48,8 @@ public class IRModule extends IRNode
 
     public int getAndIncrementCurrLabelNumber()
     {
-        return ++currLabelNumber;
+        return currLabelNumber++;
     }
-
 
     public IRGlobal getGlobal(String name)
     {
