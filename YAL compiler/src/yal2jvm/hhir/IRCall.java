@@ -31,8 +31,9 @@ public class IRCall extends IRNode
         String callInstructions = getCallInstruction();
 		inst.add(callInstructions);
 
-        if((getParent() instanceof IRStore) == false && Utils.isLastCharacterOfString("I", callInstructions))
-            inst.add("\npop");
+        if(getParent() instanceof IRMethod)
+            if(Utils.isLastCharacterOfString("V", callInstructions) == false)
+                inst.add("\npop");
 
         return inst;
     }
