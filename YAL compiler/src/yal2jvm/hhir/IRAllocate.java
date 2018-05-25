@@ -169,11 +169,11 @@ public class IRAllocate extends IRNode
 		else
 		{
             String varType = getVarIfExists(name).type.name();
-            if(varType != null && varType.equals(Type.INTEGER.name())) { // i = 5;
+            if(varType != null && varType.equals(Type.INTEGER.name())) // i = 5;
+            {
+                inst.addAll(rhs.getInstructions());
                 inst.add(getInstructionToStoreIntInRegister(this.register));
                 return inst;
-
-                //TODO: verify
             }
 
             if(varType == null)
