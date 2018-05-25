@@ -203,17 +203,16 @@ public class IRAllocate extends IRNode
 
     private ArrayList<String> setAllArrayElements()
     {
-        ArrayList<String> inst = new ArrayList<>();
         IRAllocate irAllocate = getVarIfExists(name);
-        if(irAllocate !=  null)
+        if (irAllocate != null)
         {
             System.out.println("Internal error! The program will be closed.");
             System.exit(-1);
         }
 
-        inst.add(getInstructionToLoadArrayFromRegisterToStack(irAllocate.getRegister()));
-
-        return inst;
+        String arrayRefJVMCode = getInstructionToLoadArrayFromRegisterToStack(irAllocate.getRegister());
+        ArrayList<String> valueJVMCode = rhs.getInstructions();
+        return getCodeForSetAllArrayElements(arrayRefJVMCode, valueJVMCode);
     }
 
     private boolean storeVarIsGlobal()

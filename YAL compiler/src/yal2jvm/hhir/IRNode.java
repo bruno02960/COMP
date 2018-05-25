@@ -137,9 +137,8 @@ public abstract class IRNode
         return inst;
     }
 
-    protected ArrayList<String> getGlobalVariable(String name, IRMethod method)
+    protected String getGlobalVariable(String name, IRMethod method)
     {
-        ArrayList<String> inst = new ArrayList<>();
         IRModule module = ((IRModule) method.getParent());
         IRGlobal global = module.getGlobal(name);
         if (global == null)
@@ -150,24 +149,23 @@ public abstract class IRNode
 
         String in = "getstatic " + module.getName() + "/" + global.getName() + " ";
         in += global.getType() == Type.INTEGER ? "I" : "A";
-        inst.add(in);
 
-        return inst;
+        return in;
     }
 
-    protected ArrayList<String> getCodeForSetAllArrayElements(ArrayList<String> arrayRefJVMCode,
+    protected ArrayList<String> getCodeForSetAllArrayElements(String arrayRefJVMCode,
                                                               ArrayList<String> valueJVMCode )
     {
         ArrayList<String> inst = new ArrayList<>();
 
-        inst.addAll(arrayRefJVMCode);
+        inst.add(arrayRefJVMCode);
         inst.add("arraylength");
         inst.add("init:");
         inst.add("iconst_1");
         inst.add("isub");
         inst.add("dup");
         inst.add("iflt end");
-        inst.addAll(arrayRefJVMCode);
+        inst.add(arrayRefJVMCode);
         inst.add("swap");
         inst.addAll(valueJVMCode);
         inst.add("iastore");

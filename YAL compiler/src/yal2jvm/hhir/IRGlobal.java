@@ -118,21 +118,9 @@ public class IRGlobal extends IRNode
     {
         IRNode valueNode = getValueIRNode(value);
         IRMethod method = (IRMethod) findParent("Method");
-        ArrayList<String> globalVariableJVMCode = getGlobalVariable(name, method);
+        String globalVariableJVMCode = getGlobalVariable(name, method);
 
-        staticArraysInstructions.addAll(globalVariableJVMCode);
-        staticArraysInstructions.add("arraylength");
-        staticArraysInstructions.add("init:");
-        staticArraysInstructions.add("iconst_1");
-        staticArraysInstructions.add("isub");
-        staticArraysInstructions.add("dup");
-        staticArraysInstructions.add("iflt end");
-        staticArraysInstructions.addAll(globalVariableJVMCode);
-        staticArraysInstructions.add("swap");
-        staticArraysInstructions.addAll(valueNode.getInstructions());
-        staticArraysInstructions.add("iastore");
-        staticArraysInstructions.add("goto init");
-        staticArraysInstructions.add("end:");
+        getCodeForSetAllArrayElements(globalVariableJVMCode, valueNode.getInstructions());
     }
 
     public String getName()

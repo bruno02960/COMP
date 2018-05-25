@@ -84,7 +84,7 @@ public class IRLoad extends IRNode
 
         }
         else  //variable is global
-            inst.addAll(getGlobalVariable(name, method));
+            inst.add(getGlobalVariable(name, method));
 
         return inst;
     }
