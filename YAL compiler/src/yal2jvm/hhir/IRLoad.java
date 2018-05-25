@@ -7,7 +7,7 @@ public class IRLoad extends IRNode
     private String name;
     private int register = -1;
     private Type type;
-    private IRLoad index = null;
+    private IRNode index = null;
     private boolean arraySizeAccess;
 
     public IRLoad(String name)
@@ -39,7 +39,12 @@ public class IRLoad extends IRNode
     {
         this(value.getVar());
         this.type = value.getType();
-        index = new IRLoad(value.getAt());
+
+        Variable indexVar = value.getAt();
+        if(indexVar.getType() == Type.INTEGER)
+            index = new IRConstant(indexVar.getVar());
+        else
+            index = new IRLoad(indexVar);
 
         this.addChild(index);
     }
