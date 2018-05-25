@@ -306,8 +306,8 @@ public class HHIR
 
          */
 
-        String labelTrue = "else_" + irmethod.getName() + root.getAndIncrementCurrLabelNumber();
-        createExprTestHHIR(astIf, irmethod, labelTrue, true);
+        String labelTrue = "true_" + irmethod.getName() + root.getAndIncrementCurrLabelNumber();
+        createExprTestHHIR(astIf, irmethod, labelTrue, false);
 
         //false body
         if(astIf.jjtGetNumChildren() > 2)
