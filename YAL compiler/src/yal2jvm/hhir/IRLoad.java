@@ -10,16 +10,14 @@ public class IRLoad extends IRNode
     private IRNode index = null;
     private boolean arraySizeAccess;
 
-    public IRLoad(String name)
+    private IRLoad(String name)
     {
-        //TODO distinguir arrays de intgers mas como? informaçao interna? acho que ja nao ha prob
         this.name = name;
         this.nodeType = "Load";
     }
 
     public IRLoad(String name, Type type)
     {
-        //TODO distinguir arrays de intgers mas como? informaçao interna? acho que ja nao ha prob
         this(name);
         this.type = type;
     }

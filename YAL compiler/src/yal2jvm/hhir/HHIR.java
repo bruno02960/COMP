@@ -381,7 +381,7 @@ public class HHIR
         return new IRLoad(new Variable(id, Type.INTEGER));
     }
 
-    private IRNode getIndexIRNode(ASTINDEX astIndex)
+    /*private IRNode getIndexIRNode(ASTINDEX astIndex)
     {
         Integer indexValue = astIndex.indexValue;
         if(indexValue != null)
@@ -389,7 +389,7 @@ public class HHIR
 
         String indexID = astIndex.indexID;
         return new IRLoad(indexID);
-    }
+    }*/
 
     private void createWhileHHIR(ASTWHILE astWhile, IRMethod irmethod)
     {

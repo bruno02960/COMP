@@ -62,7 +62,7 @@ public class IRCall extends IRNode
          			}
          			else
          			{
-         				var = new IRLoad(arg.getString());
+         				var = new IRLoad(arg.getString(), Type.INTEGER);
          				this.addChild(var);
          			}
          			inst.addAll(var.getInstructions());
