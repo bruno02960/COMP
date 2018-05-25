@@ -33,7 +33,6 @@ istore_3
 ldc "a: "
 iload_3
 invokestatic io/print(Ljava/lang/String;I)V
-
 iinc 2 1
 goto loop2
 loop2_end:

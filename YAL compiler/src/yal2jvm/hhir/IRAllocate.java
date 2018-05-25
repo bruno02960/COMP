@@ -34,7 +34,6 @@ public class IRAllocate extends IRNode
     {
         assert arraySize == Type.ARRAYSIZE;
 
-        this.type = Type.ARRAY;
         this.nodeType = "Allocate";
         this.name = name;
         this.type = Type.ARRAYSIZE;
@@ -52,7 +51,6 @@ public class IRAllocate extends IRNode
         this.type = Type.ARRAY;
         this.nodeType = "Allocate";
         this.name = name.getVar();
-        this.type = Type.ARRAY;
         this.lhsIndex = new IRLoad(name.getAt());
         if(value.getType().equals(Type.INTEGER))
             this.rhs = new IRConstant(value.getVar());
@@ -66,7 +64,6 @@ public class IRAllocate extends IRNode
     //a = b[5];
     IRAllocate(Variable name, VariableArray value)
     {
-        this.type = Type.ARRAY;
         this.nodeType = "Allocate";
         this.name = name.getVar();
         this.type = Type.INTEGER;
@@ -78,7 +75,6 @@ public class IRAllocate extends IRNode
     //a[i] = b[5];
     IRAllocate(VariableArray name, VariableArray value)
     {
-        this.type = Type.ARRAY;
         this.nodeType = "Allocate";
         this.name = name.getVar();
         this.type = Type.ARRAY;

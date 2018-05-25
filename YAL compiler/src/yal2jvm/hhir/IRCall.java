@@ -131,8 +131,10 @@ public class IRCall extends IRNode
         else //return undefined
         {
 			//if call from statements, keep return undefined
-        	if(lhsVarName == null)
+        	if(lhsVarName == null) {
 				callInst += "V";
+				return callInst;
+			}
 
 			IRAllocate irAllocate = getVarIfExists(lhsVarName);
 			if(irAllocate == null || irAllocate.getRegister() == -1)//if lhs not defined yet, we assume int
