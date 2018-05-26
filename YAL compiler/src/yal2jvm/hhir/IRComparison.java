@@ -101,21 +101,22 @@ public class IRComparison extends IRNode
 	private boolean useArrayOperations()
 	{
 		if (rhs.nodeType.equals("Constant") || rhs.nodeType.equals("Constant"))
-		{
 			return false;
-		}
+
 		if (rhs.nodeType.equals("Load"))
 		{
 			IRLoad load = (IRLoad)rhs;
-			if (load.getType() == Type.ARRAY)
-				return true;
+			if (load.getType() != Type.ARRAY || load.isArraySizeAccess())
+				return false;
+
+			if (lhs.nodeType.equals("Load"))
+			{
+				load = (IRLoad)lhs;
+				if (load.getType() == Type.ARRAY && load.isArraySizeAccess() == false)
+					return true;
+			}
 		}
-		if (lhs.nodeType.equals("Load"))
-		{
-			IRLoad load = (IRLoad)lhs;
-			if (load.getType() == Type.ARRAY)
-				return true;
-		}
+
 		return false;
 	}
 	

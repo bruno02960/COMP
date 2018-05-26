@@ -102,4 +102,10 @@ public class IRLoad extends IRNode
 	public String getName() {
         return name;
     }
+
+    public boolean isArraySizeAccess()
+    {
+        return arraySizeAccess;
+    }
+
 }
