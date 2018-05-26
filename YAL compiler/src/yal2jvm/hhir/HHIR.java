@@ -791,7 +791,7 @@ public class HHIR
                     arraySize = true;
 
                     variable.setType(Type.ARRAY);
-                } else
+                } else                              // a = 4;       a;
                 {
                     String str_value = astdeclaration.operator + astdeclaration.integer;
 
