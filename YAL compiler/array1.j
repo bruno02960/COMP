@@ -1,6 +1,9 @@
 .class public static array1
 .super java/lang/Object
 
+
+
+
 .method public static print_array(I)V
 .limit locals 255
 .limit stack 20
@@ -44,6 +47,6 @@ return
 .limit locals 255
 .limit stack 20
 bipush 10
-invokestatic print_array(I)V
+invokestatic array1/print_array(I)V
 return
 .end method
