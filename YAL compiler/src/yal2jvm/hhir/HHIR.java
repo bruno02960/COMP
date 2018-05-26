@@ -389,7 +389,7 @@ public class HHIR
             return getCallHHIR((ASTCALL) astTermChild);
         else if(astTermChild instanceof ASTARRAYACCESS)
         {
-            Variable variable = getArrayAccessIRNode((ASTARRAYACCESS) astTermChild);
+            VariableArray variable = getArrayAccessIRNode((ASTARRAYACCESS) astTermChild);
             return new IRLoad(variable);
         }
         else
@@ -571,7 +571,7 @@ public class HHIR
         createAssignIR(irAssign, irmethod);
     }
 
-    private Variable getArrayAccessIRNode(ASTARRAYACCESS child)
+    private VariableArray getArrayAccessIRNode(ASTARRAYACCESS child)
     {
         ASTARRAYACCESS astarrayaccess = child;
         ASTINDEX astindex = (ASTINDEX) astarrayaccess.jjtGetChild(0);
