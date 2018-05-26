@@ -1,9 +1,6 @@
 .class public static array1
 .super java/lang/Object
 
-
-
-
 .method public static print_array(I)V
 .limit locals 255
 .limit stack 20
@@ -41,7 +38,6 @@ goto while_print_array_init3
 while_print_array_end4:
 return
 .end method
-
 
 .method public static main([Ljava/lang/String;)V
 .limit locals 255

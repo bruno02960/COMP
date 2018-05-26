@@ -45,8 +45,12 @@ public class IRCall extends IRNode
          for (int i = 0; i < arguments.size(); i++)
          {
          	PairStringType arg = arguments.get(i);
-         	
-         	switch (arg.getType())
+
+			 Type type = arg.getType();
+
+			 type = getType(arg, type);
+
+			 switch (type)
          	{
          		case STRING:
  	        	{
@@ -72,26 +76,54 @@ public class IRCall extends IRNode
          		case ARRAY:
                 {
                     IRLoad irLoad = new IRLoad(arg.getString(), Type.ARRAY);
+					this.addChild(irLoad);
                     inst.addAll(irLoad.getInstructions());
                     break;
                 }
+				case ARRAYSIZE:
+				{
+					IRLoad irLoad = new IRLoad(arg.getString(), Type.ARRAYSIZE);
+					this.addChild(irLoad);
+					inst.addAll(irLoad.getInstructions());
+					break;
+				}
          		default:
          			break;
          	}
          }
          return inst;
     }
-    
-    private String getCallInstruction()
+
+	private Type getType(PairStringType arg, Type type) {
+		IRMethod method = (IRMethod) findParent("Method");
+
+		if(type != Type.STRING) {
+            type = method.getArgumentType(arg.getString());
+            if (type == null)
+                type = method.getVarType(arg.getString());
+            if (type == null) {
+                IRModule module = (IRModule) findParent("Module");
+                IRGlobal global = module.getGlobal(arg.getString());
+                type = global.getType();
+            }
+        }
+		return type;
+	}
+
+	private String getCallInstruction()
     {
        	String callInst = "invokestatic ";
     	if (this.module != null)
     		callInst += this.module + "/";
     	callInst += this.method + "(";
-    	
+
     	for (int i = 0; i < arguments.size(); i++)
     	{
-    		switch(arguments.get(i).getType())
+			Type type = arguments.get(i).getType();
+
+			type = getType(arguments.get(i), type);
+
+    		switch(type)
     		{
 		    	case STRING:
 		    	{
@@ -104,6 +136,11 @@ public class IRCall extends IRNode
 					break;
 				}
 				case ARRAY:
+				{
+					callInst += "[I";
+					break;
+				}
+				case ARRAYSIZE:
 				{
 					callInst += "[I";
 					break;

@@ -126,10 +126,7 @@ public class IRMethod extends IRNode
         return regN;
     }
 
-    public void incrementRegN()
-    {
-        this.regN++;
-    }
+    public void incrementRegN() { this.regN++; }
 
     public int getArgumentRegister(String name)//TODO VER TIAGO
     {
@@ -139,6 +136,16 @@ public class IRMethod extends IRNode
                 return i;
         }
         return -1;
+    }
+
+    public Type getArgumentType(String name)
+    {
+        for (int i = 0; i < argsType.length; i++)
+        {
+            if (argsType[i].equals(name))
+                return argsType[i];
+        }
+        return null;
     }
 
     public int getVarRegister(String name) //TODO VER TIAGO
@@ -154,6 +161,21 @@ public class IRMethod extends IRNode
             }
         }
         return -1;
+    }
+
+    public Type getVarType(String name)
+    {
+        for (int i = 0; i < children.size(); i++)
+        {
+            String childrenType = children.get(i).toString();
+            if (childrenType.equals("Allocate"))
+            {
+                IRAllocate irAllocate = ((IRAllocate) children.get(i));
+                if (irAllocate.getName().equals(name))
+                    return irAllocate.getType();
+            }
+        }
+        return null;
     }
 
 	public String getName()
