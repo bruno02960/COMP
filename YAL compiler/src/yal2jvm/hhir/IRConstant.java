@@ -23,7 +23,8 @@ public class IRConstant extends IRNode
         }
         catch(NumberFormatException nfe)
         {
-            inst.add("ldc " + value);
+            System.out.println("Error getting number. Value " + value + "cannot be casted to integer.");
+            System.exit(-1);
         }
 
         return inst;
@@ -31,10 +32,16 @@ public class IRConstant extends IRNode
 
     public static String getLoadConstantInstruction(int value)
     {
-        if(value < 6)
+        if(value == -1)
+            return "iconst_m1";
+
+        if(value < 6 && value > -1)
             return "iconst_" + value;
-        else
-            return "ldc " + value;
+
+        if(value < 127 && value > -128)
+            return "bipush " + value;
+
+        return "ldc " + value;
     }
 
 	public String getValue()
