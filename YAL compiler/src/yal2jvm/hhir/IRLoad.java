@@ -63,9 +63,29 @@ public class IRLoad extends IRNode
         ArrayList<String> inst = new ArrayList<>();
 
         IRMethod method = (IRMethod) findParent("Method");
-        int register = method.getVarRegister(name);
+        IRModule module = (IRModule) method.getParent();
+        IRGlobal irGlobal = module.getGlobal(name);
+        if(irGlobal != null) //variable is global
+        {
+            inst.add(getGlobalVariable(name, method));
+            if(type == Type.INTEGER)
+                return inst;
+            else
+            {
+                if(arraySizeAccess)
+                    inst.add("arraylength");
+                else if(index != null)
+                {
+                    inst.addAll(index.getInstructions());
+                    inst.add("iaload");
+                }
+            }
+            return inst;
+        }
+
+        int register = method.getArgumentRegister(name);
         if (register == -1)
-            register = method.getArgumentRegister(name);
+            register = method.getVarRegister(name);
         if (register > -1)	//variable is local
         {
             if(type == Type.INTEGER)
@@ -82,22 +102,6 @@ public class IRLoad extends IRNode
                 }
             }
 
-        }
-        else  //variable is global
-        {
-            inst.add(getGlobalVariable(name, method));
-            if(type == Type.INTEGER)
-                return inst;
-            else
-            {
-                if(arraySizeAccess)
-                    inst.add("arraylength");
-                else if(index != null)
-                {
-                    inst.addAll(index.getInstructions());
-                    inst.add("iaload");
-                }
-            }
         }
 
         return inst;

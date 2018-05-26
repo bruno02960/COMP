@@ -52,7 +52,7 @@ public class IRMethod extends IRNode
                     }
                     case ARRAY:
                     {
-                        methodDeclarationInst += "[I"; //TODO WTF O BRUNO JA NAO TINHA FEITO
+                        methodDeclarationInst += "[I";
                         break;
                     }
                     default:

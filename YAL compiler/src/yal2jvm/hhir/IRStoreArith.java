@@ -94,9 +94,9 @@ public class IRStoreArith extends IRStore
         String instruction = "iinc ";
 
         IRMethod method = (IRMethod) findParent("Method");
-        int register = method.getVarRegister(name);
+        int register = method.getArgumentRegister(name);
         if (register == -1)
-            register = method.getArgumentRegister(name);
+            register = method.getVarRegister(name);
 
         instruction += register + " " + (irArith.getOp().equals(Operation.SUB)? "-" : "") + irConstant.getValue();
 
