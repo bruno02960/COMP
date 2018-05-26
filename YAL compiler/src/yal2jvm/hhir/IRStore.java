@@ -38,11 +38,8 @@ public abstract class IRStore extends IRNode
                         instruction = "putstatic " + module.getName() + "/" + name + " I";
                         inst.add(instruction);
                         break;
-                    default:
-                        //TODO: VER AQUI É GLOBAL----CORRIGIR
-                        inst.add(getInstructionToLoadArrayFromRegisterToStack(register)); // aload register
-                        inst.addAll(index.getInstructions()); //  ldc index
-                        inst.add("iastore");
+                    case ARRAY:
+                        inst.addAll(setGlobalArrayElementByIRNode(index, Type.ARRAY, name, value));
                 }
 
         		return inst;

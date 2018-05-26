@@ -414,7 +414,6 @@ public class HHIR
 
     private void createWhileHHIR(ASTWHILE astWhile, IRMethod irmethod)
     {
-        //TODO ver ainda que template usar
         /* using template:
 
             lab_init: <test>
@@ -802,7 +801,7 @@ public class HHIR
                         value = new Variable(str_value, Type.INTEGER);
                     }
 
-                    variable.setType(Type.VARIABLE); //TODO VER BRUNO
+                    variable.setType(Type.VARIABLE);
                 }
                 break;
             case "ARRAYELEMENT":
