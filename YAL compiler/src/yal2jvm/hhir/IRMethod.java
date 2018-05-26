@@ -64,12 +64,13 @@ public class IRMethod extends IRNode
             switch (returnType)
             {
                 case INTEGER:
-                {
                     methodDeclarationInst += "I";
                     break;
-                }
+
                 case ARRAY:
+                    methodDeclarationInst += "[I";
                     break;
+
                 case VOID:
                     methodDeclarationInst += "V";
                     break;
