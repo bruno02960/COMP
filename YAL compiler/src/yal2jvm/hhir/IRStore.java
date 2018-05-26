@@ -13,12 +13,12 @@ public abstract class IRStore extends IRNode
     {
         ArrayList<String> inst = new ArrayList<>();
 
-        //check if storage variable exists, and if so get its register
-        register = ((IRMethod) parent).getVarRegister(name);
+        //check if it is one of the method's arguments
+        register = ((IRMethod) parent).getArgumentRegister(name);
 
-        //if not, check if it is one of the method's arguments
+        //if not, check if storage variable exists, and if so get its register
         if (register == -1)
-            register = ((IRMethod) parent).getArgumentRegister(name);
+            register = ((IRMethod) parent).getVarRegister(name);
 
         //code for global
         if (register == -1)
@@ -48,7 +48,8 @@ public abstract class IRStore extends IRNode
         if (register == -1)
         {
             IRAllocate storeVar = new IRAllocate(name, new Variable("0", Type.INTEGER));
-            parent.addChild(storeVar);
+            IRMethod method = (IRMethod) findParent("Method");
+            method.addChild(storeVar);
             register = storeVar.getRegister();
         }
 

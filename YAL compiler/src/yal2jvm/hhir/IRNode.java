@@ -148,7 +148,7 @@ public abstract class IRNode
         }
 
         String in = "getstatic " + module.getName() + "/" + global.getName() + " ";
-        in += global.getType() == Type.INTEGER ? "I" : "A";
+        in += global.getType() == Type.INTEGER ? "I" : "[I";
 
         return in;
     }

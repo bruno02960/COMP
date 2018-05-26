@@ -802,7 +802,7 @@ public class HHIR
                         value = new Variable(str_value, Type.INTEGER);
                     }
 
-                    variable.setType(Type.INTEGER); //TODO VER BRUNO
+                    variable.setType(Type.VARIABLE); //TODO VER BRUNO
                 }
                 break;
             case "ARRAYELEMENT":
@@ -856,7 +856,7 @@ public class HHIR
         assert variable != null;
         switch (variable.getType())
         {
-            case INTEGER:
+            case VARIABLE:
                 root.addChild(new IRGlobal(variable, value));
                 break;
             case ARRAY:
