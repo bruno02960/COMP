@@ -9,7 +9,7 @@
 .limit stack 20
 iconst_2
 iconst_3
-invokestatic aval1/f(II)V
+invokestatic aval1/f(II)I
 istore_1
 iload_1
 invokestatic io/println(I)V

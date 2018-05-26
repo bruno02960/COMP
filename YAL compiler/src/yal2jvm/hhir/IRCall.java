@@ -96,18 +96,24 @@ public class IRCall extends IRNode
 
 	private Type getType(PairStringType arg, Type type) {
 		IRMethod method = (IRMethod) findParent("Method");
+		Type ret_type = type;
 
-		if(type != Type.STRING) {
-            type = method.getArgumentType(arg.getString());
-            if (type == null)
-                type = method.getVarType(arg.getString());
-            if (type == null) {
+		if(ret_type != Type.STRING) {
+			ret_type = method.getArgumentType(arg.getString());
+            if (ret_type == null)
+				ret_type = method.getVarType(arg.getString());
+            if (ret_type == null) {
                 IRModule module = (IRModule) findParent("Module");
                 IRGlobal global = module.getGlobal(arg.getString());
-                type = global.getType();
+                if(global != null)
+					ret_type = global.getType();
             }
         }
-		return type;
+
+        if(ret_type == null)
+			return type;
+		else
+			return ret_type;
 	}
 
 	private String getCallInstruction()

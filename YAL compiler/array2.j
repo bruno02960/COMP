@@ -1,6 +1,9 @@
 .class public static array2
 .super java/lang/Object
 
+
+
+
 .method public static sum_array([I)I
 .limit locals 255
 .limit stack 20
@@ -25,6 +28,7 @@ while_sum_array_end2:
 iload_2
 ireturn
 .end method
+
 
 .method public static main([Ljava/lang/String;)V
 .limit locals 255
