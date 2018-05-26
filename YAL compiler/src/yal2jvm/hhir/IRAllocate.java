@@ -104,17 +104,20 @@ public class IRAllocate extends IRNode
     {
         ArrayList<String> inst = new ArrayList<>();
 
-        global = storeVarGlobal();
-        if(global != null)
-            this.storeVarGlobal  = true;
-        else
+        IRNode node = getVarIfExists(name);
+        if(node == null)
         {
-            IRAllocate irAllocate = getVarIfExists(this.name);
-            if(irAllocate != null && irAllocate.register != -1)
-		        this.register = irAllocate.register;
-            else
-		        initRegister();
+            initRegister();
         }
+        else if(node instanceof IRGlobal)
+        {
+            global = (IRGlobal) node;
+            this.storeVarGlobal  = true;
+        }
+        else if(node instanceof IRArgument)
+            register = ((IRArgument)node).getRegister();
+        else
+            register = ((IRAllocate) node).getRegister();
 
         if(type == Type.ARRAYSIZE)
         {
@@ -134,7 +137,7 @@ public class IRAllocate extends IRNode
 		if (this.storeVarGlobal)
 		{
 		    String typeStr = type.name();
-            if(typeStr != null && global.getType() == Type.INTEGER) // i = 5;
+            if(typeStr != null && global.getType() == Type.VARIABLE) // i = 5;
             {
                 inst.addAll(rhs.getInstructions());
                 inst.add(getInstructionToStoreGlobalArray(type, name));
@@ -157,7 +160,16 @@ public class IRAllocate extends IRNode
 		}
 		else
 		{
-            String varType = getVarIfExists(name).type.name();
+            String varType;
+            IRNode node = getVarIfExists(name);
+            if(node instanceof IRAllocate)
+                varType = ((IRAllocate)node).getType().name();
+            else
+            {
+               IRMethod method = (IRMethod) findParent("Method");
+                varType = method.getArgumentType(name).name();
+            }
+
             if(varType != null && varType.equals(Type.INTEGER.name())) // i = 5;
             {
                 inst.addAll(rhs.getInstructions());
@@ -184,18 +196,23 @@ public class IRAllocate extends IRNode
 
     private ArrayList<String> setAllArrayElements()
     {
-        IRAllocate irAllocate = getVarIfExists(name);
-        if (irAllocate != null)
+        int reg = -1;
+        IRNode node = getVarIfExists(name);
+        if(node == null)
         {
             System.out.println("Internal error! The program will be closed.");
             System.exit(-1);
         }
+        else if(node instanceof IRArgument)
+            reg = ((IRArgument)node).getRegister();
+        else
+            reg = ((IRAllocate) node).getRegister();
 
         String arrayRefJVMCode;
         if(storeVarGlobal)
             arrayRefJVMCode = getInstructionToLoadGlobalArrayToStack(type, name);
         else
-            arrayRefJVMCode = getInstructionToLoadArrayFromRegisterToStack(irAllocate.getRegister());
+            arrayRefJVMCode = getInstructionToLoadArrayFromRegisterToStack(reg);
         ArrayList<String> valueJVMCode = rhs.getInstructions();
         return getCodeForSetAllArrayElements(arrayRefJVMCode, valueJVMCode);
     }

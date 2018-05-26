@@ -67,7 +67,7 @@ public class IRLoad extends IRNode
         IRGlobal irGlobal = module.getGlobal(name);
         if(irGlobal != null) //variable is global
         {
-            inst.add(getGlobalVariable(name, method));
+            inst.add(getGlobalVariableGetCode(name, method));
             if(type == Type.INTEGER)
                 return inst;
             else

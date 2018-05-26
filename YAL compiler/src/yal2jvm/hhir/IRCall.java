@@ -1,5 +1,6 @@
 package yal2jvm.hhir;
 
+import com.sun.deploy.security.ValidationState;
 import yal2jvm.Yal2jvm;
 import yal2jvm.utils.Utils;
 
@@ -91,7 +92,8 @@ public class IRCall extends IRNode
          return inst;
     }
 
-	private Type getType(PairStringType arg, Type type) {
+	private Type getType(PairStringType arg, Type type)
+	{
 		IRMethod method = (IRMethod) findParent("Method");
 		Type ret_type = type;
 
@@ -179,13 +181,40 @@ public class IRCall extends IRNode
 				return callInst;
 			}
 
-			IRAllocate irAllocate = getVarIfExists(lhsVarName);
-			if(irAllocate == null || irAllocate.getRegister() == -1)//if lhs not defined yet, we assume int
+			IRNode node = getVarIfExists(lhsVarName);
+        	if(node == null)
+			{
 				callInst += "I";
-			else if(irAllocate.getType().equals(Type.INTEGER)) //otherwise lhs defined, and type equals lhs var type
-				callInst += "I";
-			else
-				callInst += "A";
+				return callInst;
+			}
+
+        	if(node instanceof IRAllocate)
+			{
+				IRAllocate allocate = (IRAllocate)node;
+				if(allocate.getRegister() == -1)//if lhs not defined yet, we assume int
+					callInst += "I";
+
+				if(allocate.getType().equals(Type.INTEGER)) //otherwise lhs defined, and type equals lhs var type
+					callInst += "I";
+				else
+					callInst += "A";
+			}
+			else if(node instanceof IRGlobal)
+			{
+				IRGlobal global = (IRGlobal) node;
+				if(global.getType().equals(Type.INTEGER)) //otherwise lhs defined, and type equals lhs var type
+					callInst += "I";
+				else
+					callInst += "A";
+			}
+			else //argument
+			{
+				IRMethod method = (IRMethod) findParent("Method");
+				if(method.getArgumentType(lhsVarName).equals(Type.INTEGER)) //otherwise lhs defined, and type equals lhs var type
+					callInst += "I";
+				else
+					callInst += "A";
+			}
         }
         return callInst;
     }

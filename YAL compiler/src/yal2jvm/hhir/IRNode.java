@@ -112,15 +112,18 @@ public abstract class IRNode
         return res;
     }
 
-    protected IRAllocate getVarIfExists(String varName)
+    protected IRNode getVarIfExists(String varName)
     {
-        IRNode parent = this.parent;
+        IRModule module = (IRModule) findParent("Module");
+        IRGlobal irGlobal = module.getGlobal(varName);
+        if(irGlobal != null)
+            return irGlobal;
 
-        while(parent.nodeType != "Method") {
-            parent = parent.parent;
-        }
+        IRMethod method = (IRMethod) findParent("Method");
+        int register = method.getArgumentRegister(varName);
+        if(register != -1)
+            return new IRArgument(register);
 
-        IRMethod method = (IRMethod)parent;
         ArrayList<IRNode> children = method.getChildren();
         for (int i = 0; i < children.size(); i++)
         {
@@ -158,7 +161,7 @@ public abstract class IRNode
         return inst;
     }
 
-    protected String getGlobalVariable(String name, IRMethod method)
+    protected String getGlobalVariableGetCode(String name, IRMethod method)
     {
         IRModule module = ((IRModule) method.getParent());
         IRGlobal global = module.getGlobal(name);
@@ -195,6 +198,5 @@ public abstract class IRNode
 
         return inst;
     }
-
 
 }
