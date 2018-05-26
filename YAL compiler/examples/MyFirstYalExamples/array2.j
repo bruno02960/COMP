@@ -31,29 +31,22 @@ ireturn
 .limit stack 3
 bipush 16
 istore_0
-
 iload_0
 newarray int
 astore_1
-
 iconst_0
 istore_2
-
 loop2:
-
 iload_2
 iload_0
 if_icmpge loop2_end
-
 aload_1
 iload_2
 iconst_1
 iastore
 iinc 2 1
 goto loop2
-
 loop2_end:
-
 aload_1
 invokestatic array2/sum_array([I)I
 

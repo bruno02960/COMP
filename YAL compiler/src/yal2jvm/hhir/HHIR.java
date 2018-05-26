@@ -662,7 +662,7 @@ public class HHIR
                 if(var2.getType().equals(Type.VARIABLE)) {   // a = b.size // a = b
                     irStoreArith.setRhs(new IRLoad(var2));
                 } else {                    // a = b[c.size] // a = b[c]
-                    irStoreArith.setRhs(new IRLoad(var2));
+                    irStoreArith.setRhs(new IRLoad((VariableArray) var2));
                 }
             }
         }
