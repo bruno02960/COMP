@@ -51,8 +51,10 @@ public class IRMethod extends IRNode
                         break;
                     }
                     case ARRAY:
-                        //TODO:
+                    {
+                        methodDeclarationInst += "[I"; //TODO WTF O BRUNO JA NAO TINHA FEITO
                         break;
+                    }
                     default:
                         break;
                 }
@@ -62,13 +64,13 @@ public class IRMethod extends IRNode
             switch (returnType)
             {
                 case INTEGER:
-                {
                     methodDeclarationInst += "I";
                     break;
-                }
+
                 case ARRAY:
-                    //TODO:
+                    methodDeclarationInst += "[I";
                     break;
+
                 case VOID:
                     methodDeclarationInst += "V";
                     break;

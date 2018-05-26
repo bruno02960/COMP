@@ -26,11 +26,40 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="IRMethod.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="IRMethod.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/yal2jvm/hhir/IRMethod.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="271">
-              <caret line="92" column="20" lean-forward="true" selection-start-line="92" selection-start-column="20" selection-end-line="92" selection-end-column="20" />
+            <state relative-caret-position="884">
+              <caret line="52" column="31" lean-forward="false" selection-start-line="52" selection-start-column="31" selection-end-line="52" selection-end-column="31" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="IRStoreArith.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/yal2jvm/hhir/IRStoreArith.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="17">
+              <caret line="4" column="13" lean-forward="false" selection-start-line="4" selection-start-column="13" selection-end-line="4" selection-end-column="13" />
+              <folding>
+                <element signature="e#709#710#0" expanded="true" />
+                <element signature="e#748#749#0" expanded="true" />
+                <element signature="e#790#791#0" expanded="true" />
+                <element signature="e#830#831#0" expanded="true" />
+                <element signature="e#864#865#0" expanded="true" />
+                <element signature="e#903#904#0" expanded="true" />
+                <element signature="e#945#946#0" expanded="true" />
+                <element signature="e#985#986#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="IRConstant.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/yal2jvm/hhir/IRConstant.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="240">
+              <caret line="37" column="13" lean-forward="true" selection-start-line="37" selection-start-column="13" selection-end-line="37" selection-end-column="13" />
               <folding />
             </state>
           </provider>
@@ -119,7 +148,6 @@
         <option value="$PROJECT_DIR$/src/yal2jvm/hhir/IRArith.java" />
         <option value="$PROJECT_DIR$/src/yal2jvm/hhir/IRLoad.java" />
         <option value="$PROJECT_DIR$/src/yal2jvm/hhir/Operation.java" />
-        <option value="$PROJECT_DIR$/src/yal2jvm/hhir/IRStoreArith.java" />
         <option value="$PROJECT_DIR$/examples/semantic_no_errors/array1.j" />
         <option value="$PROJECT_DIR$/examples/semantic_no_errors/array1.yal" />
         <option value="$PROJECT_DIR$/src/yal2jvm/hhir/IRAllocate.java" />
@@ -127,7 +155,6 @@
         <option value="$PROJECT_DIR$/examples/MyFirstYalExamples/array1.j" />
         <option value="$PROJECT_DIR$/aval1.j" />
         <option value="$PROJECT_DIR$/examples/MyFirstYalExamples/aval1.j" />
-        <option value="$PROJECT_DIR$/src/yal2jvm/hhir/IRMethod.java" />
         <option value="$PROJECT_DIR$/examples/MyFirstYalExamples/aval3.j" />
         <option value="$PROJECT_DIR$/array1.j" />
         <option value="$PROJECT_DIR$/array2.j" />
@@ -138,7 +165,6 @@
         <option value="$PROJECT_DIR$/aval7.j" />
         <option value="$PROJECT_DIR$/examples/MyFirstYalExamples/aval7.j" />
         <option value="$PROJECT_DIR$/aval8.j" />
-        <option value="$PROJECT_DIR$/src/yal2jvm/hhir/IRConstant.java" />
         <option value="$PROJECT_DIR$/constantRanges.j" />
         <option value="$PROJECT_DIR$/examples/MyFirstYalExamples/constant-ranges.j" />
         <option value="$PROJECT_DIR$/inputAsOutput.j" />
@@ -155,6 +181,9 @@
         <option value="$PROJECT_DIR$/examples/MyFirstYalExamples/register-test.j" />
         <option value="$PROJECT_DIR$/stackSize.j" />
         <option value="$PROJECT_DIR$/examples/MyFirstYalExamples/stack-size.j" />
+        <option value="$PROJECT_DIR$/src/yal2jvm/hhir/IRMethod.java" />
+        <option value="$PROJECT_DIR$/src/yal2jvm/hhir/IRStoreArith.java" />
+        <option value="$PROJECT_DIR$/src/yal2jvm/hhir/IRConstant.java" />
       </list>
     </option>
   </component>
@@ -544,7 +573,7 @@
       <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.27467105" sideWeight="0.4183056" order="8" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.27467105" sideWeight="0.4183056" order="8" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.41447368" sideWeight="0.5816944" order="3" side_tool="false" content_ui="tabs" />
@@ -605,13 +634,6 @@
     </watches-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/examples/MyFirstYalExamples/aval2.yal">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/examples/MyFirstYalExamples/aval1.yal">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -687,14 +709,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="425">
           <caret line="25" column="0" lean-forward="true" selection-start-line="25" selection-start-column="0" selection-end-line="25" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/yal2jvm/hhir/IRConstant.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="337">
-          <caret line="34" column="29" lean-forward="true" selection-start-line="34" selection-start-column="29" selection-end-line="34" selection-end-column="29" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -961,8 +975,33 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/yal2jvm/hhir/IRMethod.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="271">
-          <caret line="92" column="20" lean-forward="true" selection-start-line="92" selection-start-column="20" selection-end-line="92" selection-end-column="20" />
+        <state relative-caret-position="884">
+          <caret line="52" column="31" lean-forward="false" selection-start-line="52" selection-start-column="31" selection-end-line="52" selection-end-column="31" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/yal2jvm/hhir/IRStoreArith.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="4" column="13" lean-forward="false" selection-start-line="4" selection-start-column="13" selection-end-line="4" selection-end-column="13" />
+          <folding>
+            <element signature="e#709#710#0" expanded="true" />
+            <element signature="e#748#749#0" expanded="true" />
+            <element signature="e#790#791#0" expanded="true" />
+            <element signature="e#830#831#0" expanded="true" />
+            <element signature="e#864#865#0" expanded="true" />
+            <element signature="e#903#904#0" expanded="true" />
+            <element signature="e#945#946#0" expanded="true" />
+            <element signature="e#985#986#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/yal2jvm/hhir/IRConstant.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="240">
+          <caret line="37" column="13" lean-forward="true" selection-start-line="37" selection-start-column="13" selection-end-line="37" selection-end-column="13" />
           <folding />
         </state>
       </provider>

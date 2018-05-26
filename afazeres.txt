@@ -14,10 +14,8 @@ E possivel expressoes em ExprTest, tipo a < b+c? permite, mas a < a+b+c n?o
 E a < f1()? permite
 Ver se ta tudo direito na analise semantica para isso
 
-ver se para chamar fun?ao do memso module pode ser moduleName.fun() e fun() --- ver se ja dá, mas deve dar
-
 ver todo's
 
 se conseguir ver em whiles garantir que o 1º ciclo é executado, colocar logo jump para ele, sem verificar a expressao
 
-usar uma instruçao especial para comparaçoes com 0 nos ifs e whiles
+ver iinc melhor, file stackSize na funçao h podia usar e nao usa

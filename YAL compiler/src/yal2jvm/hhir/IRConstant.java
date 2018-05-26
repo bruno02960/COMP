@@ -23,7 +23,8 @@ public class IRConstant extends IRNode
         }
         catch(NumberFormatException nfe)
         {
-            inst.add("ldc " + value);
+            System.out.println("Error getting number. Value " + value + "cannot be casted to integer.");
+            System.exit(-1);
         }
 
         return inst;
