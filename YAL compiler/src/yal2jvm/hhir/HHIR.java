@@ -127,7 +127,7 @@ public class HHIR
             inst.addAll(globalStaticInstructions);
 
             inst.add("return \n");
-            inst.add("end method\n");
+            inst.add(".end method\n");
         }
 
         return inst;

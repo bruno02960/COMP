@@ -78,13 +78,13 @@ public class IRGlobal extends IRNode
     {
         //declare array as global
         ArrayList<String> insts = new ArrayList<>();
-        String inst = ".field public static " + name + " A";
+        String inst = ".field public static " + name + " [I";
         insts.add(inst);
 
         // instructions to static init method
         staticArraysInstructions.addAll(sizeInstructions);
         staticArraysInstructions.add("newarray int");
-        staticArraysInstructions.add("putstatic " + Yal2jvm.moduleName + "/" + name + " A");
+        staticArraysInstructions.add("putstatic " + Yal2jvm.moduleName + "/" + name + " [I");
 
         return insts;
     }

@@ -168,7 +168,7 @@ public class IRAllocate extends IRNode
         ArrayList<String> inst = new ArrayList<>();
 		if (this.storeVarGlobal)
 		{
-			String varType = type == Type.INTEGER ? "I" : "A";
+			String varType = type == Type.INTEGER ? "I" : "[I";
 			inst.add("putstatic " + Yal2jvm.moduleName + "/" + name + " " + varType);
 		}
 		else
