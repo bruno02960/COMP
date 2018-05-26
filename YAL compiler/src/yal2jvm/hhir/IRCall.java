@@ -85,7 +85,7 @@ public class IRCall extends IRNode
     private String getCallInstruction()
     {
        	String callInst = "invokestatic ";
-    	if (this.module != null && this.module != Yal2jvm.moduleName)
+    	if (this.module != null)
     		callInst += this.module + "/";
     	callInst += this.method + "(";
     	
