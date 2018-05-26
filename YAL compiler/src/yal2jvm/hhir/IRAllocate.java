@@ -7,9 +7,8 @@ import java.util.ArrayList;
 public class IRAllocate extends IRNode
 {
     private String name;
-    private IRLoad lhsIndex = null;
+    private IRNode lhsIndex = null;
     private Type type;
-    private IRLoad rhsIndex = null;
     private IRNode rhs;
     private int register = -1;
 	private boolean storeVarGlobal = false;
@@ -21,11 +20,11 @@ public class IRAllocate extends IRNode
         this.type = Type.INTEGER;
         this.nodeType = "Allocate";
         this.name = name;
+
         if(value.getType().equals(Type.INTEGER))
             this.rhs = new IRConstant(value.getVar());
         else
             this.rhs = new IRLoad(value);
-
         this.addChild(this.rhs);
     }
 
@@ -37,11 +36,11 @@ public class IRAllocate extends IRNode
         this.nodeType = "Allocate";
         this.name = name;
         this.type = Type.ARRAYSIZE;
+
         if(value.getType().equals(Type.INTEGER))
             this.rhs = new IRConstant(value.getVar());
         else
             this.rhs = new IRLoad(value);
-
         this.addChild(this.rhs);
     }
 
@@ -51,14 +50,19 @@ public class IRAllocate extends IRNode
         this.type = Type.ARRAY;
         this.nodeType = "Allocate";
         this.name = name.getVar();
-        this.lhsIndex = new IRLoad(name.getAt());
+
+        Variable at = name.getAt();
+        if(at.getType().equals(Type.INTEGER))
+            this.lhsIndex = new IRConstant(at.getVar());
+        else
+            this.lhsIndex = new IRLoad(at);
+        this.addChild(this.lhsIndex);
+
         if(value.getType().equals(Type.INTEGER))
             this.rhs = new IRConstant(value.getVar());
         else
             this.rhs = new IRLoad(value);
-
         this.addChild(this.rhs);
-        this.addChild(this.lhsIndex);
     }
 
     //a = b[5];
@@ -67,8 +71,8 @@ public class IRAllocate extends IRNode
         this.nodeType = "Allocate";
         this.name = name.getVar();
         this.type = Type.INTEGER;
-        this.rhs = new IRLoad(value);
 
+        this.rhs = new IRLoad(value);
         this.addChild(this.rhs);
     }
 
@@ -78,10 +82,15 @@ public class IRAllocate extends IRNode
         this.nodeType = "Allocate";
         this.name = name.getVar();
         this.type = Type.ARRAY;
-        this.lhsIndex = new IRLoad(name.getAt());
-        this.rhs = new IRLoad(value);
 
+        Variable at = name.getAt();
+        if(at.getType().equals(Type.INTEGER))
+            this.lhsIndex = new IRConstant(at.getVar());
+        else
+            this.lhsIndex = new IRLoad(at);
         this.addChild(this.lhsIndex);
+
+        this.rhs = new IRLoad(value);
         this.addChild(this.rhs);
     }
 
