@@ -802,6 +802,7 @@ public class HHIR
                         value = new Variable(str_value, Type.INTEGER);
                     }
 
+                    variable.setType(Type.INTEGER); //TODO VER BRUNO
                 }
                 break;
             case "ARRAYELEMENT":

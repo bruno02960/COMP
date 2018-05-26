@@ -11,9 +11,9 @@ public class IRMethod extends IRNode
     private Type[] argsType;
     private String[] argsNames;
 
-    public int labelN = 0;
+    private int labelN = 0;
     private int regN = 0;
-    public int varN = 0;
+    private int varN = 0;
 
     public IRMethod(String name, Type returnType, String returnVar, Type[] argsTypes, String[] argsNames)
     {
@@ -23,7 +23,7 @@ public class IRMethod extends IRNode
         this.argsType = argsTypes == null ? this.argsType = new Type[0] : argsTypes;
         this.argsNames = argsNames == null ? this.argsNames = new String[0] : argsNames;
         this.nodeType = "Method";
-        this.regN += this.argsNames.length;
+        this.regN = this.argsNames.length;
     }
 
     @Override
@@ -36,7 +36,7 @@ public class IRMethod extends IRNode
         if (name.equals("main"))
         {
             methodDeclarationInst += "main([Ljava/lang/String;)V";
-            this.regN++; // the main as the argument String args[], however is it not use in yal
+            this.regN++; // the main as the argument String args[], however is it not used in yal
         }
         else
         {
@@ -131,7 +131,7 @@ public class IRMethod extends IRNode
         this.regN++;
     }
 
-    public int getArgumentRegister(String name)
+    public int getArgumentRegister(String name)//TODO VER TIAGO
     {
         for (int i = 0; i < argsNames.length; i++)
         {
@@ -141,15 +141,16 @@ public class IRMethod extends IRNode
         return -1;
     }
 
-    public int getVarRegister(String name)
+    public int getVarRegister(String name) //TODO VER TIAGO
     {
         for (int i = 0; i < children.size(); i++)
         {
-            if (children.get(i).toString().equals("Allocate"))
+            String childrenType = children.get(i).toString();
+            if (childrenType.equals("Allocate"))
             {
                 IRAllocate irAllocate = ((IRAllocate) children.get(i));
                 if (irAllocate.getName().equals(name))
-                    return ((IRAllocate) children.get(i)).getRegister();
+                    return irAllocate.getRegister();
             }
         }
         return -1;
