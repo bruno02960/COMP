@@ -1,5 +1,7 @@
 package yal2jvm.hhir;
 
+import yal2jvm.Yal2jvm;
+
 import java.util.ArrayList;
 
 public abstract class IRNode
@@ -69,6 +71,18 @@ public abstract class IRNode
         return getInstructionLoadOrStoreInstructionMoreEfficient("astore", registerNumber);
     }
 
+    protected String getInstructionToLoadGlobalArrayToStack(Type type, String name)
+    {
+        String varType = type == Type.INTEGER ? "I" : "[I";
+        return "getstatic " + Yal2jvm.moduleName + "/" + name + " " + varType;
+    }
+
+    protected String getInstructionToStoreGlobalArray(Type type, String name)
+    {
+        String varType = type == Type.INTEGER ? "I" : "[I";
+        return "putstatic " + Yal2jvm.moduleName + "/" + name + " " + varType;
+    }
+
     @Override
     public String toString()
     {
@@ -121,15 +135,22 @@ public abstract class IRNode
         return null;
     }
 
-    protected ArrayList<String> setArrayElementByIRNode(IRNode index, int register, IRNode value)
+    protected ArrayList<String> setLocalArrayElementByIRNode(IRNode index, int register, IRNode value)
     {
-      return  setArrayElement(index.getInstructions(), register, value);
+        String loadArrayRefInstruction = getInstructionToLoadArrayFromRegisterToStack(register);
+        return setArrayElement(index.getInstructions(), loadArrayRefInstruction, value);
     }
 
-    protected ArrayList<String> setArrayElement(ArrayList<String> indexInstructions, int register, IRNode value)
+    protected ArrayList<String> setGlobalArrayElementByIRNode(IRNode index, Type type, String name, IRNode value)
+    {
+        String loadArrayRefInstruction = getInstructionToLoadGlobalArrayToStack(type, name);
+        return setArrayElement(index.getInstructions(), loadArrayRefInstruction, value);
+    }
+
+    protected ArrayList<String> setArrayElement(ArrayList<String> indexInstructions, String loadArrayRefInstruction, IRNode value)
     {
         ArrayList<String> inst = new ArrayList<>();
-        inst.add(getInstructionToLoadArrayFromRegisterToStack(register));
+        inst.add(loadArrayRefInstruction);
         inst.addAll(indexInstructions);
         inst.addAll(value.getInstructions());
         inst.add("iastore");

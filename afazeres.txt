@@ -19,3 +19,7 @@ ver todo's
 se conseguir ver em whiles garantir que o 1º ciclo é executado, colocar logo jump para ele, sem verificar a expressao
 
 ver iinc melhor, file stackSize na funçao h podia usar e nao usa
+
+IRMethod passar type e string para variable
+
+trocar pair sringtype to variable
