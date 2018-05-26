@@ -47,7 +47,7 @@ ireturn
 .method public static main([Ljava/lang/String;)V
 .limit locals 255
 .limit stack 20
-invokestatic max1()I
+invokestatic aval8/max1()I
 istore_1
 iload_1
 invokestatic io/println(I)V

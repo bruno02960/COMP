@@ -25,19 +25,24 @@ public abstract class IRStore extends IRNode
         {
         	IRModule module = (IRModule)findParent("Module");
         	IRGlobal global = module.getGlobal(name);
+        	String instruction = null;
+
         	if (global != null)
         	{
-        		if(global.getType() == Type.INTEGER)
-                {
-                    String storeInst = "putstatic " + module.getName() + "/" + name + " I";
-                    inst.add(storeInst);
-                }
-                else
-                {
-                    //VER AQUI É GLOBAL----CORRIGIR
-                    inst.add(getInstructionToLoadArrayFromRegisterToStack(register)); // aload register
-                    inst.addAll(index.getInstructions()); //  ldc index
-                    inst.add("iastore");
+        	    switch (global.getType()) {
+                    case INTEGER:
+                        instruction = "putstatic " + module.getName() + "/" + name + " I";
+                        inst.add(instruction);
+                        break;
+                    case VARIABLE:
+                        instruction = "putstatic " + module.getName() + "/" + name + " I";
+                        inst.add(instruction);
+                        break;
+                    default:
+                        //TODO: VER AQUI É GLOBAL----CORRIGIR
+                        inst.add(getInstructionToLoadArrayFromRegisterToStack(register)); // aload register
+                        inst.addAll(index.getInstructions()); //  ldc index
+                        inst.add("iastore");
                 }
 
         		return inst;

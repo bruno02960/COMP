@@ -9,7 +9,7 @@
 .limit stack 20
 iconst_0
 istore_1
-bipush -1
+iconst_m1
 istore_2
 while_Count_init1:
 iload_2
@@ -42,7 +42,7 @@ ireturn
 .limit locals 255
 .limit stack 20
 iconst_3
-invokestatic Count(I)I
+invokestatic aval7/Count(I)I
 istore_1
 iload_1
 invokestatic io/println(I)V

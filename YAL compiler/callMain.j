@@ -1,26 +1,31 @@
-.class public callMain
+.class public static callMain
 .super java/lang/Object
 
-.field static x I = 1
+
+.field public static x I = 1
+
 
 .method public static f()V
-.limit locals 0
-.limit stack 2
+.limit locals 255
+.limit stack 20
 getstatic callMain/x I
-ifle end_if
+ifgt true_f1
+goto if_f_end2
+true_f1:
 getstatic callMain/x I
 iconst_1
 isub
 putstatic callMain/x I
 aconst_null
 invokestatic callMain/main([Ljava/lang/String;)V
-end_if:
+if_f_end2:
 return
 .end method
 
+
 .method public static main([Ljava/lang/String;)V
-.limit locals 1
-.limit stack 1
+.limit locals 255
+.limit stack 20
 ldc "Call main"
 invokestatic io/println(Ljava/lang/String;)V
 invokestatic callMain/f()V

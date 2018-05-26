@@ -37,21 +37,15 @@ ireturn
 iconst_4
 iconst_5
 invokestatic aval5/f(II)I
-
 istore_1
-
 iload_1
 invokestatic io/println(I)V
-
 iconst_2
 iconst_2
 invokestatic aval5/f(II)I
-
 istore_1
-
 iload_1
 invokestatic io/println(I)V
-
 return
 .end method
 

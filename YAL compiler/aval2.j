@@ -1,4 +1,4 @@
-.class public static aval3
+.class public static aval2
 .super java/lang/Object
 
 
@@ -7,11 +7,11 @@
 .method public static f(II)I
 .limit locals 255
 .limit stack 20
+iconst_0
+istore_2
 iload_0
 iload_1
-if_icmpge true_f1
-iconst_4
-istore_2
+if_icmpeq true_f1
 goto if_f_end2
 true_f1:
 iconst_2
@@ -26,20 +26,22 @@ ireturn
 .limit locals 255
 .limit stack 20
 iconst_2
-istore_1
-iconst_3
-istore_2
-iload_1
-iload_2
-invokestatic aval3/f(II)I
+bipush 12
+invokestatic aval2/f(II)I
 istore_1
 iload_1
 invokestatic io/println(I)V
-bipush 6
+iconst_4
+iconst_2
+invokestatic aval2/f(II)I
 istore_1
 iload_1
-iload_2
-invokestatic aval3/f(II)I
+invokestatic io/println(I)V
+iconst_3
+istore_1
+iconst_4
+iconst_2
+invokestatic aval2/f(II)I
 istore_1
 iload_1
 invokestatic io/println(I)V

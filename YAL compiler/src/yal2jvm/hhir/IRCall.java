@@ -42,55 +42,52 @@ public class IRCall extends IRNode
     {
     	 ArrayList<String> inst = new ArrayList<>();
 
-         for (int i = 0; i < arguments.size(); i++)
-         {
-         	PairStringType arg = arguments.get(i);
+    	 if(this.method.equals("main")) {
+    	 	inst.add("aconst_null");
+		 }
+    	 else {
+			 for (int i = 0; i < arguments.size(); i++) {
+				 PairStringType arg = arguments.get(i);
 
-			 Type type = arg.getType();
+				 Type type = arg.getType();
 
-			 type = getType(arg, type);
+				 type = getType(arg, type);
 
-			 switch (type)
-         	{
-         		case STRING:
- 	        	{
- 	        		IRConstant stringConst = new IRConstant(arg.getString());
- 	        		inst.addAll(stringConst.getInstructions());
- 	        		break;
- 	        	}
-         		case INTEGER:
-         		{
-         			IRNode var;
-         			if (arg.getString().matches("-?\\d+"))
-         			{
-         				var = new IRConstant(arg.getString());
-         			}
-         			else
-         			{
-         				var = new IRLoad(arg.getString(), Type.INTEGER);
-         				this.addChild(var);
-         			}
-         			inst.addAll(var.getInstructions());
-         			break;
-         		}
-         		case ARRAY:
-                {
-                    IRLoad irLoad = new IRLoad(arg.getString(), Type.ARRAY);
-					this.addChild(irLoad);
-                    inst.addAll(irLoad.getInstructions());
-                    break;
-                }
-				case ARRAYSIZE:
-				{
-					IRLoad irLoad = new IRLoad(arg.getString(), Type.ARRAYSIZE);
-					this.addChild(irLoad);
-					inst.addAll(irLoad.getInstructions());
-					break;
-				}
-         		default:
-         			break;
-         	}
-         }
+				 switch (type) {
+					 case STRING: {
+						 IRConstant stringConst = new IRConstant(arg.getString());
+						 inst.addAll(stringConst.getInstructions());
+						 break;
+					 }
+					 case INTEGER: {
+						 IRNode var;
+						 if (arg.getString().matches("-?\\d+")) {
+							 var = new IRConstant(arg.getString());
+						 } else {
+							 var = new IRLoad(arg.getString(), Type.INTEGER);
+							 this.addChild(var);
+						 }
+						 inst.addAll(var.getInstructions());
+						 break;
+					 }
+					 case ARRAY: {
+						 IRLoad irLoad = new IRLoad(arg.getString(), Type.ARRAY);
+						 this.addChild(irLoad);
+						 inst.addAll(irLoad.getInstructions());
+						 break;
+					 }
+					 case ARRAYSIZE: {
+						 IRLoad irLoad = new IRLoad(arg.getString(), Type.ARRAYSIZE);
+						 this.addChild(irLoad);
+						 inst.addAll(irLoad.getInstructions());
+						 break;
+					 }
+					 default:
+						 break;
+				 }
+			 }
+		 }
+
          return inst;
     }
 
@@ -123,38 +120,37 @@ public class IRCall extends IRNode
     		callInst += this.module + "/";
     	callInst += this.method + "(";
 
-    	for (int i = 0; i < arguments.size(); i++)
-    	{
-			Type type = arguments.get(i).getType();
+    	if(this.method.equals("main")) {
+    		callInst+="[Ljava/lang/String;";
+		}
+		else {
+			for (int i = 0; i < arguments.size(); i++) {
+				Type type = arguments.get(i).getType();
 
-			type = getType(arguments.get(i), type);
+				type = getType(arguments.get(i), type);
 
-    		switch(type)
-    		{
-		    	case STRING:
-		    	{
-		    		callInst += "Ljava/lang/String;";
-		    		break;
-		    	}
-				case INTEGER:
-				{
-					callInst += "I";
-					break;
+				switch (type) {
+					case STRING: {
+						callInst += "Ljava/lang/String;";
+						break;
+					}
+					case INTEGER: {
+						callInst += "I";
+						break;
+					}
+					case ARRAY: {
+						callInst += "[I";
+						break;
+					}
+					case ARRAYSIZE: {
+						callInst += "[I";
+						break;
+					}
+					default:
+						break;
 				}
-				case ARRAY:
-				{
-					callInst += "[I";
-					break;
-				}
-				case ARRAYSIZE:
-				{
-					callInst += "[I";
-					break;
-				}
-				default:
-					break;
-    		}
-    	}
+			}
+		}
         callInst += ")";
 
         if (this.module == null || this.module.equals(Yal2jvm.moduleName))

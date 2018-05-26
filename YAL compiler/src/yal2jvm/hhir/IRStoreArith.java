@@ -60,8 +60,11 @@ public class IRStoreArith extends IRStore
                 if (arithLhs.getType().equals(Type.INTEGER) && getRhs().nodeType.equals("Constant") && arithLhs.getName().equals(name)) {
                     IRConstant irConstant = (IRConstant) getRhs();
                     if(Integer.parseInt(irConstant.getValue()) > -32768 && Integer.parseInt(irConstant.getValue()) < 32768) {
-                        isIinc = true;
-                        inst.add(getIincInstruction(irConstant));
+                        String instruction = getIincInstruction(irConstant);
+                        if(!instruction.equals("")) {
+                            inst.add(instruction);
+                            isIinc = true;
+                        }
                     }
                 }
             } else {
@@ -71,8 +74,11 @@ public class IRStoreArith extends IRStore
                     if (arithRhs.getType().equals(Type.INTEGER) && getLhs().nodeType.equals("Constant") && arithRhs.getName().equals(name)) {
                         IRConstant irConstant = (IRConstant) getLhs();
                         if(Integer.parseInt(irConstant.getValue()) > -32768 && Integer.parseInt(irConstant.getValue()) < 32768) {
-                            isIinc = true;
-                            inst.add(getIincInstruction(irConstant));
+                            String instruction = getIincInstruction(irConstant);
+                            if(!instruction.equals("")) {
+                                inst.add(instruction);
+                                isIinc = true;
+                            }
                         }
                     }
                 }
@@ -97,6 +103,8 @@ public class IRStoreArith extends IRStore
         int register = method.getArgumentRegister(name);
         if (register == -1)
             register = method.getVarRegister(name);
+        if (register == -1)
+            return "";
 
         instruction += register + " " + (irArith.getOp().equals(Operation.SUB)? "-" : "") + irConstant.getValue();
 
