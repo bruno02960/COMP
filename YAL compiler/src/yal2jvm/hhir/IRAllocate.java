@@ -1,7 +1,5 @@
 package yal2jvm.hhir;
 
-import yal2jvm.Yal2jvm;
-
 import java.util.ArrayList;
 
 public class IRAllocate extends IRNode
@@ -12,6 +10,7 @@ public class IRAllocate extends IRNode
     private IRNode rhs;
     private int register = -1;
 	private boolean storeVarGlobal = false;
+	private IRGlobal global;
 
 
 	//a = 1;
@@ -104,11 +103,10 @@ public class IRAllocate extends IRNode
     public ArrayList<String> getInstructions()
     {
         ArrayList<String> inst = new ArrayList<>();
-        
-        if (storeVarIsGlobal())
-    	{
-    		this.storeVarGlobal  = true;
-    	}
+
+        global = storeVarGlobal();
+        if(global != null)
+            this.storeVarGlobal  = true;
         else
         {
             IRAllocate irAllocate = getVarIfExists(this.name);
@@ -122,43 +120,10 @@ public class IRAllocate extends IRNode
         {
             inst.addAll(rhs.getInstructions());
             inst.add("newarray int");
-            inst.addAll(getStoreInst());
-        }
-        else
-        {
-            inst.addAll(getStoreInst());
         }
 
-        //TODO: remove if not necessary
- /*
-        //assign a variable
-    	if (this.variable != null)
-    	{
-            switch (type)
-            {
-
-        		int otherReg = getVarIfExists(this.variable);
-        		if (otherReg != -1)
-        		{
-        			if (this.index == null && this.)
-        			inst.add("iload " + otherReg);
-        		}
-        		else
-        		{
-        			IRLoad var = new IRLoad(this.variable);
-        			this.addChild(var);
-        			inst.addAll(var.getInstructions());
-        		}
-            }
-    	}
-    	else	//assign a constant
-    	{
-    		switch(type)
-    		{
-    			
-    		}
-    		inst.add(IRConstant.getLoadConstantInstruction(this.value));
-    	}*/
+        //get store instructions
+        inst.addAll(getStoreInst());
 
         return inst;
     }
@@ -168,8 +133,27 @@ public class IRAllocate extends IRNode
         ArrayList<String> inst = new ArrayList<>();
 		if (this.storeVarGlobal)
 		{
-			String varType = type == Type.INTEGER ? "I" : "[I";
-			inst.add("putstatic " + Yal2jvm.moduleName + "/" + name + " " + varType);
+		    String typeStr = type.name();
+            if(typeStr != null && global.getType() == Type.INTEGER) // i = 5;
+            {
+                inst.addAll(rhs.getInstructions());
+                inst.add(getInstructionToStoreGlobalArray(type, name));
+                return inst;
+            }
+
+            if(typeStr == null)
+                typeStr = rhs.nodeType;
+
+            if(typeStr.equals(Type.INTEGER.name()))
+                inst.addAll(setAllArrayElements()); // i = 5; com i array
+            else
+            {
+                if(lhsIndex != null) // a[i] = 5;
+                    inst.addAll(setGlobalArrayElementByIRNode(lhsIndex, type, name, rhs));
+                else
+                    inst.add(getInstructionToStoreGlobalArray(type, name)); // i = [5];
+            }
+
 		}
 		else
 		{
@@ -189,7 +173,7 @@ public class IRAllocate extends IRNode
             else
             {
                 if(lhsIndex != null) // a[i] = 5;
-                    inst.addAll(setArrayElementByIRNode(lhsIndex, register, rhs));
+                    inst.addAll(setLocalArrayElementByIRNode(lhsIndex, register, rhs));
                 else
                     inst.add(getInstructionToStoreArrayInRegister(this.register)); // i = [5];
             }
@@ -197,18 +181,6 @@ public class IRAllocate extends IRNode
 
         return inst;
 	}
-
-	//TODO MOVED TO IRNode, mas aquele inst.addAll(rhsIndex.getInstructions()); acho que nao faz sen
-   /* private ArrayList<String> setArrayElementByIRNode()
-    {
-        ArrayList<String> inst = new ArrayList<>();
-        inst.add(getInstructionToLoadArrayFromRegisterToStack(this.register));
-        inst.addAll(lhsIndex.getInstructions());
-        inst.addAll(rhsIndex.getInstructions());
-        inst.add("iastore");
-
-        return inst;
-    }*/
 
     private ArrayList<String> setAllArrayElements()
     {
@@ -219,15 +191,19 @@ public class IRAllocate extends IRNode
             System.exit(-1);
         }
 
-        String arrayRefJVMCode = getInstructionToLoadArrayFromRegisterToStack(irAllocate.getRegister());
+        String arrayRefJVMCode;
+        if(storeVarGlobal)
+            arrayRefJVMCode = getInstructionToLoadGlobalArrayToStack(type, name);
+        else
+            arrayRefJVMCode = getInstructionToLoadArrayFromRegisterToStack(irAllocate.getRegister());
         ArrayList<String> valueJVMCode = rhs.getInstructions();
         return getCodeForSetAllArrayElements(arrayRefJVMCode, valueJVMCode);
     }
 
-    private boolean storeVarIsGlobal()
+    private IRGlobal storeVarGlobal()
 	{
 		IRModule module = (IRModule)findParent("Module");
-		return module.getGlobal(name) != null;
+		return module.getGlobal(name);
 	}
 
     private void initRegister()

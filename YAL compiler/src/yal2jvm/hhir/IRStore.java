@@ -56,7 +56,7 @@ public abstract class IRStore extends IRNode
         if(arrayAccess)
         {
             inst.add("pop");
-            inst.addAll(setArrayElementByIRNode(index, register, value));
+            inst.addAll(setLocalArrayElementByIRNode(index, register, value));
         }
         else
             inst.add(getInstructionToStoreRegisterToStack(register));
