@@ -13,12 +13,7 @@ function a[]=f1(b[]) {
 function a[]=f2(N) {
 		 a = [N];
 
-         i = 0;
-
-         while(i < a.size) {
-            a[i] = 1;
-            i = i + 1;
-         }
+		 a = 1; // initialize all the N elements of a with value 1
 }
 
 function main() {

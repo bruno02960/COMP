@@ -182,11 +182,12 @@ public abstract class IRNode
     {
         ArrayList<String> inst = new ArrayList<>();
 
-        inst.add("init:");
         inst.add(arrayRefJVMCode);
         inst.add("arraylength");
+        inst.add("init:");
         inst.add("iconst_1");
         inst.add("isub");
+        inst.add("dup");
         inst.add("dup");
         inst.add("iflt end");
         inst.add(arrayRefJVMCode);
@@ -195,6 +196,25 @@ public abstract class IRNode
         inst.add("iastore");
         inst.add("goto init");
         inst.add("end:");
+
+        /*
+            aload_1
+            arraylength
+            init:
+            iconst_1
+            isub
+            dup
+            dup
+            iflt end
+            aload_1
+            swap
+            aload_1
+            arraylength
+            iastore
+            goto init
+            end:
+         */
+
 
         return inst;
     }

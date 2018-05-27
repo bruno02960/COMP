@@ -40,26 +40,20 @@ areturn
 iload_0
 newarray int
 astore_1
-
-iconst_0
-istore_2
-init:
-iload_2
 aload_1
 arraylength
-if_icmpge end
-
-aload_1
-
-iload_2
-
+init:
 iconst_1
-
+isub
+dup
+dup
+iflt end
+aload_1
+swap
+iconst_1
 iastore
-iinc 2 1
 goto init
 end:
-
 aload_1
 areturn
 .end method
