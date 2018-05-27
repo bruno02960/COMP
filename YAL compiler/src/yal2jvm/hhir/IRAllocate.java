@@ -154,7 +154,10 @@ public class IRAllocate extends IRNode
                 if(lhsIndex != null) // a[i] = 5;
                     inst.addAll(setGlobalArrayElementByIRNode(lhsIndex, type, name, rhs));
                 else
+                {
                     inst.add(getInstructionToStoreGlobalArray(type, name)); // i = [5];
+                    type = Type.ARRAY;
+                }
             }
 
 		}
@@ -212,7 +215,7 @@ public class IRAllocate extends IRNode
         }
         else if(node instanceof IRArgument)
             reg = ((IRArgument)node).getRegister();
-        else
+        else if(node instanceof IRAllocate)
             reg = ((IRAllocate) node).getRegister();
 
         String arrayRefJVMCode;
