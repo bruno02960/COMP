@@ -1,12 +1,27 @@
 module programa2 {
 
-function a[]=f1() {
-		 a = [N];
-		 	a[i] = 2;
+    function a[] = f1() {
+         a = [4];
+         a = [7];
+         i = 0;
+
+         a[1] = 2;
+
+         while(i != a.size) {
+            c = a[i];
+            io.println("c = ", c);
+            i = i + 1;
+         }
+
+         b = a.size;
+         io.println();
+         io.println("b = ", b);
+    }
+
+    function main() {
+        a = f1();
+    }
 }
 
-function main() {
-	a = f1();
-}
-}
+
 

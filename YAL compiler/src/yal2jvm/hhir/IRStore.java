@@ -61,16 +61,8 @@ public abstract class IRStore extends IRNode
             inst.addAll(setLocalArrayElementByIRNode(index, register, value));
         }
         else
-            inst.add(getInstructionToStoreRegisterToStack(register));
+            inst.add(getInstructionToLoadIntFromRegisterToStack(register));
 
         return inst;
-    }
-
-    protected String getInstructionToStoreRegisterToStack(int registerNumber)
-    {
-        if(registerNumber < 4)
-            return "istore_" + registerNumber;
-        else
-            return "istore " + registerNumber;
     }
 }
