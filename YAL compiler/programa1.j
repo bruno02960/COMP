@@ -1,9 +1,11 @@
 .class public static programa1
 .super java/lang/Object
 
+
 .field public static data [I
 .field public static mx I = 0
 .field public static mn I = 0
+
 
 .method public static det([I)V
 .limit locals 255
@@ -41,6 +43,7 @@ while_det_end2:
 return
 .end method
 
+
 .method public static main([Ljava/lang/String;)V
 .limit locals 255
 .limit stack 20
@@ -54,12 +57,16 @@ getstatic programa1/mn I
 invokestatic io/println(Ljava/lang/String;I)V
 return
 .end method
+.method static public <clinit>()V 
 
-.method static public <clinit>()V
 .limit stack 255
+
 .limit locals 255
+
 bipush 100
 newarray int
 putstatic programa1/data [I
-return
+return 
+
 .end method
+
