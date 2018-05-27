@@ -389,7 +389,7 @@ public class HHIR
             return getCallHHIR((ASTCALL) astTermChild);
         else if(astTermChild instanceof ASTARRAYACCESS)
         {
-            Variable variable = getArrayAccessIRNode((ASTARRAYACCESS) astTermChild);
+            VariableArray variable = getArrayAccessIRNode((ASTARRAYACCESS) astTermChild);
             return new IRLoad(variable);
         }
         else
@@ -414,7 +414,6 @@ public class HHIR
 
     private void createWhileHHIR(ASTWHILE astWhile, IRMethod irmethod)
     {
-        //TODO ver ainda que template usar
         /* using template:
 
             lab_init: <test>
@@ -571,7 +570,7 @@ public class HHIR
         createAssignIR(irAssign, irmethod);
     }
 
-    private Variable getArrayAccessIRNode(ASTARRAYACCESS child)
+    private VariableArray getArrayAccessIRNode(ASTARRAYACCESS child)
     {
         ASTARRAYACCESS astarrayaccess = child;
         ASTINDEX astindex = (ASTINDEX) astarrayaccess.jjtGetChild(0);
@@ -802,7 +801,7 @@ public class HHIR
                         value = new Variable(str_value, Type.INTEGER);
                     }
 
-                    variable.setType(Type.VARIABLE); //TODO VER BRUNO
+                    variable.setType(Type.VARIABLE);
                 }
                 break;
             case "ARRAYELEMENT":
