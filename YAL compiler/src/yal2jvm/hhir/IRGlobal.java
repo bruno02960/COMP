@@ -120,7 +120,7 @@ public class IRGlobal extends IRNode
         IRModule module = (IRModule) findParent("Module");
         String globalVariableJVMCode = getGlobalVariableGetCode(name, module);
 
-        getCodeForSetAllArrayElements(globalVariableJVMCode, valueNode.getInstructions());
+        staticArraysInstructions.addAll(getCodeForSetAllArrayElements(globalVariableJVMCode, valueNode.getInstructions()));
     }
 
     public String getName()
