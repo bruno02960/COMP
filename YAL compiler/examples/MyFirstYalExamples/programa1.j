@@ -3,19 +3,18 @@
 
 .field static data [I 
 .field static mx I 
-.field static mn I 
+.field static mn I
+
 .method public static det([I)V
 .limit locals 7
 .limit stack 2
 iconst_0
 istore_1
-
 aload_0
 arraylength
 iconst_1
 isub
 istore_2
-
 loop0:
 
 iload_1

@@ -1,6 +1,9 @@
 .class public static nestedBranch
 .super java/lang/Object
 
+
+
+
 .method public static sign(I)I
 .limit locals 255
 .limit stack 20
@@ -24,6 +27,7 @@ iload_1
 ireturn
 .end method
 
+
 .method public static main([Ljava/lang/String;)V
 .limit locals 255
 .limit stack 20
@@ -36,13 +40,13 @@ iload_2
 iadd
 istore_3
 iload_1
-invokestatic sign(I)I
+invokestatic nestedBranch/sign(I)I
 istore 4
 iload_3
-invokestatic sign(I)I
+invokestatic nestedBranch/sign(I)I
 istore 5
 iload_2
-invokestatic sign(I)I
+invokestatic nestedBranch/sign(I)I
 istore 6
 iload 4
 invokestatic io/println(I)V

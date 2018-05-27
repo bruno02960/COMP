@@ -1,7 +1,7 @@
 .class public static max_array
 .super java/lang/Object
 
-.method public static maxarray()I
+.method public static maxarray([I)I
 .limit locals 255
 .limit stack 20
 aload_0
@@ -14,7 +14,7 @@ while_maxarray_init1:
 iload_2
 aload_0
 arraylength
- while_maxarray_end2
+if_icmpge while_maxarray_end2
 iload_1
 iload_0
 if_icmplt true_maxarray3
@@ -55,8 +55,8 @@ iastore
 iinc 2 1
 goto while_main_init5
 while_main_end6:
-iload_1
-invokestatic maxarray(I)I
+aload_1
+invokestatic max_array/maxarray([I)I
 istore_3
 return
 .end method

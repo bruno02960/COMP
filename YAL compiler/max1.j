@@ -1,12 +1,22 @@
-.class public static max
+.class public static max1
 .super java/lang/Object
 
 
 
 
-.method public static max(IIIII)I
+.method public static max()I
 .limit locals 255
 .limit stack 20
+invokestatic io/read()I
+istore_0
+invokestatic io/read()I
+istore_1
+invokestatic io/read()I
+istore_2
+invokestatic io/read()I
+istore_3
+invokestatic io/read()I
+istore 4
 iload_0
 istore 5
 iload 5
@@ -41,6 +51,9 @@ true_max7:
 iload 4
 istore 5
 if_max_end8:
+ldc "max "
+iload 5
+invokestatic io/print(Ljava/lang/String;I)V
 iload 5
 ireturn
 .end method
@@ -49,23 +62,7 @@ ireturn
 .method public static main([Ljava/lang/String;)V
 .limit locals 255
 .limit stack 20
-iconst_1
-iconst_2
-iconst_3
-iconst_4
-iconst_3
-invokestatic max/max(IIIII)I
+invokestatic max1/max()I
 istore_1
-iload_1
-invokestatic io/println(I)V
-iconst_1
-bipush 6
-iconst_3
-iconst_4
-iconst_5
-invokestatic max/max(IIIII)I
-istore_1
-iload_1
-invokestatic io/println(I)V
 return
 .end method

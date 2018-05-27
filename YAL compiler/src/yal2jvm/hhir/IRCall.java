@@ -166,7 +166,7 @@ public class IRCall extends IRNode
 					callInst += "I";
 					break;
 				case ARRAY:
-					callInst += "A";
+					callInst += "[I";
 					break;
 				case VOID:
 					callInst += "V";
@@ -197,7 +197,7 @@ public class IRCall extends IRNode
 				if(allocate.getType().equals(Type.INTEGER)) //otherwise lhs defined, and type equals lhs var type
 					callInst += "I";
 				else
-					callInst += "A";
+					callInst += "[I";
 			}
 			else if(node instanceof IRGlobal)
 			{
@@ -205,7 +205,7 @@ public class IRCall extends IRNode
 				if(global.getType().equals(Type.INTEGER)) //otherwise lhs defined, and type equals lhs var type
 					callInst += "I";
 				else
-					callInst += "A";
+					callInst += "[I";
 			}
 			else //argument
 			{
@@ -213,7 +213,7 @@ public class IRCall extends IRNode
 				if(method.getArgumentType(lhsVarName).equals(Type.INTEGER)) //otherwise lhs defined, and type equals lhs var type
 					callInst += "I";
 				else
-					callInst += "A";
+					callInst += "[I";
 			}
         }
         return callInst;

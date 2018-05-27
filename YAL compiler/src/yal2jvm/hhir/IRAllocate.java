@@ -180,14 +180,16 @@ public class IRAllocate extends IRNode
             if(varType == null)
                 varType = rhs.nodeType;
 
-            if(varType.equals(Type.INTEGER.name()))
+            if(varType.equals(Type.ARRAY.name()))
                 inst.addAll(setAllArrayElements()); // i = 5; com i array
             else
             {
                 if(lhsIndex != null) // a[i] = 5;
                     inst.addAll(setLocalArrayElementByIRNode(lhsIndex, register, rhs));
-                else
+                else {
                     inst.add(getInstructionToStoreArrayInRegister(this.register)); // i = [5];
+                    type = Type.ARRAY;
+                }
             }
 		}
 

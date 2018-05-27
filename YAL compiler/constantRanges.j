@@ -1,6 +1,9 @@
 .class public static constantRanges
 .super java/lang/Object
 
+
+
+
 .method public static f()V
 .limit locals 255
 .limit stack 20
@@ -35,9 +38,10 @@ invokestatic io/println(I)V
 return
 .end method
 
+
 .method public static main([Ljava/lang/String;)V
 .limit locals 255
 .limit stack 20
-invokestatic f()V
+invokestatic constantRanges/f()V
 return
 .end method

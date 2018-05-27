@@ -18,6 +18,7 @@ iload_2
 ireturn
 .end method
 
+
 .method public static min(II)I
 .limit locals 255
 .limit stack 20
