@@ -7,7 +7,7 @@ public class Symbol
 
     protected String id;
 
-    public Symbol(String id)
+    Symbol(String id)
     {
         this.id = id;
     }

@@ -6,7 +6,7 @@ public class IRJump extends IRNode
 {
 	private String label;
 	
-	public IRJump(String label)
+	IRJump(String label)
 	{
 		this.label = label;
 		this.nodeType = "Jump";

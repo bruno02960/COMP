@@ -12,7 +12,7 @@ public abstract class IRNode
 
     public IRNode()
     {
-        children = new ArrayList<IRNode>();
+        children = new ArrayList<>();
     }
 
     public void addChild(IRNode child)
@@ -51,33 +51,33 @@ public abstract class IRNode
             return instruction + " " + registerNumber;
     }
 
-    protected String getInstructionToLoadIntFromRegisterToStack(int registerNumber)
+    String getInstructionToLoadIntFromRegisterToStack(int registerNumber)
     {
         return getInstructionLoadOrStoreInstructionMoreEfficient("iload", registerNumber);
     }
 
-    protected String getInstructionToStoreIntInRegister(int registerNumber)
+    String getInstructionToStoreIntInRegister(int registerNumber)
     {
         return getInstructionLoadOrStoreInstructionMoreEfficient("istore", registerNumber);
     }
 
-    protected String getInstructionToLoadArrayFromRegisterToStack(int registerNumber)
+    String getInstructionToLoadArrayFromRegisterToStack(int registerNumber)
     {
         return getInstructionLoadOrStoreInstructionMoreEfficient("aload", registerNumber);
     }
 
-    protected String getInstructionToStoreArrayInRegister(int registerNumber)
+    String getInstructionToStoreArrayInRegister(int registerNumber)
     {
         return getInstructionLoadOrStoreInstructionMoreEfficient("astore", registerNumber);
     }
 
-    protected String getInstructionToLoadGlobalArrayToStack(Type type, String name)
+    String getInstructionToLoadGlobalArrayToStack(Type type, String name)
     {
         String varType = type == Type.INTEGER ? "I" : "[I";
         return "getstatic " + Yal2jvm.moduleName + "/" + name + " " + varType;
     }
 
-    protected String getInstructionToStoreGlobalArray(Type type, String name)
+    String getInstructionToStoreGlobalArray(Type type, String name)
     {
         String varType = type == Type.INTEGER ? "I" : "[I";
         return "putstatic " + Yal2jvm.moduleName + "/" + name + " " + varType;
@@ -89,9 +89,9 @@ public abstract class IRNode
         return this.nodeType;
     }
     
-    public IRNode findParent(String nodeType)
+    IRNode findParent(String nodeType)
     {
-        IRNode res = null;
+        IRNode res;
         IRNode par = this.parent;
         while (true)
         {
@@ -112,7 +112,7 @@ public abstract class IRNode
         return res;
     }
 
-    protected IRNode getVarIfExists(String varName)
+    IRNode getVarIfExists(String varName)
     {
         IRModule module = (IRModule) findParent("Module");
         IRGlobal irGlobal = module.getGlobal(varName);
@@ -125,11 +125,9 @@ public abstract class IRNode
             return new IRArgument(register);
 
         ArrayList<IRNode> children = method.getChildren();
-        for (int i = 0; i < children.size(); i++)
-        {
-            if (children.get(i).toString().equals("Allocate"))
-            {
-                IRAllocate alloc = (IRAllocate)children.get(i);
+        for (IRNode aChildren : children) {
+            if (aChildren.toString().equals("Allocate")) {
+                IRAllocate alloc = (IRAllocate) aChildren;
                 if (alloc.getName().equals(varName) && alloc.getRegister() != -1)
                     return alloc;
             }
@@ -138,19 +136,19 @@ public abstract class IRNode
         return null;
     }
 
-    protected ArrayList<String> setLocalArrayElementByIRNode(IRNode index, int register, IRNode value)
+    ArrayList<String> setLocalArrayElementByIRNode(IRNode index, int register, IRNode value)
     {
         String loadArrayRefInstruction = getInstructionToLoadArrayFromRegisterToStack(register);
         return setArrayElement(index.getInstructions(), loadArrayRefInstruction, value);
     }
 
-    protected ArrayList<String> setGlobalArrayElementByIRNode(IRNode index, Type type, String name, IRNode value)
+    ArrayList<String> setGlobalArrayElementByIRNode(IRNode index, Type type, String name, IRNode value)
     {
         String loadArrayRefInstruction = getInstructionToLoadGlobalArrayToStack(type, name);
         return setArrayElement(index.getInstructions(), loadArrayRefInstruction, value);
     }
 
-    protected ArrayList<String> setArrayElement(ArrayList<String> indexInstructions, String loadArrayRefInstruction, IRNode value)
+    private ArrayList<String> setArrayElement(ArrayList<String> indexInstructions, String loadArrayRefInstruction, IRNode value)
     {
         ArrayList<String> inst = new ArrayList<>();
         inst.add(loadArrayRefInstruction);
@@ -161,7 +159,7 @@ public abstract class IRNode
         return inst;
     }
 
-    protected String getGlobalVariableGetCode(String name, IRMethod method)
+    String getGlobalVariableGetCode(String name, IRMethod method)
     {
         IRModule module = ((IRModule) method.getParent());
         IRGlobal global = module.getGlobal(name);
@@ -177,8 +175,8 @@ public abstract class IRNode
         return in;
     }
 
-    protected ArrayList<String> getCodeForSetAllArrayElements(String arrayRefJVMCode,
-                                                              ArrayList<String> valueJVMCode )
+    ArrayList<String> getCodeForSetAllArrayElements(String arrayRefJVMCode,
+                                                    ArrayList<String> valueJVMCode)
     {
         ArrayList<String> inst = new ArrayList<>();
 

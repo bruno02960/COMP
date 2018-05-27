@@ -7,7 +7,7 @@ public class IRStoreArith extends IRStore
     private IRArith irArith;
 
     //a = b + c
-    public IRStoreArith(String name, Operation op)
+    IRStoreArith(String name, Operation op)
     {
         this.name = name;
         this.nodeType = "StoreArith";
@@ -16,7 +16,7 @@ public class IRStoreArith extends IRStore
     }
 
     //a[i] = b + c;
-    public IRStoreArith(VariableArray name, Operation op)
+    IRStoreArith(VariableArray name, Operation op)
     {
         this.name = name.getVar();
         this.arrayAccess = true;
@@ -27,7 +27,7 @@ public class IRStoreArith extends IRStore
         this.addChild(irArith);
     }
 
-    public IRNode getRhs()
+    private IRNode getRhs()
     {
         return irArith.getRhs();
     }

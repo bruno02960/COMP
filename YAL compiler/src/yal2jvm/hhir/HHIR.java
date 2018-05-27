@@ -1,7 +1,6 @@
 package yal2jvm.hhir;
 
 import java.util.ArrayList;
-import java.util.Collection;
 
 import yal2jvm.ast.*;
 
@@ -9,12 +8,6 @@ public class HHIR
 {
     private IRModule root;
     private SimpleNode ast;
-
-    //TODO: Debug
-    boolean declarationDebug = true;
-    boolean functionDebug = false;
-    boolean assignDebug = false;
-    boolean callDebug = false;
 
     public HHIR(SimpleNode ast)
     {
@@ -24,84 +17,10 @@ public class HHIR
 
     private IRModule createHHIR()
     {
-        //create HHIR from AST
         ASTMODULE astModule = (ASTMODULE) ast;
         createModuleHHIR(astModule);
 
         return root;
-    }
-
-    /*public IRModule createHardcoded()
-    {
-        IRModule module = new IRModule("Module1");
-        module.addChild(new IRGlobal("a", Type.INTEGER, null, false));
-        module.addChild(new IRGlobal("b", Type.INTEGER, null, false));
-        module.addChild(new IRGlobal("c", Type.INTEGER, 12, false));
-        module.addChild(new IRGlobal("d", Type.INTEGER, 12345, false));
-
-        //newVar1;
-        //newVar2 = newVar1 * var3;
-        IRMethod m1 = new IRMethod("method1", Type.VOID, null, new Type[]
-        {
-            Type.INTEGER, Type.INTEGER, Type.INTEGER
-        }, new String[]
-        {
-            "var1", "var2", "var3"
-        });
-        //test1 = 20;
-        //test2 = 50;
-        //test1 = test2;
-        //test1 = 30;
-        //test2 = a;
-        m1.addChild(new IRAllocate("test1", Type.INTEGER, 20));
-        m1.addChild(new IRAllocate("test2", Type.INTEGER, 50));
-        m1.addChild(new IRAllocate("test1", Type.INTEGER, "test2", false));
-        m1.addChild(new IRAllocate("test1", Type.INTEGER, 30));
-        m1.addChild(new IRAllocate("test2", Type.INTEGER, "a", false));
-        module.addChild(m1);
-
-        //var1 = var2 * var3;
-        IRMethod m2 = new IRMethod("method2", Type.VOID, null, new Type[]
-        {
-            Type.INTEGER, Type.INTEGER, Type.INTEGER
-        }, new String[]
-        {
-            "var1", "var2", "var3"
-        });
-        IRStoreArith arith2 = new IRStoreArith("var1", Operation.MULT);
-        arith2.setRhs(new IRLoad("var2"));
-        arith2.setLhs(new IRLoad("var3"));
-        m2.addChild(arith2);
-        ArrayList<PairStringType> lis = new ArrayList<>();
-        lis.add(new PairStringType("var1 = ", Type.STRING));
-        lis.add(new PairStringType("2", Type.INTEGER));
-        m2.addChild(new IRCall("println", "io", lis));
-        module.addChild(m2);
-
-
-        IRMethod main = new IRMethod("main", Type.VOID, "ret", null, null);
-        module.addChild(main);
-
-        return module;
-    }*/
-
-    public void optimize()
-    {
-        //use this only as a wrapper for (possibly static) methods of a separate class
-        //in order to avoid putting too much logic in this single class
-
-    }
-
-    public void dataflowAnalysis()
-    {
-        //use this only as a wrapper for (possibly static) methods of a separate class
-        //in order to avoid putting too much logic in this single class
-    }
-
-    public void allocateRegisters(int maxLocals)
-    {
-        //use this only as a wrapper for (possibly static) methods of a separate class
-        //in order to avoid putting too much logic in this single class
     }
 
     public ArrayList<String> selectInstructions()
@@ -121,8 +40,8 @@ public class HHIR
         if(globalStaticInstructions.size() != 0)
         {
             inst.add(".method static public <clinit>()V \n");
-            inst.add(".limit stack 255\n");  //TODO VER ESTES LIMIT
-            inst.add(".limit locals 255\n");  //TODO VER ESTES LIMIT
+            inst.add(".limit stack 255\n");
+            inst.add(".limit locals 255\n");
 
             inst.addAll(globalStaticInstructions);
 
@@ -230,29 +149,6 @@ public class HHIR
         }
         IRMethod function = new IRMethod(functionId, returnType, returnName, argumentsTypes, argumentsNames);
 
-        //TODO: debug
-        if (functionDebug)
-        {
-            System.out.println("name= " + functionId);
-            System.out.println("return type= " + returnType.toString());
-            if (returnName != null)
-                System.out.println("return name= " + returnName);
-
-            if (argumentsTypes != null)
-            {
-                System.out.println("argumentsTypes= ");
-                for (Type argumentsType : argumentsTypes)
-                    System.out.println(argumentsType);
-            }
-
-            if (argumentsNames != null)
-            {
-                System.out.println("argumentsNames= ");
-                for (String argumentsName : argumentsNames)
-                    System.out.println(argumentsName);
-            }
-        }
-
         root.addChild(function);
 
         //parse statements
@@ -274,9 +170,8 @@ public class HHIR
                     break;
 
                 case "CALL":
-                    irmethod.addChild(getCallHHIR((ASTCALL) child));
+                    irmethod.addChild(getIRCall((ASTCALL) child, null));
                     break;
-
                 case "IF":
                     createIfHHIR((ASTIF) child, irmethod);
                     break;
@@ -386,7 +281,7 @@ public class HHIR
 
         Node astTermChild = astTerm.jjtGetChild(0);
         if(astTermChild instanceof ASTCALL)
-            return getCallHHIR((ASTCALL) astTermChild);
+            return getIRCall((ASTCALL) astTermChild, null);
         else if(astTermChild instanceof ASTARRAYACCESS)
         {
             VariableArray variable = getArrayAccessIRNode((ASTARRAYACCESS) astTermChild);
@@ -552,33 +447,17 @@ public class HHIR
             }
         }
 
-        //TODO: Debug
-        if (assignDebug)
-        {
-            System.out.println();
-            System.out.println(irAssign.lhs.getVar() != null ? "lhsName = " + irAssign.lhs.getVar() : "null");
-            //System.out.println(irAssign.lhs.getAt() != null ? "at = " + irAssign.atlhs.getVar() : "null");
-            for (int i = 0; i < irAssign.operands.size(); i++)
-            {
-                System.out.println("operand = " + irAssign.operands.get(i));
-                System.out.println(irAssign.isSize ? " .size" : "");
-            }
-            System.out.println(!irAssign.operator.equals("") ? "operator = " + irAssign.operator : "null");
-            System.out.println();
-        }
-
         createAssignIR(irAssign, irmethod);
     }
 
     private VariableArray getArrayAccessIRNode(ASTARRAYACCESS child)
     {
-        ASTARRAYACCESS astarrayaccess = child;
-        ASTINDEX astindex = (ASTINDEX) astarrayaccess.jjtGetChild(0);
+        ASTINDEX astindex = (ASTINDEX) child.jjtGetChild(0);
 
         if (astindex.indexID != null)
-            return new VariableArray(astarrayaccess.arrayID, new Variable(astindex.indexID, Type.VARIABLE));
+            return new VariableArray(child.arrayID, new Variable(astindex.indexID, Type.VARIABLE));
         else
-            return new VariableArray(astarrayaccess.arrayID, new Variable(astindex.indexValue.toString(), Type.INTEGER));
+            return new VariableArray(child.arrayID, new Variable(astindex.indexValue.toString(), Type.INTEGER));
     }
 
     private void createAssignImmediateIR(IRAssign irAssign, IRMethod irmethod) {
@@ -695,37 +574,6 @@ public class HHIR
         return new IRCall(methodId, moduleId, arguments, lhsVarName);
     }
 
-    private IRCall getCallHHIR(ASTCALL astCall)
-    {
-        String moduleId = astCall.module;
-        String methodId = astCall.method;
-        ArrayList<PairStringType> arguments = null;
-
-        if (astCall.jjtGetNumChildren() > 0)
-        {
-            ASTARGUMENTS astarguments = (ASTARGUMENTS) astCall.jjtGetChild(0);
-            arguments = getFunctionCallArgumentsIds(astarguments);
-        }
-
-        if (callDebug)
-        {
-            //TODO debug
-            System.out.println("from getCallHHIR");
-            System.out.println("moduleId= " + moduleId);
-            System.out.println("methodId= " + methodId);
-
-            if (arguments != null)
-            {
-                System.out.println("arguments");
-                for (PairStringType argument : arguments)
-                    System.out.println("value: " + argument.getString()
-                            + "   type: " + argument.getType().toString());
-            }
-        }
-
-        return getIRCall(astCall, null);
-    }
-
     private ArrayList<PairStringType> getFunctionCallArgumentsIds(ASTARGUMENTS astArguments)
     {
         ArrayList<PairStringType> arguments = new ArrayList<>();
@@ -834,18 +682,6 @@ public class HHIR
                     }
                 }
                 break;
-        }
-
-        //TODO:DEBUG
-        if (declarationDebug)
-        {
-            System.out.println();
-            assert variable != null;
-            System.out.println(variable.getVar() != null ? "name = " + variable.getVar() : "null");
-            System.out.println(variable.getType() != null ? "type = " + variable.getType() : "null");
-            if (value != null)
-            System.out.println(value.getVar() != null ? "value = " + value.getVar() : "null");
-            System.out.println();
         }
 
         if(!initialized) {

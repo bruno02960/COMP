@@ -14,7 +14,7 @@ public class IRAllocate extends IRNode
 
 
 	//a = 1;
-    public IRAllocate(String name, Variable value)
+    IRAllocate(String name, Variable value)
     {
         this.type = Type.INTEGER;
         this.nodeType = "Allocate";
@@ -28,7 +28,7 @@ public class IRAllocate extends IRNode
     }
 
     //a = [5];
-    public IRAllocate(String name, Variable value, Type arraySize)
+    IRAllocate(String name, Variable value, Type arraySize)
     {
         assert arraySize == Type.ARRAYSIZE;
 
@@ -156,7 +156,7 @@ public class IRAllocate extends IRNode
                 }
             }
 
-            if(typeStr.equals(Type.ARRAY.name()) && lhsIndex == null)
+            if(typeStr.equals(Type.INTEGER.name()) && lhsIndex == null)
                 inst.addAll(setAllArrayElements()); // i = 5; com i array
             else
 
@@ -232,12 +232,6 @@ public class IRAllocate extends IRNode
         return getCodeForSetAllArrayElements(arrayRefJVMCode, valueJVMCode);
     }
 
-    private IRGlobal storeVarGlobal()
-	{
-		IRModule module = (IRModule)findParent("Module");
-		return module.getGlobal(name);
-	}
-
     private void initRegister()
     {
         if (!this.storeVarGlobal && this.register == -1)
@@ -251,12 +245,6 @@ public class IRAllocate extends IRNode
     {
         initRegister();
         return register;
-    }
-
-    public void setRegister(int register)
-    {
-    	if (!this.storeVarGlobal)
-    		this.register = register;
     }
 
     public String getName()

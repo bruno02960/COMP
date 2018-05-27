@@ -6,7 +6,7 @@ public class IRArith extends IRNode {
     private Operation op;
     private IRNode rhs, lhs;
 
-    public IRArith(Operation op)
+    IRArith(Operation op)
     {
         this.op = op;
         this.nodeType = "Arith";

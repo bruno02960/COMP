@@ -10,7 +10,6 @@ public class Variable
     {
         this.type = type;
 
-        //TODO: Verify if it is possible to use type to distinguish between variables and constants
         if(var != null) /* var can be null in case of CALL type */
         {
             if(var.contains(".size"))

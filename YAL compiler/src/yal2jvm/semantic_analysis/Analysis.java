@@ -12,13 +12,13 @@ import java.util.Map.Entry;
 public abstract class Analysis
 {
 
-    protected HashMap<String, Symbol> mySymbols;
-    protected HashMap<String, Symbol> inheritedSymbols;
-    protected HashMap<String, Symbol> functionNameToFunctionSymbol;
+    HashMap<String, Symbol> mySymbols;
+    HashMap<String, Symbol> inheritedSymbols;
+    HashMap<String, Symbol> functionNameToFunctionSymbol;
     protected SimpleNode ast;
 
-    protected Analysis(SimpleNode ast, HashMap<String, Symbol> inheritedSymbols,
-            HashMap<String, Symbol> functionNameToFunctionSymbol)
+    Analysis(SimpleNode ast, HashMap<String, Symbol> inheritedSymbols,
+             HashMap<String, Symbol> functionNameToFunctionSymbol)
     {
         this.ast = ast;
         this.inheritedSymbols = inheritedSymbols;
@@ -28,7 +28,7 @@ public abstract class Analysis
 
     protected abstract void parse();
 
-    protected HashMap<String, Symbol> getUnifiedSymbolTable()
+    HashMap<String, Symbol> getUnifiedSymbolTable()
     {
         HashMap<String, Symbol> unifiedSymbolTable = new HashMap<>();
         if (inheritedSymbols != null)
@@ -367,39 +367,38 @@ public abstract class Analysis
             return varSymbol;
         }
 
-        VarSymbol varSymbol = (VarSymbol) checkSymbolExistsAndIsInitialized(scalarAccessTree, id);
-        return varSymbol;
+        return (VarSymbol) checkSymbolExistsAndIsInitialized(scalarAccessTree, id);
     }
 
-    protected VarSymbol parseDeclaration(ASTDECLARATION declarationTree)
+    void parseDeclaration(ASTDECLARATION declarationTree)
     {
         Node child = declarationTree.jjtGetChild(0);
         if (child instanceof ASTSCALARELEMENT)
         {
             ASTSCALARELEMENT astscalarelement = (ASTSCALARELEMENT) child;
-            return parseDeclarationAstScalarElement(declarationTree, astscalarelement);
+            parseDeclarationAstScalarElement(declarationTree, astscalarelement);
 
         } else if (child instanceof ASTARRAYELEMENT)
         {
             ASTARRAYELEMENT astarrayelement = (ASTARRAYELEMENT) child;
-            return parseDeclarationAstArrayElement(declarationTree, astarrayelement);
+            parseDeclarationAstArrayElement(declarationTree, astarrayelement);
         }
 
-        return null;
     }
 
-    private VarSymbol parseDeclarationAstScalarElement(ASTDECLARATION declarationTree, ASTSCALARELEMENT astscalarelement)
+    private void parseDeclarationAstScalarElement(ASTDECLARATION declarationTree, ASTSCALARELEMENT astscalarelement)
     {
         VarSymbol symbol = (VarSymbol) hasAccessToSymbol(astscalarelement.id);
-        if (symbol != null)
-            return parseDeclarationSymbol(declarationTree, symbol);
+        if (symbol != null) {
+            parseDeclarationSymbol(declarationTree, symbol);
+            return;
+        }
 
         VarSymbol varSymbol = createSymbolForDeclarationAstScalarElement(declarationTree, astscalarelement);
         if (varSymbol == null)
-            return null;
+            return;
 
         mySymbols.put(varSymbol.getId(), varSymbol);
-        return varSymbol;
     }
 
     private VarSymbol createSymbolForDeclarationAstScalarElement(ASTDECLARATION declarationTree, ASTSCALARELEMENT astscalarelement)
@@ -430,18 +429,19 @@ public abstract class Analysis
         return varSymbol;
     }
 
-    private VarSymbol parseDeclarationAstArrayElement(ASTDECLARATION declarationTree, ASTARRAYELEMENT astarrayelement)
+    private void parseDeclarationAstArrayElement(ASTDECLARATION declarationTree, ASTARRAYELEMENT astarrayelement)
     {
         VarSymbol symbol = (VarSymbol) hasAccessToSymbol(astarrayelement.id);
-        if (symbol != null)
-            return parseDeclarationSymbol(declarationTree, symbol);
+        if (symbol != null) {
+            parseDeclarationSymbol(declarationTree, symbol);
+            return;
+        }
 
         VarSymbol varSymbol = createSymbolForDeclarationAstArrayElement(declarationTree, astarrayelement);
         if (varSymbol == null)
-            return null;
+            return;
 
         mySymbols.put(varSymbol.getId(), varSymbol);
-        return varSymbol;
     }
 
     private VarSymbol createSymbolForDeclarationAstArrayElement(ASTDECLARATION declarationTree, ASTARRAYELEMENT astarrayelement)
@@ -458,7 +458,7 @@ public abstract class Analysis
                 if (scalarAccessSymbol == null)
                     return null;
             }
-            initialized = true;;
+            initialized = true;
         }
         else
         {
@@ -479,7 +479,7 @@ public abstract class Analysis
         return new VarSymbol(astarrayelement.id, SymbolType.ARRAY.toString(), initialized);
     }
 
-    private VarSymbol parseDeclarationSymbol(ASTDECLARATION declarationTree, VarSymbol symbol)
+    private void parseDeclarationSymbol(ASTDECLARATION declarationTree, VarSymbol symbol)
     {
         //if it has already been declared and its not just a initialization
         if (declarationTree.integer == null)
@@ -487,7 +487,7 @@ public abstract class Analysis
             System.out.println("Line " + declarationTree.getBeginLine() + ": Variable " + symbol.getId()
                     + " already declared.");
             ModuleAnalysis.hasErrors = true;
-            return null;
+            return;
         }
 
         if (symbol.getType().equals(Type.INTEGER.toString()) && symbol.isInitialized())
@@ -496,24 +496,22 @@ public abstract class Analysis
                     + symbol.getId() + " was already initialized." + " Error assigning "
                     + declarationTree.integer + " to the variable " + symbol.getId() + ".");
             ModuleAnalysis.hasErrors = true;
-            return null;
+            return;
         }
 
         symbol.setInitialized(true);
 
-        if (symbol.getType().equals(Type.ARRAY.toString()) && symbol.isInitialized() == false)
+        if (symbol.getType().equals(Type.ARRAY.toString()) && !symbol.isInitialized())
         {
             System.out.println("Line " + declarationTree.getBeginLine() + ": Variable "
                     + symbol.getId() + " has the size not defined." + " Error assigning "
                     + declarationTree.integer + " to all elements of " + symbol.getId() + ".");
             ModuleAnalysis.hasErrors = true;
-            return null;
         }
 
-        return symbol;
     }
 
-    private boolean parseAssign(ASTASSIGN assignTree)
+    private void parseAssign(ASTASSIGN assignTree)
     {
         VarSymbol rhsSymbol = null;
         SimpleNode rhsTree = (SimpleNode) assignTree.jjtGetChild(1);
@@ -523,21 +521,21 @@ public abstract class Analysis
         SimpleNode lhsTree = (SimpleNode) assignTree.jjtGetChild(0);
         VarSymbol lhsSymbol = getLhsVariable(lhsTree);
         if (lhsSymbol == null)
-            return false;
+            return;
 
         //if rhs has an error, but lhs is correct, we assume that lhs is initialized
         if (rhsSymbol == null)
         {
             lhsSymbol.setInitialized(true);
             addToSymbolTable(lhsSymbol);
-            return false;
+            return;
         }
 
         if (lhsSymbol.getId().contains(".size"))
         {
             System.out.println("Line " + rhsTree.getBeginLine() + ": Impossible to set a variable size.");
             ModuleAnalysis.hasErrors = true;
-            return false;
+            return;
         }
 
         if (rhsSymbol.getType().equals("ARRAYSIZE"))
@@ -545,7 +543,8 @@ public abstract class Analysis
             // if is from type A = [VALUE] with A already declared or still not declared
             lhsSymbol.setType(SymbolType.ARRAY.toString());
             lhsSymbol.setInitialized(true);
-            return addToSymbolTable(lhsSymbol);
+            addToSymbolTable(lhsSymbol);
+            return;
         }
 
         if (lhsSymbol.getType().equals(SymbolType.UNDEFINED.toString()))
@@ -562,24 +561,26 @@ public abstract class Analysis
         if (lhsSymbolType.equals(rhsSymbolType) && !(rhsSymbol instanceof ImmediateSymbol)) //if both lhs and rhs have same type
         {
             lhsSymbol.setInitialized(rhsSymbol.isInitialized());
-            return addToSymbolTable(lhsSymbol);
+            addToSymbolTable(lhsSymbol);
+            return;
         }
 
         //for the case in which the array as not the size defined yet
         if (lhsSymbolType.equals(SymbolType.ARRAY.toString()) && rhsSymbolType.equals("INTEGER")
-                && lhsSymbol.isInitialized() == false)
+                && !lhsSymbol.isInitialized())
         {
             System.out.println("Line " + lhsTree.getBeginLine() + ": Variable " + lhsSymbol.getId()
                     + " has the size not defined." + " Error assigning right hand side to all elements of " + lhsSymbol.getId() + ".");
             ModuleAnalysis.hasErrors = true;
-            return false;
+            return;
         }
 
         //for A=[N] in which N is an integer. Used when assigning size to an array
         if (lhsSymbolType.equals(SymbolType.ARRAY.toString()) && rhsSymbolType.equals("ARRAYSIZE"))
         {
             lhsSymbol.setInitialized(true);
-            return addToSymbolTable(lhsSymbol);
+            addToSymbolTable(lhsSymbol);
+            return;
         }
 
         if (!(lhsSymbolType.equals(SymbolType.ARRAY.toString()) && rhsSymbolType.equals(SymbolType.INTEGER.toString()))) //for A=5; in which A is an array and all its elements are set to 5
@@ -589,23 +590,21 @@ public abstract class Analysis
                     System.out.println("Line " + lhsTree.getBeginLine() + ": Variable " + lhsSymbol.getId()
                             + " has been declared as " + lhsSymbolType + ". Cannot redeclare it as " + rhsSymbolType + ".");
                     ModuleAnalysis.hasErrors = true;
-                    return false;
+                    return;
                 }
 
         lhsSymbol.setInitialized(true);
 
-        return addToSymbolTable(lhsSymbol);
+        addToSymbolTable(lhsSymbol);
     }
 
-    private boolean addToSymbolTable(VarSymbol lhsSymbol)
+    private void addToSymbolTable(VarSymbol lhsSymbol)
     {
         if ((inheritedSymbols.get(lhsSymbol.getId()) == null) && (mySymbols.get(lhsSymbol.getId()) == null))
         {
             mySymbols.put(lhsSymbol.getId(), lhsSymbol);
-            return true;
         }
 
-        return false;
     }
 
     private VarSymbol getLhsVariable(SimpleNode lhsTree)
@@ -625,7 +624,7 @@ public abstract class Analysis
                     return null;
                 }
 
-                if (symbol.getType().equals(Type.ARRAY.toString()) == false)
+                if (!symbol.getType().equals(Type.ARRAY.toString()))
                 {
                     System.out.println("Line " + astArrayAccess.getBeginLine() + ": Cannot access to an index of variable "
                             + symbol.getId() + " because it has type " + symbol.getType() + ".");
@@ -662,17 +661,17 @@ public abstract class Analysis
         return true;
     }
 
-    protected boolean parseExprTest(ASTEXPRTEST astExprtest)
+    void parseExprTest(ASTEXPRTEST astExprtest)
     {
         ASTLHS astLhs = (ASTLHS) astExprtest.jjtGetChild(0);
         VarSymbol lhsSymbol = parseLhs(astLhs);
         if (lhsSymbol == null)
-            return false;
+            return;
 
         ASTRHS astRhs = (ASTRHS) astExprtest.jjtGetChild(1);
         VarSymbol rhsSymbol = parseRhs(astRhs);
         if (rhsSymbol == null)
-            return false;
+            return;
 
         if (!lhsSymbol.getType().equals(rhsSymbol.getType()))
         {
@@ -680,26 +679,24 @@ public abstract class Analysis
                     + "Variable " + lhsSymbol.getId() + " has type " + lhsSymbol.getType() + " and variable "
                     + rhsSymbol.getId() + " has type " + rhsSymbol.getType() + ".");
             ModuleAnalysis.hasErrors = true;
-            return false;
+            return;
         }
 
         //if operands being tested are both array type and the comparison operator is not == or !=, semantic error.
         if (lhsSymbol.getType().equals(SymbolType.ARRAY.toString()))
         {
-            if(astExprtest.operation != "==" && astExprtest.operation != "!=")
+            if(!astExprtest.operation.equals("==") && !astExprtest.operation.equals("!="))
             {
                 System.out.println("Line " + astLhs.getBeginLine() + ": Variables must be INTEGER to be compared. Variable "
                         + lhsSymbol.getId() + " has type " + lhsSymbol.getType() + " and variable " + rhsSymbol.getId()
                         + " has type " + rhsSymbol.getType() + ".");
                 ModuleAnalysis.hasErrors = true;
-                return false;
             }
         }
 
-        return true;
     }
 
-    protected void parseStmtLst(ASTSTATEMENTS astStatements)
+    void parseStmtLst(ASTSTATEMENTS astStatements)
     {
         int statementsNumChilds = astStatements.jjtGetNumChildren();
         for (int i = 0; i < statementsNumChilds; i++)
@@ -731,15 +728,14 @@ public abstract class Analysis
         }
     }
 
-    protected HashMap<String, Symbol> setAllSymbolsAsNotInitialized(HashMap<String, Symbol> symbols)
+    HashMap<String, Symbol> setAllSymbolsAsNotInitialized(HashMap<String, Symbol> symbols)
     {
         HashMap<String, Symbol> symbolsNotInitialized = new HashMap<>();
 
         for (Entry<String, Symbol> o : symbols.entrySet())
         {
-            HashMap.Entry<String, Symbol> pair = o;
-            String symbolName = (String) pair.getKey();
-            VarSymbol symbol = (VarSymbol) pair.getValue();
+            String symbolName = o.getKey();
+            VarSymbol symbol = (VarSymbol) o.getValue();
             symbol.setInitialized(false);
             symbolsNotInitialized.put(symbolName, symbol);
         }

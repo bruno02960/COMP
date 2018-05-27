@@ -1,7 +1,7 @@
 package yal2jvm.hhir;
 
 public class VariableArray extends Variable {
-    Variable at;
+    private Variable at;
 
     VariableArray(String var, Variable at) {
         super(var, Type.ARRAY);

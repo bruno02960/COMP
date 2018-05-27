@@ -20,7 +20,7 @@ public class YalParser/*@bgen(jjtree)*/ implements YalParserTreeConstants, YalPa
         String filepath = args[0];
         //Create parser and parse
         YalParser parser = new YalParser(new FileInputStream(filepath));
-        SimpleNode root = parser.Module();
+        SimpleNode root = Module();
         //Display tree
         root.dump("");
     }
@@ -58,7 +58,6 @@ public class YalParser/*@bgen(jjtree)*/ implements YalParserTreeConstants, YalPa
                     switch ((jj_ntk == -1) ? jj_ntk() : jj_ntk)
                     {
                         case ID:
-            ;
                             break;
                         default:
                             jj_la1[0] = jj_gen;
@@ -72,7 +71,6 @@ public class YalParser/*@bgen(jjtree)*/ implements YalParserTreeConstants, YalPa
                     switch ((jj_ntk == -1) ? jj_ntk() : jj_ntk)
                     {
                         case FUNCTION:
-            ;
                             break;
                         default:
                             jj_la1[1] = jj_gen;
@@ -196,7 +194,6 @@ public class YalParser/*@bgen(jjtree)*/ implements YalParserTreeConstants, YalPa
                                         break;
                                     default:
                                         jj_la1[3] = jj_gen;
-                                        ;
                                 }
                                 t = jj_consume_token(INTEGER);
                                 jjtn000.integer = new Integer(t.image);
@@ -209,7 +206,6 @@ public class YalParser/*@bgen(jjtree)*/ implements YalParserTreeConstants, YalPa
                         break;
                     default:
                         jj_la1[5] = jj_gen;
-                        ;
                 }
                 jj_consume_token(PVIRG);
             } catch (ParseException e)
@@ -334,7 +330,6 @@ public class YalParser/*@bgen(jjtree)*/ implements YalParserTreeConstants, YalPa
                         break;
                     default:
                         jj_la1[8] = jj_gen;
-                        ;
                 }
                 jj_consume_token(RPAR);
             } catch (ParseException e)
@@ -421,7 +416,6 @@ public class YalParser/*@bgen(jjtree)*/ implements YalParserTreeConstants, YalPa
                 switch ((jj_ntk == -1) ? jj_ntk() : jj_ntk)
                 {
                     case VIRG:
-          ;
                         break;
                     default:
                         jj_la1[10] = jj_gen;
@@ -484,8 +478,7 @@ public class YalParser/*@bgen(jjtree)*/ implements YalParserTreeConstants, YalPa
     }
 
     /* ArrayElement ::= <ID> "[" "]" */
-    static final public void ArrayElement() throws ParseException
-    {
+    static final public void ArrayElement() {
         /*@bgen(jjtree) ARRAYELEMENT */
         ASTARRAYELEMENT jjtn000 = new ASTARRAYELEMENT(JJTARRAYELEMENT);
         boolean jjtc000 = true;
@@ -522,8 +515,7 @@ public class YalParser/*@bgen(jjtree)*/ implements YalParserTreeConstants, YalPa
     }
 
     /*ScalarElement ::= <ID>*/
-    static final public void ScalarElement() throws ParseException
-    {
+    static final public void ScalarElement() {
         /*@bgen(jjtree) SCALARELEMENT */
         ASTSCALARELEMENT jjtn000 = new ASTSCALARELEMENT(JJTSCALARELEMENT);
         boolean jjtc000 = true;
@@ -573,7 +565,6 @@ public class YalParser/*@bgen(jjtree)*/ implements YalParserTreeConstants, YalPa
                     case WHILE:
                     case IF:
                     case ID:
-          ;
                         break;
                     default:
                         jj_la1[12] = jj_gen;
@@ -671,8 +662,7 @@ public class YalParser/*@bgen(jjtree)*/ implements YalParserTreeConstants, YalPa
     }
 
     /* ParseBlock ::= Stmtlst <RCHAVETA>*/
-    static final public void ParseBlock() throws ParseException
-    {
+    static final public void ParseBlock() {
         try
         {
             Stmtlst();
@@ -716,7 +706,6 @@ public class YalParser/*@bgen(jjtree)*/ implements YalParserTreeConstants, YalPa
                         break;
                     default:
                         jj_la1[15] = jj_gen;
-                        ;
                 }
                 jj_consume_token(LPAR);
                 switch ((jj_ntk == -1) ? jj_ntk() : jj_ntk)
@@ -728,7 +717,6 @@ public class YalParser/*@bgen(jjtree)*/ implements YalParserTreeConstants, YalPa
                         break;
                     default:
                         jj_la1[16] = jj_gen;
-                        ;
                 }
                 jj_consume_token(RPAR);
                 jj_consume_token(PVIRG);
@@ -955,7 +943,6 @@ public class YalParser/*@bgen(jjtree)*/ implements YalParserTreeConstants, YalPa
                             break;
                         default:
                             jj_la1[19] = jj_gen;
-                            ;
                     }
                     break;
                 case LPARRETO:
@@ -1097,7 +1084,6 @@ public class YalParser/*@bgen(jjtree)*/ implements YalParserTreeConstants, YalPa
                     break;
                 default:
                     jj_la1[22] = jj_gen;
-                    ;
             }
             switch ((jj_ntk == -1) ? jj_ntk() : jj_ntk)
             {
@@ -1339,7 +1325,6 @@ public class YalParser/*@bgen(jjtree)*/ implements YalParserTreeConstants, YalPa
                         break;
                     default:
                         jj_la1[25] = jj_gen;
-                        ;
                 }
             } catch (ParseException e)
             {
@@ -1484,7 +1469,6 @@ public class YalParser/*@bgen(jjtree)*/ implements YalParserTreeConstants, YalPa
                     break;
                 default:
                     jj_la1[26] = jj_gen;
-                    ;
             }
             jj_consume_token(LPAR);
             switch ((jj_ntk == -1) ? jj_ntk() : jj_ntk)
@@ -1496,7 +1480,6 @@ public class YalParser/*@bgen(jjtree)*/ implements YalParserTreeConstants, YalPa
                     break;
                 default:
                     jj_la1[27] = jj_gen;
-                    ;
             }
             jj_consume_token(RPAR);
         } catch (Throwable jjte000)
@@ -1554,7 +1537,6 @@ public class YalParser/*@bgen(jjtree)*/ implements YalParserTreeConstants, YalPa
                 switch ((jj_ntk == -1) ? jj_ntk() : jj_ntk)
                 {
                     case VIRG:
-          ;
                         break;
                     default:
                         jj_la1[28] = jj_gen;
@@ -1743,7 +1725,6 @@ public class YalParser/*@bgen(jjtree)*/ implements YalParserTreeConstants, YalPa
                     break;
                 default:
                     jj_la1[30] = jj_gen;
-                    ;
             }
         } finally
         {
@@ -1948,17 +1929,14 @@ public class YalParser/*@bgen(jjtree)*/ implements YalParserTreeConstants, YalPa
         if (jj_3R_17())
         {
             jj_scanpos = xsp;
-            if (jj_3R_18())
-                return true;
+            return jj_3R_18();
         }
         return false;
     }
 
     static private boolean jj_3R_17()
     {
-        if (jj_3R_21())
-            return true;
-        return false;
+        return jj_3R_21();
     }
 
     static private boolean jj_3R_10()
@@ -1974,25 +1952,19 @@ public class YalParser/*@bgen(jjtree)*/ implements YalParserTreeConstants, YalPa
         xsp = jj_scanpos;
         if (jj_3R_15())
             jj_scanpos = xsp;
-        if (jj_scan_token(RPAR))
-            return true;
-        return false;
+        return jj_scan_token(RPAR);
     }
 
     static private boolean jj_3R_14()
     {
         if (jj_scan_token(PONTO))
             return true;
-        if (jj_scan_token(ID))
-            return true;
-        return false;
+        return jj_scan_token(ID);
     }
 
     static private boolean jj_3_5()
     {
-        if (jj_3R_6())
-            return true;
-        return false;
+        return jj_3R_6();
     }
 
     static private boolean jj_3R_20()
@@ -2013,54 +1985,41 @@ public class YalParser/*@bgen(jjtree)*/ implements YalParserTreeConstants, YalPa
         if (jj_3_7())
         {
             jj_scanpos = xsp;
-            if (jj_3R_16())
-                return true;
+            return jj_3R_16();
         }
         return false;
     }
 
     static private boolean jj_3_7()
     {
-        if (jj_3R_9())
-            return true;
-        return false;
+        return jj_3R_9();
     }
 
     static private boolean jj_3R_24()
     {
         if (jj_scan_token(PONTO))
             return true;
-        if (jj_scan_token(SIZE))
-            return true;
-        return false;
+        return jj_scan_token(SIZE);
     }
 
     static private boolean jj_3_1()
     {
-        if (jj_3R_6())
-            return true;
-        return false;
+        return jj_3R_6();
     }
 
     static private boolean jj_3R_16()
     {
-        if (jj_3R_20())
-            return true;
-        return false;
+        return jj_3R_20();
     }
 
     static private boolean jj_3_4()
     {
-        if (jj_3R_6())
-            return true;
-        return false;
+        return jj_3R_6();
     }
 
     static private boolean jj_3_6()
     {
-        if (jj_3R_8())
-            return true;
-        return false;
+        return jj_3R_8();
     }
 
     static private boolean jj_3R_8()
@@ -2069,16 +2028,12 @@ public class YalParser/*@bgen(jjtree)*/ implements YalParserTreeConstants, YalPa
             return true;
         if (jj_scan_token(ASSIGN))
             return true;
-        if (jj_3R_13())
-            return true;
-        return false;
+        return jj_3R_13();
     }
 
     static private boolean jj_3R_27()
     {
-        if (jj_3R_20())
-            return true;
-        return false;
+        return jj_3R_20();
     }
 
     static private boolean jj_3R_9()
@@ -2087,30 +2042,22 @@ public class YalParser/*@bgen(jjtree)*/ implements YalParserTreeConstants, YalPa
             return true;
         if (jj_scan_token(LPARRETO))
             return true;
-        if (jj_3R_23())
-            return true;
-        return false;
+        return jj_3R_23();
     }
 
     static private boolean jj_3_9()
     {
-        if (jj_3R_9())
-            return true;
-        return false;
+        return jj_3R_9();
     }
 
     static private boolean jj_3_8()
     {
-        if (jj_3R_10())
-            return true;
-        return false;
+        return jj_3R_10();
     }
 
     static private boolean jj_3R_26()
     {
-        if (jj_scan_token(INTEGER))
-            return true;
-        return false;
+        return jj_scan_token(INTEGER);
     }
 
     static private boolean jj_3R_21()
@@ -2129,8 +2076,7 @@ public class YalParser/*@bgen(jjtree)*/ implements YalParserTreeConstants, YalPa
                 if (jj_3_9())
                 {
                     jj_scanpos = xsp;
-                    if (jj_3R_27())
-                        return true;
+                    return jj_3R_27();
                 }
             }
         }
@@ -2139,37 +2085,27 @@ public class YalParser/*@bgen(jjtree)*/ implements YalParserTreeConstants, YalPa
 
     static private boolean jj_3_2()
     {
-        if (jj_3R_6())
-            return true;
-        return false;
+        return jj_3R_6();
     }
 
     static private boolean jj_3R_25()
     {
-        if (jj_scan_token(ADDSUB_OP))
-            return true;
-        return false;
+        return jj_scan_token(ADDSUB_OP);
     }
 
     static private boolean jj_3R_30()
     {
-        if (jj_scan_token(INTEGER))
-            return true;
-        return false;
+        return jj_scan_token(INTEGER);
     }
 
     static private boolean jj_3R_11()
     {
-        if (jj_scan_token(ID))
-            return true;
-        return false;
+        return jj_scan_token(ID);
     }
 
     static private boolean jj_3R_29()
     {
-        if (jj_scan_token(STRING))
-            return true;
-        return false;
+        return jj_scan_token(STRING);
     }
 
     static private boolean jj_3R_22()
@@ -2182,8 +2118,7 @@ public class YalParser/*@bgen(jjtree)*/ implements YalParserTreeConstants, YalPa
             if (jj_3R_29())
             {
                 jj_scanpos = xsp;
-                if (jj_3R_30())
-                    return true;
+                return jj_3R_30();
             }
         }
         return false;
@@ -2191,16 +2126,12 @@ public class YalParser/*@bgen(jjtree)*/ implements YalParserTreeConstants, YalPa
 
     static private boolean jj_3R_7()
     {
-        if (jj_3R_11())
-            return true;
-        return false;
+        return jj_3R_11();
     }
 
     static private boolean jj_3R_28()
     {
-        if (jj_scan_token(ID))
-            return true;
-        return false;
+        return jj_scan_token(ID);
     }
 
     static private boolean jj_3_3()
@@ -2215,46 +2146,34 @@ public class YalParser/*@bgen(jjtree)*/ implements YalParserTreeConstants, YalPa
             if (jj_3R_7())
                 return true;
         }
-        if (jj_scan_token(ASSIGN))
-            return true;
-        return false;
+        return jj_scan_token(ASSIGN);
     }
 
     static private boolean jj_3R_19()
     {
-        if (jj_3R_22())
-            return true;
-        return false;
+        return jj_3R_22();
     }
 
     static private boolean jj_3R_18()
     {
-        if (jj_scan_token(LPARRETO))
-            return true;
-        return false;
+        return jj_scan_token(LPARRETO);
     }
 
     static private boolean jj_3R_6()
     {
         if (jj_scan_token(ID))
             return true;
-        if (jj_scan_token(LPARRETO))
-            return true;
-        return false;
+        return jj_scan_token(LPARRETO);
     }
 
     static private boolean jj_3R_15()
     {
-        if (jj_3R_19())
-            return true;
-        return false;
+        return jj_3R_19();
     }
 
     static private boolean jj_3R_32()
     {
-        if (jj_scan_token(INTEGER))
-            return true;
-        return false;
+        return jj_scan_token(INTEGER);
     }
 
     static private boolean jj_3R_23()
@@ -2264,17 +2183,14 @@ public class YalParser/*@bgen(jjtree)*/ implements YalParserTreeConstants, YalPa
         if (jj_3R_31())
         {
             jj_scanpos = xsp;
-            if (jj_3R_32())
-                return true;
+            return jj_3R_32();
         }
         return false;
     }
 
     static private boolean jj_3R_31()
     {
-        if (jj_scan_token(ID))
-            return true;
-        return false;
+        return jj_scan_token(ID);
     }
 
     static private boolean jj_initialized_once = false;
@@ -2382,7 +2298,7 @@ public class YalParser/*@bgen(jjtree)*/ implements YalParserTreeConstants, YalPa
         {
             throw new RuntimeException(e);
         }
-        token_source.ReInit(jj_input_stream);
+        YalParserTokenManager.ReInit(jj_input_stream);
         token = new Token();
         jj_ntk = -1;
         jjtree.reset();
@@ -2423,7 +2339,7 @@ public class YalParser/*@bgen(jjtree)*/ implements YalParserTreeConstants, YalPa
     static public void ReInit(java.io.Reader stream)
     {
         jj_input_stream.ReInit(stream, 1, 1);
-        token_source.ReInit(jj_input_stream);
+        YalParserTokenManager.ReInit(jj_input_stream);
         token = new Token();
         jj_ntk = -1;
         jjtree.reset();
@@ -2479,7 +2395,7 @@ public class YalParser/*@bgen(jjtree)*/ implements YalParserTreeConstants, YalPa
         if ((oldToken = token).next != null)
             token = token.next;
         else
-            token = token.next = token_source.getNextToken();
+            token = token.next = YalParserTokenManager.getNextToken();
         jj_ntk = -1;
         if (token.kind == kind)
         {
@@ -2517,7 +2433,7 @@ public class YalParser/*@bgen(jjtree)*/ implements YalParserTreeConstants, YalPa
             jj_la--;
             if (jj_scanpos.next == null)
             {
-                jj_lastpos = jj_scanpos = jj_scanpos.next = token_source.getNextToken();
+                jj_lastpos = jj_scanpos = jj_scanpos.next = YalParserTokenManager.getNextToken();
             } else
             {
                 jj_lastpos = jj_scanpos = jj_scanpos.next;
@@ -2553,7 +2469,7 @@ public class YalParser/*@bgen(jjtree)*/ implements YalParserTreeConstants, YalPa
         if (token.next != null)
             token = token.next;
         else
-            token = token.next = token_source.getNextToken();
+            token = token.next = YalParserTokenManager.getNextToken();
         jj_ntk = -1;
         jj_gen++;
         return token;
@@ -2570,7 +2486,7 @@ public class YalParser/*@bgen(jjtree)*/ implements YalParserTreeConstants, YalPa
             if (t.next != null)
                 t = t.next;
             else
-                t = t.next = token_source.getNextToken();
+                t = t.next = YalParserTokenManager.getNextToken();
         }
         return t;
     }
@@ -2578,7 +2494,7 @@ public class YalParser/*@bgen(jjtree)*/ implements YalParserTreeConstants, YalPa
     static private int jj_ntk()
     {
         if ((jj_nt = token.next) == null)
-            return (jj_ntk = (token.next = token_source.getNextToken()).kind);
+            return (jj_ntk = (token.next = YalParserTokenManager.getNextToken()).kind);
         else
             return (jj_ntk = jj_nt.kind);
     }

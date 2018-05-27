@@ -7,7 +7,7 @@ public class IRArgument extends IRNode
 {
     private int register;
 
-    public IRArgument(int register)
+    IRArgument(int register)
     {
         this.register = register;
     }

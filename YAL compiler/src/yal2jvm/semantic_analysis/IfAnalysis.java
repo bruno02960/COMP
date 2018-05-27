@@ -12,8 +12,8 @@ import java.util.HashMap;
 public class IfAnalysis extends Analysis
 {
 
-    public IfAnalysis(SimpleNode ast, HashMap<String, Symbol> inheritedSymbols,
-            HashMap<String, Symbol> functionNameToFunctionSymbolOfModule)
+    IfAnalysis(SimpleNode ast, HashMap<String, Symbol> inheritedSymbols,
+               HashMap<String, Symbol> functionNameToFunctionSymbolOfModule)
     {
         super(ast, inheritedSymbols, functionNameToFunctionSymbolOfModule);
     }
@@ -57,8 +57,7 @@ public class IfAnalysis extends Analysis
             ArrayList<Symbol> commonInitializedSymbols = getCommonInitializedSymbols(inheritedSymbolsStatesAfterIf, inheritedSymbolsStatesAfterElse);
             for (HashMap.Entry<String, Symbol> o : originalInheritedSymbols.entrySet())
             {
-                HashMap.Entry<String, Symbol> pair = o;
-                VarSymbol symbol = (VarSymbol) pair.getValue();
+                VarSymbol symbol = (VarSymbol) o.getValue();
                 if (commonInitializedSymbols.contains(symbol))
                     symbol.setInitialized(true);
             }
@@ -82,11 +81,10 @@ public class IfAnalysis extends Analysis
 
         for (HashMap.Entry<String, Symbol> o : symbols.entrySet())
         {
-            HashMap.Entry<String, Symbol> pair = o;
-            VarSymbol symbol = (VarSymbol) pair.getValue();
+            VarSymbol symbol = (VarSymbol) o.getValue();
             if (commonDeclaredSymbols.contains(symbol))
             {
-                String symbolName = (String) pair.getKey();
+                String symbolName = o.getKey();
                 symbol.setInitialized(true);
                 symbolsInitialized.put(symbolName, symbol);
             }

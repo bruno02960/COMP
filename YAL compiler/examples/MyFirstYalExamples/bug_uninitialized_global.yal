@@ -1,0 +1,8 @@
+module bug_uninitialized_global {
+    c = [95];
+
+    function main()
+    {
+        c = c.size;
+    }
+}

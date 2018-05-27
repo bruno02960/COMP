@@ -13,7 +13,7 @@ public class IRCall extends IRNode
 	private Type type;
     private ArrayList<PairStringType> arguments;
 
-    public IRCall(String method, String module, ArrayList<PairStringType> arguments, String lhsVarName)
+    IRCall(String method, String module, ArrayList<PairStringType> arguments, String lhsVarName)
     {
         this.method = method;
         this.module = module;
@@ -25,15 +25,13 @@ public class IRCall extends IRNode
     @Override
     public ArrayList<String> getInstructions()
     {
-        ArrayList<String> inst = new ArrayList<>();
-
-        inst.addAll(getArgumentsInstructions());
+		ArrayList<String> inst = new ArrayList<>(getArgumentsInstructions());
 
         String callInstructions = getCallInstruction();
 		inst.add(callInstructions);
 
         if(getParent() instanceof IRMethod)
-            if(Utils.isLastCharacterOfString("V", callInstructions) == false)
+            if(!Utils.isLastCharacterOfString("V", callInstructions))
                 inst.add("\npop");
 
         return inst;
@@ -47,9 +45,7 @@ public class IRCall extends IRNode
     	 	inst.add("aconst_null");
 		 }
     	 else {
-			 for (int i = 0; i < arguments.size(); i++) {
-				 PairStringType arg = arguments.get(i);
-
+			 for (PairStringType arg : arguments) {
 				 Type type = arg.getType();
 
 				 type = getArgumentsType(arg, type);
@@ -122,35 +118,35 @@ public class IRCall extends IRNode
 
 	private String getCallInstruction()
     {
-       	String callInst = "invokestatic ";
+       	StringBuilder callInst = new StringBuilder("invokestatic ");
     	if (this.module != null)
-    		callInst += this.module + "/";
-    	callInst += this.method + "(";
+    		callInst.append(this.module).append("/");
+    	callInst.append(this.method).append("(");
 
     	if(this.method.equals("main")) {
-    		callInst+="[Ljava/lang/String;";
+    		callInst.append("[Ljava/lang/String;");
 		}
 		else {
-			for (int i = 0; i < arguments.size(); i++) {
-				Type argumentType = arguments.get(i).getType();
+			for (PairStringType argument : arguments) {
+				Type argumentType = argument.getType();
 
-				argumentType = getArgumentsType(arguments.get(i), argumentType);
+				argumentType = getArgumentsType(argument, argumentType);
 
 				switch (argumentType) {
 					case STRING: {
-						callInst += "Ljava/lang/String;";
+						callInst.append("Ljava/lang/String;");
 						break;
 					}
 					case INTEGER: {
-						callInst += "I";
+						callInst.append("I");
 						break;
 					}
 					case ARRAY: {
-						callInst += "[I";
+						callInst.append("[I");
 						break;
 					}
 					case ARRAYSIZE: {
-						callInst += "[I";
+						callInst.append("[I");
 						break;
 					}
 					default:
@@ -158,7 +154,7 @@ public class IRCall extends IRNode
 				}
 			}
 		}
-        callInst += ")";
+        callInst.append(")");
 
         if (this.module == null || this.module.equals(Yal2jvm.moduleName))
         {
@@ -168,15 +164,15 @@ public class IRCall extends IRNode
 			switch(returnType)
 			{
 				case INTEGER:
-					callInst += "I";
+					callInst.append("I");
 					type = Type.INTEGER;
 					break;
 				case ARRAY:
-					callInst += "[I";
+					callInst.append("[I");
 					type = Type.ARRAY;
 					break;
 				case VOID:
-					callInst += "V";
+					callInst.append("V");
 					type = Type.VOID;
 					break;
 			}
@@ -185,17 +181,17 @@ public class IRCall extends IRNode
         {
 			//if call from statements, keep return undefined
         	if(lhsVarName == null) {
-				callInst += "V";
+				callInst.append("V");
 				type = Type.VOID;
-				return callInst;
+				return callInst.toString();
 			}
 
 			IRNode node = getVarIfExists(lhsVarName);
         	if(node == null)
 			{
-				callInst += "I";
+				callInst.append("I");
 				type = Type.INTEGER;
-				return callInst;
+				return callInst.toString();
 			}
 
         	if(node instanceof IRAllocate)
@@ -203,18 +199,18 @@ public class IRCall extends IRNode
 				IRAllocate allocate = (IRAllocate)node;
 				if(allocate.getRegister() == -1)//if lhs not defined yet, we assume int
 				{
-					callInst += "I";
+					callInst.append("I");
 					type = Type.INTEGER;
 				}
 
 				if(allocate.getType().equals(Type.INTEGER)) //otherwise lhs defined, and type equals lhs var type
 				{
-					callInst += "I";
+					callInst.append("I");
 					type = Type.INTEGER;
 				}
 				else
 				{
-					callInst += "[I";
+					callInst.append("[I");
 					type = Type.ARRAY;
 				}
 			}
@@ -223,12 +219,12 @@ public class IRCall extends IRNode
 				IRGlobal global = (IRGlobal) node;
 				if(global.getType().equals(Type.INTEGER)) //otherwise lhs defined, and type equals lhs var type
 				{
-					callInst += "I";
+					callInst.append("I");
 					type = Type.INTEGER;
 				}
 				else
 				{
-					callInst += "[I";
+					callInst.append("[I");
 					type = Type.ARRAY;
 				}
 			}
@@ -237,16 +233,16 @@ public class IRCall extends IRNode
 				IRMethod method = (IRMethod) findParent("Method");
 				if(method.getArgumentType(lhsVarName).equals(Type.INTEGER)) //otherwise lhs defined, and type equals lhs var type
 				{
-					callInst += "I";
+					callInst.append("I");
 					type = Type.INTEGER;
 				}
 				else
 				{
-					callInst += "[I";
+					callInst.append("[I");
 					type = Type.ARRAY;
 				}
 			}
         }
-        return callInst;
+        return callInst.toString();
     }
 }

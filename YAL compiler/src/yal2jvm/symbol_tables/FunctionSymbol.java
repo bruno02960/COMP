@@ -103,14 +103,13 @@ public class FunctionSymbol extends Symbol
 
     private VarSymbol parseArrayElementArgument(ASTARRAYELEMENT child)
     {
-        ASTARRAYELEMENT astarrayelement = child;
-        String astArrayElementId = astarrayelement.id;
+        String astArrayElementId = child.id;
         String astArrayElementType = SymbolType.ARRAY.toString();
         if (returnValue != null && returnValue.getId().equals(astArrayElementId))
         {
             if (!returnValue.getType().equals(astArrayElementType))
             {
-                System.out.println("Line " + astarrayelement.getBeginLine() + ": Argument " + astarrayelement.id
+                System.out.println("Line " + child.getBeginLine() + ": Argument " + child.id
                         + " already declared as " + returnValue.getType() + ".");
                 return null;
             }
@@ -125,14 +124,13 @@ public class FunctionSymbol extends Symbol
 
     private VarSymbol parseScalarElementArgument(ASTSCALARELEMENT child)
     {
-        ASTSCALARELEMENT astscalarelement = child;
-        String astScalarElementId = astscalarelement.id;
+        String astScalarElementId = child.id;
         String astScalarElementType = SymbolType.INTEGER.toString();
         if (returnValue != null && returnValue.getId().equals(astScalarElementId))
         {
             if (!returnValue.getType().equals(astScalarElementType))
             {
-                System.out.println("Line " + astscalarelement.getBeginLine() + ": Argument " + astscalarelement.id
+                System.out.println("Line " + child.getBeginLine() + ": Argument " + child.id
                         + " already declared as " + returnValue.getType() + ".");
                 return null;
             }

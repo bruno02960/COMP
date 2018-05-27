@@ -12,20 +12,20 @@ public class IRGlobal extends IRNode
     private boolean arraySize = false;
     private ArrayList<String> staticArraysInstructions = new ArrayList<>();
 
-    public IRGlobal(Variable variable) // a[]; ou a;
+    IRGlobal(Variable variable) // a[]; ou a;
     {
         this.name = variable.getVar();
         this.type = variable.getType();
         this.nodeType = "Global";
     }
 
-    public IRGlobal(Variable variable, Variable value)
+    IRGlobal(Variable variable, Variable value)
     {
         this(variable);
         this.value = value;
     }
 
-    public IRGlobal(Variable variable, Variable value, Type arraySize) // a[] = [50]; ou a = [50];
+    IRGlobal(Variable variable, Variable value, Type arraySize) // a[] = [50]; ou a = [50];
     {
         this(variable, value);
         assert arraySize == Type.ARRAYSIZE;
@@ -51,7 +51,7 @@ public class IRGlobal extends IRNode
                 else // a[] = 50;
                 {
                     assignAllArrayElements(value);
-                    return new ArrayList<String>();
+                    return new ArrayList<>();
                 }
             }
             else // a = ...
@@ -142,16 +142,6 @@ public class IRGlobal extends IRNode
     {
         return staticArraysInstructions;
     }
-    
-    public ArrayList<String>getInitializationInstructions()
-    {
-		ArrayList<String> inst = new ArrayList<>();
-		
-		//if size
-		
-		//else if init 
-		
-		return inst;
-    }
+
 }
 

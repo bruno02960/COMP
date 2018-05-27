@@ -6,7 +6,7 @@ public class IRLabel extends IRNode
 {
 	private String label;
 	
-	public IRLabel(String label)
+	IRLabel(String label)
 	{
 		this.label = label;
 		this.nodeType = "Label";

@@ -26,8 +26,7 @@ public class ModuleAnalysis extends Analysis
         HashMap<String, Symbol> unifiedSymbolTable = getUnifiedSymbolTable();
         for (HashMap.Entry<String, Symbol> o : functionNameToFunctionSymbol.entrySet())
         {
-            HashMap.Entry<String, Symbol> pair = o;
-            FunctionSymbol functionSymbol = (FunctionSymbol) pair.getValue();
+            FunctionSymbol functionSymbol = (FunctionSymbol) o.getValue();
 
             SimpleNode functionAST = functionSymbol.getFunctionAST();
             FunctionAnalysis functionAnalysis = new FunctionAnalysis(functionAST, unifiedSymbolTable,
@@ -50,8 +49,7 @@ public class ModuleAnalysis extends Analysis
     {
         for (HashMap.Entry<String, Symbol> o : mySymbols.entrySet())
         {
-            HashMap.Entry<String, Symbol> pair = o;
-            VarSymbol symbol = (VarSymbol) pair.getValue();
+            VarSymbol symbol = (VarSymbol) o.getValue();
             symbol.setInitialized(true);
         }
     }
@@ -81,7 +79,7 @@ public class ModuleAnalysis extends Analysis
         }
     }
 
-    private boolean addFunctionToHashMap(ASTFUNCTION astfunctionNode, FunctionSymbol functionSymbol)
+    private void addFunctionToHashMap(ASTFUNCTION astfunctionNode, FunctionSymbol functionSymbol)
     {
         FunctionSymbol retValue = (FunctionSymbol) functionNameToFunctionSymbol.put(functionSymbol.getId(), functionSymbol);
         if(retValue != null)
@@ -90,9 +88,7 @@ public class ModuleAnalysis extends Analysis
             System.out.println("Line " + astfunctionNode.getBeginLine() + ": Function " + functionSymbol.getId()
                 + " already declared.");
             ModuleAnalysis.hasErrors = true;
-            return false;
         }
 
-        return true;
     }
 }

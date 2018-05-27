@@ -160,7 +160,7 @@ public class YalParserTokenManager implements YalParserConstants
     {
         try
         {
-            curChar = input_stream.readChar();
+            curChar = SimpleCharStream.readChar();
         } catch (java.io.IOException e)
         {
             jjStopStringLiteralDfa_0(0, active0);
@@ -194,7 +194,7 @@ public class YalParserTokenManager implements YalParserConstants
             return jjStartNfa_0(0, old0);
         try
         {
-            curChar = input_stream.readChar();
+            curChar = SimpleCharStream.readChar();
         } catch (java.io.IOException e)
         {
             jjStopStringLiteralDfa_0(1, active0);
@@ -224,7 +224,7 @@ public class YalParserTokenManager implements YalParserConstants
             return jjStartNfa_0(1, old0);
         try
         {
-            curChar = input_stream.readChar();
+            curChar = SimpleCharStream.readChar();
         } catch (java.io.IOException e)
         {
             jjStopStringLiteralDfa_0(2, active0);
@@ -256,7 +256,7 @@ public class YalParserTokenManager implements YalParserConstants
             return jjStartNfa_0(2, old0);
         try
         {
-            curChar = input_stream.readChar();
+            curChar = SimpleCharStream.readChar();
         } catch (java.io.IOException e)
         {
             jjStopStringLiteralDfa_0(3, active0);
@@ -284,7 +284,7 @@ public class YalParserTokenManager implements YalParserConstants
             return jjStartNfa_0(3, old0);
         try
         {
-            curChar = input_stream.readChar();
+            curChar = SimpleCharStream.readChar();
         } catch (java.io.IOException e)
         {
             jjStopStringLiteralDfa_0(4, active0);
@@ -310,7 +310,7 @@ public class YalParserTokenManager implements YalParserConstants
             return jjStartNfa_0(4, old0);
         try
         {
-            curChar = input_stream.readChar();
+            curChar = SimpleCharStream.readChar();
         } catch (java.io.IOException e)
         {
             jjStopStringLiteralDfa_0(5, active0);
@@ -332,7 +332,7 @@ public class YalParserTokenManager implements YalParserConstants
             return jjStartNfa_0(5, old0);
         try
         {
-            curChar = input_stream.readChar();
+            curChar = SimpleCharStream.readChar();
         } catch (java.io.IOException e)
         {
             jjStopStringLiteralDfa_0(6, active0);
@@ -356,7 +356,7 @@ public class YalParserTokenManager implements YalParserConstants
         jjmatchedPos = pos;
         try
         {
-            curChar = input_stream.readChar();
+            curChar = SimpleCharStream.readChar();
         } catch (java.io.IOException e)
         {
             return pos + 1;
@@ -641,7 +641,7 @@ public class YalParserTokenManager implements YalParserConstants
                 return curPos;
             try
             {
-                curChar = input_stream.readChar();
+                curChar = SimpleCharStream.readChar();
             } catch (java.io.IOException e)
             {
                 return curPos;
@@ -751,11 +751,11 @@ public class YalParserTokenManager implements YalParserConstants
         final int beginColumn;
         final int endColumn;
         String im = jjstrLiteralImages[jjmatchedKind];
-        curTokenImage = (im == null) ? input_stream.GetImage() : im;
-        beginLine = input_stream.getBeginLine();
-        beginColumn = input_stream.getBeginColumn();
-        endLine = input_stream.getEndLine();
-        endColumn = input_stream.getEndColumn();
+        curTokenImage = (im == null) ? SimpleCharStream.GetImage() : im;
+        beginLine = SimpleCharStream.getBeginLine();
+        beginColumn = SimpleCharStream.getBeginColumn();
+        endLine = SimpleCharStream.getEndLine();
+        endColumn = SimpleCharStream.getEndColumn();
         t = Token.newToken(jjmatchedKind, curTokenImage);
 
         t.beginLine = beginLine;
@@ -786,7 +786,7 @@ public class YalParserTokenManager implements YalParserConstants
         {
             try
             {
-                curChar = input_stream.BeginToken();
+                curChar = SimpleCharStream.BeginToken();
             } catch (java.io.IOException e)
             {
                 jjmatchedKind = 0;
@@ -796,9 +796,9 @@ public class YalParserTokenManager implements YalParserConstants
 
             try
             {
-                input_stream.backup(0);
+                SimpleCharStream.backup(0);
                 while (curChar <= 32 && (0x100002600L & (1L << curChar)) != 0L)
-                    curChar = input_stream.BeginToken();
+                    curChar = SimpleCharStream.BeginToken();
             } catch (java.io.IOException e1)
             {
                 continue EOFLoop;
@@ -809,7 +809,7 @@ public class YalParserTokenManager implements YalParserConstants
             if (jjmatchedKind != 0x7fffffff)
             {
                 if (jjmatchedPos + 1 < curPos)
-                    input_stream.backup(curPos - jjmatchedPos - 1);
+                    SimpleCharStream.backup(curPos - jjmatchedPos - 1);
                 if ((jjtoToken[jjmatchedKind >> 6] & (1L << (jjmatchedKind & 077))) != 0L)
                 {
                     matchedToken = jjFillToken();
@@ -819,18 +819,18 @@ public class YalParserTokenManager implements YalParserConstants
                     continue EOFLoop;
                 }
             }
-            int error_line = input_stream.getEndLine();
-            int error_column = input_stream.getEndColumn();
+            int error_line = SimpleCharStream.getEndLine();
+            int error_column = SimpleCharStream.getEndColumn();
             String error_after = null;
             boolean EOFSeen = false;
             try
             {
-                input_stream.readChar();
-                input_stream.backup(1);
+                SimpleCharStream.readChar();
+                SimpleCharStream.backup(1);
             } catch (java.io.IOException e1)
             {
                 EOFSeen = true;
-                error_after = curPos <= 1 ? "" : input_stream.GetImage();
+                error_after = curPos <= 1 ? "" : SimpleCharStream.GetImage();
                 if (curChar == '\n' || curChar == '\r')
                 {
                     error_line++;
@@ -840,8 +840,8 @@ public class YalParserTokenManager implements YalParserConstants
             }
             if (!EOFSeen)
             {
-                input_stream.backup(1);
-                error_after = curPos <= 1 ? "" : input_stream.GetImage();
+                SimpleCharStream.backup(1);
+                error_after = curPos <= 1 ? "" : SimpleCharStream.GetImage();
             }
             throw new TokenMgrError(EOFSeen, curLexState, error_line, error_column, error_after, curChar, TokenMgrError.LEXICAL_ERROR);
         }

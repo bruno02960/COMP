@@ -5,7 +5,6 @@ import java.util.ArrayList;
 public class IRLoad extends IRNode
 {
     private String name;
-    private int register = -1;
     private Type type;
     private IRNode index = null;
     private boolean arraySizeAccess;
@@ -16,13 +15,13 @@ public class IRLoad extends IRNode
         this.nodeType = "Load";
     }
 
-    public IRLoad(String name, Type type)
+    IRLoad(String name, Type type)
     {
         this(name);
         this.type = type;
     }
 
-    public IRLoad(Variable value)
+    IRLoad(Variable value)
     {
         this(value.getVar());
         this.type = Type.INTEGER; //assumes type is integer and changes if needed
@@ -33,7 +32,7 @@ public class IRLoad extends IRNode
         }
     }
 
-    public IRLoad(VariableArray value)
+    IRLoad(VariableArray value)
     {
         this(value.getVar());
         this.type = value.getType();
@@ -45,16 +44,6 @@ public class IRLoad extends IRNode
             index = new IRLoad(indexVar);
 
         this.addChild(index);
-    }
-
-    public int getRegister()
-    {
-        return register;
-    }
-
-    public void setRegister(int register)
-    {
-        this.register = register;
     }
 
     @Override

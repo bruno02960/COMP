@@ -9,7 +9,7 @@ public class Utils
 {
     public static HashMap<String, Symbol> copyHashMap(HashMap<String, Symbol> original)
     {
-        HashMap<String, Symbol> copy = new HashMap<String, Symbol>();
+        HashMap<String, Symbol> copy = new HashMap<>();
         for (Map.Entry<String, Symbol> entry : original.entrySet())
             copy.put(entry.getKey(), entry.getValue().getCopy());
 

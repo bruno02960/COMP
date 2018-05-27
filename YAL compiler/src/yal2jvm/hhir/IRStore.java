@@ -5,16 +5,15 @@ import java.util.ArrayList;
 public abstract class IRStore extends IRNode
 {
     protected String name;
-    protected boolean arrayAccess = false;
+    boolean arrayAccess = false;
     protected IRLoad index = null;
-    private int register;
 
-    protected ArrayList<String> getInstForStoring(boolean arrayAccess, IRLoad index, IRNode value)
+    ArrayList<String> getInstForStoring(boolean arrayAccess, IRLoad index, IRNode value)
     {
         ArrayList<String> inst = new ArrayList<>();
 
         //check if it is one of the method's arguments
-        register = ((IRMethod) parent).getArgumentRegister(name);
+        int register = ((IRMethod) parent).getArgumentRegister(name);
 
         //if not, check if storage variable exists, and if so get its register
         if (register == -1)
@@ -25,7 +24,7 @@ public abstract class IRStore extends IRNode
         {
         	IRModule module = (IRModule)findParent("Module");
         	IRGlobal global = module.getGlobal(name);
-        	String instruction = null;
+        	String instruction;
 
         	if (global != null)
         	{

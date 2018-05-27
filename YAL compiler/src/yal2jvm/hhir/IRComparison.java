@@ -9,16 +9,10 @@ public class IRComparison extends IRNode
 	private IRNode lhs;
 	private String label;
 
-	public IRComparison(Comparator comp, String label, boolean invert)
-	{
-		this.comp = invert ? Comparator.invert(comp) : comp;
-		this.label = label;
-		this.nodeType = "Comparison";
-	}
-
-	public IRComparison(String operator, String label, boolean invert)
+	IRComparison(String operator, String label, boolean invert)
 	{
 		Comparator comp = getComparatorGivenOperator(operator);
+		assert comp != null;
 		this.comp = invert ? Comparator.invert(comp) : comp;
 		this.label = label;
 		this.nodeType = "Comparison";
@@ -59,7 +53,7 @@ public class IRComparison extends IRNode
 	{
 		ArrayList<String> inst = new ArrayList<>();
 		
-		String branchInst = "";
+		String branchInst;
 		
 		if (isConstantZero(rhs))
 		{
@@ -87,13 +81,12 @@ public class IRComparison extends IRNode
 		return inst;
 	}
 	
-	boolean isConstantZero(IRNode node)
+	private boolean isConstantZero(IRNode node)
 	{
 		if (node.nodeType.equals("Constant"))
 		{
 			IRConstant constant = (IRConstant)node;
-			if (constant.getValue().equals("0"))
-				return true;
+			return constant.getValue().equals("0");
 		}
 		return false;
 	}
@@ -112,15 +105,14 @@ public class IRComparison extends IRNode
 			if (lhs.nodeType.equals("Load"))
 			{
 				load = (IRLoad)lhs;
-				if (load.getType() == Type.ARRAY && load.isArraySizeAccess() == false)
-					return true;
+				return load.getType() == Type.ARRAY && !load.isArraySizeAccess();
 			}
 		}
 
 		return false;
 	}
 	
-	public String getZeroComparison()
+	private String getZeroComparison()
 	{
 		String branchInst = "";
 		switch(comp)
@@ -149,7 +141,7 @@ public class IRComparison extends IRNode
 		return branchInst;
 	}
 	
-	public String getArrayComparison()
+	private String getArrayComparison()
 	{
 		String branchInst = "";
 		switch(comp)
@@ -166,7 +158,7 @@ public class IRComparison extends IRNode
 		return branchInst;
 	}
 	
-	public String getIntegerComparison()
+	private String getIntegerComparison()
 	{
 		String branchInst = "";
 		switch(comp)
@@ -193,11 +185,6 @@ public class IRComparison extends IRNode
 			break;
 		}
 		return branchInst;
-	}
-
-	public IRNode getRhs()
-	{
-		return rhs;
 	}
 
 	public void setRhs(IRNode rhs)

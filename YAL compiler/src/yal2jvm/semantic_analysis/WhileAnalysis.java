@@ -11,8 +11,8 @@ import java.util.HashMap;
 public class WhileAnalysis extends Analysis
 {
 
-    public WhileAnalysis(SimpleNode ast, HashMap<String, Symbol> inheritedSymbols,
-            HashMap<String, Symbol> functionNameToFunctionSymbolOfModule)
+    WhileAnalysis(SimpleNode ast, HashMap<String, Symbol> inheritedSymbols,
+                  HashMap<String, Symbol> functionNameToFunctionSymbolOfModule)
     {
         super(ast, inheritedSymbols, functionNameToFunctionSymbolOfModule);
     }
@@ -25,8 +25,7 @@ public class WhileAnalysis extends Analysis
 
         //get inherited symbols States before while, in order to not change original values.
         // Changes made inside while mus not be visible outside, because while can not be executed
-        HashMap<String, Symbol> inheritedSymbolsHashMapBeforeWhile = Utils.copyHashMap(inheritedSymbols);
-        inheritedSymbols = inheritedSymbolsHashMapBeforeWhile;
+        inheritedSymbols = Utils.copyHashMap(inheritedSymbols);
 
         ASTSTATEMENTS stmtlst = ((ASTSTATEMENTS) ast.jjtGetChild(1));
         parseStmtLst(stmtlst);

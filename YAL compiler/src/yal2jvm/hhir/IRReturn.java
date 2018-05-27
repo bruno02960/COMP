@@ -7,7 +7,7 @@ public class IRReturn extends IRNode
     private String name;
     private Type type;
 
-    public IRReturn(String name, Type type)
+    IRReturn(String name, Type type)
     {
         this.name = name;
         this.type = type;

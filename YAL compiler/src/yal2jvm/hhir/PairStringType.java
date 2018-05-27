@@ -6,7 +6,7 @@ public class PairStringType
     private Type type;
     private String string;
 
-    public PairStringType(String string, Type type)
+    PairStringType(String string, Type type)
     {
         this.type = type;
         this.string = string;

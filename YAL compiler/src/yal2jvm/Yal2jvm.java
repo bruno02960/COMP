@@ -96,10 +96,6 @@ public class Yal2jvm
         
         System.out.println("Initiating JVM code generation");
         HHIR hhir = new HHIR(ast);
-        if (this.optimize)
-            hhir.optimize();
-        hhir.dataflowAnalysis();
-        hhir.allocateRegisters(this.localVars);
 
         ArrayList<String> instructions = hhir.selectInstructions();
         String moduleName = hhir.getModuleName();

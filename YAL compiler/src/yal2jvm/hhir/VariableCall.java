@@ -1,7 +1,7 @@
 package yal2jvm.hhir;
 
 public class VariableCall extends Variable {
-    IRCall irCall;
+    private IRCall irCall;
 
     VariableCall(String var, Type type, IRCall irCall) {
         super(var, type);

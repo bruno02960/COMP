@@ -6,7 +6,7 @@ public class IRConstant extends IRNode
 {
     private String value;
 
-    public IRConstant(String value)
+    IRConstant(String value)
     {
         this.value = value;
         this.nodeType = "Constant";
@@ -29,7 +29,7 @@ public class IRConstant extends IRNode
         return inst;
     }
 
-    public static String getLoadConstantInstruction(int value)
+    private static String getLoadConstantInstruction(int value)
     {
         if(value < 6 && value > -2) {
             if(value == -1) {

@@ -11,9 +11,7 @@ public class IRMethod extends IRNode
     private Type[] argsType;
     private String[] argsNames;
 
-    private int labelN = 0;
-    private int regN = 0;
-    private int varN = 0;
+    private int regN;
 
     public IRMethod(String name, Type returnType, String returnVar, Type[] argsTypes, String[] argsNames)
     {
@@ -31,48 +29,44 @@ public class IRMethod extends IRNode
     {
         ArrayList<String> inst = new ArrayList<>();
 
-        String methodDeclarationInst = ".method public static ";
+        StringBuilder methodDeclarationInst = new StringBuilder(".method public static ");
 
         if (name.equals("main"))
         {
-            methodDeclarationInst += "main([Ljava/lang/String;)V";
+            methodDeclarationInst.append("main([Ljava/lang/String;)V");
             this.regN++; // the main as the argument String args[], however is it not used in yal
         }
         else
         {
-            methodDeclarationInst += name + "(";
-            for (int i = 0; i < argsType.length; i++)
-            {
-                switch (argsType[i])
-                {
-                    case INTEGER:
-                    {
-                        methodDeclarationInst += "I";
+            methodDeclarationInst.append(name).append("(");
+            for (Type anArgsType : argsType) {
+                switch (anArgsType) {
+                    case INTEGER: {
+                        methodDeclarationInst.append("I");
                         break;
                     }
-                    case ARRAY:
-                    {
-                        methodDeclarationInst += "[I";
+                    case ARRAY: {
+                        methodDeclarationInst.append("[I");
                         break;
                     }
                     default:
                         break;
                 }
             }
-            methodDeclarationInst += ")";
+            methodDeclarationInst.append(")");
 
             switch (returnType)
             {
                 case INTEGER:
-                    methodDeclarationInst += "I";
+                    methodDeclarationInst.append("I");
                     break;
 
                 case ARRAY:
-                    methodDeclarationInst += "[I";
+                    methodDeclarationInst.append("[I");
                     break;
 
                 case VOID:
-                    methodDeclarationInst += "V";
+                    methodDeclarationInst.append("V");
                     break;
                 default:
                     break;
@@ -88,7 +82,7 @@ public class IRMethod extends IRNode
 
         String endMethodInst = ".end method";
 
-        inst.add(methodDeclarationInst);
+        inst.add(methodDeclarationInst.toString());
         inst.addAll(methodBody);
         inst.addAll(instReturn);
         inst.add(endMethodInst);
@@ -106,7 +100,6 @@ public class IRMethod extends IRNode
             if (node.toString().equals("Allocate"))
                 localsCount++;
         }
-        localsCount += this.argsType.length;
 
         localsCount = 255;
         inst.add(".limit locals " + localsCount);
@@ -150,12 +143,10 @@ public class IRMethod extends IRNode
 
     public int getVarRegister(String name)
     {
-        for (int i = 0; i < children.size(); i++)
-        {
-            String childrenType = children.get(i).toString();
-            if (childrenType.equals("Allocate"))
-            {
-                IRAllocate irAllocate = ((IRAllocate) children.get(i));
+        for (IRNode aChildren : children) {
+            String childrenType = aChildren.toString();
+            if (childrenType.equals("Allocate")) {
+                IRAllocate irAllocate = ((IRAllocate) aChildren);
                 if (irAllocate.getName().equals(name))
                     return irAllocate.getRegister();
             }
@@ -166,12 +157,10 @@ public class IRMethod extends IRNode
 
     public Type getVarType(String name)
     {
-        for (int i = 0; i < children.size(); i++)
-        {
-            String childrenType = children.get(i).toString();
-            if (childrenType.equals("Allocate"))
-            {
-                IRAllocate irAllocate = ((IRAllocate) children.get(i));
+        for (IRNode aChildren : children) {
+            String childrenType = aChildren.toString();
+            if (childrenType.equals("Allocate")) {
+                IRAllocate irAllocate = ((IRAllocate) aChildren);
                 if (irAllocate.getName().equals(name))
                     return irAllocate.getType();
             }
@@ -192,11 +181,6 @@ public class IRMethod extends IRNode
 	public Type getReturnType()
 	{
 		return returnType;
-	}
-
-	public void setReturnType(Type returnType)
-	{
-		this.returnType = returnType;
 	}
 
 }

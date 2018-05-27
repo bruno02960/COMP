@@ -7,7 +7,7 @@ public class IRModule extends IRNode
     private String name;
     private int currLabelNumber = 1;
 
-    public IRModule(String name)
+    IRModule(String name)
     {
         super();
         this.setName(name);
@@ -53,11 +53,9 @@ public class IRModule extends IRNode
 
     public IRGlobal getGlobal(String name)
     {
-        for (int i = 0; i < children.size(); i++)
-        {
-            if (children.get(i).toString().equals("Global"))
-            {
-                IRGlobal global = ((IRGlobal) children.get(i));
+        for (IRNode aChildren : children) {
+            if (aChildren.toString().equals("Global")) {
+                IRGlobal global = ((IRGlobal) aChildren);
                 if (global.getName().equals(name))
                     return global;
             }
@@ -67,12 +65,9 @@ public class IRModule extends IRNode
 
     public IRMethod getChildMethod(String name)
     {
-        for (int i = 0; i < children.size(); i++)
-        {
-            IRNode child = children.get(i);
-            if(child instanceof IRMethod)
-            {
-                if(((IRMethod) child).getName().equals(name))
+        for (IRNode child : children) {
+            if (child instanceof IRMethod) {
+                if (((IRMethod) child).getName().equals(name))
                     return ((IRMethod) child);
             }
         }
