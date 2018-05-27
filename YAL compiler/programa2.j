@@ -4,44 +4,63 @@
 
 
 
-.method public static f1()[I
+.method public static f1([I)[I
 .limit locals 255
 .limit stack 20
-iconst_4
-newarray int
-astore_0
-bipush 7
-newarray int
-astore_0
 iconst_0
 istore_1
 aload_0
-iconst_1
-iconst_2
-iastore
+arraylength
+istore_2
+iload_2
+newarray int
+astore_3
 while_f1_init1:
 iload_1
 aload_0
 arraylength
-if_icmpeq while_f1_end2
+if_icmpge while_f1_end2
+aload_3
+iload_1
 aload_0
 iload_1
 iaload
-istore_2
-ldc "c = "
-iload_2
-invokestatic io/println(Ljava/lang/String;I)V
+iastore
 iinc 1 1
 goto while_f1_init1
 while_f1_end2:
-aload_0
+aload_3
+areturn
+.end method
+
+
+.method public static f2(I)[I
+.limit locals 255
+.limit stack 20
+iload_0
+newarray int
+astore_1
+
+iconst_0
+istore_2
+init:
+iload_2
+aload_1
 arraylength
-istore_3
-invokestatic io/println()V
-ldc "b = "
-iload_3
-invokestatic io/println(Ljava/lang/String;I)V
-aload_0
+if_icmpge end
+
+aload_1
+
+iload_2
+
+iconst_1
+
+iastore
+iinc 2 1
+goto init
+end:
+
+aload_1
 areturn
 .end method
 
@@ -49,7 +68,50 @@ areturn
 .method public static main([Ljava/lang/String;)V
 .limit locals 255
 .limit stack 20
-invokestatic programa2/f1()[I
+bipush 100
+newarray int
 astore_1
+aload_1
+iconst_0
+iconst_1
+iastore
+aload_1
+bipush 99
+iconst_2
+iastore
+aload_1
+invokestatic programa2/f1([I)[I
+astore_2
+aload_2
+iconst_0
+iaload
+istore_3
+aload_2
+bipush 99
+iaload
+istore 4
+ldc "first: "
+iload_3
+invokestatic io/println(Ljava/lang/String;I)V
+ldc "last: "
+iload 4
+invokestatic io/println(Ljava/lang/String;I)V
+bipush 100
+invokestatic programa2/f2(I)[I
+astore_2
+aload_2
+iconst_0
+iaload
+istore_3
+aload_2
+bipush 99
+iaload
+istore 4
+ldc "first: "
+iload_3
+invokestatic io/println(Ljava/lang/String;I)V
+ldc "last: "
+iload 4
+invokestatic io/println(Ljava/lang/String;I)V
 return
 .end method

@@ -147,17 +147,22 @@ public class IRAllocate extends IRNode
             if(typeStr == null)
                 typeStr = rhs.nodeType;
 
-            if(typeStr.equals(Type.INTEGER.name()))
+            if(rhs.parent.nodeType.equals("Allocate")) {
+                IRAllocate rhsParent = (IRAllocate) rhs.parent;
+                if(rhsParent.type == Type.ARRAYSIZE) {
+                    inst.add(getInstructionToStoreGlobalArray(type, name)); // i = [5];
+                    type = Type.ARRAY;
+                    return inst;
+                }
+            }
+
+            if(typeStr.equals(Type.ARRAY.name()) && lhsIndex == null)
                 inst.addAll(setAllArrayElements()); // i = 5; com i array
             else
+
             {
                 if(lhsIndex != null) // a[i] = 5;
                     inst.addAll(setGlobalArrayElementByIRNode(lhsIndex, type, name, rhs));
-                else
-                {
-                    inst.add(getInstructionToStoreGlobalArray(type, name)); // i = [5];
-                    type = Type.ARRAY;
-                }
             }
 
 		}

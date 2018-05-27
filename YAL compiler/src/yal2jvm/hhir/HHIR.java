@@ -801,7 +801,7 @@ public class HHIR
                         value = new Variable(str_value, Type.INTEGER);
                     }
 
-                    variable.setType(Type.VARIABLE);
+                    variable.setType(Type.INTEGER);
                 }
                 break;
             case "ARRAYELEMENT":
@@ -851,21 +851,20 @@ public class HHIR
         if(!initialized) {
             root.addChild(new IRGlobal(variable));
         }
-
-        assert variable != null;
-        switch (variable.getType())
-        {
-            case VARIABLE:
-                root.addChild(new IRGlobal(variable, value));
-                break;
-            case ARRAY:
-                if(arraySize) {
-                    root.addChild(new IRGlobal(variable, value, Type.ARRAYSIZE));
-                }
-                else {
+        else {
+            assert variable != null;
+            switch (variable.getType()) {
+                case INTEGER:
                     root.addChild(new IRGlobal(variable, value));
-                }
-                break;
+                    break;
+                case ARRAY:
+                    if (arraySize) {
+                        root.addChild(new IRGlobal(variable, value, Type.ARRAYSIZE));
+                    } else {
+                        root.addChild(new IRGlobal(variable, value));
+                    }
+                    break;
+            }
         }
     }
 }
