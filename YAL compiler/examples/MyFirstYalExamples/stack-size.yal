@@ -17,7 +17,7 @@ module stackSize {
 	}
 
 	function main() {
-		a = -1;
+		a = 2;
 		f(a);
 	}
 }
