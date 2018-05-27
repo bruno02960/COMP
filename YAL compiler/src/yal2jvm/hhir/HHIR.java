@@ -649,6 +649,14 @@ public class HHIR
                         value = new Variable(str_value, Type.INTEGER);
                     }
 
+                    IRGlobal irGlobal = root.getGlobal(variable.getVar());
+                    if(irGlobal != null && initialized)
+                    {
+                        variable.setType(Type.ARRAY);
+                        root.addChild(new IRGlobal(variable, value));
+                        return;
+                    }
+
                     variable.setType(Type.INTEGER);
                 }
                 break;

@@ -71,13 +71,13 @@ public abstract class IRNode
         return getInstructionLoadOrStoreInstructionMoreEfficient("astore", registerNumber);
     }
 
-    String getInstructionToLoadGlobalArrayToStack(Type type, String name)
+    String getInstructionToLoadGlobalToStack(Type type, String name)
     {
         String varType = type == Type.INTEGER ? "I" : "[I";
         return "getstatic " + Yal2jvm.moduleName + "/" + name + " " + varType;
     }
 
-    String getInstructionToStoreGlobalArray(Type type, String name)
+    String getInstructionToStoreGlobal(Type type, String name)
     {
         String varType = type == Type.INTEGER ? "I" : "[I";
         return "putstatic " + Yal2jvm.moduleName + "/" + name + " " + varType;
@@ -144,7 +144,7 @@ public abstract class IRNode
 
     ArrayList<String> setGlobalArrayElementByIRNode(IRNode index, Type type, String name, IRNode value)
     {
-        String loadArrayRefInstruction = getInstructionToLoadGlobalArrayToStack(type, name);
+        String loadArrayRefInstruction = getInstructionToLoadGlobalToStack(type, name);
         return setArrayElement(index.getInstructions(), loadArrayRefInstruction, value);
     }
 
@@ -159,9 +159,8 @@ public abstract class IRNode
         return inst;
     }
 
-    String getGlobalVariableGetCode(String name, IRMethod method)
+    String getGlobalVariableGetCode(String name, IRModule module)
     {
-        IRModule module = ((IRModule) method.getParent());
         IRGlobal global = module.getGlobal(name);
         if (global == null)
         {
@@ -173,6 +172,11 @@ public abstract class IRNode
         in += global.getType() == Type.ARRAY ? "[I" : "I";
 
         return in;
+    }
+
+    String getGlobalVariableGetCodeByIRMethod(String name, IRMethod method) {
+        IRModule module = ((IRModule) method.getParent());
+        return getGlobalVariableGetCode(name, module);
     }
 
     ArrayList<String> getCodeForSetAllArrayElements(String arrayRefJVMCode,

@@ -12,7 +12,6 @@ public class IRAllocate extends IRNode
 	private boolean storeVarGlobal = false;
 	private IRGlobal global;
 
-
 	//a = 1;
     IRAllocate(String name, Variable value)
     {
@@ -140,7 +139,7 @@ public class IRAllocate extends IRNode
             if(typeStr != null && global.getType() == Type.VARIABLE) // i = 5;
             {
                 inst.addAll(rhs.getInstructions());
-                inst.add(getInstructionToStoreGlobalArray(type, name));
+                inst.add(getInstructionToStoreGlobal(type, name));
                 return inst;
             }
 
@@ -150,13 +149,18 @@ public class IRAllocate extends IRNode
             if(rhs.parent.nodeType.equals("Allocate")) {
                 IRAllocate rhsParent = (IRAllocate) rhs.parent;
                 if(rhsParent.type == Type.ARRAYSIZE) {
-                    inst.add(getInstructionToStoreGlobalArray(type, name)); // i = [5];
+                    inst.add(getInstructionToStoreGlobal(type, name)); // i = [5];
                     type = Type.ARRAY;
                     return inst;
                 }
             }
 
-            if(typeStr.equals(Type.INTEGER.name()) && lhsIndex == null)
+            Type prevType = global.getType();
+            if(prevType == Type.ARRAY && type == Type.INTEGER) {
+                typeStr = Type.ARRAY.name();
+            }
+
+            if(typeStr.equals(Type.ARRAY.name()) && lhsIndex == null)
                 inst.addAll(setAllArrayElements()); // i = 5; com i array
             else
 
@@ -213,19 +217,27 @@ public class IRAllocate extends IRNode
     {
         int reg = -1;
         IRNode node = getVarIfExists(name);
+
         if(node == null)
         {
             System.out.println("Internal error! The program will be closed.");
             System.exit(-1);
         }
-        else if(node instanceof IRArgument)
-            reg = ((IRArgument)node).getRegister();
-        else if(node instanceof IRAllocate)
+        else if(node instanceof IRArgument) {
+            reg = ((IRArgument) node).getRegister();
+        }
+        else if(node instanceof IRAllocate) {
             reg = ((IRAllocate) node).getRegister();
+        }
 
         String arrayRefJVMCode;
-        if(storeVarGlobal)
-            arrayRefJVMCode = getInstructionToLoadGlobalArrayToStack(type, name);
+        if(storeVarGlobal) {
+            Type prevType = global.getType();
+            if(prevType == Type.ARRAY && type == Type.INTEGER) {
+                type = Type.ARRAY;
+            }
+            arrayRefJVMCode = getInstructionToLoadGlobalToStack(type, name);
+        }
         else
             arrayRefJVMCode = getInstructionToLoadArrayFromRegisterToStack(reg);
         ArrayList<String> valueJVMCode = rhs.getInstructions();

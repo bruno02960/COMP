@@ -1,8 +1,29 @@
 module bug_uninitialized_global {
-    c = [95];
+    b=10;
+    c= [95];
+
+    function y=f(a) {
+
+        c=c.size;
+        while(a < b)
+        {
+            a = a + 1;
+        }
+        b = 20;
+        if (a <= b)
+        {
+         a = 69;
+        }
+        y = c[2];
+        io.println(y);
+        c[2]=5;
+        y = c[2];
+        io.println(y);
+    }
+
 
     function main()
     {
-        c = c.size;
+        f(0);
     }
 }
