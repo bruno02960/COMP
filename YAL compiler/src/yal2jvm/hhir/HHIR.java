@@ -176,8 +176,7 @@ public class HHIR
         String functionId = astFunction.id;
         Type returnType = Type.VOID;
         String returnName = null;
-        Type[] argumentsTypes = null;
-        String[] argumentsNames = null;
+        Variable[] arguments = null;
 
         //indicates the index(child num) of the arguments. 0 if no return value, or 1 if has return value
         int argumentsIndex = 0;
@@ -208,8 +207,7 @@ public class HHIR
         if (currNode instanceof ASTVARS)
         {
             int numArguments = currNode.jjtGetNumChildren();
-            argumentsNames = new String[numArguments];
-            argumentsTypes = new Type[numArguments];
+            arguments = new Variable[numArguments];
 
             for (int i = 0; i < numArguments; i++)
             {
@@ -218,40 +216,38 @@ public class HHIR
                 {
                     if (child instanceof ASTSCALARELEMENT)
                     {
-                        argumentsNames[i] = ((ASTSCALARELEMENT) child).id;
-                        argumentsTypes[i] = Type.INTEGER;
+                        arguments[i] = new Variable(((ASTSCALARELEMENT) child).id, Type.INTEGER);
                     } else
                     {
-                        argumentsNames[i] = ((ASTARRAYELEMENT) child).id;
-                        argumentsTypes[i] = Type.ARRAY;
+                        arguments[i] = new Variable(((ASTARRAYELEMENT) child).id, Type.ARRAY);
                     }
                 }
             }
         }
-        IRMethod function = new IRMethod(functionId, returnType, returnName, argumentsTypes, argumentsNames);
+        IRMethod function = new IRMethod(functionId, returnType, returnName, arguments);
 
         //TODO: debug
-        if (functionDebug)
-        {
-            System.out.println("name= " + functionId);
-            System.out.println("return type= " + returnType.toString());
-            if (returnName != null)
-                System.out.println("return name= " + returnName);
-
-            if (argumentsTypes != null)
-            {
-                System.out.println("argumentsTypes= ");
-                for (Type argumentsType : argumentsTypes)
-                    System.out.println(argumentsType);
-            }
-
-            if (argumentsNames != null)
-            {
-                System.out.println("argumentsNames= ");
-                for (String argumentsName : argumentsNames)
-                    System.out.println(argumentsName);
-            }
-        }
+//        if (functionDebug)
+//        {
+//            System.out.println("name= " + functionId);
+//            System.out.println("return type= " + returnType.toString());
+//            if (returnName != null)
+//                System.out.println("return name= " + returnName);
+//
+//            if (argumentsTypes != null)
+//            {
+//                System.out.println("argumentsTypes= ");
+//                for (Type argumentsType : argumentsTypes)
+//                    System.out.println(argumentsType);
+//            }
+//
+//            if (argumentsNames != null)
+//            {
+//                System.out.println("argumentsNames= ");
+//                for (String argumentsName : argumentsNames)
+//                    System.out.println(argumentsName);
+//            }
+//        }
 
         root.addChild(function);
 
@@ -684,7 +680,7 @@ public class HHIR
         String methodId = astCall.method;
         if(moduleId == null)
             moduleId = root.getName();
-        ArrayList<PairStringType> arguments = new ArrayList<>();
+        ArrayList<Variable> arguments = new ArrayList<>();
 
         if (astCall.jjtGetNumChildren() > 0)
         {
@@ -699,7 +695,7 @@ public class HHIR
     {
         String moduleId = astCall.module;
         String methodId = astCall.method;
-        ArrayList<PairStringType> arguments = null;
+        ArrayList<Variable> arguments = null;
 
         if (astCall.jjtGetNumChildren() > 0)
         {
@@ -717,8 +713,8 @@ public class HHIR
             if (arguments != null)
             {
                 System.out.println("arguments");
-                for (PairStringType argument : arguments)
-                    System.out.println("value: " + argument.getString()
+                for (Variable argument : arguments)
+                    System.out.println("value: " + argument.getVar()
                             + "   type: " + argument.getType().toString());
             }
         }
@@ -726,28 +722,28 @@ public class HHIR
         return getIRCall(astCall, null);
     }
 
-    private ArrayList<PairStringType> getFunctionCallArgumentsIds(ASTARGUMENTS astArguments)
+    private ArrayList<Variable> getFunctionCallArgumentsIds(ASTARGUMENTS astArguments)
     {
-        ArrayList<PairStringType> arguments = new ArrayList<>();
+        ArrayList<Variable> arguments = new ArrayList<>();
         int numArguments = astArguments.jjtGetNumChildren();
         for (int i = 0; i < numArguments; i++)
         {
             ASTARGUMENT astArgument = (ASTARGUMENT) astArguments.jjtGetChild(i);
             if (astArgument.intArg != null)
             {
-                PairStringType pair = new PairStringType(astArgument.intArg.toString(), Type.INTEGER);
+                Variable pair = new Variable(astArgument.intArg.toString(), Type.INTEGER);
                 arguments.add(pair);
                 continue;
             }
             if (astArgument.stringArg != null)
             {
-                PairStringType pair = new PairStringType(astArgument.stringArg, Type.STRING);
+                Variable pair = new Variable(astArgument.stringArg, Type.STRING);
                 arguments.add(pair);
                 continue;
             }
             if (astArgument.idArg != null)
             {
-                PairStringType pair = new PairStringType(astArgument.idArg, Type.INTEGER);
+                Variable pair = new Variable(astArgument.idArg, Type.INTEGER);
                 arguments.add(pair);
             }
         }

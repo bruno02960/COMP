@@ -11,9 +11,9 @@ public class IRCall extends IRNode
     private String module;
     private String lhsVarName;
 	private Type type;
-    private ArrayList<PairStringType> arguments;
+    private ArrayList<Variable> arguments;
 
-    public IRCall(String method, String module, ArrayList<PairStringType> arguments, String lhsVarName)
+    public IRCall(String method, String module, ArrayList<Variable> arguments, String lhsVarName)
     {
         this.method = method;
         this.module = module;
@@ -48,7 +48,7 @@ public class IRCall extends IRNode
 		 }
     	 else {
 			 for (int i = 0; i < arguments.size(); i++) {
-				 PairStringType arg = arguments.get(i);
+				 Variable arg = arguments.get(i);
 
 				 Type type = arg.getType();
 
@@ -56,29 +56,29 @@ public class IRCall extends IRNode
 
 				 switch (type) {
 					 case STRING: {
-						 IRConstant stringConst = new IRConstant(arg.getString());
+						 IRConstant stringConst = new IRConstant(arg.getVar());
 						 inst.addAll(stringConst.getInstructions());
 						 break;
 					 }
 					 case INTEGER: {
 						 IRNode var;
-						 if (arg.getString().matches("-?\\d+")) {
-							 var = new IRConstant(arg.getString());
+						 if (arg.getVar().matches("-?\\d+")) {
+							 var = new IRConstant(arg.getVar());
 						 } else {
-							 var = new IRLoad(arg.getString(), Type.INTEGER);
+							 var = new IRLoad(arg.getVar(), Type.INTEGER);
 							 this.addChild(var);
 						 }
 						 inst.addAll(var.getInstructions());
 						 break;
 					 }
 					 case ARRAY: {
-						 IRLoad irLoad = new IRLoad(arg.getString(), Type.ARRAY);
+						 IRLoad irLoad = new IRLoad(arg.getVar(), Type.ARRAY);
 						 this.addChild(irLoad);
 						 inst.addAll(irLoad.getInstructions());
 						 break;
 					 }
 					 case ARRAYSIZE: {
-						 IRLoad irLoad = new IRLoad(arg.getString(), Type.ARRAYSIZE);
+						 IRLoad irLoad = new IRLoad(arg.getVar(), Type.ARRAYSIZE);
 						 this.addChild(irLoad);
 						 inst.addAll(irLoad.getInstructions());
 						 break;
@@ -92,18 +92,18 @@ public class IRCall extends IRNode
          return inst;
     }
 
-	private Type getArgumentsType(PairStringType arg, Type initType)
+	private Type getArgumentsType(Variable arg, Type initType)
 	{
 		IRMethod method = (IRMethod) findParent("Method");
 		Type ret_type = initType;
 
 		if(ret_type != Type.STRING) {
-			ret_type = method.getArgumentType(arg.getString());
+			ret_type = method.getArgumentType(arg.getVar());
             if (ret_type == null)
-				ret_type = method.getVarType(arg.getString());
+				ret_type = method.getVarType(arg.getVar());
             if (ret_type == null) {
                 IRModule module = (IRModule) findParent("Module");
-                IRGlobal global = module.getGlobal(arg.getString());
+                IRGlobal global = module.getGlobal(arg.getVar());
                 if(global != null)
 					ret_type = global.getType();
             }

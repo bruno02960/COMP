@@ -8,22 +8,20 @@ public class IRMethod extends IRNode
     private String name;
     private Type returnType;
     private String returnVar;
-    private Type[] argsType;
-    private String[] argsNames;
+    private Variable[] args;
 
     private int labelN = 0;
     private int regN = 0;
     private int varN = 0;
 
-    public IRMethod(String name, Type returnType, String returnVar, Type[] argsTypes, String[] argsNames)
+    public IRMethod(String name, Type returnType, String returnVar, Variable[] args)
     {
         this.name = name;
         this.returnType = returnType;
         this.returnVar = returnVar;
-        this.argsType = argsTypes == null ? this.argsType = new Type[0] : argsTypes;
-        this.argsNames = argsNames == null ? this.argsNames = new String[0] : argsNames;
+        this.args = args == null ? this.args = new Variable[0] : args;
         this.nodeType = "Method";
-        this.regN = this.argsNames.length;
+        this.regN = this.args.length;
     }
 
     @Override
@@ -41,9 +39,9 @@ public class IRMethod extends IRNode
         else
         {
             methodDeclarationInst += name + "(";
-            for (int i = 0; i < argsType.length; i++)
+            for (int i = 0; i < args.length; i++)
             {
-                switch (argsType[i])
+                switch (args[i].getType())
                 {
                     case INTEGER:
                     {
@@ -106,7 +104,7 @@ public class IRMethod extends IRNode
             if (node.toString().equals("Allocate"))
                 localsCount++;
         }
-        localsCount += this.argsType.length;
+        localsCount += this.args.length;
 
         localsCount = 255;
         inst.add(".limit locals " + localsCount);
@@ -130,9 +128,9 @@ public class IRMethod extends IRNode
 
     public int getArgumentRegister(String name)
     {
-        for (int i = 0; i < argsNames.length; i++)
+        for (int i = 0; i < args.length; i++)
         {
-            if (argsNames[i].equals(name))
+            if (args[i].getVar().equals(name))
                 return i;
         }
         return -1;
@@ -140,10 +138,10 @@ public class IRMethod extends IRNode
 
     public Type getArgumentType(String name)
     {
-        for (int i = 0; i < argsType.length; i++)
+        for (int i = 0; i < args.length; i++)
         {
-            if (argsNames[i].equals(name))
-                return argsType[i];
+            if (args[i].getVar().equals(name))
+                return args[i].getType();
         }
         return null;
     }
