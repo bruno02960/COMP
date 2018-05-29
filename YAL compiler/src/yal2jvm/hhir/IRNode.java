@@ -161,9 +161,8 @@ public abstract class IRNode
         return inst;
     }
 
-    protected String getGlobalVariableGetCode(String name, IRMethod method)
+    protected String getGlobalVariableGetCode(String name, IRModule module)
     {
-        IRModule module = ((IRModule) method.getParent());
         IRGlobal global = module.getGlobal(name);
         if (global == null)
         {
@@ -175,6 +174,12 @@ public abstract class IRNode
         in += global.getType() == Type.ARRAY ? "[I" : "I";
 
         return in;
+    }
+
+    protected String getGlobalVariableGetCodeByIRMethod(String name, IRMethod method)
+    {
+        IRModule module = ((IRModule) method.getParent());
+        return getGlobalVariableGetCode(name, module);
     }
 
     protected ArrayList<String> getCodeForSetAllArrayElements(String arrayRefJVMCode,

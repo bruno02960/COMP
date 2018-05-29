@@ -117,10 +117,10 @@ public class IRGlobal extends IRNode
     private void assignAllArrayElements(Variable value)
     {
         IRNode valueNode = getValueIRNode(value);
-        IRMethod method = (IRMethod) findParent("Method");
-        String globalVariableJVMCode = getGlobalVariableGetCode(name, method);
+        IRModule module = (IRModule) findParent("Module");
+        String globalVariableJVMCode = getGlobalVariableGetCode(name, module);
 
-        getCodeForSetAllArrayElements(globalVariableJVMCode, valueNode.getInstructions());
+        staticArraysInstructions.addAll(getCodeForSetAllArrayElements(globalVariableJVMCode, valueNode.getInstructions()));
     }
 
     public String getName()
