@@ -10,12 +10,6 @@ public class HHIR
     private IRModule root;
     private SimpleNode ast;
 
-    //TODO: Debug
-    boolean declarationDebug = true;
-    boolean functionDebug = false;
-    boolean assignDebug = false;
-    boolean callDebug = false;
-
     public HHIR(SimpleNode ast)
     {
         this.ast = ast;
@@ -31,6 +25,7 @@ public class HHIR
         return root;
     }
 
+    //TODO: Remove
     /*public IRModule createHardcoded()
     {
         IRModule module = new IRModule("Module1");
@@ -146,6 +141,7 @@ public class HHIR
                    irGlobalsWithStaticInstructions.addAll(instructions);
            }
        }
+
 
        return irGlobalsWithStaticInstructions;
     }
@@ -548,21 +544,6 @@ public class HHIR
             }
         }
 
-        //TODO: Debug
-        if (assignDebug)
-        {
-            System.out.println();
-            System.out.println(irAssign.lhs.getVar() != null ? "lhsName = " + irAssign.lhs.getVar() : "null");
-            //System.out.println(irAssign.lhs.getAt() != null ? "at = " + irAssign.atlhs.getVar() : "null");
-            for (int i = 0; i < irAssign.operands.size(); i++)
-            {
-                System.out.println("operand = " + irAssign.operands.get(i));
-                System.out.println(irAssign.isSize ? " .size" : "");
-            }
-            System.out.println(!irAssign.operator.equals("") ? "operator = " + irAssign.operator : "null");
-            System.out.println();
-        }
-
         createAssignIR(irAssign, irmethod);
     }
 
@@ -703,22 +684,6 @@ public class HHIR
             arguments = getFunctionCallArgumentsIds(astarguments);
         }
 
-        if (callDebug)
-        {
-            //TODO debug
-            System.out.println("from getCallHHIR");
-            System.out.println("moduleId= " + moduleId);
-            System.out.println("methodId= " + methodId);
-
-            if (arguments != null)
-            {
-                System.out.println("arguments");
-                for (Variable argument : arguments)
-                    System.out.println("value: " + argument.getVar()
-                            + "   type: " + argument.getType().toString());
-            }
-        }
-
         return getIRCall(astCall, null);
     }
 
@@ -830,18 +795,6 @@ public class HHIR
                     }
                 }
                 break;
-        }
-
-        //TODO:DEBUG
-        if (declarationDebug)
-        {
-            System.out.println();
-            assert variable != null;
-            System.out.println(variable.getVar() != null ? "name = " + variable.getVar() : "null");
-            System.out.println(variable.getType() != null ? "type = " + variable.getType() : "null");
-            if (value != null)
-            System.out.println(value.getVar() != null ? "value = " + value.getVar() : "null");
-            System.out.println();
         }
 
         if(!initialized) {

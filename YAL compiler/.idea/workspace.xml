@@ -19,8 +19,8 @@
       <file leaf-file-name="HHIR.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/yal2jvm/hhir/HHIR.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="469">
-              <caret line="735" column="25" lean-forward="true" selection-start-line="735" selection-start-column="25" selection-end-line="735" selection-end-column="25" />
+            <state relative-caret-position="284">
+              <caret line="799" column="26" lean-forward="true" selection-start-line="799" selection-start-column="26" selection-end-line="799" selection-end-column="26" />
               <folding />
             </state>
           </provider>
@@ -79,6 +79,16 @@
           </provider>
         </entry>
       </file>
+      <file leaf-file-name="Variable.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/yal2jvm/hhir/Variable.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="187">
+              <caret line="11" column="0" lean-forward="false" selection-start-line="11" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
     </leaf>
   </component>
   <component name="FileTemplateManagerImpl">
@@ -90,7 +100,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>&quot;ldc</find>
       <find>ldc</find>
       <find>register</find>
       <find>register =</find>
@@ -119,6 +128,7 @@
       <find>Type.I</find>
       <find>varlist</find>
       <find>iinc</find>
+      <find>TODO</find>
       <find>IRMethod</find>
     </findStrings>
     <replaceStrings>
@@ -147,7 +157,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/aval7.j" />
         <option value="$PROJECT_DIR$/examples/MyFirstYalExamples/aval7.j" />
         <option value="$PROJECT_DIR$/constantRanges.j" />
         <option value="$PROJECT_DIR$/examples/MyFirstYalExamples/constant-ranges.j" />
@@ -197,6 +206,7 @@
         <option value="$PROJECT_DIR$/examples/MyFirstYalExamples/stack-size.yal" />
         <option value="$PROJECT_DIR$/src/yal2jvm/hhir/IRMethod.java" />
         <option value="$PROJECT_DIR$/src/yal2jvm/hhir/IRCall.java" />
+        <option value="$PROJECT_DIR$/src/yal2jvm/hhir/Variable.java" />
         <option value="$PROJECT_DIR$/src/yal2jvm/hhir/HHIR.java" />
       </list>
     </option>
@@ -643,13 +653,13 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/yal2jvm/hhir/HHIR.java</url>
-          <line>20</line>
+          <line>14</line>
           <properties />
           <option name="timeStamp" value="142" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/yal2jvm/hhir/HHIR.java</url>
-          <line>769</line>
+          <line>734</line>
           <properties />
           <option name="timeStamp" value="143" />
         </line-breakpoint>
@@ -721,23 +731,6 @@
             <element signature="e#7441#7442#0" expanded="false" />
             <element signature="e#7485#7486#0" expanded="false" />
             <element signature="e#7517#7518#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/yal2jvm/hhir/Variable.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="408">
-          <caret line="24" column="0" lean-forward="false" selection-start-line="24" selection-start-column="0" selection-end-line="24" selection-end-column="0" />
-          <folding>
-            <element signature="e#656#657#0" expanded="false" />
-            <element signature="e#688#689#0" expanded="false" />
-            <element signature="e#729#730#0" expanded="false" />
-            <element signature="e#762#763#0" expanded="false" />
-            <element signature="e#791#792#0" expanded="false" />
-            <element signature="e#818#819#0" expanded="false" />
-            <element signature="e#848#849#0" expanded="false" />
-            <element signature="e#874#875#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -992,6 +985,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="51">
           <caret line="3" column="13" lean-forward="false" selection-start-line="3" selection-start-column="13" selection-end-line="3" selection-end-column="13" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1069,10 +1063,18 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/yal2jvm/hhir/Variable.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="187">
+          <caret line="11" column="0" lean-forward="false" selection-start-line="11" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/yal2jvm/hhir/HHIR.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="469">
-          <caret line="735" column="25" lean-forward="true" selection-start-line="735" selection-start-column="25" selection-end-line="735" selection-end-column="25" />
+        <state relative-caret-position="284">
+          <caret line="799" column="26" lean-forward="true" selection-start-line="799" selection-start-column="26" selection-end-line="799" selection-end-column="26" />
           <folding />
         </state>
       </provider>
