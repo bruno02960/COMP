@@ -99,7 +99,9 @@ public class Yal2jvm
         if (this.optimize)
             hhir.optimize();
         hhir.dataflowAnalysis();
-        hhir.allocateRegisters(this.localVars);
+        boolean allocated = hhir.allocateRegisters(this.localVars);
+        if (!allocated)
+        	System.exit(-6);
 
         ArrayList<String> instructions = hhir.selectInstructions();
         String moduleName = hhir.getModuleName();

@@ -2,13 +2,18 @@ package yal2jvm.hlir;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 
 import yal2jvm.ast.*;
+import yal2jvm.hlir.liveness_analysis.IntGraph;
+import yal2jvm.hlir.liveness_analysis.LivenessAnalyzer;
+import yal2jvm.hlir.register_allocation.RegisterAllocator;
 
 public class HLIR
 {
     private IRModule root;
     private SimpleNode ast;
+	private HashMap<String, IntGraph> intGraphs;
 
     public HLIR(SimpleNode ast)
     {
@@ -18,85 +23,30 @@ public class HLIR
 
     private IRModule createHHIR()
     {
-        //create HHIR from AST
         ASTMODULE astModule = (ASTMODULE) ast;
         createModuleHHIR(astModule);
 
         return root;
     }
 
-    //TODO: Remove
-    /*public IRModule createHardcoded()
-    {
-        IRModule module = new IRModule("Module1");
-        module.addChild(new IRGlobal("a", Type.INTEGER, null, false));
-        module.addChild(new IRGlobal("b", Type.INTEGER, null, false));
-        module.addChild(new IRGlobal("c", Type.INTEGER, 12, false));
-        module.addChild(new IRGlobal("d", Type.INTEGER, 12345, false));
-
-        //newVar1;
-        //newVar2 = newVar1 * var3;
-        IRMethod m1 = new IRMethod("method1", Type.VOID, null, new Type[]
-        {
-            Type.INTEGER, Type.INTEGER, Type.INTEGER
-        }, new String[]
-        {
-            "var1", "var2", "var3"
-        });
-        //test1 = 20;
-        //test2 = 50;
-        //test1 = test2;
-        //test1 = 30;
-        //test2 = a;
-        m1.addChild(new IRAllocate("test1", Type.INTEGER, 20));
-        m1.addChild(new IRAllocate("test2", Type.INTEGER, 50));
-        m1.addChild(new IRAllocate("test1", Type.INTEGER, "test2", false));
-        m1.addChild(new IRAllocate("test1", Type.INTEGER, 30));
-        m1.addChild(new IRAllocate("test2", Type.INTEGER, "a", false));
-        module.addChild(m1);
-
-        //var1 = var2 * var3;
-        IRMethod m2 = new IRMethod("method2", Type.VOID, null, new Type[]
-        {
-            Type.INTEGER, Type.INTEGER, Type.INTEGER
-        }, new String[]
-        {
-            "var1", "var2", "var3"
-        });
-        IRStoreArith arith2 = new IRStoreArith("var1", Operation.MULT);
-        arith2.setRhs(new IRLoad("var2"));
-        arith2.setLhs(new IRLoad("var3"));
-        m2.addChild(arith2);
-        ArrayList<PairStringType> lis = new ArrayList<>();
-        lis.add(new PairStringType("var1 = ", Type.STRING));
-        lis.add(new PairStringType("2", Type.INTEGER));
-        m2.addChild(new IRCall("println", "io", lis));
-        module.addChild(m2);
-
-
-        IRMethod main = new IRMethod("main", Type.VOID, "ret", null, null);
-        module.addChild(main);
-
-        return module;
-    }*/
-
     public void optimize()
     {
-        //use this only as a wrapper for (possibly static) methods of a separate class
-        //in order to avoid putting too much logic in this single class
+
 
     }
 
     public void dataflowAnalysis()
     {
-        //use this only as a wrapper for (possibly static) methods of a separate class
-        //in order to avoid putting too much logic in this single class
+        LivenessAnalyzer analyzer = new LivenessAnalyzer(this.root);
+        analyzer.analyze();
+        this.intGraphs = analyzer.getInterferenceGraphs();
     }
 
-    public void allocateRegisters(int maxLocals)
+    public boolean allocateRegisters(int maxLocals)
     {
-        //use this only as a wrapper for (possibly static) methods of a separate class
-        //in order to avoid putting too much logic in this single class
+    	selectInstructions();
+        RegisterAllocator allocator = new RegisterAllocator(this.root, this.intGraphs);
+        return allocator.allocate();
     }
 
     public ArrayList<String> selectInstructions()
