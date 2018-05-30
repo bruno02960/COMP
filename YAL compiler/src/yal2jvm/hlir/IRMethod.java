@@ -1,4 +1,4 @@
-package yal2jvm.hhir;
+package yal2jvm.hlir;
 
 import java.util.ArrayList;
 
@@ -20,7 +20,7 @@ public class IRMethod extends IRNode
         this.returnType = returnType;
         this.returnVar = returnVar;
         this.args = args == null ? this.args = new Variable[0] : args;
-        this.nodeType = "Method";
+        this.setNodeType("Method");
         this.regN = this.args.length;
     }
 

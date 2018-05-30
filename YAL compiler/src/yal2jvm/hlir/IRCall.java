@@ -1,4 +1,4 @@
-package yal2jvm.hhir;
+package yal2jvm.hlir;
 
 import yal2jvm.Yal2jvm;
 import yal2jvm.utils.Utils;
@@ -19,7 +19,7 @@ public class IRCall extends IRNode
         this.module = module;
         this.arguments = arguments;
         this.lhsVarName = lhsVarName;
-        this.nodeType = "Call";
+        this.setNodeType("Call");
     }
 
     @Override

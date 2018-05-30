@@ -1,4 +1,4 @@
-package yal2jvm.hhir;
+package yal2jvm.hlir;
 
 import java.util.ArrayList;
 
@@ -11,7 +11,7 @@ public class IRModule extends IRNode
     {
         super();
         this.setName(name);
-        this.nodeType = "Module";
+        this.setNodeType("Module");
     }
 
     @Override

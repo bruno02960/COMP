@@ -1,4 +1,4 @@
-package yal2jvm.hhir;
+package yal2jvm.hlir;
 
 import java.util.ArrayList;
 
@@ -13,7 +13,7 @@ public class IRComparison extends IRNode
 	{
 		this.comp = invert ? Comparator.invert(comp) : comp;
 		this.label = label;
-		this.nodeType = "Comparison";
+		this.setNodeType("Comparison");
 	}
 
 	public IRComparison(String operator, String label, boolean invert)
@@ -21,7 +21,7 @@ public class IRComparison extends IRNode
 		Comparator comp = getComparatorGivenOperator(operator);
 		this.comp = invert ? Comparator.invert(comp) : comp;
 		this.label = label;
-		this.nodeType = "Comparison";
+		this.setNodeType("Comparison");
 	}
 
 	private Comparator getComparatorGivenOperator(String operator)
@@ -89,7 +89,7 @@ public class IRComparison extends IRNode
 	
 	boolean isConstantZero(IRNode node)
 	{
-		if (node.nodeType.equals("Constant"))
+		if (node.getNodeType().equals("Constant"))
 		{
 			IRConstant constant = (IRConstant)node;
 			if (constant.getValue().equals("0"))
@@ -100,16 +100,16 @@ public class IRComparison extends IRNode
 
 	private boolean useArrayOperations()
 	{
-		if (rhs.nodeType.equals("Constant") || rhs.nodeType.equals("Constant"))
+		if (rhs.getNodeType().equals("Constant") || rhs.getNodeType().equals("Constant"))
 			return false;
 
-		if (rhs.nodeType.equals("Load"))
+		if (rhs.getNodeType().equals("Load"))
 		{
 			IRLoad load = (IRLoad)rhs;
 			if (load.getType() != Type.ARRAY || load.isArraySizeAccess())
 				return false;
 
-			if (lhs.nodeType.equals("Load"))
+			if (lhs.getNodeType().equals("Load"))
 			{
 				load = (IRLoad)lhs;
 				if (load.getType() == Type.ARRAY && load.isArraySizeAccess() == false)

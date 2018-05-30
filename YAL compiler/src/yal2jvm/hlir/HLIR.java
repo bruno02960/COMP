@@ -1,16 +1,16 @@
-package yal2jvm.hhir;
+package yal2jvm.hlir;
 
 import java.util.ArrayList;
 import java.util.Collection;
 
 import yal2jvm.ast.*;
 
-public class HHIR
+public class HLIR
 {
     private IRModule root;
     private SimpleNode ast;
 
-    public HHIR(SimpleNode ast)
+    public HLIR(SimpleNode ast)
     {
         this.ast = ast;
         this.root = createHHIR();
@@ -134,7 +134,7 @@ public class HHIR
 
        for(IRNode child : root.children)
        {
-           if(child.nodeType.equals("Global"))
+           if(child.getNodeType().equals("Global"))
            {
                ArrayList<String> instructions = ((IRGlobal) child).getStaticArraysInstructions();
                if(instructions.size() != 0)

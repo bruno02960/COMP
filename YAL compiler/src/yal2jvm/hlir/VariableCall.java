@@ -1,4 +1,4 @@
-package yal2jvm.hhir;
+package yal2jvm.hlir;
 
 public class VariableCall extends Variable {
     IRCall irCall;

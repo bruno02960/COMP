@@ -2,7 +2,7 @@ package yal2jvm.semantic_analysis;
 
 import yal2jvm.Yal2jvm;
 import yal2jvm.ast.*;
-import yal2jvm.hhir.Type;
+import yal2jvm.hlir.Type;
 import yal2jvm.symbol_tables.*;
 
 import java.util.ArrayList;

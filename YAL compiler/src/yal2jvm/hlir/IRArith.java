@@ -1,4 +1,4 @@
-package yal2jvm.hhir;
+package yal2jvm.hlir;
 
 import java.util.ArrayList;
 
@@ -9,7 +9,7 @@ public class IRArith extends IRNode {
     public IRArith(Operation op)
     {
         this.op = op;
-        this.nodeType = "Arith";
+        this.setNodeType("Arith");
     }
 
     @Override

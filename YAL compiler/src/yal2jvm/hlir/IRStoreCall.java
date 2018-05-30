@@ -1,4 +1,4 @@
-package yal2jvm.hhir;
+package yal2jvm.hlir;
 
 import java.util.ArrayList;
 
@@ -8,14 +8,14 @@ public class IRStoreCall extends IRStore
     public IRStoreCall(String name)
     {
         this.name = name;
-        this.nodeType = "StoreCall";
+        this.setNodeType("StoreCall");
     }
 
     // a[i] = f();
     public IRStoreCall(VariableArray name)
     {
         this.name = name.getVar();
-        this.nodeType = "StoreCall";
+        this.setNodeType("StoreCall");
     }
 
     @Override

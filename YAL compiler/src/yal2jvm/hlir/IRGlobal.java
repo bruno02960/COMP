@@ -1,4 +1,4 @@
-package yal2jvm.hhir;
+package yal2jvm.hlir;
 
 import yal2jvm.Yal2jvm;
 
@@ -16,7 +16,7 @@ public class IRGlobal extends IRNode
     {
         this.name = variable.getVar();
         this.type = variable.getType();
-        this.nodeType = "Global";
+        this.setNodeType("Global");
     }
 
     public IRGlobal(Variable variable, Variable value)

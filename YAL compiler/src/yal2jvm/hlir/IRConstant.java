@@ -1,4 +1,4 @@
-package yal2jvm.hhir;
+package yal2jvm.hlir;
 
 import java.util.ArrayList;
 
@@ -9,7 +9,7 @@ public class IRConstant extends IRNode
     public IRConstant(String value)
     {
         this.value = value;
-        this.nodeType = "Constant";
+        this.setNodeType("Constant");
     }
 
     @Override

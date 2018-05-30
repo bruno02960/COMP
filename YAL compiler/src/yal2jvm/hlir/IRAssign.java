@@ -1,4 +1,4 @@
-package yal2jvm.hhir;
+package yal2jvm.hlir;
 
 import yal2jvm.ast.ASTLHS;
 import yal2jvm.ast.ASTRHS;

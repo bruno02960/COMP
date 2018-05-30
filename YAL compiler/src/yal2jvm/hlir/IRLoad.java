@@ -1,4 +1,4 @@
-package yal2jvm.hhir;
+package yal2jvm.hlir;
 
 import java.util.ArrayList;
 
@@ -13,7 +13,7 @@ public class IRLoad extends IRNode
     private IRLoad(String name)
     {
         this.name = name;
-        this.nodeType = "Load";
+        this.setNodeType("Load");
     }
 
     public IRLoad(String name, Type type)

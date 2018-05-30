@@ -1,22 +1,22 @@
-package yal2jvm.hhir;
+package yal2jvm.hlir;
 
 import java.util.ArrayList;
 
-public class IRJump extends IRNode
+public class IRLabel extends IRNode
 {
 	private String label;
 	
-	public IRJump(String label)
+	public IRLabel(String label)
 	{
 		this.label = label;
-		this.nodeType = "Jump";
+		this.setNodeType("Label");
 	}
 	
 	@Override
 	public ArrayList<String> getInstructions()
 	{
 		ArrayList<String> inst = new ArrayList<>();
-		inst.add("goto " + label);
+		inst.add(label + ":");
 		return inst;
 	}
 }

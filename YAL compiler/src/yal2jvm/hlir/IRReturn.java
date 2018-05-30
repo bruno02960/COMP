@@ -1,4 +1,4 @@
-package yal2jvm.hhir;
+package yal2jvm.hlir;
 
 import java.util.ArrayList;
 
@@ -11,7 +11,7 @@ public class IRReturn extends IRNode
     {
         this.name = name;
         this.type = type;
-        this.nodeType = "Return";
+        this.setNodeType("Return");
     }
 
     @Override

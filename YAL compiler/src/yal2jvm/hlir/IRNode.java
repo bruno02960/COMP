@@ -1,4 +1,4 @@
-package yal2jvm.hhir;
+package yal2jvm.hlir;
 
 import yal2jvm.Yal2jvm;
 
@@ -223,5 +223,15 @@ public abstract class IRNode
 
         return inst;
     }
+
+	public String getNodeType()
+	{
+		return nodeType;
+	}
+
+	public void setNodeType(String nodeType)
+	{
+		this.nodeType = nodeType;
+	}
 
 }

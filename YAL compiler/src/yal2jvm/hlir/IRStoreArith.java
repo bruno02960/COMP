@@ -1,4 +1,4 @@
-package yal2jvm.hhir;
+package yal2jvm.hlir;
 
 import java.util.ArrayList;
 
@@ -10,7 +10,7 @@ public class IRStoreArith extends IRStore
     public IRStoreArith(String name, Operation op)
     {
         this.name = name;
-        this.nodeType = "StoreArith";
+        this.setNodeType("StoreArith");
         irArith = new IRArith(op);
         this.addChild(irArith);
     }
@@ -21,7 +21,7 @@ public class IRStoreArith extends IRStore
         this.name = name.getVar();
         this.arrayAccess = true;
         this.index = new IRLoad(name.getAt());
-        this.nodeType = "StoreArith";
+        this.setNodeType("StoreArith");
         irArith = new IRArith(op);
         this.addChild(index);
         this.addChild(irArith);
@@ -54,10 +54,10 @@ public class IRStoreArith extends IRStore
         boolean isIinc = false;
 
         if(irArith.getOp().equals(Operation.ADD) || irArith.getOp().equals(Operation.SUB)) {
-            if (irArith.getLhs().nodeType.equals("Load")) {
+            if (irArith.getLhs().getNodeType().equals("Load")) {
                 IRLoad arithLhs = ((IRLoad) irArith.getLhs());
 
-                if (arithLhs.getType().equals(Type.INTEGER) && getRhs().nodeType.equals("Constant") && arithLhs.getName().equals(name)) {
+                if (arithLhs.getType().equals(Type.INTEGER) && getRhs().getNodeType().equals("Constant") && arithLhs.getName().equals(name)) {
                     IRConstant irConstant = (IRConstant) getRhs();
                     if(Integer.parseInt(irConstant.getValue()) > -32768 && Integer.parseInt(irConstant.getValue()) < 32768) {
                         String instruction = getIincInstruction(irConstant);
@@ -68,10 +68,10 @@ public class IRStoreArith extends IRStore
                     }
                 }
             } else {
-                if (irArith.getRhs().nodeType.equals("Load")) {
+                if (irArith.getRhs().getNodeType().equals("Load")) {
                     IRLoad arithRhs = ((IRLoad) irArith.getRhs());
 
-                    if (arithRhs.getType().equals(Type.INTEGER) && getLhs().nodeType.equals("Constant") && arithRhs.getName().equals(name)) {
+                    if (arithRhs.getType().equals(Type.INTEGER) && getLhs().getNodeType().equals("Constant") && arithRhs.getName().equals(name)) {
                         IRConstant irConstant = (IRConstant) getLhs();
                         if(Integer.parseInt(irConstant.getValue()) > -32768 && Integer.parseInt(irConstant.getValue()) < 32768) {
                             String instruction = getIincInstruction(irConstant);

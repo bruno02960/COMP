@@ -1,4 +1,4 @@
-package yal2jvm.hhir;
+package yal2jvm.hlir;
 
 import java.util.ArrayList;
 
@@ -17,7 +17,7 @@ public class IRAllocate extends IRNode
     public IRAllocate(String name, Variable value)
     {
         this.type = Type.INTEGER;
-        this.nodeType = "Allocate";
+        this.setNodeType("Allocate");
         this.name = name;
 
         if(value.getType().equals(Type.INTEGER))
@@ -32,7 +32,7 @@ public class IRAllocate extends IRNode
     {
         assert arraySize == Type.ARRAYSIZE;
 
-        this.nodeType = "Allocate";
+        this.setNodeType("Allocate");
         this.name = name;
         this.type = Type.ARRAYSIZE;
 
@@ -47,7 +47,7 @@ public class IRAllocate extends IRNode
     IRAllocate(VariableArray name, Variable value)
     {
         this.type = Type.ARRAY;
-        this.nodeType = "Allocate";
+        this.setNodeType("Allocate");
         this.name = name.getVar();
 
         Variable at = name.getAt();
@@ -67,7 +67,7 @@ public class IRAllocate extends IRNode
     //a = b[5];
     IRAllocate(Variable name, VariableArray value)
     {
-        this.nodeType = "Allocate";
+        this.setNodeType("Allocate");
         this.name = name.getVar();
         this.type = Type.INTEGER;
 
@@ -78,7 +78,7 @@ public class IRAllocate extends IRNode
     //a[i] = b[5];
     IRAllocate(VariableArray name, VariableArray value)
     {
-        this.nodeType = "Allocate";
+        this.setNodeType("Allocate");
         this.name = name.getVar();
         this.type = Type.ARRAY;
 
@@ -145,9 +145,9 @@ public class IRAllocate extends IRNode
             }
 
             if(typeStr == null)
-                typeStr = rhs.nodeType;
+                typeStr = rhs.getNodeType();
 
-            if(rhs.parent.nodeType.equals("Allocate")) {
+            if(rhs.parent.getNodeType().equals("Allocate")) {
                 IRAllocate rhsParent = (IRAllocate) rhs.parent;
                 if(rhsParent.type == Type.ARRAYSIZE) {
                     inst.add(getInstructionToStoreGlobalArray(type, name)); // i = [5];
@@ -186,9 +186,9 @@ public class IRAllocate extends IRNode
             }
 
             if(varType == null)
-                varType = rhs.nodeType;
+                varType = rhs.getNodeType();
 
-            if(rhs.parent.nodeType.equals("Allocate")) {
+            if(rhs.parent.getNodeType().equals("Allocate")) {
                 IRAllocate rhsParent = (IRAllocate) rhs.parent;
                 if(rhsParent.type == Type.ARRAYSIZE) {
                     inst.add(getInstructionToStoreArrayInRegister(this.register)); // i = [5];

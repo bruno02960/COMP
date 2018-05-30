@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import yal2jvm.ast.*;
-import yal2jvm.hhir.HHIR;
+import yal2jvm.hlir.HLIR;
 import yal2jvm.semantic_analysis.ModuleAnalysis;
 import yal2jvm.utils.Utils;
 
@@ -95,7 +95,7 @@ public class Yal2jvm
             System.exit(-3);
         
         System.out.println("Initiating JVM code generation");
-        HHIR hhir = new HHIR(ast);
+        HLIR hhir = new HLIR(ast);
         if (this.optimize)
             hhir.optimize();
         hhir.dataflowAnalysis();
