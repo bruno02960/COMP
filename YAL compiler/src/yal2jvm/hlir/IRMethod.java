@@ -1,9 +1,34 @@
 package yal2jvm.hlir;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 public class IRMethod extends IRNode
 {
+    private static final Map<String, Integer> intructionToStackCountValue = new HashMap<>();
+    static
+    {
+        intructionToStackCountValue.put("getstatic", 1);
+        intructionToStackCountValue.put("iload", 1);
+        intructionToStackCountValue.put("iconst", 1);
+        intructionToStackCountValue.put("dup", 1);
+        intructionToStackCountValue.put("aload", 1);
+        intructionToStackCountValue.put("ldc", 1);
+        intructionToStackCountValue.put("bipush", 1);
+        intructionToStackCountValue.put("istore", -1);
+        intructionToStackCountValue.put("iaload", -1);
+        intructionToStackCountValue.put("pop", -1);
+        intructionToStackCountValue.put("astore", -1);
+        intructionToStackCountValue.put("iastore", -3);
+        intructionToStackCountValue.put("newarray", -1);
+        intructionToStackCountValue.put("iadd", -1);
+        intructionToStackCountValue.put("isub", -1);
+        intructionToStackCountValue.put("idiv", -1);
+        intructionToStackCountValue.put("imul", -1);
+        intructionToStackCountValue.put("putstatic", -1);
+    }
 
     private String name;
     private Type returnType;
@@ -97,6 +122,15 @@ public class IRMethod extends IRNode
     {
         ArrayList<String> inst = new ArrayList<>();
 
+        ArrayList<String> childsInstructions = new ArrayList<>();
+        int numChilds = getChildren().size();
+        for (int i = 0; i < numChilds; i++)
+        {
+            IRNode node = getChildren().get(i);
+            childsInstructions.addAll(node.getInstructions());
+        }
+
+
         int localsCount = 0;
         for (int i = 0; i < getChildren().size(); i++)
         {
@@ -107,16 +141,69 @@ public class IRMethod extends IRNode
         localsCount += this.args.length;
 
         localsCount = 255;
-        inst.add(".limit locals " + localsCount);
-        inst.add(".limit stack 20");
+        inst.add(".limit locals " + localsCount); //TODO ver o que contar aqui...se o melhor possivel ou o efetivo
 
-        int numChilds = getChildren().size();
-        for (int i = 0; i < numChilds; i++)
-        {
-            IRNode node = getChildren().get(i);
-            inst.addAll(node.getInstructions());
-        }
+        int stackValue = stackValueCount(childsInstructions);
+        inst.add(".limit stack " + stackValue);
+
+        inst.addAll(childsInstructions);
         return inst;
+    }
+
+    private int stackValueCount(ArrayList<String> inst)
+    {
+        //search in child's code for instruction that put or remove elements from the stack
+        int currStackCount = 0;
+        int maxStackCount = 0;
+        for(int i = 0; i < inst.size(); i++)
+        {
+            String currInstruction = inst.get(i);
+            currStackCount += getInstructionStackValue(currInstruction);
+            if(currStackCount > maxStackCount)
+                maxStackCount = currStackCount;
+        }
+
+        //TODO DEBUG
+        System.out.println(currStackCount);
+        System.out.println(maxStackCount);
+        System.out.println();
+        System.out.println();
+        return maxStackCount;
+    }
+
+    private Integer getInstructionStackValue(String currIntruction)
+    {
+        //invoke has a more difficult behaviour
+        if(currIntruction.contains("invokestatic"))
+            return getInvokeStaticStackValue(currIntruction);
+
+        Iterator it = intructionToStackCountValue.entrySet().iterator();
+        while (it.hasNext())
+        {
+            Map.Entry pair = (Map.Entry)it.next();
+            String instructionName = (String) pair.getKey();
+            if(currIntruction.contains(instructionName))
+            {
+                Integer instructionStackValue = (Integer) pair.getValue();
+                return instructionStackValue;
+            }
+        }
+
+        // if not detected instruction, is an instruction that not alter stack size
+        return 0;
+    }
+
+    private Integer getInvokeStaticStackValue(String currIntruction)
+    {
+        //must return the number of parameters, minus one if not return void
+        String parameters = currIntruction.substring(currIntruction.indexOf('(') + 1, currIntruction.indexOf(')'));
+        int numberOfParameters = parameters.split(",").length;
+
+        char lastCharacter = currIntruction.charAt(currIntruction.length() - 1);
+        if(lastCharacter != 'V')
+            return -(numberOfParameters - 1);
+        else
+            return -numberOfParameters;
     }
 
     public int getRegN()
