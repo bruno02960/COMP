@@ -60,33 +60,22 @@ public class IRLoad extends IRNode
     @Override
     public ArrayList<String> getInstructions()
     {
-        ArrayList<String> inst = new ArrayList<>();
-
         IRMethod method = (IRMethod) findParent("Method");
         IRModule module = (IRModule) method.getParent();
         IRGlobal irGlobal = module.getGlobal(name);
-        if(irGlobal != null) //variable is global
-        {
-            inst.add(getGlobalVariableGetCodeByIRMethod(name, method));
-            if(type == Type.INTEGER)
-                return inst;
-            else
-            {
-                if(arraySizeAccess)
-                    inst.add("arraylength");
-                else if(index != null)
-                {
-                    inst.addAll(index.getInstructions());
-                    inst.add("iaload");
-                }
-            }
-            return inst;
-        }
+        if(irGlobal != null)
+            return getGlobalVariableInstructions(method);
+        else
+            return getLocalVariableInstructions(method);
+    }
 
+    private ArrayList<String> getLocalVariableInstructions(IRMethod method)
+    {
+        ArrayList<String> inst = new ArrayList<>();
         int register = method.getArgumentRegister(name);
         if (register == -1)
             register = method.getVarRegister(name);
-        if (register > -1)	//variable is local
+        if (register > -1)
         {
             if(type == Type.INTEGER)
                 inst.add(getInstructionToLoadIntFromRegisterToStack(register));
@@ -101,7 +90,26 @@ public class IRLoad extends IRNode
                     inst.add("iaload");
                 }
             }
+        }
 
+        return inst;
+    }
+
+    private ArrayList<String> getGlobalVariableInstructions(IRMethod method)
+    {
+        ArrayList<String> inst = new ArrayList<>();
+        inst.add(getGlobalVariableGetCodeByIRMethod(name, method));
+        if(type == Type.INTEGER)
+            return inst;
+        else
+        {
+            if(arraySizeAccess)
+                inst.add("arraylength");
+            else if(index != null)
+            {
+                inst.addAll(index.getInstructions());
+                inst.add("iaload");
+            }
         }
 
         return inst;
