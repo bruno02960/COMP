@@ -74,7 +74,7 @@ public class IRLoad extends IRNode
         ArrayList<String> inst = new ArrayList<>();
         int register = method.getArgumentRegister(name);
         if (register == -1)
-            register = method.getVarRegister(name);
+            register = method.getVarRegisterDeclaredUntilThis(name, this);
         if (register > -1)
         {
             if(type == Type.INTEGER)

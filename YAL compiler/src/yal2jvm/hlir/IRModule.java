@@ -78,4 +78,22 @@ public class IRModule extends IRNode
         }
         return null;
     }
+
+    public boolean removeAllocateChild(String varName)
+    {
+        for (int i = 0; i < children.size(); i++)
+        {
+            if (children.get(i).toString().equals("Allocate"))
+            {
+                IRAllocate alloc = (IRAllocate) children.get(i);
+                if (alloc.getName().equals(varName))
+                {
+                    children.remove(i);
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
 }

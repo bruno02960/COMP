@@ -18,14 +18,16 @@ public abstract class IRStore extends IRNode
         if (register == -1)
             register = ((IRMethod) parent).getVarRegister(name);
 
+        IRModule module = (IRModule)findParent("Module");
         //code for check global
         if (register == -1)
         {
-        	IRModule module = (IRModule)findParent("Module");
-        	IRGlobal global = module.getGlobal(name);
+            IRGlobal global = module.getGlobal(name);
         	if (global != null)
                 return getInstForStoringGlobalVariable(index, value, module, global);
         }
+        else
+            module.removeAllocateChild(name);
 
         //if storage variable does not exist (locally or globally), allocate it
         if (register == -1)

@@ -11,7 +11,7 @@ public class IRAllocate extends IRNode
     private int register = -1;
 	private boolean storeVarGlobal = false;
 	private IRGlobal global;
-
+    private boolean isConstant;
 
 	//a = 1;
     public IRAllocate(String name, Variable value)
@@ -21,7 +21,10 @@ public class IRAllocate extends IRNode
         this.name = name;
 
         if(value.getType().equals(Type.INTEGER))
+        {
             this.rhs = new IRConstant(value.getVar());
+            isConstant = true;
+        }
         else
             this.rhs = new IRLoad(value);
         this.addChild(this.rhs);
@@ -58,7 +61,10 @@ public class IRAllocate extends IRNode
         this.addChild(this.lhsIndex);
 
         if(value.getType().equals(Type.INTEGER))
+        {
             this.rhs = new IRConstant(value.getVar());
+            isConstant = true;
+        }
         else
             this.rhs = new IRLoad(value);
         this.addChild(this.rhs);
@@ -156,6 +162,10 @@ public class IRAllocate extends IRNode
                 }
             }
 
+            Type prevType = global.getType();
+            if(prevType == Type.ARRAY && type == Type.INTEGER)
+                typeStr = Type.ARRAY.name();
+
             if(typeStr.equals(Type.ARRAY.name()) && lhsIndex == null)
                 inst.addAll(setAllArrayElements()); // i = 5; com i array
             else
@@ -225,7 +235,12 @@ public class IRAllocate extends IRNode
 
         String arrayRefJVMCode;
         if(storeVarGlobal)
+        {
+            Type prevType = global.getType();
+            if(prevType == Type.ARRAY && type == Type.INTEGER)
+                type = Type.ARRAY;
             arrayRefJVMCode = getInstructionToLoadGlobalArrayToStack(type, name);
+        }
         else
             arrayRefJVMCode = getInstructionToLoadArrayFromRegisterToStack(reg);
         ArrayList<String> valueJVMCode = rhs.getInstructions();

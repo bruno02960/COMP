@@ -2,46 +2,45 @@ package yal2jvm.hlir;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 public class IRMethod extends IRNode
 {
-    private static final Map<String, Integer> intructionToStackCountValue = new HashMap<>();
+    private static final Map<String, Integer> instructionToStackCountValue = new HashMap<>();
     static
     {
-        intructionToStackCountValue.put("getstatic", 1);
-        intructionToStackCountValue.put("iload", 1);
-        intructionToStackCountValue.put("iconst", 1);
-        intructionToStackCountValue.put("dup", 1);
-        intructionToStackCountValue.put("aload", 1);
-        intructionToStackCountValue.put("ldc", 1);
-        intructionToStackCountValue.put("bipush", 1);
-        intructionToStackCountValue.put("istore", -1);
-        intructionToStackCountValue.put("iaload", -1);
-        intructionToStackCountValue.put("pop", -1);
-        intructionToStackCountValue.put("astore", -1);
-        intructionToStackCountValue.put("iastore", -3);
-        intructionToStackCountValue.put("newarray", -1);
-        intructionToStackCountValue.put("iadd", -1);
-        intructionToStackCountValue.put("isub", -1);
-        intructionToStackCountValue.put("idiv", -1);
-        intructionToStackCountValue.put("imul", -1);
-        intructionToStackCountValue.put("putstatic", -1);
-        intructionToStackCountValue.put("if_icmpeq", -2);
-        intructionToStackCountValue.put("if_icmpgt", -2);
-        intructionToStackCountValue.put("if_icmpge", -2);
-        intructionToStackCountValue.put("if_icmpne", -2);
-        intructionToStackCountValue.put("if_icmplt", -2);
-        intructionToStackCountValue.put("if_icmple", -2);
-        intructionToStackCountValue.put("if_acmpeq", -2);
-        intructionToStackCountValue.put("if_acmpne", -2);
-        intructionToStackCountValue.put("ifeq", -1);
-        intructionToStackCountValue.put("ifgt", -1);
-        intructionToStackCountValue.put("ifge", -1);
-        intructionToStackCountValue.put("ifne", -1);
-        intructionToStackCountValue.put("iflt", -1);
-        intructionToStackCountValue.put("ifle", -1);
+        instructionToStackCountValue.put("getstatic", 1);
+        instructionToStackCountValue.put("iload", 1);
+        instructionToStackCountValue.put("iconst", 1);
+        instructionToStackCountValue.put("dup", 1);
+        instructionToStackCountValue.put("aload", 1);
+        instructionToStackCountValue.put("ldc", 1);
+        instructionToStackCountValue.put("bipush", 1);
+        instructionToStackCountValue.put("istore", -1);
+        instructionToStackCountValue.put("iaload", -1);
+        instructionToStackCountValue.put("pop", -1);
+        instructionToStackCountValue.put("iastore", -3);
+        instructionToStackCountValue.put("astore", -1);
+        instructionToStackCountValue.put("newarray", -1);
+        instructionToStackCountValue.put("iadd", -1);
+        instructionToStackCountValue.put("isub", -1);
+        instructionToStackCountValue.put("idiv", -1);
+        instructionToStackCountValue.put("imul", -1);
+        instructionToStackCountValue.put("putstatic", -1);
+        instructionToStackCountValue.put("if_icmpeq", -2);
+        instructionToStackCountValue.put("if_icmpgt", -2);
+        instructionToStackCountValue.put("if_icmpge", -2);
+        instructionToStackCountValue.put("if_icmpne", -2);
+        instructionToStackCountValue.put("if_icmplt", -2);
+        instructionToStackCountValue.put("if_icmple", -2);
+        instructionToStackCountValue.put("if_acmpeq", -2);
+        instructionToStackCountValue.put("if_acmpne", -2);
+        instructionToStackCountValue.put("ifeq", -1);
+        instructionToStackCountValue.put("ifgt", -1);
+        instructionToStackCountValue.put("ifge", -1);
+        instructionToStackCountValue.put("ifne", -1);
+        instructionToStackCountValue.put("iflt", -1);
+        instructionToStackCountValue.put("ifle", -1);
     }
 
     private String name;
@@ -186,18 +185,36 @@ public class IRMethod extends IRNode
         return maxStackCount;
     }
 
-    private Integer getInstructionStackValue(String currIntruction)
+    private Integer getInstructionStackValue(String currInstruction)
     {
         //invoke has a more difficult behaviour
-        if(currIntruction.contains("invokestatic"))
-            return getInvokeStaticStackValue(currIntruction);
+        if(currInstruction.contains("invokestatic"))
+            return getInvokeStaticStackValue(currInstruction);
 
-        Iterator it = intructionToStackCountValue.entrySet().iterator();
+        int underscoreIndex = currInstruction.indexOf('_');
+        if(underscoreIndex != -1)
+            currInstruction = currInstruction.substring(0, underscoreIndex);
+        else
+        {
+            int spaceIndex = currInstruction.indexOf(' ');
+            if(spaceIndex != -1)
+                currInstruction = currInstruction.substring(0, spaceIndex);
+        }
+
+        Integer instructionStackValue = instructionToStackCountValue.get(currInstruction);
+        if(instructionStackValue == null)  // if not detected instruction, is an instruction that not alter stack size
+            return 0;
+
+
+        return instructionStackValue;
+
+        //TODO REMOVE PROBABLY NOT NECESSARY
+       /* Iterator it = instructionToStackCountValue.entrySet().iterator();
         while (it.hasNext())
         {
             Map.Entry pair = (Map.Entry)it.next();
             String instructionName = (String) pair.getKey();
-            if(currIntruction.contains(instructionName))
+            if(currInstruction.contains(instructionName))
             {
                 Integer instructionStackValue = (Integer) pair.getValue();
                 return instructionStackValue;
@@ -205,7 +222,7 @@ public class IRMethod extends IRNode
         }
 
         // if not detected instruction, is an instruction that not alter stack size
-        return 0;
+        return 0;*/
     }
 
     private Integer getInvokeStaticStackValue(String currIntruction)

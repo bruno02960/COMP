@@ -12,7 +12,7 @@ public abstract class IRNode
 
     public IRNode()
     {
-        children = new ArrayList<IRNode>();
+        children = new ArrayList<>();
     }
 
     public void addChild(IRNode child)
@@ -109,6 +109,7 @@ public abstract class IRNode
                 }
             }
         }
+
         return res;
     }
 
@@ -153,6 +154,7 @@ public abstract class IRNode
     protected ArrayList<String> setArrayElement(ArrayList<String> indexInstructions, String loadArrayRefInstruction, IRNode value)
     {
         ArrayList<String> inst = new ArrayList<>();
+
         inst.add(loadArrayRefInstruction);
         inst.addAll(indexInstructions);
         inst.addAll(value.getInstructions());
@@ -182,8 +184,7 @@ public abstract class IRNode
         return getGlobalVariableGetCode(name, module);
     }
 
-    protected ArrayList<String> getCodeForSetAllArrayElements(String arrayRefJVMCode,
-                                                              ArrayList<String> valueJVMCode )
+    protected ArrayList<String> getCodeForSetAllArrayElements(String arrayRefJVMCode, ArrayList<String> valueJVMCode)
     {
         ArrayList<String> inst = new ArrayList<>();
 
@@ -201,25 +202,6 @@ public abstract class IRNode
         inst.add("iastore");
         inst.add("goto init");
         inst.add("end:");
-
-        /*
-            aload_1
-            arraylength
-            init:
-            iconst_1
-            isub
-            dup
-            dup
-            iflt end
-            aload_1
-            swap
-            aload_1
-            arraylength
-            iastore
-            goto init
-            end:
-         */
-
 
         return inst;
     }
