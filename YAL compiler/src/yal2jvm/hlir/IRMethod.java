@@ -28,6 +28,20 @@ public class IRMethod extends IRNode
         intructionToStackCountValue.put("idiv", -1);
         intructionToStackCountValue.put("imul", -1);
         intructionToStackCountValue.put("putstatic", -1);
+        intructionToStackCountValue.put("if_icmpeq", -2);
+        intructionToStackCountValue.put("if_icmpgt", -2);
+        intructionToStackCountValue.put("if_icmpge", -2);
+        intructionToStackCountValue.put("if_icmpne", -2);
+        intructionToStackCountValue.put("if_icmplt", -2);
+        intructionToStackCountValue.put("if_icmple", -2);
+        intructionToStackCountValue.put("if_acmpeq", -2);
+        intructionToStackCountValue.put("if_acmpne", -2);
+        intructionToStackCountValue.put("ifeq", -1);
+        intructionToStackCountValue.put("ifgt", -1);
+        intructionToStackCountValue.put("ifge", -1);
+        intructionToStackCountValue.put("ifne", -1);
+        intructionToStackCountValue.put("iflt", -1);
+        intructionToStackCountValue.put("ifle", -1);
     }
 
     private String name;
@@ -54,6 +68,21 @@ public class IRMethod extends IRNode
     {
         ArrayList<String> inst = new ArrayList<>();
 
+        String methodDeclarationInst = getMethodDeclarationInstructions();
+        ArrayList<String> methodBody = getMethodBody();
+
+        //parse return
+        IRReturn irReturn = new IRReturn(returnVar, returnType);
+        this.addChild(irReturn);
+
+        inst.add(methodDeclarationInst);
+        inst.addAll(methodBody);
+        inst.add(".end method");
+        return inst;
+    }
+
+    private String getMethodDeclarationInstructions()
+    {
         String methodDeclarationInst = ".method public static ";
 
         if (name.equals("main"))
@@ -101,21 +130,7 @@ public class IRMethod extends IRNode
                     break;
             }
         }
-
-        ArrayList<String> methodBody = getMethodBody();
-
-        //parse return
-        IRReturn irReturn = new IRReturn(returnVar, returnType);
-        this.addChild(irReturn);
-        ArrayList<String> instReturn = irReturn.getInstructions();
-
-        String endMethodInst = ".end method";
-
-        inst.add(methodDeclarationInst);
-        inst.addAll(methodBody);
-        inst.addAll(instReturn);
-        inst.add(endMethodInst);
-        return inst;
+        return methodDeclarationInst;
     }
 
     private ArrayList<String> getMethodBody()
@@ -141,7 +156,7 @@ public class IRMethod extends IRNode
         localsCount += this.args.length;
 
         localsCount = 255;
-        inst.add(".limit locals " + localsCount); //TODO ver o que contar aqui...se o melhor possivel ou o efetivo
+        inst.add(".limit locals " + localsCount); //TODO ver o que contar aqui...a register allocaton vai dar isso
 
         int stackValue = stackValueCount(childsInstructions);
         inst.add(".limit stack " + stackValue);
@@ -235,12 +250,35 @@ public class IRMethod extends IRNode
 
     public int getVarRegister(String name)
     {
+        //TODO SERÁ QUE PODIA SER ATE AO THIS, OU SEJA Á CURR INSTRUCTION?
+        // TODO ASSIM JA NAO FALHAVA O ENCONTRAR VARAIVEIS QUE SO FORAM DECLARADAS DEPOIS
         for (int i = 0; i < children.size(); i++)
         {
             String childrenType = children.get(i).toString();
             if (childrenType.equals("Allocate"))
             {
                 IRAllocate irAllocate = ((IRAllocate) children.get(i));
+                if (irAllocate.getName().equals(name))
+                    return irAllocate.getRegister();
+            }
+        }
+
+        return -1;
+    }
+
+    public int getVarRegisterDeclaredUntilThis(String name, IRNode callerNodeThis)
+    {
+        //TODO SERÁ QUE PODIA SER ATE AO THIS, OU SEJA Á CURR INSTRUCTION?
+        // TODO ASSIM JA NAO FALHAVA O ENCONTRAR VARAIVEIS QUE SO FORAM DECLARADAS DEPOIS
+        for (int i = 0; i < children.size(); i++)
+        {
+            IRNode currChild = children.get(i);
+            if(currChild == callerNodeThis) // stop if curr method child is the caller node
+                break;
+            String childrenType = currChild.toString();
+            if (childrenType.equals("Allocate"))
+            {
+                IRAllocate irAllocate = ((IRAllocate)currChild);
                 if (irAllocate.getName().equals(name))
                     return irAllocate.getRegister();
             }
