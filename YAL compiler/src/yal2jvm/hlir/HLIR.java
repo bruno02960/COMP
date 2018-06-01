@@ -593,7 +593,41 @@ public class HLIR
             }
         }
 
-        irmethod.addChild(irStoreArith);
+        boolean mayOptimize = var1.getType().equals(Type.INTEGER) == var2.getType().equals(Type.INTEGER);
+
+        if(mayOptimize) {
+            irmethod.addChild(new IRAllocate(irAssign.lhs.getVar(), new Variable(String.valueOf(getOperationValue(var1, var2, irAssign.operator)), Type.INTEGER)));
+        }
+        else {
+            irmethod.addChild(irStoreArith);
+        }
+    }
+
+    private int getOperationValue(Variable var1, Variable var2, String operator) {
+        switch(operator) {
+            case "+":
+                return Integer.parseInt(var1.getVar()) + Integer.parseInt(var2.getVar());
+            case "-":
+                return Integer.parseInt(var1.getVar()) - Integer.parseInt(var2.getVar());
+            case "*":
+                return Integer.parseInt(var1.getVar()) * Integer.parseInt(var2.getVar());
+            case "/":
+                return Integer.parseInt(var1.getVar()) / Integer.parseInt(var2.getVar());
+            case ">>":
+                return Integer.parseInt(var1.getVar()) >> Integer.parseInt(var2.getVar());
+            case "<<":
+                return Integer.parseInt(var1.getVar()) << Integer.parseInt(var2.getVar());
+            case ">>>":
+                return Integer.parseInt(var1.getVar()) >>> Integer.parseInt(var2.getVar());
+            case "&":
+                return Integer.parseInt(var1.getVar()) & Integer.parseInt(var2.getVar());
+            case "|":
+                return Integer.parseInt(var1.getVar()) | Integer.parseInt(var2.getVar());
+            case "^":
+                return Integer.parseInt(var1.getVar()) ^ Integer.parseInt(var2.getVar());
+        }
+
+        return 0;
     }
 
     private void createAssignIR(IRAssign irAssign, IRMethod irmethod) {
