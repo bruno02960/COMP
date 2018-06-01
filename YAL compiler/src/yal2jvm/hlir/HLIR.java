@@ -63,10 +63,11 @@ public class HLIR
         ArrayList<String> inst = new ArrayList<>();
 
         ArrayList<String> globalStaticInstructions = getAllIRGlobalStaticInstructions();
+        int maxStackSize = IRMethod.stackValueCount(globalStaticInstructions);
         if(globalStaticInstructions.size() != 0)
         {
-            inst.add(".method static public <clinit>()V \n");
-            inst.add(".limit stack 255\n");  //TODO VER ESTES LIMIT
+            inst.add(".method public static <clinit>()V \n");
+            inst.add(".limit stack " + maxStackSize + "\n");
             inst.add(".limit locals 255\n");  //TODO VER ESTES LIMIT
 
             inst.addAll(globalStaticInstructions);

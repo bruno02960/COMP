@@ -21,7 +21,6 @@ public class IRMethod extends IRNode
         instructionToStackCountValue.put("pop", -1);
         instructionToStackCountValue.put("iastore", -3);
         instructionToStackCountValue.put("astore", -1);
-        instructionToStackCountValue.put("newarray", -1);
         instructionToStackCountValue.put("iadd", -1);
         instructionToStackCountValue.put("isub", -1);
         instructionToStackCountValue.put("idiv", -1);
@@ -164,7 +163,7 @@ public class IRMethod extends IRNode
         return inst;
     }
 
-    private int stackValueCount(ArrayList<String> inst)
+    public static int stackValueCount(ArrayList<String> inst)
     {
         //search in child's code for instruction that put or remove elements from the stack
         int currStackCount = 0;
@@ -185,7 +184,7 @@ public class IRMethod extends IRNode
         return maxStackCount;
     }
 
-    private Integer getInstructionStackValue(String currInstruction)
+    private static Integer getInstructionStackValue(String currInstruction)
     {
         //invoke has a more difficult behaviour
         if(currInstruction.contains("invokestatic"))
@@ -225,7 +224,7 @@ public class IRMethod extends IRNode
         return 0;*/
     }
 
-    private Integer getInvokeStaticStackValue(String currIntruction)
+    private static Integer getInvokeStaticStackValue(String currIntruction)
     {
         //must return the number of parameters, minus one if not return void
         String parameters = currIntruction.substring(currIntruction.indexOf('(') + 1, currIntruction.indexOf(')'));
