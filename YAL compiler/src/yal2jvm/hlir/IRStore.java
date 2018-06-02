@@ -63,11 +63,12 @@ public abstract class IRStore extends IRNode
         ArrayList<String> inst = new ArrayList<>();
         if(arrayAccess)
         {
-            inst.add("pop");
+            //inst.add("pop");//TODO VER se nao causa problemas, assim evita o pop depois
             inst.addAll(setLocalArrayElementByIRNode(index, register, value));
         }
         else
         {
+            inst.addAll(value.getInstructions());
             if(value instanceof IRCall && ((IRCall) value).getType().equals(Type.ARRAY))
                 inst.add(getInstructionToStoreArrayInRegister(register));
             else
