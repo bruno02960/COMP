@@ -24,15 +24,15 @@ public class MethodAnalyzer
 		ArrayList<String> allVars = method.getAllVars();
 		
 		System.out.println("Liveness analysis of method " + method.getName());
-		System.out.print("Local vars: ");
-		System.out.println(allVars);
+		//System.out.print("Local vars: ");
+		//System.out.println(allVars);
 		
 		method.buildAllLines();
-		ArrayList<Line> lines = method.getLines();
-		for (Line l : lines)
-			System.out.println(l);
-		System.out.println("");
-		
+		//ArrayList<Line> lines = method.getLines();
+		//for (Line l : lines)
+		//	System.out.println(l);
+		//System.out.println("");
+		method.calculateSets();
 	}
 
 	public IntGraph getGraph()

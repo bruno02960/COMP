@@ -25,6 +25,7 @@ public class MethodTree extends Method
 	private ArrayList<Line> lines;
 	private ArrayList<String> locals;
 	private int lineCount = 0;
+	private Line currBranching = null;
 
 	public MethodTree(IRMethod method)
 	{
@@ -89,10 +90,13 @@ public class MethodTree extends Method
 		return locals;
 	}
 
-	@Override
-	public Line getNextLine()
+	public Line getLine(int id)
 	{
-		// TODO Auto-generated method stub
+		for (Line line : this.lines)
+		{
+			if (line.getId() == id)
+				return line;
+		}
 		return null;
 	}
 
@@ -262,5 +266,11 @@ public class MethodTree extends Method
 	public void setLines(ArrayList<Line> lines)
 	{
 		this.lines = lines;
+	}
+
+	public void calculateSets()
+	{
+		// TODO Auto-generated method stub
+		
 	}
 }

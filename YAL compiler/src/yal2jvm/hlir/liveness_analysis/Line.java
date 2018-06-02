@@ -1,5 +1,6 @@
 package yal2jvm.hlir.liveness_analysis;
 
+import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.HashMap;
 
@@ -11,6 +12,7 @@ public class Line
 	private BitSet def;
 	private BitSet in;
 	private BitSet out;
+	private ArrayList<Line> successors;
 
 	public Line(int id, HashMap<String, Integer> varToBit)
 	{
@@ -20,6 +22,7 @@ public class Line
 		this.def = new BitSet();
 		this.in = new BitSet();
 		this.out = new BitSet();
+		this.successors = new ArrayList<>();
 	}
 	
 	@Override
@@ -57,5 +60,20 @@ public class Line
 	{
 		int index = this.varToBit.get(var);
 		this.def.set(index);
+	}
+
+	public int getId()
+	{
+		return id;
+	}
+
+	public void setId(int id)
+	{
+		this.id = id;
+	}
+	
+	public void addSuccessor(Line line)
+	{
+		this.successors.add(line);
 	}
 }

@@ -11,8 +11,6 @@ public abstract class Method
 	protected int index = 0;
 	
 	public abstract ArrayList<String> getAllVars();
-
-	public abstract Line getNextLine();
 	
 	public abstract String getName();
 
