@@ -108,7 +108,7 @@ public class IRAllocate extends IRNode
     {
         ArrayList<String> inst = new ArrayList<>();
 
-        handleConstantRhsForConstantPropagationOtimization();
+        handleConstantRhsForConstantPropagationOptimisation();
 
         IRNode node = getVarIfExists(name);
         if(node == null)
@@ -137,11 +137,14 @@ public class IRAllocate extends IRNode
         return inst;
     }
 
-    private void handleConstantRhsForConstantPropagationOtimization()
+    private void handleConstantRhsForConstantPropagationOptimisation()
     {
         IRMethod method = (IRMethod) parent;
         if(rhs instanceof IRConstant)
-            method.addToConstVarNameToConstValue(name, (IRConstant) rhs); //TODO ver se nao dá porblema usar o mesmo rhs, secalhar copia pode ser mehor
+        {
+            if(type != Type.ARRAY && type != Type.ARRAYSIZE)
+                method.addToConstVarNameToConstValue(name, (IRConstant) rhs); //TODO ver se nao dá porblema usar o mesmo rhs, secalhar copia pode ser mehor
+        }
         else if(method.getConstValueByConstVarName(((IRLoad)rhs).getName()) != null)
         {
             rhs = new IRConstant(method.getConstValueByConstVarName(((IRLoad)rhs).getName()).getValue());
