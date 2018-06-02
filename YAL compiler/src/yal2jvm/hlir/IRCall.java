@@ -249,4 +249,14 @@ public class IRCall extends IRNode
         }
         return callInst;
     }
+
+	public ArrayList<Variable> getArguments()
+	{
+		return arguments;
+	}
+
+	public void setArguments(ArrayList<Variable> arguments)
+	{
+		this.arguments = arguments;
+	}
 }

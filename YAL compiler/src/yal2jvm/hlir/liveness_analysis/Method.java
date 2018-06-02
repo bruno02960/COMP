@@ -15,4 +15,6 @@ public abstract class Method
 	public abstract Line getNextLine();
 	
 	public abstract String getName();
+
+	public abstract void buildAllLines();
 }

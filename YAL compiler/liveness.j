@@ -12,6 +12,8 @@
 .limit stack 2
 iconst_2
 istore_2
+iload_0
+istore_2
 iconst_2
 iload_0
 iadd
@@ -30,6 +32,10 @@ iadd
 istore_3
 iconst_2
 invokestatic liveness/f2(I)V
+iload_1
+iconst_2
+invokestatic liveness/f3(II)I
+istore_0
 iconst_2
 istore 4
 iconst_2
@@ -48,7 +54,7 @@ return
 
 .method public static f3(II)I
 .limit locals 255
-.limit stack 5
+.limit stack 2
 iconst_0
 istore_2
 iload_0

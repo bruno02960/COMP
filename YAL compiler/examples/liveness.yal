@@ -6,15 +6,17 @@ module liveness
 	
 	function ret = f1(a, b)
 	{
-		c = 2;
-		c = c + a;
-		c = c + b;
-		d = c;
-		g1 = g2;
-		d = g3;
-		d = g1 + g2;
-		f2(d);
-		ret = d;
+		c = 2;			//def: c
+		c = a;			//def: c	use: a
+		c = c + a;		//def: c	use: a, c
+		c = c + b;		//def: c	use: b, c
+		d = c;			//def: d	use: c
+		g1 = g2;		
+		d = g3;			//def: d
+		d = g1 + g2;	//def: d
+		f2(d);			//use: d
+		a = f3(b, c);	//def: a	use: b, c
+		ret = d;		//def: ret	use: d
 	}
 	
 	function f2(arg1)

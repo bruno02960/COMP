@@ -39,4 +39,11 @@ public class MethodInstructions extends Method
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public void buildAllLines()
+	{
+		// TODO Auto-generated method stub
+		
+	}
 }
