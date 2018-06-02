@@ -231,13 +231,15 @@ public class IRMethod extends IRNode
         return 0;*/
     }
 
-    private static Integer getInvokeStaticStackValue(String currIntruction)
+    private static Integer getInvokeStaticStackValue(String currInstruction)
     {
         //must return the number of parameters, minus one if not return void
-        String parameters = currIntruction.substring(currIntruction.indexOf('(') + 1, currIntruction.indexOf(')'));
-        int numberOfParameters = parameters.split(",").length;
+        int numberOfParameters = 0;
+        String parameters = currInstruction.substring(currInstruction.indexOf('(') + 1, currInstruction.indexOf(')'));
+        if(parameters.length() != 0) //not empty string, at least one parameter
+            numberOfParameters = parameters.split(",").length; // to pop from stack
 
-        char lastCharacter = currIntruction.charAt(currIntruction.length() - 1);
+        char lastCharacter = currInstruction.charAt(currInstruction.length() - 1); // to push to stack
         if(lastCharacter != 'V')
             return -(numberOfParameters - 1);
         else
