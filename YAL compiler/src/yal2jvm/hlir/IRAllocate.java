@@ -203,7 +203,7 @@ public class IRAllocate extends IRNode
                 inst.addAll(rhs.getInstructions());
                 inst.add(getInstructionToStoreIntInRegister(this.register));
 
-                //this is done after getInstructions of rhs, because loadConstant ir set there
+                //this is done after getInstructions of rhs, because loadConstant is set there
                 if(rhs instanceof IRConstant)
                     method.addToConstVarNameToConstValue(name, (IRConstant) rhs);
                 else
