@@ -51,6 +51,22 @@ public class IRStoreArith extends IRStore
     public ArrayList<String> getInstructions()
     {
         ArrayList<String> inst = new ArrayList<>();
+        boolean isIinc = checkIfIsIinc(inst);
+
+        if(!isIinc)
+        {
+            ArrayList<String> arithInst = irArith.getInstructions();
+            ArrayList<String> storeInst = getInstForStoring(arrayAccess, index, irArith);
+
+            inst.addAll(arithInst);
+            inst.addAll(storeInst);
+        }
+
+        return inst;
+    }
+
+    private boolean checkIfIsIinc(ArrayList<String> inst)
+    {
         boolean isIinc = false;
 
         if(irArith.getOp().equals(Operation.ADD) || irArith.getOp().equals(Operation.SUB)) {
@@ -85,15 +101,7 @@ public class IRStoreArith extends IRStore
             }
         }
 
-        if(!isIinc) {
-            ArrayList<String> arithInst = irArith.getInstructions();
-            ArrayList<String> storeInst = getInstForStoring(arrayAccess, index, irArith);
-
-            inst.addAll(arithInst);
-            inst.addAll(storeInst);
-        }
-
-        return inst;
+        return isIinc;
     }
 
     private String getIincInstruction(IRConstant irConstant) {
