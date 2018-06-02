@@ -6,25 +6,32 @@ public class IRStoreArith extends IRStore
 {
     private IRArith irArith;
 
-    //a = b + c
-    public IRStoreArith(String name, Operation op)
+    public IRStoreArith(Operation op)
     {
-        this.setName(name);
         this.setNodeType("StoreArith");
         irArith = new IRArith(op);
         this.addChild(irArith);
     }
 
+    //a = b + c
+    public IRStoreArith(String name, Operation op)
+    {
+        this(op);
+        this.name = name;
+    }
+
     //a[i] = b + c;
     public IRStoreArith(VariableArray name, Operation op)
     {
-        this.setName(name.getVar());
+        this(op);
+        this.name = name.getVar();
         this.arrayAccess = true;
-        this.index = new IRLoad(name.getAt());
-        this.setNodeType("StoreArith");
-        irArith = new IRArith(op);
+        Variable at = name.getAt();
+        if(at.getType().equals(Type.INTEGER))
+            this.index = new IRConstant(at.getVar());
+        else
+            this.index = new IRLoad(at);
         this.addChild(index);
-        this.addChild(irArith);
     }
 
     public IRNode getRhs()
@@ -55,10 +62,7 @@ public class IRStoreArith extends IRStore
 
         if(!isIinc)
         {
-            ArrayList<String> arithInst = irArith.getInstructions();
             ArrayList<String> storeInst = getInstForStoring(arrayAccess, index, irArith);
-
-            inst.addAll(arithInst);
             inst.addAll(storeInst);
         }
 
