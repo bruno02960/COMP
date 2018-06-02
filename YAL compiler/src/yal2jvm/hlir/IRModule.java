@@ -79,7 +79,7 @@ public class IRModule extends IRNode
         return null;
     }
 
-    public boolean removeAllocateChild(String varName)
+    public boolean removeAllocateChildByName(String varName)
     {
         for (int i = 0; i < children.size(); i++)
         {
@@ -95,5 +95,10 @@ public class IRModule extends IRNode
         }
 
         return false;
+    }
+
+    public boolean removeChild(IRNode irNode)
+    {
+        return children.remove(irNode);
     }
 }
