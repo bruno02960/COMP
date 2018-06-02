@@ -1,5 +1,7 @@
 package yal2jvm.hlir;
 
+import yal2jvm.utils.Utils;
+
 import java.util.ArrayList;
 
 public class IRArith extends IRNode {
@@ -87,5 +89,26 @@ public class IRArith extends IRNode {
 
     public Operation getOp() {
         return op;
+    }
+
+    public String getStringValueIfBothConstant()
+    {
+        String lhsValue;
+        if(lhs instanceof IRConstant)
+            lhsValue = ((IRConstant)lhs).getValue();
+        else if(((IRLoad)lhs).getLoadedConstantValue() != null)
+            lhsValue = ((IRLoad)lhs).getLoadedConstantValue();
+        else
+            return null;
+
+        String rhsValue;
+        if(rhs instanceof IRConstant)
+            rhsValue = ((IRConstant)rhs).getValue();
+        else if(((IRLoad)rhs).getLoadedConstantValue() != null)
+            rhsValue = ((IRLoad)rhs).getLoadedConstantValue();
+        else
+            return null;
+
+        return String.valueOf(Utils.getOperationValue(lhsValue, rhsValue, op.getSymbol()));
     }
 }

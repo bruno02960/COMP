@@ -11,7 +11,6 @@ public class IRAllocate extends IRNode
     private int register = -1;
 	private boolean storeVarGlobal = false;
 	private IRGlobal global;
-    private boolean isConstant;
 
 	//a = 1;
     public IRAllocate(String name, Variable value)
@@ -21,12 +20,10 @@ public class IRAllocate extends IRNode
         this.name = name;
 
         if(value.getType().equals(Type.INTEGER))
-        {
             this.rhs = new IRConstant(value.getVar());
-            isConstant = true;
-        }
         else
             this.rhs = new IRLoad(value);
+
         this.addChild(this.rhs);
     }
 
@@ -61,10 +58,7 @@ public class IRAllocate extends IRNode
         this.addChild(this.lhsIndex);
 
         if(value.getType().equals(Type.INTEGER))
-        {
             this.rhs = new IRConstant(value.getVar());
-            isConstant = true;
-        }
         else
             this.rhs = new IRLoad(value);
         this.addChild(this.rhs);
@@ -104,11 +98,17 @@ public class IRAllocate extends IRNode
         return type;
     }
 
+    public IRNode getRhs()
+    {
+        return rhs;
+    }
 
     @Override
     public ArrayList<String> getInstructions()
     {
         ArrayList<String> inst = new ArrayList<>();
+
+        handleConstantRhsForConstantPropagationOtimization();
 
         IRNode node = getVarIfExists(name);
         if(node == null)
@@ -137,7 +137,19 @@ public class IRAllocate extends IRNode
         return inst;
     }
 
-	private ArrayList<String> getStoreInst()
+    private void handleConstantRhsForConstantPropagationOtimization()
+    {
+        IRMethod method = (IRMethod) parent;
+        if(rhs instanceof IRConstant)
+            method.addToConstVarNameToConstValue(name, (IRConstant) rhs); //TODO ver se nao dá porblema usar o mesmo rhs, secalhar copia pode ser mehor
+        else if(method.getConstValueByConstVarName(((IRLoad)rhs).getName()) != null)
+        {
+            rhs = new IRConstant(method.getConstValueByConstVarName(((IRLoad)rhs).getName()).getValue());
+            method.addToConstVarNameToConstValue(name, (IRConstant) rhs);
+        }
+    }
+
+    private ArrayList<String> getStoreInst()
 	{
         ArrayList<String> inst = new ArrayList<>();
 		if (this.storeVarGlobal)
@@ -179,19 +191,28 @@ public class IRAllocate extends IRNode
 		else
 		{
             String varType;
+            IRMethod method = (IRMethod) findParent("Method");
             IRNode node = getVarIfExists(name);
             if(node instanceof IRAllocate)
                 varType = ((IRAllocate)node).getType().name();
             else
-            {
-               IRMethod method = (IRMethod) findParent("Method");
                 varType = method.getArgumentType(name).name();
-            }
 
             if(varType != null && varType.equals(Type.INTEGER.name())) // i = 5;
             {
                 inst.addAll(rhs.getInstructions());
                 inst.add(getInstructionToStoreIntInRegister(this.register));
+
+                //this is done after getInstructions of rhs, because loadConstant ir set there
+                if(rhs instanceof IRConstant)
+                    method.addToConstVarNameToConstValue(name, (IRConstant) rhs);
+                else
+                {
+                    String value = ((IRLoad)rhs).getLoadedConstantValue();
+                    if(value != null)
+                        method.addToConstVarNameToConstValue(name, new IRConstant(value));
+                }
+
                 return inst;
             }
 

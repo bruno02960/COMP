@@ -46,6 +46,7 @@ public class IRMethod extends IRNode
     private Type returnType;
     private String returnVar;
     private Variable[] args;
+    private HashMap<String, IRConstant> constVarNameToConstValue = new HashMap<>();
 
     private int labelN = 0;
     private int regN = 0;
@@ -249,6 +250,16 @@ public class IRMethod extends IRNode
     }
 
     public void incrementRegN() { this.regN++; }
+
+    public IRConstant getConstValueByConstVarName(String constVarName)
+    {
+        return constVarNameToConstValue.get(constVarName);
+    }
+
+    public void addToConstVarNameToConstValue(String constVarName, IRConstant constValue)
+    {
+        this.constVarNameToConstValue.put(constVarName, constValue);
+    }
 
     public int getArgumentRegister(String name)
     {

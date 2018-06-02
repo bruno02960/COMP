@@ -9,6 +9,7 @@ public class IRLoad extends IRNode
     private Type type;
     private IRNode index = null;
     private boolean arraySizeAccess;
+    private String loadedConstantValue = null;
 
     private IRLoad(String name)
     {
@@ -47,6 +48,11 @@ public class IRLoad extends IRNode
         this.addChild(index);
     }
 
+    public String getLoadedConstantValue()
+    {
+        return loadedConstantValue;
+    }
+
     public int getRegister()
     {
         return register;
@@ -74,7 +80,19 @@ public class IRLoad extends IRNode
         ArrayList<String> inst = new ArrayList<>();
         int register = method.getArgumentRegister(name);
         if (register == -1)
-            register = method.getVarRegisterDeclaredUntilThis(name, this);
+        {
+            IRAllocate var = method.getVarDeclaredUntilThis(name, this);
+
+            //if var is const at this moment, we can put just its value and not load it from register
+            IRConstant constValue = method.getConstValueByConstVarName(name);
+            if(constValue != null)
+            {
+                loadedConstantValue = constValue.getValue();
+                return constValue.getInstructions(); //constant instructions
+            }
+
+            register = var.getRegister();
+        }
         if (register > -1)
         {
             if(type == Type.INTEGER)

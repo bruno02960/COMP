@@ -11,12 +11,22 @@ public abstract class IRStore extends IRNode
 
     protected ArrayList<String> getInstForStoring(boolean arrayAccess, IRLoad index, IRNode value)
     {
+        boolean isConstant = false;
+
         //check if it is one of the method's arguments
         register = ((IRMethod) parent).getArgumentRegister(name);
 
         //if not, check if storage variable exists, and if so get its register
         if (register == -1)
-            register = ((IRMethod) parent).getVarRegister(name);
+        {
+            //TODO VER ISTO MELHOR
+            IRAllocate var = ((IRMethod) parent).getVarDeclaredUntilThis(name, this);
+            if(var != null)
+            {
+                register = var.getRegister();
+                //isConstant = ((IRMethod) parent).getConstValueByConstVarName(name) //TODO SE FOR PRECISOP PARA VER SE É CONSTANTE
+            }
+        }
 
         IRModule module = (IRModule)findParent("Module");
         //code for check global
@@ -25,17 +35,23 @@ public abstract class IRStore extends IRNode
             IRGlobal global = module.getGlobal(name);
         	if (global != null)
                 return getInstForStoringGlobalVariable(index, value, module, global);
+        	//TODO ver const para global
         }
-        else
-            module.removeAllocateChild(name);
 
         //if storage variable does not exist (locally or globally), allocate it
         if (register == -1)
         {
-            IRAllocate storeVar = new IRAllocate(name, new Variable("0", Type.INTEGER));
             IRMethod method = (IRMethod) findParent("Method");
-            method.addChild(storeVar);
-            register = storeVar.getRegister();
+            IRAllocate irAllocate = new IRAllocate(name, new Variable("0", Type.INTEGER));
+            method.addNewChildAfterChild(this, irAllocate);
+            register = irAllocate.getRegister();
+
+            if(value instanceof IRArith)
+            {
+                String valueString = ((IRArith) value).getStringValueIfBothConstant();
+                if(valueString != null)
+                    method.addToConstVarNameToConstValue(name, new IRConstant(valueString));
+            }
         }
 
         return getInstForStoringLocalVariable(arrayAccess, index, value);
@@ -74,4 +90,5 @@ public abstract class IRStore extends IRNode
 
         return inst;
     }
+
 }
