@@ -131,8 +131,11 @@ public abstract class IRNode
             if (children.get(i).toString().equals("Allocate"))
             {
                 IRAllocate alloc = (IRAllocate)children.get(i);
-                if (alloc.getName().equals(varName) && alloc.getRegister() != -1)
+                if (alloc.getName().equals(varName))
+                {
+                    alloc.getRegister();
                     return alloc;
+                }
             }
         }
 
