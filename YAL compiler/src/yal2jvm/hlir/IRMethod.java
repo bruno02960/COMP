@@ -67,11 +67,12 @@ public class IRMethod extends IRNode
         ArrayList<String> inst = new ArrayList<>();
 
         String methodDeclarationInst = getMethodDeclarationInstructions();
-        ArrayList<String> methodBody = getMethodBody();
 
         //parse return
         IRReturn irReturn = new IRReturn(returnVar, returnType);
         this.addChild(irReturn);
+
+        ArrayList<String> methodBody = getMethodBody();
 
         inst.add(methodDeclarationInst);
         inst.addAll(methodBody);
@@ -141,6 +142,11 @@ public class IRMethod extends IRNode
         {
             IRNode node = getChildren().get(i);
             childsInstructions.addAll(node.getInstructions());
+            if(getChildren().size() > numChilds)
+            {
+                i++;
+                numChilds = getChildren().size();
+            }
         }
 
 
@@ -282,7 +288,7 @@ public class IRMethod extends IRNode
         return -1;
     }
 
-    public int getVarRegisterDeclaredUntilThis(String name, IRNode callerNodeThis)
+    public IRAllocate getVarDeclaredUntilThis(String name, IRNode callerNodeThis)
     {
         //TODO SERÁ QUE PODIA SER ATE AO THIS, OU SEJA Á CURR INSTRUCTION?
         // TODO ASSIM JA NAO FALHAVA O ENCONTRAR VARAIVEIS QUE SO FORAM DECLARADAS DEPOIS
@@ -296,11 +302,23 @@ public class IRMethod extends IRNode
             {
                 IRAllocate irAllocate = ((IRAllocate)currChild);
                 if (irAllocate.getName().equals(name))
-                    return irAllocate.getRegister();
+                    return irAllocate;
             }
         }
 
-        return -1;
+        return null;
+    }
+
+    public int getVarRegisterDeclaredUntilThis(String name, IRNode callerNodeThis)
+    {
+        //TODO SERÁ QUE PODIA SER ATE AO THIS, OU SEJA Á CURR INSTRUCTION?
+        // TODO ASSIM JA NAO FALHAVA O ENCONTRAR VARAIVEIS QUE SO FORAM DECLARADAS DEPOIS
+
+        IRAllocate var = getVarDeclaredUntilThis(name, callerNodeThis);
+        if(var == null)
+            return -1;
+
+        return var.getRegister();
     }
 
     public Type getVarType(String name)
@@ -338,4 +356,10 @@ public class IRMethod extends IRNode
 		this.returnType = returnType;
 	}
 
+    public void addNewChildAfterChild(IRNode child, IRNode newChild)
+    {
+        int myIndex = children.indexOf(child);
+        children.add(myIndex + 1, newChild);
+        newChild.setParent(this);
+    }
 }
