@@ -197,14 +197,14 @@ public class IRMethod extends IRNode
         if(currInstruction.contains("invokestatic"))
             return getInvokeStaticStackValue(currInstruction);
 
-        int underscoreIndex = currInstruction.indexOf('_');
-        if(underscoreIndex != -1)
-            currInstruction = currInstruction.substring(0, underscoreIndex);
+        int spaceIndex = currInstruction.indexOf(' ');
+        if(spaceIndex != -1)
+            currInstruction = currInstruction.substring(0, spaceIndex);
         else
         {
-            int spaceIndex = currInstruction.indexOf(' ');
-            if(spaceIndex != -1)
-                currInstruction = currInstruction.substring(0, spaceIndex);
+            int underscoreIndex = currInstruction.indexOf('_');
+            if(underscoreIndex != -1)
+                currInstruction = currInstruction.substring(0, underscoreIndex);
         }
 
         Integer instructionStackValue = instructionToStackCountValue.get(currInstruction);
