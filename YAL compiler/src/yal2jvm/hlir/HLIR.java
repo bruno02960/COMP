@@ -1,13 +1,13 @@
 package yal2jvm.hlir;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 
 import yal2jvm.ast.*;
 import yal2jvm.hlir.liveness_analysis.IntGraph;
 import yal2jvm.hlir.liveness_analysis.LivenessAnalyzer;
 import yal2jvm.hlir.register_allocation.RegisterAllocator;
+import yal2jvm.utils.Utils;
 
 public class HLIR
 {
@@ -597,38 +597,12 @@ public class HLIR
         boolean mayOptimize = var1.getType().equals(Type.INTEGER) && var2.getType().equals(Type.INTEGER);
 
         if(mayOptimize) {
-            irmethod.addChild(new IRAllocate(irAssign.lhs.getVar(), new Variable(String.valueOf(getOperationValue(var1, var2, irAssign.operator)), Type.INTEGER)));
+            irmethod.addChild(new IRAllocate(irAssign.lhs.getVar(),
+                    new Variable(String.valueOf(Utils.getOperationValue(var1.getVar(), var2.getVar(), irAssign.operator)), Type.INTEGER)));
         }
         else {
             irmethod.addChild(irStoreArith);
         }
-    }
-
-    private int getOperationValue(Variable var1, Variable var2, String operator) {
-        switch(operator) {
-            case "+":
-                return Integer.parseInt(var1.getVar()) + Integer.parseInt(var2.getVar());
-            case "-":
-                return Integer.parseInt(var1.getVar()) - Integer.parseInt(var2.getVar());
-            case "*":
-                return Integer.parseInt(var1.getVar()) * Integer.parseInt(var2.getVar());
-            case "/":
-                return Integer.parseInt(var1.getVar()) / Integer.parseInt(var2.getVar());
-            case ">>":
-                return Integer.parseInt(var1.getVar()) >> Integer.parseInt(var2.getVar());
-            case "<<":
-                return Integer.parseInt(var1.getVar()) << Integer.parseInt(var2.getVar());
-            case ">>>":
-                return Integer.parseInt(var1.getVar()) >>> Integer.parseInt(var2.getVar());
-            case "&":
-                return Integer.parseInt(var1.getVar()) & Integer.parseInt(var2.getVar());
-            case "|":
-                return Integer.parseInt(var1.getVar()) | Integer.parseInt(var2.getVar());
-            case "^":
-                return Integer.parseInt(var1.getVar()) ^ Integer.parseInt(var2.getVar());
-        }
-
-        return 0;
     }
 
     private void createAssignIR(IRAssign irAssign, IRMethod irmethod) {

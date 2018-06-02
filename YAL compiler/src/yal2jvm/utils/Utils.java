@@ -53,4 +53,33 @@ public class Utils
 
         return -1;
     }
+
+    public static int getOperationValue(String var1, String var2, String operator)
+    {
+        switch(operator)
+        {
+            case "+":
+                return Integer.parseInt(var1) + Integer.parseInt(var2);
+            case "-":
+                return Integer.parseInt(var1) - Integer.parseInt(var2);
+            case "*":
+                return Integer.parseInt(var1) * Integer.parseInt(var2);
+            case "/":
+                return Integer.parseInt(var1) / Integer.parseInt(var2);
+            case ">>":
+                return Integer.parseInt(var1) >> Integer.parseInt(var2);
+            case "<<":
+                return Integer.parseInt(var1) << Integer.parseInt(var2);
+            case ">>>":
+                return Integer.parseInt(var1) >>> Integer.parseInt(var2);
+            case "&":
+                return Integer.parseInt(var1) & Integer.parseInt(var2);
+            case "|":
+                return Integer.parseInt(var1) | Integer.parseInt(var2);
+            case "^":
+                return Integer.parseInt(var1) ^ Integer.parseInt(var2);
+        }
+
+        return 0;
+    }
 }
