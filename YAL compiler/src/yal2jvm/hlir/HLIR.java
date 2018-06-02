@@ -594,7 +594,7 @@ public class HLIR
             }
         }
 
-        boolean mayOptimize = var1.getType().equals(Type.INTEGER) == var2.getType().equals(Type.INTEGER);
+        boolean mayOptimize = var1.getType().equals(Type.INTEGER) && var2.getType().equals(Type.INTEGER);
 
         if(mayOptimize) {
             irmethod.addChild(new IRAllocate(irAssign.lhs.getVar(), new Variable(String.valueOf(getOperationValue(var1, var2, irAssign.operator)), Type.INTEGER)));
