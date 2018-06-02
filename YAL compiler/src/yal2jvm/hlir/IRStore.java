@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public abstract class IRStore extends IRNode
 {
-    protected String name;
+    private String name;
     protected boolean arrayAccess = false;
     protected IRLoad index = null;
     private int register;
@@ -90,5 +90,15 @@ public abstract class IRStore extends IRNode
 
         return inst;
     }
+
+	public String getName()
+	{
+		return name;
+	}
+
+	public void setName(String name)
+	{
+		this.name = name;
+	}
 
 }

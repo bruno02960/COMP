@@ -104,6 +104,9 @@ public class Yal2jvm
         	System.exit(-6);*/
 
         ArrayList<String> instructions = hhir.selectInstructions();
+        //----------------------
+        hhir.dataflowAnalysis();
+        //----------------------
         String moduleName = hhir.getModuleName();
 
         System.out.println("JVM code generation completed");

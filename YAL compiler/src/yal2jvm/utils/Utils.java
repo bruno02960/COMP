@@ -1,7 +1,9 @@
 package yal2jvm.utils;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeSet;
 
 import yal2jvm.symbol_tables.Symbol;
 
@@ -81,5 +83,13 @@ public class Utils
         }
 
         return 0;
+    }
+    
+    public static <T> ArrayList<T> setToList(TreeSet<T> set)
+    {
+    	ArrayList<T> list = new ArrayList<T>();
+    	for (T elem : set)
+    		list.add(elem);
+    	return list;
     }
 }

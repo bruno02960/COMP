@@ -1,0 +1,50 @@
+module liveness
+{
+	g1 = 2;
+	g2 = 3;
+	g3 = 4;
+	
+	function ret = f1(a, b)
+	{
+		c = 2;
+		c = c + a;
+		c = c + b;
+		d = c;
+		g1 = g2;
+		d = g3;
+		d = g1 + g2;
+		f2(d);
+		ret = d;
+	}
+	
+	function f2(arg1)
+	{
+		arg1 = 1 + 2;
+	}
+	
+	function ret = f3(arg1, arg2)
+	{
+		ret = 0;
+		if (arg1 > arg2)
+		{
+			ret = arg1;
+		}
+		else
+		{
+			ret = arg2;
+		}
+		a = 0;
+		while (a < 10)
+		{
+			ret = ret + 300;
+		}
+	}
+	
+	function main()
+	{
+		a = f1(1, 2);
+		b = f3(a, 3);
+		io.println("a = ", a);
+		io.println("b = ", b);
+	}
+}

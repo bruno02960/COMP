@@ -7,14 +7,14 @@ public class IRStoreCall extends IRStore
     // a = f();
     public IRStoreCall(String name)
     {
-        this.name = name;
+        this.setName(name);
         this.setNodeType("StoreCall");
     }
 
     // a[i] = f();
     public IRStoreCall(VariableArray name)
     {
-        this.name = name.getVar();
+        this.setName(name.getVar());
         this.setNodeType("StoreCall");
     }
 

@@ -283,7 +283,7 @@ public class IRMethod extends IRNode
 
     public int getVarRegister(String name)
     {
-        //TODO SERÁ QUE PODIA SER ATE AO THIS, OU SEJA Á CURR INSTRUCTION?
+        //TODO SERÃ� QUE PODIA SER ATE AO THIS, OU SEJA Ã� CURR INSTRUCTION?
         // TODO ASSIM JA NAO FALHAVA O ENCONTRAR VARAIVEIS QUE SO FORAM DECLARADAS DEPOIS
         for (int i = 0; i < children.size(); i++)
         {
@@ -301,7 +301,7 @@ public class IRMethod extends IRNode
 
     public IRAllocate getVarDeclaredUntilThis(String name, IRNode callerNodeThis)
     {
-        //TODO SERÁ QUE PODIA SER ATE AO THIS, OU SEJA Á CURR INSTRUCTION?
+        //TODO SERÃ� QUE PODIA SER ATE AO THIS, OU SEJA Ã� CURR INSTRUCTION?
         // TODO ASSIM JA NAO FALHAVA O ENCONTRAR VARAIVEIS QUE SO FORAM DECLARADAS DEPOIS
         for (int i = 0; i < children.size(); i++)
         {
@@ -322,7 +322,7 @@ public class IRMethod extends IRNode
 
     public int getVarRegisterDeclaredUntilThis(String name, IRNode callerNodeThis)
     {
-        //TODO SERÁ QUE PODIA SER ATE AO THIS, OU SEJA Á CURR INSTRUCTION?
+        //TODO SERÃ� QUE PODIA SER ATE AO THIS, OU SEJA Ã� CURR INSTRUCTION?
         // TODO ASSIM JA NAO FALHAVA O ENCONTRAR VARAIVEIS QUE SO FORAM DECLARADAS DEPOIS
 
         IRAllocate var = getVarDeclaredUntilThis(name, callerNodeThis);
@@ -373,4 +373,14 @@ public class IRMethod extends IRNode
         children.add(myIndex + 1, newChild);
         newChild.setParent(this);
     }
+
+	public Variable[] getArgs()
+	{
+		return args;
+	}
+
+	public void setArgs(Variable[] args)
+	{
+		this.args = args;
+	}
 }

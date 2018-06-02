@@ -9,7 +9,7 @@ public class IRStoreArith extends IRStore
     //a = b + c
     public IRStoreArith(String name, Operation op)
     {
-        this.name = name;
+        this.setName(name);
         this.setNodeType("StoreArith");
         irArith = new IRArith(op);
         this.addChild(irArith);
@@ -18,7 +18,7 @@ public class IRStoreArith extends IRStore
     //a[i] = b + c;
     public IRStoreArith(VariableArray name, Operation op)
     {
-        this.name = name.getVar();
+        this.setName(name.getVar());
         this.arrayAccess = true;
         this.index = new IRLoad(name.getAt());
         this.setNodeType("StoreArith");
@@ -73,7 +73,7 @@ public class IRStoreArith extends IRStore
             if (irArith.getLhs().getNodeType().equals("Load")) {
                 IRLoad arithLhs = ((IRLoad) irArith.getLhs());
 
-                if (arithLhs.getType().equals(Type.INTEGER) && getRhs().getNodeType().equals("Constant") && arithLhs.getName().equals(name)) {
+                if (arithLhs.getType().equals(Type.INTEGER) && getRhs().getNodeType().equals("Constant") && arithLhs.getName().equals(getName())) {
                     IRConstant irConstant = (IRConstant) getRhs();
                     if(Integer.parseInt(irConstant.getValue()) > -32768 && Integer.parseInt(irConstant.getValue()) < 32768) {
                         String instruction = getIincInstruction(irConstant);
@@ -87,7 +87,7 @@ public class IRStoreArith extends IRStore
                 if (irArith.getRhs().getNodeType().equals("Load")) {
                     IRLoad arithRhs = ((IRLoad) irArith.getRhs());
 
-                    if (arithRhs.getType().equals(Type.INTEGER) && getLhs().getNodeType().equals("Constant") && arithRhs.getName().equals(name)) {
+                    if (arithRhs.getType().equals(Type.INTEGER) && getLhs().getNodeType().equals("Constant") && arithRhs.getName().equals(getName())) {
                         IRConstant irConstant = (IRConstant) getLhs();
                         if(Integer.parseInt(irConstant.getValue()) > -32768 && Integer.parseInt(irConstant.getValue()) < 32768) {
                             String instruction = getIincInstruction(irConstant);
@@ -108,9 +108,9 @@ public class IRStoreArith extends IRStore
         String instruction = "iinc ";
 
         IRMethod method = (IRMethod) findParent("Method");
-        int register = method.getArgumentRegister(name);
+        int register = method.getArgumentRegister(getName());
         if (register == -1)
-            register = method.getVarRegister(name);
+            register = method.getVarRegister(getName());
         if (register == -1)
             return "";
 

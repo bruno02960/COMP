@@ -1,6 +1,7 @@
 package yal2jvm.hlir;
 
 import java.util.ArrayList;
+import java.util.TreeSet;
 
 public class IRModule extends IRNode
 {
@@ -101,4 +102,18 @@ public class IRModule extends IRNode
     {
         return children.remove(irNode);
     }
+
+	public TreeSet<String> getAllGlobals()
+	{
+		TreeSet<String> globals = new TreeSet<>();
+		for (IRNode i : children)
+		{
+			if (i.getNodeType().equals("Global"))
+			{
+				IRGlobal gl = (IRGlobal)i;
+				globals.add(gl.getName());
+			}
+		}
+		return globals;
+	}
 }
