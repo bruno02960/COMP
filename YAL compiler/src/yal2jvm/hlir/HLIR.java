@@ -14,6 +14,7 @@ public class HLIR
     private IRModule root;
     private SimpleNode ast;
 	private HashMap<String, IntGraph> intGraphs;
+	private boolean optimize;
 
     public HLIR(SimpleNode ast)
     {
@@ -31,8 +32,7 @@ public class HLIR
 
     public void optimize()
     {
-
-
+        this.optimize = true;
     }
 
     public void dataflowAnalysis()
@@ -596,7 +596,7 @@ public class HLIR
 
         boolean mayOptimize = var1.getType().equals(Type.INTEGER) && var2.getType().equals(Type.INTEGER);
 
-        if(mayOptimize) {
+        if(mayOptimize && optimize) {
             irmethod.addChild(new IRAllocate(irAssign.lhs.getVar(),
                     new Variable(String.valueOf(Utils.getOperationValue(var1.getVar(), var2.getVar(), irAssign.operator)), Type.INTEGER)));
         }
