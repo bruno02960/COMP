@@ -50,10 +50,39 @@ public class HLIR
 
         HashMap<String, HashMap<String, Integer>> allocatedRegisterByMethodName = allocator.getAllocatedRegisterByMethodName();
 
+        if (allocateSuccessfully)
+        	assignNewRegisters(allocatedRegisterByMethodName);
+        
         return allocateSuccessfully;
     }
 
-    public ArrayList<String> selectInstructions()
+    private void assignNewRegisters(HashMap<String, HashMap<String, Integer>> methods)
+	{
+    	for (String key : methods.keySet())
+    		assignNewRegistersMethod(methods.get(key), key);
+	}
+
+	private void assignNewRegistersMethod(HashMap<String, Integer> methodVars, String methodName)
+	{
+		IRMethod method = null;
+		
+		for (IRNode child : this.root.getChildren())
+		{
+			if (child.getNodeType().equals("Method"))
+			{
+				if (((IRMethod)child).getName().equals(methodName))
+				{
+					method = (IRMethod)child;
+					break;
+				}
+			}
+		}
+		
+		for (String key : methodVars.keySet())
+			method.assignNewRegister(key, methodVars.get(key));
+	}
+
+	public ArrayList<String> selectInstructions()
     {
         ArrayList<String> inst = new ArrayList<>();
         inst.addAll(root.getInstructions());

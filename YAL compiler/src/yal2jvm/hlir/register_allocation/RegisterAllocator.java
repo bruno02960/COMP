@@ -32,7 +32,10 @@ public class RegisterAllocator
 				return false;
 			}
 			else
+			{
+				System.out.println("Successfull register allocation with max. " + numberRegisters + " registers for method " + methodName);
 				allocatedRegisterByMethodName.put(methodName, graphColoring.getVarNameToRegisterNumber());
+			}
 		}
 
 		return true;

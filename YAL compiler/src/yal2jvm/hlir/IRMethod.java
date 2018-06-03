@@ -429,4 +429,10 @@ public class IRMethod extends IRNode
 	{
 		this.args = args;
 	}
+
+	public void assignNewRegister(String key, Integer integer)
+	{
+		
+		
+	}
 }

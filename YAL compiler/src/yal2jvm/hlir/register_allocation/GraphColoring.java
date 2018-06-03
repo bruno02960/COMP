@@ -94,7 +94,7 @@ public class  GraphColoring
 
         return null;
     }
-
+/*
     public static void main(String args[])
     {
         IntNode node1 = new IntNode("1");
@@ -129,7 +129,7 @@ public class  GraphColoring
         graphColoring.colorGraph();
         printHashMap(graphColoring.varNameToRegisterNumber);
 
-    }
+    }*/
 
     private static void printHashMap(HashMap<String, Integer> hashMap)
     {

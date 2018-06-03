@@ -28,6 +28,7 @@ public class LivenessAnalyzer
 				IRMethod method = (IRMethod)n;
 				MethodSetBuilder met = new MethodSetBuilder(method);
 				MethodAnalyzer analyzer = new MethodAnalyzer(met);
+				analyzer.analyze();
 				this.intGraphs.put(method.getName(), analyzer.getGraph());
 			}
 		}
