@@ -71,13 +71,13 @@ public abstract class IRNode
         return getInstructionLoadOrStoreInstructionMoreEfficient("astore", registerNumber);
     }
 
-    protected String getInstructionToLoadGlobalArrayToStack(Type type, String name)
+    protected String getInstructionToLoadGlobalToStack(Type type, String name)
     {
         String varType = type == Type.INTEGER ? "I" : "[I";
         return "getstatic " + Yal2jvm.moduleName + "/" + name + " " + varType;
     }
 
-    protected String getInstructionToStoreGlobalArray(Type type, String name)
+    protected String getInstructionToStoreGlobal(Type type, String name)
     {
         String varType = type == Type.INTEGER ? "I" : "[I";
         return "putstatic " + Yal2jvm.moduleName + "/" + name + " " + varType;
@@ -150,7 +150,7 @@ public abstract class IRNode
 
     protected ArrayList<String> setGlobalArrayElementByIRNode(IRNode index, Type type, String name, IRNode value)
     {
-        String loadArrayRefInstruction = getInstructionToLoadGlobalArrayToStack(type, name);
+        String loadArrayRefInstruction = getInstructionToLoadGlobalToStack(type, name);
         return setArrayElement(index.getInstructions(), loadArrayRefInstruction, value);
     }
 

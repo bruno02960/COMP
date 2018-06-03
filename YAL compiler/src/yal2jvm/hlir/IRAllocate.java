@@ -158,10 +158,10 @@ public class IRAllocate extends IRNode
 		if (this.storeVarGlobal)
 		{
 		    String typeStr = type.name();
-            if(typeStr != null && global.getType() == Type.VARIABLE) // i = 5;
+            if(typeStr != null && (global.getType() == Type.VARIABLE || global.getType() == Type.INTEGER)) // i = 5;
             {
                 inst.addAll(rhs.getInstructions());
-                inst.add(getInstructionToStoreGlobalArray(type, name));
+                inst.add(getInstructionToStoreGlobal(type, name));
                 return inst;
             }
 
@@ -171,7 +171,7 @@ public class IRAllocate extends IRNode
             if(rhs.parent.getNodeType().equals("Allocate")) {
                 IRAllocate rhsParent = (IRAllocate) rhs.parent;
                 if(rhsParent.type == Type.ARRAYSIZE) {
-                    inst.add(getInstructionToStoreGlobalArray(type, name)); // i = [5];
+                    inst.add(getInstructionToStoreGlobal(type, name)); // i = [5];
                     type = Type.ARRAY;
                     return inst;
                 }
@@ -263,7 +263,7 @@ public class IRAllocate extends IRNode
             Type prevType = global.getType();
             if(prevType == Type.ARRAY && type == Type.INTEGER)
                 type = Type.ARRAY;
-            arrayRefJVMCode = getInstructionToLoadGlobalArrayToStack(type, name);
+            arrayRefJVMCode = getInstructionToLoadGlobalToStack(type, name);
         }
         else
             arrayRefJVMCode = getInstructionToLoadArrayFromRegisterToStack(reg);
