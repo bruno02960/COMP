@@ -96,16 +96,16 @@ public class Yal2jvm
         
         System.out.println("Initiating JVM code generation");
         HLIR hhir = new HLIR(ast);
-        /*if (this.optimize)
+        if (this.optimize)
             hhir.optimize();
-        hhir.dataflowAnalysis();
+       /* hhir.dataflowAnalysis();
         boolean allocated = hhir.allocateRegisters(this.localVars);
         if (!allocated)
         	System.exit(-6);*/
 
         ArrayList<String> instructions = hhir.selectInstructions();
         //----------------------
-        hhir.dataflowAnalysis();
+        //hhir.dataflowAnalysis();
         //----------------------
         String moduleName = hhir.getModuleName();
 

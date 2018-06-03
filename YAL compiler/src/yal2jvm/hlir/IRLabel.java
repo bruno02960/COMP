@@ -19,4 +19,10 @@ public class IRLabel extends IRNode
 		inst.add(label + ":");
 		return inst;
 	}
+
+	public String getLabel()
+	{
+		return label;
+	}
+
 }

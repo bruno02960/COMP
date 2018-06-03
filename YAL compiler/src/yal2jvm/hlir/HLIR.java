@@ -14,7 +14,7 @@ public class HLIR
     private IRModule root;
     private SimpleNode ast;
 	private HashMap<String, IntGraph> intGraphs;
-	private boolean optimize;
+	public static boolean optimize;
 
     public HLIR(SimpleNode ast)
     {
