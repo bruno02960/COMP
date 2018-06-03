@@ -207,6 +207,7 @@ public class IRAllocate extends IRNode
                 inst.add(getInstructionToStoreIntInRegister(this.register));
 
                 //this is done after getInstructions of rhs, because loadConstant is set there
+                //this puts in the hashmap the new value of the variable name or replace it
                 if(rhs instanceof IRConstant)
                     method.addToConstVarNameToConstValue(name, (IRConstant) rhs);
                 else

@@ -2,6 +2,7 @@ package yal2jvm.hlir;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 public class IRMethod extends IRNode
@@ -11,11 +12,13 @@ public class IRMethod extends IRNode
     {
         instructionToStackCountValue.put("getstatic", 1);
         instructionToStackCountValue.put("iload", 1);
+        instructionToStackCountValue.put("aconst", 1);
         instructionToStackCountValue.put("iconst", 1);
         instructionToStackCountValue.put("dup", 1);
         instructionToStackCountValue.put("aload", 1);
         instructionToStackCountValue.put("ldc", 1);
         instructionToStackCountValue.put("bipush", 1);
+        instructionToStackCountValue.put("sipush", 1);
         instructionToStackCountValue.put("istore", -1);
         instructionToStackCountValue.put("iaload", -1);
         instructionToStackCountValue.put("pop", -1);
@@ -47,6 +50,7 @@ public class IRMethod extends IRNode
     private String returnVar;
     private Variable[] args;
     private HashMap<String, IRConstant> constVarNameToConstValue = new HashMap<>();
+    private ArrayList<HashMap<String, IRConstant>> listConstVarNameToConstValueWhileOrIfInitState = new ArrayList<>();
 
     private int labelN = 0;
     private int regN = 0;
@@ -148,6 +152,8 @@ public class IRMethod extends IRNode
                 i++;
                 numChilds = getChildren().size();
             }
+            if(HLIR.optimize && node instanceof IRLabel)
+                handleWhileOrIfConstantPropagationOptimization((IRLabel) node);
         }
 
 
@@ -168,6 +174,44 @@ public class IRMethod extends IRNode
 
         inst.addAll(childsInstructions);
         return inst;
+    }
+
+    private void handleWhileOrIfConstantPropagationOptimization(IRLabel irLabel)
+    {
+        String label = irLabel.getLabel();
+        if(label.contains("while_init") || (label.contains("if_end") && irLabel.getInstructions().get(0).endsWith(":") == false)
+                || label.contains("if_false")) //init label, while_init ou if_... if_false ou if_... if_end ou if_falseN:
+        {
+            //store curr for the end
+            listConstVarNameToConstValueWhileOrIfInitState.add(new HashMap<>(constVarNameToConstValue));
+
+            //set curr as the previous if existent, if more than one if or while stacked
+            if(listConstVarNameToConstValueWhileOrIfInitState.size() > 1)
+            {
+                constVarNameToConstValue = listConstVarNameToConstValueWhileOrIfInitState.get(
+                        listConstVarNameToConstValueWhileOrIfInitState.size() - 1);
+            }
+        }
+        else if(label.contains("_end"))//end label
+        {
+            //remove list entry
+            HashMap<String, IRConstant> oldHashMap = listConstVarNameToConstValueWhileOrIfInitState.remove(
+                    listConstVarNameToConstValueWhileOrIfInitState.size() - 1);
+
+            //remove constant altered on the way
+            Iterator it = oldHashMap.entrySet().iterator();
+            while (it.hasNext())
+            {
+                Map.Entry pair = (Map.Entry)it.next();
+                String key = (String) pair.getKey();
+                String value = ((IRConstant) pair.getValue()).getValue();
+                if(constVarNameToConstValue.get(key).getValue().equals(value) == false)
+                    it.remove();
+            }
+
+            //set the constVarNameToConstValue as the old except the defined in the interval
+            constVarNameToConstValue = oldHashMap;
+        }
     }
 
     public static int stackValueCount(ArrayList<String> inst)

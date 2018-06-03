@@ -84,19 +84,22 @@ public class IRLoad extends IRNode
             IRAllocate var = method.getVarDeclaredUntilThis(name, this);
 
             //if var is const at this moment, we can put just its value and not load it from register
-            IRConstant constValue = method.getConstValueByConstVarName(name);
-            if(constValue != null)
-            {
-                loadedConstantValue = constValue.getValue();
-                return constValue.getInstructions(); //constant instructions
-            }
+            ArrayList<String> constantInstructions = getConstantCodeIfConstant(method);
+            if(constantInstructions != null)
+                return constantInstructions;
 
             register = var.getRegister();
         }
         if (register > -1)
         {
             if(type == Type.INTEGER)
+            {
+                //if var is const at this moment, we can put just its value and not load it from register
+                ArrayList<String> constantInstructions = getConstantCodeIfConstant(method);
+                if(constantInstructions != null)
+                    return constantInstructions;
                 inst.add(getInstructionToLoadIntFromRegisterToStack(register));
+            }
             else
             {
                 inst.add(getInstructionToLoadArrayFromRegisterToStack(register));
@@ -113,12 +116,31 @@ public class IRLoad extends IRNode
         return inst;
     }
 
+    private ArrayList<String> getConstantCodeIfConstant(IRMethod method)
+    {
+        IRConstant constValue = method.getConstValueByConstVarName(name);
+        if(constValue != null)
+        {
+            loadedConstantValue = constValue.getValue();
+            return constValue.getInstructions(); //constant instructions
+        }
+
+        return null;
+    }
+
     private ArrayList<String> getGlobalVariableInstructions(IRMethod method)
     {
         ArrayList<String> inst = new ArrayList<>();
         inst.add(getGlobalVariableGetCodeByIRMethod(name, method));
         if(type == Type.INTEGER)
-            return inst;
+        {
+            //if var is const at this moment, we can put just its value and not load it
+            ArrayList<String> constantInstructions = getConstantCodeIfConstant(method);
+            if(constantInstructions != null)
+                return constantInstructions;
+            else
+                return inst;
+        }
         else
         {
             if(arraySizeAccess)

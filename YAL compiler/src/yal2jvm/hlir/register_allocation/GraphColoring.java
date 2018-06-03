@@ -1,3 +1,5 @@
+package yal2jvm.hlir.register_allocation;
+
 import java.util.*;
 import java.util.LinkedList;
 
