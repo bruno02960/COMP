@@ -93,21 +93,30 @@ public class IRArith extends IRNode {
 
     public String getStringValueIfBothConstant()
     {
+        IRMethod method = (IRMethod) findParent("Method");
         String lhsValue;
         if(lhs instanceof IRConstant)
             lhsValue = ((IRConstant)lhs).getValue();
-        else if(((IRLoad)lhs).getLoadedConstantValue() != null)
-            lhsValue = ((IRLoad)lhs).getLoadedConstantValue();
+        else if(method.getConstValueByConstVarName(((IRLoad)lhs).getName()) != null)
+            lhsValue = method.getConstValueByConstVarName(((IRLoad)lhs).getName()).getValue();
         else
             return null;
+
+        //TODO
+        // else if(((IRLoad)lhs).getLoadedConstantValue() != null)
+        //            lhsValue = ((IRLoad)lhs).getLoadedConstantValue();
 
         String rhsValue;
         if(rhs instanceof IRConstant)
             rhsValue = ((IRConstant)rhs).getValue();
-        else if(((IRLoad)rhs).getLoadedConstantValue() != null)
-            rhsValue = ((IRLoad)rhs).getLoadedConstantValue();
+        else if(method.getConstValueByConstVarName(((IRLoad)rhs).getName()) != null)
+            rhsValue = method.getConstValueByConstVarName(((IRLoad)rhs).getName()).getValue();
         else
             return null;
+
+        //TODO
+        //  else if(((IRLoad)rhs).getLoadedConstantValue() != null)
+        //            rhsValue = ((IRLoad)rhs).getLoadedConstantValue();
 
         return String.valueOf(Utils.getOperationValue(lhsValue, rhsValue, op.getSymbol()));
     }
