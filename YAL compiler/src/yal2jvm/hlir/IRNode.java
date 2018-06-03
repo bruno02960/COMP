@@ -10,6 +10,13 @@ public abstract class IRNode
     protected ArrayList<IRNode> children;
     protected String nodeType;
 
+    public IRNode(IRNode irNode)
+    {
+        this.children = new ArrayList<>(irNode.getChildren());
+        this.parent = irNode.parent;
+        this.nodeType = new String(irNode.getNodeType());
+    }
+
     public IRNode()
     {
         children = new ArrayList<>();

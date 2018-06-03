@@ -21,8 +21,10 @@ public abstract class IRStore extends IRNode
         {
             IRAllocate var = ((IRMethod) parent).getVarDeclaredUntilThis(name, this);
             if (var != null)
+            {
                 register = var.getRegister();
-            addVariableToConstIfAppropriated(value, method);
+                addVariableToConstIfAppropriated(value, method);
+            }
         }
 
         //code for check global
