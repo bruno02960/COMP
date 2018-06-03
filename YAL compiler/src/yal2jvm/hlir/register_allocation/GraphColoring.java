@@ -1,105 +1,143 @@
 package yal2jvm.hlir.register_allocation;
 
-import java.util.*;
-import java.util.LinkedList;
+import yal2jvm.hlir.liveness_analysis.IntGraph;
+import yal2jvm.hlir.liveness_analysis.IntNode;
 
-// This class represents an undirected graph using adjacency list
-// This code is contributed by Aakash Hasija
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
+
 class GraphColoring
 {
-    private int V;   // No. of vertices
-    private LinkedList<Integer> adj[]; //Adjacency List
+    private IntGraph graph;
+    private int numRegisters;
+    private List<Integer> registers;
+    private Stack<IntNode> nodesToColorStack = new Stack<>();
+    private HashMap<String, Integer> varNameToRegisterNumber = new HashMap<>();
 
-    //Constructor
-    public GraphColoring(int v)
+    public GraphColoring(IntGraph graph, int numRegisters)
     {
-        V = v;
-        adj = new LinkedList[v];
-        for (int i=0; i<v; ++i)
-            adj[i] = new LinkedList();
+        this.graph = graph;
+        this.numRegisters = numRegisters;
+        this.registers = IntStream.rangeClosed(0, numRegisters - 1).boxed().collect(Collectors.toList());
     }
 
-    //Function to add an edge into the graph
-    void addEdge(int v,int w)
+    public void setNumRegisters(int numRegisters)
     {
-        adj[v].add(w);
-        adj[w].add(v); //Graph is undirected
+        this.numRegisters = numRegisters;
+        this.registers = IntStream.rangeClosed(0, numRegisters - 1).boxed().collect(Collectors.toList());
     }
 
-    // Assigns colors (starting from 0) to all vertices and
-    // prints the assignment of colors
-    void greedyColoring()
+    public HashMap<String, Integer> getVarNameToRegisterNumber()
     {
-        int result[] = new int[V];
+        return varNameToRegisterNumber;
+    }
 
-        // Initialize all vertices as unassigned
-        Arrays.fill(result, -1);
-
-        // Assign the first color to first vertex
-        result[0]  = 0;
-
-        // A temporary array to store the available colors. False
-        // value of available[cr] would mean that the color cr is
-        // assigned to one of its adjacent vertices
-        boolean available[] = new boolean[V];
-
-        // Initially, all colors are available
-        Arrays.fill(available, true);
-
-        // Assign colors to remaining V-1 vertices
-        for (int u = 1; u < V; u++)
+    private boolean buildStackOfNodesToColor()
+    {
+        ArrayList<IntNode> listNodesOriginalGraph = graph.getNodes();
+        IntGraph graphCopy = new IntGraph(graph);
+        ArrayList<IntNode> listNodesGraphCopy = graphCopy.getNodes();
+        for(int i = 0; i < listNodesGraphCopy.size(); i++)
         {
-            // Process all adjacent vertices and flag their colors
-            // as unavailable
-            Iterator<Integer> it = adj[u].iterator() ;
-            while (it.hasNext())
+            IntNode node = listNodesGraphCopy.get(i);
+            if(node.indegree() < numRegisters)
             {
-                int i = it.next();
-                if (result[i] != -1)
-                    available[result[i]] = false;
+                nodesToColorStack.push(listNodesOriginalGraph.get(listNodesOriginalGraph.indexOf(node)));
+                graphCopy.removeNode(node);
+                i = -1;
             }
-
-            // Find the first available color
-            int cr;
-            for (cr = 0; cr < V; cr++){
-                if (available[cr])
-                    break;
-            }
-
-            result[u] = cr; // Assign the found color
-
-            // Reset the values back to true for the next iteration
-            Arrays.fill(available, true);
         }
 
-        // print the result
-        for (int u = 0; u < V; u++)
-            System.out.println("Vertex " + u + " --->  Color "
-                    + result[u]);
+        return listNodesGraphCopy.size() == 0;
     }
 
-    // Driver method
+    private boolean colorGraph()
+    {
+        if(buildStackOfNodesToColor() == false)
+            return false;
+
+        while (nodesToColorStack.empty() == false)
+        {
+            IntNode node = nodesToColorStack.pop();
+
+            ArrayList<Integer> usedRegisters = new ArrayList<>();
+            ArrayList<IntNode> nodeInterferences = node.getInterferences();
+            for(IntNode interference : nodeInterferences)
+            {
+                Integer registerNumber = varNameToRegisterNumber.get(interference.getName());
+                if(registerNumber != null)
+                    usedRegisters.add(registerNumber);
+            }
+
+            Integer register = findFirstUnusedRegister(usedRegisters);
+            if(register == null)
+            {
+                System.out.println("Internal error coloring graph - colorGraph of class GraphColoring.");
+                System.exit(-1);
+            }
+
+            varNameToRegisterNumber.put(node.getName(), register);
+        }
+
+        return true;
+    }
+
+    private Integer findFirstUnusedRegister(ArrayList<Integer> usedRegisters)
+    {
+        for(Integer register : registers)
+        {
+            if(usedRegisters.contains(register) == false)
+                return register;
+        }
+
+        return null;
+    }
+
     public static void main(String args[])
     {
-        GraphColoring g1 = new GraphColoring(5);
-        g1.addEdge(0, 1);
-        g1.addEdge(0, 2);
-        g1.addEdge(1, 2);
-        g1.addEdge(1, 3);
-        g1.addEdge(2, 3);
-        g1.addEdge(3, 4);
-        System.out.println("Coloring of graph 1");
-        g1.greedyColoring();
+        IntNode node1 = new IntNode("1");
+        IntNode node2 = new IntNode("2");
+        IntNode node3 = new IntNode("3");
+        IntNode node4 = new IntNode("4");
 
-        System.out.println();
-        GraphColoring g2 = new GraphColoring(5);
-        g2.addEdge(0, 1);
-        g2.addEdge(0, 2);
-        g2.addEdge(1, 2);
-        g2.addEdge(1, 4);
-        g2.addEdge(2, 4);
-        g2.addEdge(4, 3);
-        System.out.println("Coloring of graph 2 ");
-        g2.greedyColoring();
+        node1.addInterference(node2);
+        node1.addInterference(node3);
+        node1.addInterference(node4);
+
+        node3.addInterference(node4);
+
+        node2.addInterference(node4);
+
+        IntGraph graph = new IntGraph();
+        graph.addNode(node1);
+        graph.addNode(node2);
+        graph.addNode(node3);
+        graph.addNode(node4);
+
+        GraphColoring graphColoring = new GraphColoring(graph, 1);
+
+        graphColoring.colorGraph();
+        printHashMap(graphColoring.varNameToRegisterNumber);
+
+        graphColoring.setNumRegisters(3);
+        graphColoring.colorGraph();
+        printHashMap(graphColoring.varNameToRegisterNumber);
+
+        graphColoring.setNumRegisters(4);
+        graphColoring.colorGraph();
+        printHashMap(graphColoring.varNameToRegisterNumber);
+
+    }
+
+    private static void printHashMap(HashMap<String, Integer> hashMap)
+    {
+        Iterator it = hashMap.entrySet().iterator();
+        while (it.hasNext())
+        {
+            Map.Entry pair = (Map.Entry)it.next();
+            System.out.println(pair.getKey() + " = " + pair.getValue());
+        }
     }
 }
