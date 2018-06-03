@@ -16,6 +16,7 @@ public class IRMethod extends IRNode
         instructionToStackCountValue.put("aload", 1);
         instructionToStackCountValue.put("ldc", 1);
         instructionToStackCountValue.put("bipush", 1);
+        instructionToStackCountValue.put("sipush", 1);
         instructionToStackCountValue.put("istore", -1);
         instructionToStackCountValue.put("iaload", -1);
         instructionToStackCountValue.put("pop", -1);
