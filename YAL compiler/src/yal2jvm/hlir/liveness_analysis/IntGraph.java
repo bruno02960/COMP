@@ -42,4 +42,13 @@ public class IntGraph
 		this.nodes.add(node);
 		return node;
 	}
+	
+	@Override
+	public String toString()
+	{
+		String s = "";
+		for (int i = 0; i < this.nodes.size(); i++)
+			s += this.nodes.get(i).toString() + "\n";
+		return s;
+	}
 }

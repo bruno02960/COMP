@@ -30,18 +30,25 @@ public class MethodAnalyzer
 		method.buildAllLines();
 		method.calculateSets();
 		
-		
+		/*
 		ArrayList<Line> lines = method.getLines();
 		for (Line l : lines)
 			System.out.println(l);
-		System.out.println("");
+		System.out.println("");*/
 		
 	}
 
 	public IntGraph getGraph()
 	{
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<IntPair> interferences = method.getAllPairs();
+		
+		IntGraph graph = new IntGraph();
+		for (IntPair pair : interferences)
+			graph.addInterference(pair.getVar1(), pair.getVar2());
+		
+		System.out.println(graph.toString());
+		
+		return graph;
 	}
 
 }

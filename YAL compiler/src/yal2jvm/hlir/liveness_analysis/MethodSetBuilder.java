@@ -2,6 +2,7 @@ package yal2jvm.hlir.liveness_analysis;
 
 import java.util.ArrayList;
 import java.util.BitSet;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.TreeSet;
 
@@ -350,7 +351,6 @@ public class MethodSetBuilder extends Method
 			insOld = insNew;
 			outsOld = outsNew;
 		}
-		System.out.println("Did " + count + " iterations");
 	}
 
 	private boolean compareSetLists(ArrayList<BitSet> oldSet, ArrayList<BitSet> newSet)
@@ -427,5 +427,45 @@ public class MethodSetBuilder extends Method
 			if (def.get(i))
 				in.clear(i);
 		}
+	}
+
+	public ArrayList<IntPair> getAllPairs()
+	{
+		ArrayList<IntPair> pairs = new ArrayList<>();
+		
+		ArrayList<BitSet> ins = getAllInSets();
+		for (BitSet set : ins)
+			pairs.addAll(getInterferences(set));
+		
+		ArrayList<BitSet> outs = getAllOutSets();
+		for (BitSet set : outs)
+			pairs.addAll(getInterferences(set));
+
+		return pairs;
+	}
+
+	private ArrayList<IntPair> getInterferences(BitSet set)
+	{
+		ArrayList<String> varList = new ArrayList<>();
+		ArrayList<IntPair> pairs = new ArrayList<>();
+		
+		for (String var : this.varToBit.keySet())
+		{
+			int i = this.varToBit.get(var);
+			if (set.get(i))
+				varList.add(var);
+		}
+		if (varList.size() < 2)
+			return pairs;
+		
+		for (int i = 0; i < varList.size(); i++)
+		{
+			for (int j = 0; j < varList.size(); j++)
+			{
+				if (i != j)
+					pairs.add(new IntPair(varList.get(i), varList.get(j)));
+			}
+		}
+		return pairs;
 	}
 }
