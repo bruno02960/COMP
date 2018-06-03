@@ -45,8 +45,12 @@ public class HLIR
     public boolean allocateRegisters(int maxLocals)
     {
     	selectInstructions();
-        RegisterAllocator allocator = new RegisterAllocator(this.root, this.intGraphs);
-        return allocator.allocate();
+        RegisterAllocator allocator = new RegisterAllocator(this.intGraphs);
+        boolean allocateSuccessfully = allocator.allocate(maxLocals);
+
+        HashMap<String, HashMap<String, Integer>> allocatedRegisterByMethodName = allocator.getAllocatedRegisterByMethodName();
+
+        return allocateSuccessfully;
     }
 
     public ArrayList<String> selectInstructions()
