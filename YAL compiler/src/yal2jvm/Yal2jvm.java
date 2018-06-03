@@ -95,19 +95,16 @@ public class Yal2jvm
             System.exit(-3);
         
         System.out.println("Initiating JVM code generation");
-        HLIR hhir = new HLIR(ast);
+        HLIR hlir = new HLIR(ast);
         if (this.optimize)
-            hhir.optimize();
-       /* hhir.dataflowAnalysis();
-        boolean allocated = hhir.allocateRegisters(this.localVars);
+            hlir.optimize();
+        hlir.dataflowAnalysis();
+        boolean allocated = hlir.allocateRegisters(this.localVars);
         if (!allocated)
-        	System.exit(-6);*/
+        	System.exit(-6);
 
-        ArrayList<String> instructions = hhir.selectInstructions();
-        //----------------------
-        hhir.dataflowAnalysis();
-        //----------------------
-        String moduleName = hhir.getModuleName();
+        ArrayList<String> instructions = hlir.selectInstructions();
+        String moduleName = hlir.getModuleName();
 
         System.out.println("JVM code generation completed");
         saveToJasminFile(instructions, moduleName);

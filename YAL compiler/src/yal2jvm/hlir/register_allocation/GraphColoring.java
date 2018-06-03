@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 
-class GraphColoring
+public class  GraphColoring
 {
     private IntGraph graph;
     private int numRegisters;
@@ -53,7 +53,7 @@ class GraphColoring
         return listNodesGraphCopy.size() == 0;
     }
 
-    private boolean colorGraph()
+    public boolean colorGraph()
     {
         if(buildStackOfNodesToColor() == false)
             return false;
