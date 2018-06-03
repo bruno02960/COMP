@@ -28,10 +28,10 @@ public class MethodAnalyzer
 		//System.out.println(allVars);
 		
 		method.buildAllLines();
-		//ArrayList<Line> lines = method.getLines();
-		//for (Line l : lines)
-		//	System.out.println(l);
-		//System.out.println("");
+		ArrayList<Line> lines = method.getLines();
+		for (Line l : lines)
+			System.out.println(l);
+		System.out.println("");
 		method.calculateSets();
 	}
 

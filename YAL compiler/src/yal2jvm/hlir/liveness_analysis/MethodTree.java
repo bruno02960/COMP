@@ -8,6 +8,8 @@ import yal2jvm.hlir.IRAllocate;
 import yal2jvm.hlir.IRArith;
 import yal2jvm.hlir.IRCall;
 import yal2jvm.hlir.IRComparison;
+import yal2jvm.hlir.IRJump;
+import yal2jvm.hlir.IRLabel;
 import yal2jvm.hlir.IRLoad;
 import yal2jvm.hlir.IRMethod;
 import yal2jvm.hlir.IRModule;
@@ -134,9 +136,60 @@ public class MethodTree extends Method
 				case "Call":
 					buildLineCall((IRCall)n, line);
 					break;
+				case "Label":
+					buildLineLabel((IRLabel)n, line);
+					break;
+				case "Jump":
+					buildLineJump((IRJump)n, line);
+					break;
 			}
 			this.lines.add(line);
 		}
+		setSuccessors();
+	}
+
+	private void setSuccessors()
+	{
+		for (int i = 0; i < this.lines.size() - 1; i++)
+		{
+			Line currLine = this.lines.get(i);
+			
+			if (!currLine.getJumpLabel().equals(""))
+			{
+				currLine.addSuccessor(this.lines.get(i + 1));
+				Line dest = findLabelLine(currLine.getJumpLabel());
+				currLine.addSuccessor(dest);
+			}
+			else if (currLine.isJump())
+			{
+				Line dest = findLabelLine(currLine.getJumpLabel());
+				currLine.addSuccessor(dest);
+			}
+			else
+			{
+				currLine.addSuccessor(this.lines.get(i + 1));
+			}
+		}
+	}
+
+	private Line findLabelLine(String label)
+	{
+		for (Line line : this.lines)
+		{
+			if (line.getLabel().equals(label))
+				return line;
+		}
+		return null;
+	}
+
+	private void buildLineJump(IRJump node, Line line)
+	{
+		line.setJump(true);
+	}
+
+	private void buildLineLabel(IRLabel node, Line line)
+	{
+		line.addLabel(node.getLabel());
 	}
 
 	private void buildLineCall(IRCall node, Line line)
@@ -151,6 +204,8 @@ public class MethodTree extends Method
 
 	private void buildLineComparison(IRComparison node, Line line)
 	{
+		line.setJumpLabel(node.getLabel());
+		
 		if (node.getRhs().getNodeType().equals("Load"))
 		{
 			IRLoad load = (IRLoad)node.getRhs();

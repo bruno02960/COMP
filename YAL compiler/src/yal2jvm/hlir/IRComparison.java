@@ -216,4 +216,14 @@ public class IRComparison extends IRNode
 		this.lhs = lhs;
 		this.lhs.setParent(this);
 	}
+
+	public String getLabel()
+	{
+		return label;
+	}
+
+	public void setLabel(String label)
+	{
+		this.label = label;
+	}
 }

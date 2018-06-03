@@ -13,6 +13,9 @@ public class Line
 	private BitSet in;
 	private BitSet out;
 	private ArrayList<Line> successors;
+	private String label = "";
+	private String jumpLabel = "";
+	private boolean isJump = false;
 
 	public Line(int id, HashMap<String, Integer> varToBit)
 	{
@@ -33,9 +36,22 @@ public class Line
 		s += "DEF: [" + stringifySet(this.def) + "] ";
 		s += "IN:  [" + stringifySet(this.in) + "] ";
 		s += "OUT: [" + stringifySet(this.out) + "] ";
+		s += "SUCC: [" + getSuccString() + "]";
 		return s;
 	}
 	
+	private String getSuccString()
+	{
+		String s = "";
+		for (Line line : this.successors)
+		{
+			s += line.getId() + ", ";
+		}
+		if (s.length() > 0)
+			s = s.substring(0, s.length() - 2);
+		return s;
+	}
+
 	private String stringifySet(BitSet set)
 	{
 		String s = "";
@@ -72,8 +88,38 @@ public class Line
 		this.id = id;
 	}
 	
+	public void addLabel(String label)
+	{
+		this.label = label;
+	}
+	
+	public String getLabel()
+	{
+		return this.label;
+	}
+	
 	public void addSuccessor(Line line)
 	{
 		this.successors.add(line);
+	}
+
+	public void setJump(boolean b)
+	{
+		this.isJump  = b;
+	}
+
+	public String getJumpLabel()
+	{
+		return jumpLabel;
+	}
+
+	public void setJumpLabel(String jumpLabel)
+	{
+		this.jumpLabel = jumpLabel;
+	}
+
+	public boolean isJump()
+	{
+		return this.isJump;
 	}
 }

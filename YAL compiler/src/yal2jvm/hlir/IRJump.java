@@ -19,4 +19,14 @@ public class IRJump extends IRNode
 		inst.add("goto " + label);
 		return inst;
 	}
+
+	public String getLabel()
+	{
+		return label;
+	}
+
+	public void setLabel(String label)
+	{
+		this.label = label;
+	}
 }
