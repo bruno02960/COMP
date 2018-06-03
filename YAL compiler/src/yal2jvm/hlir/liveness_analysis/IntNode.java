@@ -1,12 +1,13 @@
 package yal2jvm.hlir.liveness_analysis;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class IntNode
+public class IntNode implements Serializable
 {
 	private String name;
-	ArrayList<IntNode> interferences;
-	
+	private ArrayList<IntNode> interferences;
+
 	public IntNode(String name)
 	{
 		this.name = name;
@@ -20,11 +21,16 @@ public class IntNode
 		if (this.interferences.indexOf(node) == -1)
 			this.interferences.add(node);
 	}
-	
+
+	public void removeInterference(IntNode node)
+	{
+		this.interferences.remove(node);
+	}
+
 	@Override
 	public boolean equals(Object o)
 	{
-		return this.name == ((IntNode)o).getName();
+		return this.name.equals(((IntNode)o).getName());
 	}
 
 	public String getName()
@@ -36,7 +42,12 @@ public class IntNode
 	{
 		this.name = name;
 	}
-	
+
+	public ArrayList<IntNode> getInterferences()
+	{
+		return interferences;
+	}
+
 	public int indegree()
 	{
 		return this.interferences.size();

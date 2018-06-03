@@ -8,15 +8,26 @@ import yal2jvm.utils.Utils;
 
 import java.util.HashMap;
 
+/**
+ *
+ */
 public class WhileAnalysis extends Analysis
 {
-
+    /**
+     *
+     * @param ast
+     * @param inheritedSymbols
+     * @param functionNameToFunctionSymbolOfModule
+     */
     public WhileAnalysis(SimpleNode ast, HashMap<String, Symbol> inheritedSymbols,
             HashMap<String, Symbol> functionNameToFunctionSymbolOfModule)
     {
         super(ast, inheritedSymbols, functionNameToFunctionSymbolOfModule);
     }
 
+    /**
+     *
+     */
     @Override
     public void parse()
     {

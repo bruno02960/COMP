@@ -1,10 +1,41 @@
 package yal2jvm.hlir.liveness_analysis;
 
+import java.io.*;
 import java.util.ArrayList;
 
-public class IntGraph
+public class IntGraph implements Serializable
 {
 	private ArrayList<IntNode> nodes;
+
+	public IntGraph(IntGraph graph)
+	{
+        try
+        {
+            FileOutputStream fos = new FileOutputStream("tempdata.ser");
+            ObjectOutputStream oos = new ObjectOutputStream(fos);
+            oos.writeObject(graph);
+            oos.close();
+        }
+        catch (Exception ex)
+        {
+            System.out.println("Exception thrown during test: " + ex.toString());
+        }
+
+        try
+        {
+            FileInputStream fis = new FileInputStream("tempdata.ser");
+            ObjectInputStream ois = new ObjectInputStream(fis);
+            IntGraph graphRead = (IntGraph) ois.readObject();
+            nodes = graphRead.getNodes();
+            ois.close();
+
+            new File("tempdata.ser").delete();
+        }
+        catch (Exception ex)
+        {
+            System.out.println("Exception thrown during test: " + ex.toString());
+        }
+	}
 	
 	public IntGraph()
 	{
@@ -18,6 +49,29 @@ public class IntGraph
 		
 		n1.addInterference(n2);
 		n2.addInterference(n1);
+	}
+
+	public void addNode(IntNode node)
+	{
+		ArrayList<IntNode> graphNodeInterferences = node.getInterferences();
+		for(IntNode graphNodeToInterference : graphNodeInterferences)
+		{
+			graphNodeToInterference.addInterference(node);
+		}
+
+		nodes.add(node);
+	}
+
+	public void removeNode(IntNode node)
+	{
+		int nodeIndex = nodes.indexOf(node);
+		IntNode graphNodeToRemove = nodes.remove(nodeIndex);
+
+		ArrayList<IntNode> graphNodeToRemoveInterferences = graphNodeToRemove.getInterferences();
+		for(IntNode graphNodeToRemoveInterference : graphNodeToRemoveInterferences)
+		{
+			graphNodeToRemoveInterference.removeInterference(graphNodeToRemove);
+		}
 	}
 	
 	public void addVariable(String var)
@@ -42,7 +96,12 @@ public class IntGraph
 		this.nodes.add(node);
 		return node;
 	}
-	
+
+	public ArrayList<IntNode> getNodes()
+	{
+		return nodes;
+	}
+
 	@Override
 	public String toString()
 	{

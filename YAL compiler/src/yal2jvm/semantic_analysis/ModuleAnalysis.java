@@ -8,16 +8,26 @@ import yal2jvm.symbol_tables.VarSymbol;
 
 import java.util.*;
 
+/**
+ *
+ */
 public class ModuleAnalysis extends Analysis
 {
     public static boolean hasErrors;
 
+    /**
+     *
+     * @param ast
+     */
     public ModuleAnalysis(SimpleNode ast)
     {
         super(ast, null, new HashMap<>());
         Yal2jvm.moduleName = ((ASTMODULE) ast).name;
     }
 
+    /**
+     *
+     */
     public void parse()
     {
         initiateGlobalSymbolTable();
@@ -36,6 +46,9 @@ public class ModuleAnalysis extends Analysis
         }
     }
 
+    /**
+     *
+     */
     private void initiateGlobalSymbolTable()
     {
         int numChildren = ast.jjtGetNumChildren();
@@ -46,6 +59,9 @@ public class ModuleAnalysis extends Analysis
         }
     }
 
+    /**
+     *
+     */
     private void setGlobalVariablesAsInitialized()
     {
         for (HashMap.Entry<String, Symbol> o : mySymbols.entrySet())
@@ -56,6 +72,10 @@ public class ModuleAnalysis extends Analysis
         }
     }
 
+    /**
+     *
+     * @param child
+     */
     private void addSymbolToSymbolTable(SimpleNode child)
     {
         String type = child.toString();
@@ -81,6 +101,12 @@ public class ModuleAnalysis extends Analysis
         }
     }
 
+    /**
+     *
+     * @param astfunctionNode
+     * @param functionSymbol
+     * @return
+     */
     private boolean addFunctionToHashMap(ASTFUNCTION astfunctionNode, FunctionSymbol functionSymbol)
     {
         FunctionSymbol retValue = (FunctionSymbol) functionNameToFunctionSymbol.put(functionSymbol.getId(), functionSymbol);

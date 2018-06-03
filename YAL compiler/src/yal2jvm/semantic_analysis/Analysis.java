@@ -9,6 +9,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
+/**
+ *
+ */
 public abstract class Analysis
 {
 
@@ -17,6 +20,13 @@ public abstract class Analysis
     protected HashMap<String, Symbol> functionNameToFunctionSymbol;
     protected SimpleNode ast;
 
+    /**
+     * Constructor for the class analysis
+     *
+     * @param ast
+     * @param inheritedSymbols
+     * @param functionNameToFunctionSymbol
+     */
     protected Analysis(SimpleNode ast, HashMap<String, Symbol> inheritedSymbols,
             HashMap<String, Symbol> functionNameToFunctionSymbol)
     {
@@ -26,8 +36,16 @@ public abstract class Analysis
         this.functionNameToFunctionSymbol = functionNameToFunctionSymbol;
     }
 
+    /**
+     * Abstract function that will be used by the analysis classes
+     * that extend this class
+     */
     protected abstract void parse();
 
+    /**
+     *
+     * @return
+     */
     protected HashMap<String, Symbol> getUnifiedSymbolTable()
     {
         HashMap<String, Symbol> unifiedSymbolTable = new HashMap<>();
@@ -39,6 +57,11 @@ public abstract class Analysis
         return unifiedSymbolTable;
     }
 
+    /**
+     *
+     * @param symbolId
+     * @return
+     */
     private Symbol hasAccessToSymbol(String symbolId)
     {
         Symbol symbol = null;
@@ -55,6 +78,11 @@ public abstract class Analysis
         return symbol;
     }
 
+    /**
+     *
+     * @param lhsTree
+     * @return
+     */
     private VarSymbol parseLhs(SimpleNode lhsTree)
     {
         Node child = lhsTree.jjtGetChild(0);
@@ -69,6 +97,11 @@ public abstract class Analysis
         return null;
     }
 
+    /**
+     *
+     * @param rhsTree
+     * @return
+     */
     private VarSymbol parseRhs(SimpleNode rhsTree)
     {
         Node firstChild = rhsTree.jjtGetChild(0);
@@ -117,6 +150,11 @@ public abstract class Analysis
         return symbol;
     }
 
+    /**
+     *
+     * @param arraySizeTree
+     * @return
+     */
     private VarSymbol parseArraySize(ASTARRAYSIZE arraySizeTree)
     {
         if (arraySizeTree.integer != null)
@@ -129,6 +167,11 @@ public abstract class Analysis
         }
     }
 
+    /**
+     *
+     * @param termTree
+     * @return
+     */
     private VarSymbol parseTerm(ASTTERM termTree)
     {
         if (termTree.integer != null)
@@ -158,6 +201,11 @@ public abstract class Analysis
         return null;
     }
 
+    /**
+     *
+     * @param callTree
+     * @return
+     */
     private VarSymbol parseCall(ASTCALL callTree)
     {
         String module = callTree.module;
@@ -233,6 +281,11 @@ public abstract class Analysis
         return returnSymbol;
     }
 
+    /**
+     *
+     * @param astarguments
+     * @return
+     */
     private ArrayList<String> parseArgumentList(ASTARGUMENTS astarguments)
     {
         Integer childrenLength = astarguments.jjtGetNumChildren();
@@ -274,6 +327,11 @@ public abstract class Analysis
         return argumentsTypes;
     }
 
+    /**
+     *
+     * @param arrayAccessTree
+     * @return
+     */
     private VarSymbol parseArrayAccess(ASTARRAYACCESS arrayAccessTree)
     {
         String arrayId = arrayAccessTree.arrayID;
@@ -312,6 +370,12 @@ public abstract class Analysis
         return arraySymbol;
     }
 
+    /**
+     *
+     * @param ast
+     * @param symbolId
+     * @return
+     */
     private Symbol checkSymbolExistsAndIsInitialized(SimpleNode ast, String symbolId)
     {
         VarSymbol indexSymbol = (VarSymbol) hasAccessToSymbol(symbolId);
@@ -332,6 +396,11 @@ public abstract class Analysis
         return indexSymbol;
     }
 
+    /**
+     *
+     * @param scalarAccessTree
+     * @return
+     */
     private VarSymbol parseScalarAccess(ASTSCALARACCESS scalarAccessTree)
     {
         String id = scalarAccessTree.id;
@@ -371,6 +440,11 @@ public abstract class Analysis
         return varSymbol;
     }
 
+    /**
+     *
+     * @param declarationTree
+     * @return
+     */
     protected VarSymbol parseDeclaration(ASTDECLARATION declarationTree)
     {
         Node child = declarationTree.jjtGetChild(0);
@@ -388,6 +462,12 @@ public abstract class Analysis
         return null;
     }
 
+    /**
+     *
+     * @param declarationTree
+     * @param astscalarelement
+     * @return
+     */
     private VarSymbol parseDeclarationAstScalarElement(ASTDECLARATION declarationTree, ASTSCALARELEMENT astscalarelement)
     {
         VarSymbol symbol = (VarSymbol) hasAccessToSymbol(astscalarelement.id);
@@ -402,6 +482,12 @@ public abstract class Analysis
         return varSymbol;
     }
 
+    /**
+     *
+     * @param declarationTree
+     * @param astscalarelement
+     * @return
+     */
     private VarSymbol createSymbolForDeclarationAstScalarElement(ASTDECLARATION declarationTree, ASTSCALARELEMENT astscalarelement)
     {
         boolean initialized = false;
@@ -430,6 +516,12 @@ public abstract class Analysis
         return varSymbol;
     }
 
+    /**
+     *
+     * @param declarationTree
+     * @param astarrayelement
+     * @return
+     */
     private VarSymbol parseDeclarationAstArrayElement(ASTDECLARATION declarationTree, ASTARRAYELEMENT astarrayelement)
     {
         VarSymbol symbol = (VarSymbol) hasAccessToSymbol(astarrayelement.id);
@@ -444,6 +536,12 @@ public abstract class Analysis
         return varSymbol;
     }
 
+    /**
+     *
+     * @param declarationTree
+     * @param astarrayelement
+     * @return
+     */
     private VarSymbol createSymbolForDeclarationAstArrayElement(ASTDECLARATION declarationTree, ASTARRAYELEMENT astarrayelement)
     {
         boolean initialized;
@@ -479,6 +577,12 @@ public abstract class Analysis
         return new VarSymbol(astarrayelement.id, SymbolType.ARRAY.toString(), initialized);
     }
 
+    /**
+     *
+     * @param declarationTree
+     * @param symbol
+     * @return
+     */
     private VarSymbol parseDeclarationSymbol(ASTDECLARATION declarationTree, VarSymbol symbol)
     {
         //if it has already been declared and its not just a initialization
@@ -513,6 +617,11 @@ public abstract class Analysis
         return symbol;
     }
 
+    /**
+     *
+     * @param assignTree
+     * @return
+     */
     private boolean parseAssign(ASTASSIGN assignTree)
     {
         VarSymbol rhsSymbol = null;
@@ -597,6 +706,11 @@ public abstract class Analysis
         return addToSymbolTable(lhsSymbol);
     }
 
+    /**
+     *
+     * @param lhsSymbol
+     * @return
+     */
     private boolean addToSymbolTable(VarSymbol lhsSymbol)
     {
         if ((inheritedSymbols.get(lhsSymbol.getId()) == null) && (mySymbols.get(lhsSymbol.getId()) == null))
@@ -608,6 +722,11 @@ public abstract class Analysis
         return false;
     }
 
+    /**
+     *
+     * @param lhsTree
+     * @return
+     */
     private VarSymbol getLhsVariable(SimpleNode lhsTree)
     {
         VarSymbol symbol = null;
@@ -650,6 +769,11 @@ public abstract class Analysis
         return symbol;
     }
 
+    /**
+     *
+     * @param astIndex
+     * @return
+     */
     private boolean parseIndex(ASTINDEX astIndex)
     {
         String indexSymbolId = astIndex.indexID;
@@ -662,6 +786,11 @@ public abstract class Analysis
         return true;
     }
 
+    /**
+     *
+     * @param astExprtest
+     * @return
+     */
     protected boolean parseExprTest(ASTEXPRTEST astExprtest)
     {
         ASTLHS astLhs = (ASTLHS) astExprtest.jjtGetChild(0);
@@ -699,6 +828,10 @@ public abstract class Analysis
         return true;
     }
 
+    /**
+     *
+     * @param astStatements
+     */
     protected void parseStmtLst(ASTSTATEMENTS astStatements)
     {
         int statementsNumChilds = astStatements.jjtGetNumChildren();
@@ -731,6 +864,11 @@ public abstract class Analysis
         }
     }
 
+    /**
+     *
+     * @param symbols
+     * @return
+     */
     protected HashMap<String, Symbol> setAllSymbolsAsNotInitialized(HashMap<String, Symbol> symbols)
     {
         HashMap<String, Symbol> symbolsNotInitialized = new HashMap<>();

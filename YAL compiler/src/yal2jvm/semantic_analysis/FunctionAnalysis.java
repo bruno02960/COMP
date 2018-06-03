@@ -8,15 +8,28 @@ import yal2jvm.symbol_tables.VarSymbol;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+
+/**
+ *
+ */
 public class FunctionAnalysis extends Analysis
 {
 
+    /**
+     *
+     * @param ast
+     * @param inheritedSymbols
+     * @param functionNameToFunctionSymbolOfModule
+     */
     FunctionAnalysis(SimpleNode ast, HashMap<String, Symbol> inheritedSymbols,
             HashMap<String, Symbol> functionNameToFunctionSymbolOfModule)
     {
         super(ast, inheritedSymbols, functionNameToFunctionSymbolOfModule);
     }
 
+    /**
+     *
+     */
     @Override
     protected void parse()
     {
@@ -42,6 +55,10 @@ public class FunctionAnalysis extends Analysis
         }
     }
 
+    /**
+     *
+     * @param astFunction
+     */
     private void addArgumentsToMySymbols(FunctionSymbol astFunction)
     {
         ArrayList<VarSymbol> arguments = astFunction.getArguments();
@@ -49,6 +66,10 @@ public class FunctionAnalysis extends Analysis
             mySymbols.put(argument.getId(), argument);
     }
 
+    /**
+     *
+     * @param astFunction
+     */
     private void addReturnValueToMySymbols(FunctionSymbol astFunction)
     {
         VarSymbol returnValue = astFunction.getReturnValue();
