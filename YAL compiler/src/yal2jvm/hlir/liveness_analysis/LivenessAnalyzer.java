@@ -26,7 +26,7 @@ public class LivenessAnalyzer
 			if (n.getNodeType().equals("Method"))
 			{
 				IRMethod method = (IRMethod)n;
-				MethodTree met = new MethodTree(method);
+				MethodSetBuilder met = new MethodSetBuilder(method);
 				MethodAnalyzer analyzer = new MethodAnalyzer(met);
 				this.intGraphs.put(method.getName(), analyzer.getGraph());
 			}

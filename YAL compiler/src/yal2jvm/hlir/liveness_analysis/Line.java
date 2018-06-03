@@ -122,4 +122,54 @@ public class Line
 	{
 		return this.isJump;
 	}
+
+	public ArrayList<Line> getSuccessors()
+	{
+		return successors;
+	}
+
+	public void setSuccessors(ArrayList<Line> successors)
+	{
+		this.successors = successors;
+	}
+
+	public BitSet getUse()
+	{
+		return use;
+	}
+
+	public void setUse(BitSet use)
+	{
+		this.use = use;
+	}
+
+	public BitSet getDef()
+	{
+		return def;
+	}
+
+	public void setDef(BitSet def)
+	{
+		this.def = def;
+	}
+
+	public BitSet getIn()
+	{
+		return in;
+	}
+
+	public void setIn(BitSet in)
+	{
+		this.in = in;
+	}
+
+	public BitSet getOut()
+	{
+		return out;
+	}
+
+	public void setOut(BitSet out)
+	{
+		this.out = out;
+	}
 }

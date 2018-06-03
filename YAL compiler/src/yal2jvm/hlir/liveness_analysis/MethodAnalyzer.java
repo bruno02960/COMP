@@ -8,10 +8,10 @@ public class MethodAnalyzer
 {
 	private ArrayList<Line> lines;
 	private HashMap<Integer, String> vars;
-	private MethodTree method;
+	private MethodSetBuilder method;
 	private String methodName;
 	
-	public MethodAnalyzer(MethodTree method)
+	public MethodAnalyzer(MethodSetBuilder method)
 	{
 		this.method = method;
 		this.methodName = method.getName();
@@ -28,11 +28,14 @@ public class MethodAnalyzer
 		//System.out.println(allVars);
 		
 		method.buildAllLines();
+		method.calculateSets();
+		
+		
 		ArrayList<Line> lines = method.getLines();
 		for (Line l : lines)
 			System.out.println(l);
 		System.out.println("");
-		method.calculateSets();
+		
 	}
 
 	public IntGraph getGraph()

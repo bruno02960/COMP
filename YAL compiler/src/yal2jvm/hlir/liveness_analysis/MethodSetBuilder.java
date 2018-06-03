@@ -1,6 +1,7 @@
 package yal2jvm.hlir.liveness_analysis;
 
 import java.util.ArrayList;
+import java.util.BitSet;
 import java.util.HashMap;
 import java.util.TreeSet;
 
@@ -20,7 +21,7 @@ import yal2jvm.hlir.IRStoreCall;
 import yal2jvm.hlir.Variable;
 import yal2jvm.utils.Utils;
 
-public class MethodTree extends Method
+public class MethodSetBuilder extends Method
 {
 	private IRMethod node;
 	private HashMap<String, Integer> varToBit;
@@ -29,7 +30,7 @@ public class MethodTree extends Method
 	private int lineCount = 0;
 	private Line currBranching = null;
 
-	public MethodTree(IRMethod method)
+	public MethodSetBuilder(IRMethod method)
 	{
 		this.node = method;
 		this.lines = new ArrayList<>();
@@ -325,7 +326,106 @@ public class MethodTree extends Method
 
 	public void calculateSets()
 	{
-		// TODO Auto-generated method stub
+		ArrayList<BitSet> insOld;
+		ArrayList<BitSet> outsOld;
 		
+		int count = 1;
+		
+		doIteration();
+		
+		insOld = getAllInSets();
+		outsOld = getAllOutSets();
+		
+		boolean isEqual = false;
+		
+		while (!isEqual)
+		{
+			doIteration();
+			count++;
+			ArrayList<BitSet> insNew = getAllInSets();
+			ArrayList<BitSet> outsNew = getAllOutSets();
+			
+			isEqual = compareSetLists(insOld, insNew) && compareSetLists(outsOld, outsNew);
+			
+			insOld = insNew;
+			outsOld = outsNew;
+		}
+		System.out.println("Did " + count + " iterations");
+	}
+
+	private boolean compareSetLists(ArrayList<BitSet> oldSet, ArrayList<BitSet> newSet)
+	{
+		for (int i = 0; i < oldSet.size(); i++)
+		{
+			if (!oldSet.get(i).equals(newSet.get(i)))
+				return false;
+		}
+		return true;
+	}
+
+	private ArrayList<BitSet> getAllOutSets()
+	{
+		ArrayList<BitSet> sets = new ArrayList<>();
+		
+		for (int i = 0; i < this.lines.size(); i++)
+			sets.add((BitSet)this.lines.get(i).getOut().clone());
+		return sets;
+	}
+
+	private ArrayList<BitSet> getAllInSets()
+	{
+		ArrayList<BitSet> sets = new ArrayList<>();
+		
+		for (int i = 0; i < this.lines.size(); i++)
+			sets.add((BitSet)this.lines.get(i).getIn().clone());
+		return sets;
+	}
+
+	private void doIteration()
+	{
+		for (int i = this.lines.size() - 1; i > -1; i--)
+		{
+			Line line = this.lines.get(i);
+			
+			BitSet out = calculateOut(line);
+			line.setOut(out);
+			
+			BitSet in = calculateIn(line);
+			
+			line.setIn(in);
+		}
+	}
+	
+	private BitSet calculateOut(Line line)
+	{
+		BitSet out = new BitSet(varToBit.size());
+		
+		for (int i = 0; i < line.getSuccessors().size(); i++)
+			out.or(line.getSuccessors().get(i).getIn());
+		
+		return out;
+	}
+	
+	private BitSet calculateIn(Line line)
+	{
+		BitSet out = line.getOut();
+		BitSet def = line.getDef();
+		BitSet use = line.getUse();
+		BitSet in = new BitSet(varToBit.size());
+		
+		in.or(out);
+		difference(in, def);
+		in.or(use);
+		
+		return in;
+	}
+
+	private void difference(BitSet in, BitSet def)
+	{
+		for (int i = 0; i < in.size(); i++)
+		{
+			if (def.get(i))
+				in.clear(i);
+		}
 	}
 }
