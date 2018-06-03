@@ -240,37 +240,44 @@ public class HLIR
         /* using template:
 
                     <do the test>
-                    boper …, lab_true
-                    <false_body>
-                    jump lab_end
-            lab_true:
+                    boper …, lab_false
                     <true_body>
+                    jump lab_end
+            lab_false:
+                    <false_body>
             lab_end:
 
          */
 
-        String labelTrue = "true_" + irmethod.getName() + root.getAndIncrementCurrLabelNumber();
-        createExprTestHHIR(astIf, irmethod, labelTrue, false);
+        int labelNumber = root.getAndIncrementCurrLabelNumber();
 
-        //false body
+        //test
+        String labelFalse = "if_false" + labelNumber;
+        String labelEnd = "if_end" + labelNumber;
         if(astIf.jjtGetNumChildren() > 2)
-        {
-            ASTELSE astElse = (ASTELSE) astIf.jjtGetChild(2);
-            ASTSTATEMENTS astElseStatements = (ASTSTATEMENTS) astElse.jjtGetChild(0);
-            createStatementsHHIR(astElseStatements, irmethod);
-        }
-
-        //jump end
-        String labelEnd = "if_" + irmethod.getName() + "_end" + root.getAndIncrementCurrLabelNumber();
-        createJumpEndHHIR(irmethod, labelEnd);
-
-        //label true
-        IRLabel irLabelTrue = new IRLabel(labelTrue);
-        irmethod.addChild(irLabelTrue);
+            createExprTestHHIR(astIf, irmethod, labelFalse, true);
+        else
+            createExprTestHHIR(astIf, irmethod, labelEnd, true);
 
         //true body
         ASTSTATEMENTS astIfStatements = (ASTSTATEMENTS) astIf.jjtGetChild(1);
         createStatementsHHIR(astIfStatements, irmethod);
+
+        // if 2 childs, so else exists
+        if(astIf.jjtGetNumChildren() > 2)
+        {
+            //jump end
+            createJumpEndHHIR(irmethod, labelEnd);
+
+            //label false
+            IRLabel irLabelFalse = new IRLabel(labelFalse);
+            irmethod.addChild(irLabelFalse);
+
+            //false body
+            ASTELSE astElse = (ASTELSE) astIf.jjtGetChild(2);
+            ASTSTATEMENTS astElseStatements = (ASTSTATEMENTS) astElse.jjtGetChild(0);
+            createStatementsHHIR(astElseStatements, irmethod);
+        }
 
         //label true
         IRLabel irLabelEnd = new IRLabel(labelEnd);
@@ -358,30 +365,34 @@ public class HLIR
     private void createWhileHHIR(ASTWHILE astWhile, IRMethod irmethod)
     {
         /* using template:
-
-            lab_init: <test>
+                      <test>
                       boper …, lab_end
+            lab_init:
                       <body>
-                      jump lab_init
+                      <test>
+                      boper …, lab_init
             lab_end:
          */
 
-        //label init
-        String labelInit = "while_" + irmethod.getName() + "_init" + root.getAndIncrementCurrLabelNumber();
-        IRLabel irLabelInit = new IRLabel(labelInit);
-        irmethod.addChild(irLabelInit);
+        int labelNumber = root.getAndIncrementCurrLabelNumber();
 
         //test
-        String labelEnd = "while_" + irmethod.getName() + "_end" + root.getAndIncrementCurrLabelNumber();
+        String labelEnd = "while_end" + labelNumber;
         createExprTestHHIR(astWhile, irmethod, labelEnd, true);
+
+        //label init
+        String labelInit = "while_init" + labelNumber;
+        IRLabel irLabelInit = new IRLabel(labelInit);
+        irmethod.addChild(irLabelInit);
 
         //body
         ASTSTATEMENTS astStatements = (ASTSTATEMENTS) astWhile.jjtGetChild(1);
         createStatementsHHIR(astStatements, irmethod);
 
-        //jump init
-        createJumpEndHHIR(irmethod, labelInit);
+        //test
+        createExprTestHHIR(astWhile, irmethod, labelInit, false);
 
+        //label end
         IRLabel irLabelEnd = new IRLabel(labelEnd);
         irmethod.addChild(irLabelEnd);
     }
