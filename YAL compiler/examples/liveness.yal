@@ -38,7 +38,7 @@ module liveness
 		a = 0;
 		while (a < 10)
 		{
-			ret = ret + 300;
+			ret = ret + 1;
 		}
 	}
 	

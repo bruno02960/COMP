@@ -2,7 +2,6 @@ package yal2jvm.hlir.liveness_analysis;
 
 import java.util.ArrayList;
 import java.util.BitSet;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.TreeSet;
 
@@ -22,23 +21,21 @@ import yal2jvm.hlir.IRStoreCall;
 import yal2jvm.hlir.Variable;
 import yal2jvm.utils.Utils;
 
-public class MethodSetBuilder extends Method
+public class MethodSetBuilder
 {
 	private IRMethod node;
 	private HashMap<String, Integer> varToBit;
 	private ArrayList<Line> lines;
 	private ArrayList<String> locals;
 	private int lineCount = 0;
-	private Line currBranching = null;
-
+	
 	public MethodSetBuilder(IRMethod method)
 	{
 		this.node = method;
 		this.lines = new ArrayList<>();
 		this.varToBit = new HashMap<>();
 	}
-	
-	@Override
+
 	public ArrayList<String> getAllVars()
 	{
 		IRModule module = (IRModule)this.node.findParent("Module");
@@ -104,15 +101,15 @@ public class MethodSetBuilder extends Method
 		return null;
 	}
 
-	@Override
 	public String getName()
 	{
 		return this.node.getName();
 	}
 
-	@Override
 	public void buildAllLines()
 	{
+		this.lines.add(createMethodArgumentsLine());
+		
 		for (IRNode n : this.node.getChildren())
 		{
 			Line line = new Line(this.lineCount, this.varToBit);
@@ -131,7 +128,7 @@ public class MethodSetBuilder extends Method
 					break;
 				case "Return":
 					buildLineReturn((IRReturn)n, line);
-					break;
+					break; 
 				case "Comparison":
 					buildLineComparison((IRComparison)n, line);
 					break;
@@ -148,6 +145,18 @@ public class MethodSetBuilder extends Method
 			this.lines.add(line);
 		}
 		setSuccessors();
+	}
+
+	private Line createMethodArgumentsLine()
+	{
+		Line line = new Line(this.lineCount, this.varToBit);
+		this.lineCount++;
+		
+		Variable[] args = this.node.getArgs();
+		for (Variable arg : args)
+			line.addDef(arg.getVar());
+		
+		return line;
 	}
 
 	private void setSuccessors()
@@ -329,9 +338,7 @@ public class MethodSetBuilder extends Method
 	{
 		ArrayList<BitSet> insOld;
 		ArrayList<BitSet> outsOld;
-		
-		int count = 1;
-		
+
 		doIteration();
 		
 		insOld = getAllInSets();
@@ -342,7 +349,7 @@ public class MethodSetBuilder extends Method
 		while (!isEqual)
 		{
 			doIteration();
-			count++;
+			
 			ArrayList<BitSet> insNew = getAllInSets();
 			ArrayList<BitSet> outsNew = getAllOutSets();
 			
