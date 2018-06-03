@@ -105,7 +105,7 @@ public class Yal2jvm
 
         ArrayList<String> instructions = hhir.selectInstructions();
         //----------------------
-        //hhir.dataflowAnalysis();
+        hhir.dataflowAnalysis();
         //----------------------
         String moduleName = hhir.getModuleName();
 
