@@ -9,15 +9,26 @@ import yal2jvm.utils.Utils;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/**
+ *
+ */
 public class IfAnalysis extends Analysis
 {
-
+    /**
+     *
+     * @param ast
+     * @param inheritedSymbols
+     * @param functionNameToFunctionSymbolOfModule
+     */
     public IfAnalysis(SimpleNode ast, HashMap<String, Symbol> inheritedSymbols,
             HashMap<String, Symbol> functionNameToFunctionSymbolOfModule)
     {
         super(ast, inheritedSymbols, functionNameToFunctionSymbolOfModule);
     }
 
+    /**
+     *
+     */
     @Override
     public void parse()
     {
@@ -75,6 +86,12 @@ public class IfAnalysis extends Analysis
         }
     }
 
+    /**
+     *
+     * @param symbols
+     * @param commonDeclaredSymbols
+     * @return
+     */
     private HashMap<String, Symbol> setListSymbolsAsInitializedAccordingToOtherList(HashMap<String, Symbol> symbols,
             ArrayList<Symbol> commonDeclaredSymbols)
     {
@@ -95,6 +112,12 @@ public class IfAnalysis extends Analysis
         return symbolsInitialized;
     }
 
+    /**
+     *
+     * @param mySymbolsStatesAfterIf
+     * @param mySymbolsStatesAfterElse
+     * @return
+     */
     private HashMap<String, Symbol> mergeDeclaredSymbols(ArrayList<Symbol> mySymbolsStatesAfterIf,
             ArrayList<Symbol> mySymbolsStatesAfterElse)
     {
@@ -115,6 +138,12 @@ public class IfAnalysis extends Analysis
         return mergedDeclaredSymbols;
     }
 
+    /**
+     *
+     * @param inheritedSymbolsStatesAfterIf
+     * @param inheritedSymbolsStatesAfterElse
+     * @return
+     */
     private ArrayList<Symbol> getCommonInitializedSymbols(ArrayList<Symbol> inheritedSymbolsStatesAfterIf,
             ArrayList<Symbol> inheritedSymbolsStatesAfterElse)
     {
@@ -131,6 +160,12 @@ public class IfAnalysis extends Analysis
         return commonInitializedSymbols;
     }
 
+    /**
+     *
+     * @param mySymbolsStatesAfterIf
+     * @param mySymbolsStatesAfterElse
+     * @return
+     */
     private ArrayList<Symbol> getCommonDeclaredSymbols(ArrayList<Symbol> mySymbolsStatesAfterIf,
             ArrayList<Symbol> mySymbolsStatesAfterElse)
     {
