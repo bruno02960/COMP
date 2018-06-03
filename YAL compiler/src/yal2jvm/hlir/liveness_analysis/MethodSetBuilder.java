@@ -39,11 +39,11 @@ public class MethodSetBuilder
 	public ArrayList<String> getAllVars()
 	{
 		IRModule module = (IRModule)this.node.findParent("Module");
-		var globals = module.getAllGlobals();
-		var locals = findLocals();
+		TreeSet<String> globals = module.getAllGlobals();
+		TreeSet<String> locals = findLocals();
 		locals.removeAll(globals);
-		var list = Utils.setToList(locals);
-		
+		ArrayList<String> list = Utils.setToList(locals);
+
 		for (int i = 0; i < list.size(); i++)
 			varToBit.put(list.get(i), i);
 		
@@ -53,7 +53,7 @@ public class MethodSetBuilder
 
 	private TreeSet<String> findLocals()
 	{
-		var locals = new TreeSet<String>();
+		TreeSet<String> locals = new TreeSet<String>();
 		
 		for (IRNode n : this.node.getChildren())
 		{
