@@ -6,6 +6,12 @@ public class IRConstant extends IRNode
 {
     private String value;
 
+    public IRConstant(IRConstant irConstant)
+    {
+        super(irConstant);
+        this.value = new String(irConstant.getValue());
+    }
+
     public IRConstant(String value)
     {
         this.value = value;
@@ -31,7 +37,7 @@ public class IRConstant extends IRNode
 
     public static String getLoadConstantInstruction(int value)
     {
-        if(value < 6 && value > -2) {
+        if(value <= 5 && value >= -1) {
             if(value == -1) {
                 return "iconst_m1";
             }
@@ -40,8 +46,8 @@ public class IRConstant extends IRNode
             }
         }
         else {
-            if (value < 32768 && value > -32769) {
-                if(value < 128 && value > -129 ) {
+            if (value <= 32767 && value >= -32768) {
+                if(value <= 127 && value >= -128 ) {
                     return "bipush " + value;
                 }
                 else {
@@ -63,4 +69,9 @@ public class IRConstant extends IRNode
 	{
 		this.value = value;
 	}
+
+    public Object clone()
+    {
+        return new IRConstant(this);
+    }
 }
