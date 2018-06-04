@@ -232,7 +232,11 @@ public class IRMethod extends IRNode
                 insideWhile = true;
         }
         else if(label.contains("_end") && irNode instanceof IRLabel)//end label
+        {
             removeEntryFromConstVarNameAndSetAsBefore();
+            if(label.contains("while_end"))
+                insideWhile = false;
+        }
 
     }
 
