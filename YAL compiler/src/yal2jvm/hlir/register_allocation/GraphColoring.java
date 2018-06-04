@@ -65,7 +65,7 @@ public class  GraphColoring
             int nodeRequiredRegister = node.getRequiredRegister();
             if(nodeRequiredRegister > lastRegisterNumber)
                 lastRegisterNumber = nodeRequiredRegister;
-            if(node.indegree() < numRegisters && lastRegisterNumber == -1) //indegree less than numRegisters and not parameter
+            if(node.indegree() < numRegisters && nodeRequiredRegister == -1) //indegree less than numRegisters and not parameter
             {
                 nodesToColorStack.push(listNodesOriginalGraph.get(listNodesOriginalGraph.indexOf(node)));
                 graphCopy.removeNode(node);
