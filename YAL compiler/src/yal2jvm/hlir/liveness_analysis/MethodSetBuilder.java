@@ -571,7 +571,7 @@ public class MethodSetBuilder
 		
 		for (int i = 0; i < out.size(); i++)
 		{
-			if (!def.get(i))
+			if (!def.get(i) && out.get(i))
 				diff.set(i);
 		}
 		return diff;
