@@ -1,7 +1,7 @@
 package yal2jvm.symbol_tables;
 
 /**
- *
+ * VarSymbol class that extends the class Symbol
  */
 public class VarSymbol extends Symbol
 {
@@ -10,10 +10,10 @@ public class VarSymbol extends Symbol
     private boolean initialized;
 
     /**
-     *
-     * @param id
-     * @param type
-     * @param initialized
+     * Constructor for the class VarSymbol
+     * @param id            id for the new object
+     * @param type          type of the new object
+     * @param initialized   sets the initialized field to true or false
      */
     public VarSymbol(String id, String type, boolean initialized)
     {
@@ -23,8 +23,8 @@ public class VarSymbol extends Symbol
     }
 
     /**
-     *
-     * @return
+     * Returns the value of the field type
+     * @return  value of field type
      */
     public String getType()
     {
@@ -32,8 +32,8 @@ public class VarSymbol extends Symbol
     }
 
     /**
-     *
-     * @param type
+     * Sets the field type to the parameter type's value
+     * @param type  new value for the field type
      */
     public void setType(String type)
     {
@@ -41,8 +41,8 @@ public class VarSymbol extends Symbol
     }
 
     /**
-     *
-     * @return
+     * Returns the value of the field initialized
+     * @return  boolean value of the field initialized
      */
     public boolean isInitialized()
     {
@@ -50,8 +50,8 @@ public class VarSymbol extends Symbol
     }
 
     /**
-     *
-     * @param initialized
+     * Sets the field initialized to the parameter initialized's value
+     * @param initialized   new value for field initialized
      */
     public void setInitialized(boolean initialized)
     {
@@ -59,8 +59,8 @@ public class VarSymbol extends Symbol
     }
 
     /**
-     *
-     * @return
+     * Hashes the id of this object
+     * @return the value of the hash
      */
     @Override
     public int hashCode()
@@ -69,9 +69,9 @@ public class VarSymbol extends Symbol
     }
 
     /**
-     *
-     * @param other
-     * @return
+     * Checks if this object is equal to the object in the parameter
+     * @param other the object that will be compared to this object
+     * @return      true if the objects have the same id. False if not.
      */
     @Override
     public boolean equals(Object other)
@@ -80,8 +80,8 @@ public class VarSymbol extends Symbol
     }
 
     /**
-     *
-     * @return
+     * Creates a copy of this object
+     * @return new VarSymbol object
      */
     public VarSymbol getCopy()
     {
@@ -89,8 +89,8 @@ public class VarSymbol extends Symbol
     }
 
     /**
-     *
-     * @return
+     * Uses the getCopy method
+     * @return  getCopy method
      */
     @Override
     protected Object clone()
