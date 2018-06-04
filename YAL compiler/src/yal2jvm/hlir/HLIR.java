@@ -2,6 +2,7 @@ package yal2jvm.hlir;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.TreeSet;
 
 import yal2jvm.ast.*;
 import yal2jvm.hlir.liveness_analysis.IntGraph;
@@ -109,11 +110,15 @@ public class HLIR
 			}
 		}
 		
+		TreeSet<Integer> uniqueRegs = new TreeSet<>();
+		
 		for (String key : methodVars.keySet())
 		{
 			System.out.println("Var " + key + " -> " + methodVars.get(key));
 			method.assignNewRegister(key, methodVars.get(key));
+			uniqueRegs.add(methodVars.get(key));
 		}
+		method.setRegisterCount(uniqueRegs.size() + 1);
 	}
 
     /**
