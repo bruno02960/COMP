@@ -198,6 +198,7 @@ public class IRAllocate extends IRNode
             if(method.getConstValueByConstVarName(rhsName) != null)
             {
                 rhs = new IRConstant(method.getConstValueByConstVarName(rhsName).getValue());
+                rhs.setParent(load.parent);
                 method.addToConstVarNameToConstValue(varName, (IRConstant) rhs);
             }
             else
