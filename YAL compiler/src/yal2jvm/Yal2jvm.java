@@ -96,8 +96,10 @@ public class Yal2jvm
         
         System.out.println("Initiating JVM code generation");
         HLIR hlir = new HLIR(ast);
+        
         if (this.optimize)
             hlir.optimize();
+
         hlir.dataflowAnalysis();
         boolean allocated = hlir.allocateRegisters(this.localVars);
         if (!allocated)

@@ -552,12 +552,19 @@ public class IRMethod extends IRNode
 
     /**
      *
-     * @param key
-     * @param integer
+     * @param var
+     * @param register
      */
-	public void assignNewRegister(String key, Integer integer)
+	public void assignNewRegister(String var, Integer register)
 	{
-		
-		
+		for (IRNode node : this.children)
+		{
+			if (node.getNodeType().equals("Allocate"))
+			{
+				IRAllocate alloc = (IRAllocate)node;
+				if (alloc.getName().equals(var))
+					alloc.setRegister(register);
+			}
+		}
 	}
 }
