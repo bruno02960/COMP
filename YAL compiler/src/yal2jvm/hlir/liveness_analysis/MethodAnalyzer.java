@@ -35,7 +35,7 @@ public class MethodAnalyzer
 		method.buildAllLines();
 		method.calculateSets();
 		
-		
+		//TODO remove
 		ArrayList<Line> lines = method.getLines();
 		for (Line l : lines)
 			System.out.println(l);

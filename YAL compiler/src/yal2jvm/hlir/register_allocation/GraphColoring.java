@@ -157,12 +157,8 @@ public class  GraphColoring
         graphColoring.colorGraph();
         printHashMap(graphColoring.varNameToRegisterNumber);
 
-    }*/
+    }
 
-    /**
-     *
-     * @param hashMap
-     */
     private static void printHashMap(HashMap<String, Integer> hashMap)
     {
         Iterator it = hashMap.entrySet().iterator();
@@ -171,5 +167,5 @@ public class  GraphColoring
             Map.Entry pair = (Map.Entry)it.next();
             System.out.println(pair.getKey() + " = " + pair.getValue());
         }
-    }
+    }*/
 }
