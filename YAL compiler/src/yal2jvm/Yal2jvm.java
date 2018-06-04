@@ -50,8 +50,12 @@ public class Yal2jvm
             keepJFile = true;
 
         String regexForNumberBetween0And255 = "\\b(1?[0-9]{1,2}|2[0-4][0-9]|25[0-5])\\b";
-        if(Utils.stringArrayMatches(args, "-r=" + regexForNumberBetween0And255) != -1)
-            localVars = Integer.parseInt(args[1].split("=")[1]);
+        int registersValueIndex = Utils.stringArrayMatches(args, "-r=" + regexForNumberBetween0And255);
+        if(registersValueIndex != -1)
+        {
+            String localVarsString = args[registersValueIndex].split("=")[1];
+            localVars = Integer.parseInt(localVarsString);
+        }
 
         String regexForFlag = "-r=" + regexForNumberBetween0And255 + "|-o|-S";
         int inputFileIndex;
