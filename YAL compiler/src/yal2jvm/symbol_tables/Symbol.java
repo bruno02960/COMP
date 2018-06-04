@@ -3,7 +3,7 @@ package yal2jvm.symbol_tables;
 import java.util.Objects;
 
 /**
- *
+ *  Symbol class that is extended by the other symbol classes
  */
 public class Symbol
 {
@@ -11,8 +11,8 @@ public class Symbol
     protected String id;
 
     /**
-     *
-     * @param id
+     * Constructor for class Symbol
+     * @param id    id for new object of class Symbol
      */
     public Symbol(String id)
     {
@@ -20,8 +20,8 @@ public class Symbol
     }
 
     /**
-     *
-     * @return
+     * Returns this object's id
+     * @return  object id
      */
     public String getId()
     {
@@ -29,8 +29,8 @@ public class Symbol
     }
 
     /**
-     *
-     * @param id
+     * Sets this object's id equal to the parameter
+     * @param id    new id for this object
      */
     public void setId(String id)
     {
@@ -38,9 +38,9 @@ public class Symbol
     }
 
     /**
-     *
-     * @param other
-     * @return
+     * Checks if this object is equal to the object in the parameter
+     * @param other the object that will be compared to this object
+     * @return      true if the objects have the same id. False if not.
      */
     @Override
     public boolean equals(Object other)
@@ -49,8 +49,8 @@ public class Symbol
     }
 
     /**
-     *
-     * @return
+     * Creates a copy of this object
+     * @return new Symbol object
      */
     public Symbol getCopy()
     {
@@ -58,8 +58,8 @@ public class Symbol
     }
 
     /**
-     *
-     * @return
+     * Hashes the id of this object
+     * @return the value of the hash
      */
     @Override
     public int hashCode()

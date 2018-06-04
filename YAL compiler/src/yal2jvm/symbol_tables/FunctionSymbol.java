@@ -6,7 +6,7 @@ import yal2jvm.semantic_analysis.ModuleAnalysis;
 import java.util.ArrayList;
 
 /**
- *
+ * FunctionSymbol class that extends the class Symbol
  */
 public class FunctionSymbol extends Symbol
 {
@@ -17,9 +17,9 @@ public class FunctionSymbol extends Symbol
     private int statementsChildNumber = 0;
 
     /**
-     *
-     * @param functionAST
-     * @param id
+     * Constructor for the class FunctionSymbol
+     * @param functionAST   tree containing the subtrees of function
+     * @param id            object id
      */
     public FunctionSymbol(SimpleNode functionAST, String id)
     {
@@ -29,8 +29,8 @@ public class FunctionSymbol extends Symbol
     }
 
     /**
-     *
-     * @return
+     * Returns the field functionAST
+     * @return  functionAST field value
      */
     public SimpleNode getFunctionAST()
     {
@@ -38,8 +38,8 @@ public class FunctionSymbol extends Symbol
     }
 
     /**
-     *
-     * @return
+     * Returns the field arguments
+     * @return  arguments field value
      */
     public ArrayList<VarSymbol> getArguments()
     {
@@ -47,8 +47,8 @@ public class FunctionSymbol extends Symbol
     }
 
     /**
-     *
-     * @return
+     * Returns the field returnValue
+     * @return  returnValue field value
      */
     public VarSymbol getReturnValue()
     {
@@ -56,8 +56,8 @@ public class FunctionSymbol extends Symbol
     }
 
     /**
-     *
-     * @return
+     * Returns the statementsChildNumber field
+     * @return  statementsChildNumber field value
      */
     public int getStatementsChildNumber()
     {
@@ -65,7 +65,7 @@ public class FunctionSymbol extends Symbol
     }
 
     /**
-     *
+     * Calls functions that process the arguments and return value of a function
      */
     public void parseFunctionHeader()
     {
@@ -94,8 +94,9 @@ public class FunctionSymbol extends Symbol
     }
 
     /**
-     *
-     * @param argumentsNode
+     * Processes all of the arguments of a function, calling the function that process scalar elements
+     * and array elements.
+     * @param argumentsNode node containing all of the function's arguments
      */
     private void parseArguments(SimpleNode argumentsNode)
     {
@@ -120,9 +121,9 @@ public class FunctionSymbol extends Symbol
     }
 
     /**
-     *
-     * @param child
-     * @param varSymbol
+     * Checks whether or not a function's argument already exists
+     * @param child     argument node child
+     * @param varSymbol argument being processed
      */
     private void checkArgumentAlreadyExists(SimpleNode child, VarSymbol varSymbol)
     {
