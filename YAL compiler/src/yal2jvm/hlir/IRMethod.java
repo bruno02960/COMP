@@ -65,6 +65,7 @@ public class IRMethod extends IRNode
     private int labelN = 0;
     private int regN = 0;
     private int varN = 0;
+	private int registerCount;
     /**
      *
      * @param name
@@ -195,7 +196,7 @@ public class IRMethod extends IRNode
         localsCount += this.args.length;
 
         localsCount = 255;
-        inst.add(".limit locals " + localsCount); //TODO ver o que contar aqui...a register allocaton vai dar isso
+        inst.add(".limit locals " + registerCount); //TODO ver o que contar aqui...a register allocaton vai dar isso
 
         int stackValue = stackValueCount(childsInstructions);
         inst.add(".limit stack " + stackValue);
@@ -612,5 +613,15 @@ public class IRMethod extends IRNode
 					alloc.setRegister(register);
 			}
 		}
+	}
+
+	public int getRegisterCount()
+	{
+		return registerCount;
+	}
+
+	public void setRegisterCount(int registerCount)
+	{
+		this.registerCount = registerCount;
 	}
 }

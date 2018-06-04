@@ -8,7 +8,7 @@
 
 
 .method public static f1(II)I
-.limit locals 255
+.limit locals 4
 .limit stack 2
 iconst_2
 istore_2
@@ -46,7 +46,7 @@ ireturn
 
 
 .method public static f2(I)V
-.limit locals 255
+.limit locals 2
 .limit stack 2
 iconst_1
 getstatic liveness/g3 I
@@ -57,7 +57,7 @@ return
 
 
 .method public static f3(II)I
-.limit locals 255
+.limit locals 3
 .limit stack 2
 iconst_0
 istore_0
@@ -88,7 +88,7 @@ ireturn
 
 
 .method public static f4(II)I
-.limit locals 255
+.limit locals 4
 .limit stack 2
 iload_0
 istore_2
@@ -116,7 +116,7 @@ ireturn
 
 
 .method public static f5(II)I
-.limit locals 255
+.limit locals 4
 .limit stack 2
 iload_1
 istore_2
@@ -140,7 +140,7 @@ ireturn
 
 
 .method public static main([Ljava/lang/String;)V
-.limit locals 255
+.limit locals 3
 .limit stack 5
 iconst_1
 iconst_2
