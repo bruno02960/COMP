@@ -538,6 +538,12 @@ public class IRMethod extends IRNode
      */
 	public Variable[] getArgs()
 	{
+		if (this.name.equals("main") && this.args.length == 0)
+		{
+			Variable[] ret = new Variable[1];
+			ret[0] = new Variable("mainArgs", Type.ARRAY);
+			return ret;
+		}
 		return args;
 	}
 

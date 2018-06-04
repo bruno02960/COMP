@@ -152,4 +152,16 @@ public class IntGraph implements Serializable
 			s += this.nodes.get(i).toString() + "\n";
 		return s;
 	}
+
+	public void setRequiredRegisters(ArrayList<String> args)
+	{
+		for (int i = 0; i < args.size(); i++)
+		{
+			for (IntNode node : this.nodes)
+			{
+				if (node.getName().equals(args.get(i)))
+					node.setRequiredRegister(i);
+			}
+		}
+	}
 }

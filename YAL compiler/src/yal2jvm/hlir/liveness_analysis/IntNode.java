@@ -10,6 +10,7 @@ public class IntNode implements Serializable
 {
 	private String name;
 	private ArrayList<IntNode> interferences;
+	private int requiredRegister = -1;
 
 	/**
 	 *
@@ -102,6 +103,26 @@ public class IntNode implements Serializable
 		if (this.interferences.size() > 0)
 			s = s.substring(0, s.length() - 2);
 		s += "]";
+		if (this.requiredRegister != -1)
+			s += " Required reg: " + this.requiredRegister;
 		return s;
+	}
+
+	/**
+	 * 
+	 * @return
+	 */
+	public int getRequiredRegister()
+	{
+		return requiredRegister;
+	}
+
+	/**
+	 * 
+	 * @param requiredRegister
+	 */
+	public void setRequiredRegister(int requiredRegister)
+	{
+		this.requiredRegister = requiredRegister;
 	}
 }

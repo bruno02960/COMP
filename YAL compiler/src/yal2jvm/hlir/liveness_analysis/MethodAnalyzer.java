@@ -18,7 +18,6 @@ public class MethodAnalyzer
 	{
 		this.method = method;
 		this.methodName = method.getName();
-		analyze();
 	}
 
 	/**
@@ -54,6 +53,13 @@ public class MethodAnalyzer
 		IntGraph graph = new IntGraph();
 		for (IntPair pair : interferences)
 			graph.addInterference(pair.getVar1(), pair.getVar2());
+		
+		ArrayList<String> locals = method.getLocals();
+		for (String local : locals)
+			graph.addVariable(local);
+			
+		ArrayList<String> args = method.getAllArgs();
+		graph.setRequiredRegisters(args);
 		
 		System.out.println(graph.toString());
 		

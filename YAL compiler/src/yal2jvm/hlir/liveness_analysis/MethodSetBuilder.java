@@ -611,4 +611,28 @@ public class MethodSetBuilder
 		}
 		return pairs;
 	}
+
+	/**
+	 * 
+	 * @return
+	 */
+	public ArrayList<String> getAllArgs()
+	{
+		ArrayList<String> args = new ArrayList<>();
+		Variable[] varArgs = this.node.getArgs();
+		
+		for (Variable arg : varArgs)
+			args.add(arg.getVar());
+		
+		return args;
+	}
+
+	/**
+	 * 
+	 * @return
+	 */
+	public ArrayList<String> getLocals()
+	{
+		return locals;
+	}
 }
