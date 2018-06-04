@@ -16,6 +16,7 @@ import yal2jvm.utils.Utils;
 public class Yal2jvm
 {
     private static final int MAX_LOCAL_VARS = 255;
+    public static boolean VERBOSE = false;
 
     public static String moduleName;
     private int localVars;
@@ -24,11 +25,12 @@ public class Yal2jvm
     private String inputFile;
     private SimpleNode ast;
 
-    public Yal2jvm(int localVars, boolean optimize, boolean keepJFile, String inputFile)
+    public Yal2jvm(int localVars, boolean optimize, boolean keepJFile, boolean verbose, String inputFile)
     {
         this.localVars = localVars;
         this.optimize = optimize;
         this.keepJFile = keepJFile;
+        Yal2jvm.VERBOSE = verbose;
         this.inputFile = inputFile;
     }
 
@@ -37,6 +39,7 @@ public class Yal2jvm
         String inputFile = null;
         boolean optimize = false;
         boolean keepJFile = false;
+        boolean verbose = false;
         int localVars = MAX_LOCAL_VARS;
         boolean validInput = true;
 
@@ -48,6 +51,9 @@ public class Yal2jvm
 
         if(Utils.stringArrayContains(args, "-S") != -1)
             keepJFile = true;
+        
+        if(Utils.stringArrayContains(args, "-v") != -1)
+            verbose = true;
 
         String regexForNumberBetween0And255 = "\\b(1?[0-9]{1,2}|2[0-4][0-9]|25[0-5])\\b";
         int registersValueIndex = Utils.stringArrayMatches(args, "-r=" + regexForNumberBetween0And255);
@@ -57,7 +63,7 @@ public class Yal2jvm
             localVars = Integer.parseInt(localVarsString);
         }
 
-        String regexForFlag = "-r=" + regexForNumberBetween0And255 + "|-o|-S";
+        String regexForFlag = "-r=" + regexForNumberBetween0And255 + "|-o|-S|-v";
         int inputFileIndex;
         if((inputFileIndex = Utils.stringArrayNotMatches(args, regexForFlag)) != -1)
             inputFile = args[inputFileIndex];
@@ -68,12 +74,17 @@ public class Yal2jvm
         if (!validInput || inputFile == null)
         {
             System.out.println("Insufficient or incorrect arguments for the Yal2jvm compiler");
-            System.out.println("\nUsage:\tjava Yal2jvm [-r=<0..255>] [-o] [-S] <input_file.yal>\n");
+            System.out.println("\nUsage:\tjava -jar Yal2jvm [-r=<0..255>] [-o] [-S] [-v] <input_file.yal>\n");
+            System.out.println("\t-r=<0..255>       number of JVM local vars per function (default 255)  (optional)");
+            System.out.println("\t-o                run three additional code optimizations              (optional)");
+            System.out.println("\t-S                keep the intermediate Jasmin file (.j) on the CWD    (optional)");
+            System.out.println("\t-v                allow verbose output of all compilation stages       (optional)");
+            System.out.println("\t<input_file>.yal  path to the .yal file to compile.                    (mandatory)");
             System.exit(-5);
         }
         else
         {
-            Yal2jvm instance = new Yal2jvm(localVars, optimize, keepJFile, inputFile);
+            Yal2jvm instance = new Yal2jvm(localVars, optimize, keepJFile, verbose, inputFile);
             instance.run();
         }
     }
@@ -82,23 +93,25 @@ public class Yal2jvm
     {
         FileInputStream inputStream = getFileStream();
 
-        System.out.println("Initiating syntatic analysis");
+        log("Initiating syntatic analysis");
         ast = createAst(inputStream);
-        System.out.println("Completed syntatic analysis");
+        
+        log("Completed syntatic analysis");
         if (ast == null)
             System.exit(-2);
-        System.out.println("Printing abstract syntatic tree");
-        ast.dump("");
+        
+        log("Printing abstract syntatic tree");
+        if (VERBOSE)
+        	ast.dump("");
 
-        System.out.println("Initiating semantic analysis");
+        log("Initiating semantic analysis");
         ModuleAnalysis moduleAnalysis = new ModuleAnalysis(ast);
         moduleAnalysis.parse();
-        System.out.println("Completed semantic analysis");
-
         if (ModuleAnalysis.hasErrors)
             System.exit(-3);
+        log("Completed semantic analysis");
         
-        System.out.println("Initiating JVM code generation");
+        log("Initiating JVM code generation");
         HLIR hlir = new HLIR(ast);
         
         if (this.optimize)
@@ -112,10 +125,10 @@ public class Yal2jvm
         ArrayList<String> instructions = hlir.selectInstructions();
         String moduleName = hlir.getModuleName();
 
-        System.out.println("JVM code generation completed");
+        log("JVM code generation completed");
         saveToJasminFile(instructions, moduleName);
         compileToBytecode(moduleName + ".j");
-        System.out.println("Bytecode generated");
+        log("Bytecode generated");
     }
 
     private FileInputStream getFileStream()
@@ -200,5 +213,11 @@ public class Yal2jvm
     public void setInputFile(String inputFile)
     {
         this.inputFile = inputFile;
+    }
+    
+    public static void log(String msg)
+    {
+    	if (Yal2jvm.VERBOSE)
+    		System.out.println(msg);
     }
 }

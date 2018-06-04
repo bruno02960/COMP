@@ -46,10 +46,10 @@ public class Line
 	public String toString()
 	{
 		String s = "Line " + this.id + " (" + this.type + ") -> "; 
-		//s += "USE: [" + stringifySet(this.use) + "] ";
-		//s += "DEF: [" + stringifySet(this.def) + "] ";
-		//s += "IN:  [" + stringifySet(this.in) + "] ";
-		//s += "OUT: [" + stringifySet(this.out) + "] ";
+		s += "USE: [" + stringifySet(this.use) + "] ";
+		s += "DEF: [" + stringifySet(this.def) + "] ";
+		s += "IN:  [" + stringifySet(this.in) + "] ";
+		s += "OUT: [" + stringifySet(this.out) + "] ";
 		s += "SUCC: [" + getSuccString() + "]";
 		return s;
 	}
