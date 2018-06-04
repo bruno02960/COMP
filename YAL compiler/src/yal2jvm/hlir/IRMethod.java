@@ -253,8 +253,9 @@ public class IRMethod extends IRNode
             Map.Entry pair = (Map.Entry)it.next();
             String key = (String) pair.getKey();
             String value = ((IRConstant) pair.getValue()).getValue();
-            if(constVarNameToConstValue.get(key).getValue().equals(value) == false)
-                it.remove();
+            if(constVarNameToConstValue.get(key) != null)
+                if(constVarNameToConstValue.get(key).getValue().equals(value) == false)
+                    it.remove();
         }
 
         //set the constVarNameToConstValue as the old except the defined in the interval
