@@ -94,7 +94,7 @@ public class  GraphColoring
                     usedRegisters.add(registerNumber);
             }
 
-            Integer register = findFirstUnusedRegister(usedRegisters);
+            Integer register = findFirstUnusedRegisterThatMatchesRequired(usedRegisters, node.getRequiredRegister());
             if(register == null)
             {
                 System.out.println("Internal error coloring graph - colorGraph of class GraphColoring.");
@@ -110,13 +110,14 @@ public class  GraphColoring
     /**
      *
      * @param usedRegisters
+     * @param requiredRegister
      * @return
      */
-    private Integer findFirstUnusedRegister(ArrayList<Integer> usedRegisters)
+    private Integer findFirstUnusedRegisterThatMatchesRequired(ArrayList<Integer> usedRegisters, int requiredRegister)
     {
         for(Integer register : registers)
         {
-            if(usedRegisters.contains(register) == false)
+            if(usedRegisters.contains(register) == false && (requiredRegister == -1 || register.intValue() == requiredRegister))
                 return register;
         }
 
