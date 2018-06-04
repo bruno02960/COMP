@@ -254,8 +254,12 @@ public class IRMethod extends IRNode
             String key = (String) pair.getKey();
             String value = ((IRConstant) pair.getValue()).getValue();
             if(constVarNameToConstValue.get(key) != null)
-                if(constVarNameToConstValue.get(key).getValue().equals(value) == false)
+            {
+                if(constVarNameToConstValue.get(key).getValue().equals(value) == false) //remove if exists yet but the value is diferent, altered inside if or while
                     it.remove();
+            }
+            else
+                it.remove(); //remove if the entry does not exist anymore, variable is now not constant
         }
 
         //set the constVarNameToConstValue as the old except the defined in the interval
