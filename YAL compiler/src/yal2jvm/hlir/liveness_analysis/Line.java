@@ -19,6 +19,8 @@ public class Line
 	private String label = "";
 	private String jumpLabel = "";
 	private boolean isJump = false;
+	private boolean hasSuccessor = true;
+	private String type;
 
 	/**
 	 *
@@ -43,11 +45,11 @@ public class Line
 	@Override
 	public String toString()
 	{
-		String s = "Line " + this.id + " ";
-		s += "USE: [" + stringifySet(this.use) + "] ";
-		s += "DEF: [" + stringifySet(this.def) + "] ";
-		s += "IN:  [" + stringifySet(this.in) + "] ";
-		s += "OUT: [" + stringifySet(this.out) + "] ";
+		String s = "Line " + this.id + " (" + this.type + ") -> "; 
+		//s += "USE: [" + stringifySet(this.use) + "] ";
+		//s += "DEF: [" + stringifySet(this.def) + "] ";
+		//s += "IN:  [" + stringifySet(this.in) + "] ";
+		//s += "OUT: [" + stringifySet(this.out) + "] ";
 		s += "SUCC: [" + getSuccString() + "]";
 		return s;
 	}
@@ -276,5 +278,25 @@ public class Line
 	public void setOut(BitSet out)
 	{
 		this.out = out;
+	}
+
+	public boolean hasSuccessor()
+	{
+		return this.hasSuccessor;
+	}
+
+	public void setHasSuccessor(boolean hasSuccessor)
+	{
+		this.hasSuccessor = hasSuccessor;
+	}
+
+	public String getType()
+	{
+		return type;
+	}
+
+	public void setType(String type)
+	{
+		this.type = type;
 	}
 }

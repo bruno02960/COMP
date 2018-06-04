@@ -39,7 +39,6 @@ public class MethodAnalyzer
 		for (Line l : lines)
 			System.out.println(l);
 		System.out.println("");
-		
 	}
 
 	/**

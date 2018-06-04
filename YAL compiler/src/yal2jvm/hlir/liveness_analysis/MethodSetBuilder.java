@@ -199,21 +199,18 @@ public class MethodSetBuilder
 		{
 			Line currLine = this.lines.get(i);
 			
-			if (!currLine.getJumpLabel().equals(""))
-			{
-				currLine.addSuccessor(this.lines.get(i + 1));
-				Line dest = findLabelLine(currLine.getJumpLabel());
-				currLine.addSuccessor(dest);
-			}
-			else if (currLine.isJump())
+			//line has a jump
+			if (currLine.isJump())
 			{
 				Line dest = findLabelLine(currLine.getJumpLabel());
 				currLine.addSuccessor(dest);
 			}
-			else
+			//line has a direct successor
+			if (currLine.hasSuccessor())
 			{
 				currLine.addSuccessor(this.lines.get(i + 1));
 			}
+			//it can have both a jump and a direct successor (like an if)
 		}
 	}
 
@@ -240,6 +237,9 @@ public class MethodSetBuilder
 	private void buildLineJump(IRJump node, Line line)
 	{
 		line.setJump(true);
+		line.setJumpLabel(node.getLabel());
+		line.setHasSuccessor(false);
+		line.setType("Jump");
 	}
 
 	/**
@@ -250,6 +250,7 @@ public class MethodSetBuilder
 	private void buildLineLabel(IRLabel node, Line line)
 	{
 		line.addLabel(node.getLabel());
+		line.setType("Label");
 	}
 
 	/**
@@ -265,6 +266,7 @@ public class MethodSetBuilder
 			if (isNotGlobal(arg.getVar()))
 				line.addUse(arg.getVar());
 		}
+		line.setType("Call");
 	}
 
 	/**
@@ -274,7 +276,9 @@ public class MethodSetBuilder
 	 */
 	private void buildLineComparison(IRComparison node, Line line)
 	{
+		line.setJump(true);
 		line.setJumpLabel(node.getLabel());
+		line.setType("Comp");
 		
 		if (node.getRhs().getNodeType().equals("Load"))
 		{
@@ -324,6 +328,7 @@ public class MethodSetBuilder
 		if (isNotGlobal(node.getName()))
 		{
 			line.addUse(node.getName());
+			line.setType("Return");
 		}
 	}
 
@@ -334,6 +339,7 @@ public class MethodSetBuilder
 	 */
 	private void buildLineStoreCall(IRStoreCall node, Line line)
 	{
+		line.setType("StoreCall");
 		if (isNotGlobal(node.getName()))
 		{
 			line.addDef(node.getName());
@@ -355,6 +361,7 @@ public class MethodSetBuilder
 	 */
 	private void buildLineStoreArith(IRStoreArith node, Line line)
 	{
+		line.setType("StoreArith");
 		if (isNotGlobal(node.getName()))
 		{
 			line.addDef(node.getName());
@@ -384,6 +391,7 @@ public class MethodSetBuilder
 	 */
 	private void buildLineAllocate(IRAllocate node, Line line)
 	{
+		line.setType("Allocate");
 		if (isNotGlobal(node.getName()))
 		{
 			line.addDef(node.getName());
@@ -525,7 +533,9 @@ public class MethodSetBuilder
 		BitSet out = new BitSet(varToBit.size());
 		
 		for (int i = 0; i < line.getSuccessors().size(); i++)
+		{
 			out.or(line.getSuccessors().get(i).getIn());
+		}
 		
 		return out;
 	}
@@ -539,12 +549,13 @@ public class MethodSetBuilder
 	{
 		BitSet out = line.getOut();
 		BitSet def = line.getDef();
-		BitSet use = line.getUse();
+		BitSet use = line.getUse();	
+		BitSet diff = difference(out, def);
+		
 		BitSet in = new BitSet(varToBit.size());
 		
-		in.or(out);
-		difference(in, def);
 		in.or(use);
+		in.or(diff);
 		
 		return in;
 	}
@@ -554,13 +565,16 @@ public class MethodSetBuilder
 	 * @param in
 	 * @param def
 	 */
-	private void difference(BitSet in, BitSet def)
+	private BitSet difference(BitSet out, BitSet def)
 	{
-		for (int i = 0; i < in.size(); i++)
+		BitSet diff = new BitSet(varToBit.size());
+		
+		for (int i = 0; i < out.size(); i++)
 		{
-			if (def.get(i))
-				in.clear(i);
+			if (!def.get(i))
+				diff.set(i);
 		}
+		return diff;
 	}
 
 	/**

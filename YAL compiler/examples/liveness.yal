@@ -21,7 +21,7 @@ module liveness
 	
 	function f2(arg1)
 	{
-		arg1 = 1 + 2;
+		arg1 = 1 + g3;
 	}
 	
 	function ret = f3(arg1, arg2)
@@ -40,6 +40,34 @@ module liveness
 		{
 			ret = ret + 1;
 		}
+	}
+	
+	function ret = f4(arg1, arg2)
+	{
+		a = arg1;
+		b = a;
+		while (arg2 > 10)
+		{
+			arg2 = a + 1;
+		}
+		ret = arg2 + arg1;
+	}
+	
+	function ret = f5(arg1, arg2)
+	{
+		a = arg2;
+		x = 123;
+		if (arg1 > arg2)
+		{
+			b = arg1;
+			arg1 = b + arg2; 
+		}/*
+		else
+		{
+			c = arg2;
+			arg2 = c + arg1;
+		}*/
+		ret = a;
 	}
 	
 	function main()

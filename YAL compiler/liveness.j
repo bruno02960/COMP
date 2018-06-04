@@ -11,36 +11,36 @@
 .limit locals 255
 .limit stack 2
 iconst_2
-istore_2
+istore_3
 iload_0
-istore_2
-iload_2
+istore_3
+iload_3
 iload_0
 iadd
-istore_2
-iload_2
+istore_3
+iload_3
 iload_1
 iadd
+istore_3
+iload_3
 istore_2
-iload_2
-istore_0
 getstatic liveness/g2 I
 putstatic liveness/g1 I
 getstatic liveness/g3 I
-istore_0
+istore_2
 getstatic liveness/g1 I
 getstatic liveness/g2 I
 iadd
-istore_0
-iload_0
+istore_2
+iload_2
 invokestatic liveness/f2(I)V
 iload_1
-iload_2
+iload_3
 invokestatic liveness/f3(II)I
 istore_0
-iload_0
-istore_0
-iload_0
+iload_2
+istore 4
+iload 4
 ireturn
 .end method
 
@@ -49,7 +49,7 @@ ireturn
 .limit locals 255
 .limit stack 2
 iconst_1
-iconst_2
+getstatic liveness/g3 I
 iadd
 istore_0
 return
@@ -60,29 +60,81 @@ return
 .limit locals 255
 .limit stack 2
 iconst_0
-istore_0
+istore_3
 iload_0
 iload_1
 if_icmple if_false1
 iload_0
-istore_0
+istore_3
 goto if_end1
 if_false1:
 iload_1
-istore_0
+istore_3
 if_end1:
 iconst_0
-istore_0
-iload_0
+istore_2
+iload_3
 bipush 10
 if_icmpge while_end2
 while_init2:
-iinc 0 1
-iload_0
+iinc 3 1
+iload_3
 bipush 10
 if_icmplt while_init2
 while_end2:
+iload_3
+ireturn
+.end method
+
+
+.method public static f4(II)I
+.limit locals 255
+.limit stack 2
 iload_0
+istore_3
+iload_3
+istore_2
+iload_1
+bipush 10
+if_icmple while_end3
+while_init3:
+iload_3
+iconst_1
+iadd
+istore_1
+iload_1
+bipush 10
+if_icmpgt while_init3
+while_end3:
+iload_1
+iload_0
+iadd
+istore_2
+iload_2
+ireturn
+.end method
+
+
+.method public static f5(II)I
+.limit locals 255
+.limit stack 2
+iload_1
+istore 4
+bipush 123
+istore_2
+iload_0
+iload_1
+if_icmple if_end4
+iload_0
+istore_3
+iload_3
+iload_1
+iadd
+istore_0
+if_end4:
+iload 4
+istore 5
+iload 5
 ireturn
 .end method
 
