@@ -174,7 +174,7 @@ public class IRMethod extends IRNode
                 i++;
                 numChilds = getChildren().size();
             }
-            if(HLIR.optimize && (node instanceof IRLabel || node instanceof IRComparison))
+            if(node instanceof IRLabel || node instanceof IRComparison)
                 handleWhileOrIfConstantPropagationOptimization(node);
         }
 
@@ -378,7 +378,7 @@ public class IRMethod extends IRNode
      */
     public IRConstant getConstValueByConstVarName(String constVarName)
     {
-        if(insideWhile)
+        if(insideWhile || HLIR.optimize == false)
             return null;
 
         return constVarNameToConstValue.get(constVarName);
