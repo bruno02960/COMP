@@ -344,7 +344,7 @@ public class IRAllocate extends IRNode
      *
      * @return
      */
-    private IRGlobal storeVarGlobal()
+    public IRGlobal storeVarGlobal()
 	{
 		IRModule module = (IRModule)findParent("Module");
 		return module.getGlobal(name);

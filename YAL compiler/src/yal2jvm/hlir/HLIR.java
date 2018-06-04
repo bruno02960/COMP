@@ -48,7 +48,7 @@ public class HLIR
      */
     public void optimize()
     {
-        this.optimize = true;
+        HLIR.optimize = true;
     }
 
     /**

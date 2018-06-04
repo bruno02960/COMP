@@ -7,14 +7,14 @@ import java.util.ArrayList;
  */
 public class MethodAnalyzer
 {
-	private MethodSetBuilder method;
+	private SetBuilder method;
 	private String methodName;
 
 	/**
 	 *
 	 * @param method
 	 */
-	public MethodAnalyzer(MethodSetBuilder method)
+	public MethodAnalyzer(SetBuilder method)
 	{
 		this.method = method;
 		this.methodName = method.getName();
