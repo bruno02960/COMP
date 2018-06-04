@@ -118,7 +118,7 @@ public class HLIR
 			method.assignNewRegister(key, methodVars.get(key));
 			uniqueRegs.add(methodVars.get(key));
 		}
-		method.setRegisterCount(uniqueRegs.size() + 1);
+		method.setRegisterCount(uniqueRegs.size());
 	}
 
     /**
