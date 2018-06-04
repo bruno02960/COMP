@@ -159,15 +159,26 @@ public class IRStoreArith extends IRStore
         String instruction = "iinc ";
 
         IRMethod method = (IRMethod) findParent("Method");
-        int register = method.getArgumentRegister(getName());
+        int register = method.getArgumentRegister(name);
         if (register == -1)
-            register = method.getVarRegister(getName());
+            register = method.getVarRegister(name);
         if (register == -1)
             return "";
 
-        instruction += register + " " + (irArith.getOp().equals(Operation.SUB)? "-" : "") + irConstant.getValue();
+        addNewValueOfVariableNameToConstsHashMap(method, irConstant.getValue());
 
+        instruction += register + " " + (irArith.getOp().equals(Operation.SUB)? "-" : "") + irConstant.getValue();
         return instruction;
+    }
+
+    private void addNewValueOfVariableNameToConstsHashMap(IRMethod method, String increment)
+    {
+        IRConstant previousValue = method.getConstValueByConstVarName(name);
+        if(previousValue == null)
+            return;
+
+        Integer newValue = Integer.parseInt(previousValue.getValue()) + Integer.parseInt(increment);
+        previousValue.setValue(newValue.toString());
     }
 
 }
