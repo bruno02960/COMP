@@ -183,16 +183,25 @@ public class IRAllocate extends IRNode
      */
     private void handleConstantRhsForConstantPropagationOptimisation()
     {
+        String varName = getVarNameForConstantName(name, lhsIndex);
         IRMethod method = (IRMethod) parent;
         if(rhs instanceof IRConstant)
         {
-            if(type != Type.ARRAY && type != Type.ARRAYSIZE)
-                method.addToConstVarNameToConstValue(name, (IRConstant) rhs); //TODO ver se nao dá porblema usar o mesmo rhs, secalhar copia pode ser mehor
+            ///TODO ver se nao dá porblema usar o mesmo rhs, secalhar copia pode ser mehor
+            if(type == Type.INTEGER || type == Type.ARRAY)
+                method.addToConstVarNameToConstValue(varName, (IRConstant) rhs);
         }
-        else if(method.getConstValueByConstVarName(((IRLoad)rhs).getName()) != null)
+        else
         {
-            rhs = new IRConstant(method.getConstValueByConstVarName(((IRLoad)rhs).getName()).getValue());
-            method.addToConstVarNameToConstValue(name, (IRConstant) rhs);
+            IRLoad load = (IRLoad)rhs;
+            String rhsName = getVarNameForConstantName(load.getName(), load.getIndex());
+            if(method.getConstValueByConstVarName(rhsName) != null)
+            {
+                rhs = new IRConstant(method.getConstValueByConstVarName(rhsName).getValue());
+                method.addToConstVarNameToConstValue(varName, (IRConstant) rhs);
+            }
+            else
+                method.removeFromConstVarNameToConstValue(varName);
         }
     }
 
@@ -256,13 +265,17 @@ public class IRAllocate extends IRNode
 
                 //this is done after getInstructions of rhs, because loadConstant is set there
                 //this puts in the hashmap the new value of the variable name or replace it
+                String varName = getVarNameForConstantName(name, lhsIndex);
+
                 if(rhs instanceof IRConstant)
-                    method.addToConstVarNameToConstValue(name, (IRConstant) rhs);
+                    method.addToConstVarNameToConstValue(varName, (IRConstant) rhs);
                 else
                 {
                     String value = ((IRLoad)rhs).getLoadedConstantValue();
                     if(value != null)
-                        method.addToConstVarNameToConstValue(name, new IRConstant(value));
+                        method.addToConstVarNameToConstValue(varName, new IRConstant(value));
+                    else
+                        method.removeFromConstVarNameToConstValue(varName);
                 }
 
                 return inst;
@@ -271,9 +284,11 @@ public class IRAllocate extends IRNode
             if(varType == null)
                 varType = rhs.getNodeType();
 
-            if(rhs.parent.getNodeType().equals("Allocate")) {
+            if(rhs.parent != null && rhs.parent.getNodeType().equals("Allocate"))
+            {
                 IRAllocate rhsParent = (IRAllocate) rhs.parent;
-                if(rhsParent.type == Type.ARRAYSIZE) {
+                if(rhsParent.type == Type.ARRAYSIZE)
+                {
                     inst.add(getInstructionToStoreArrayInRegister(this.register)); // i = [5];
                     type = Type.ARRAY;
                     return inst;

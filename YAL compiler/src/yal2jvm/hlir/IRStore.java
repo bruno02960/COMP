@@ -31,10 +31,7 @@ public abstract class IRStore extends IRNode
         {
             IRAllocate var = ((IRMethod) parent).getVarDeclaredUntilThis(name, this);
             if (var != null)
-            {
                 register = var.getRegister();
-                addVariableToConstIfAppropriated(value, method);
-            }
         }
 
         //code for check global
@@ -43,7 +40,10 @@ public abstract class IRStore extends IRNode
         {
             IRGlobal global = module.getGlobal(name);
             if (global != null)
+            {
+                addVariableToConstIfAppropriated(value, method);
                 return getInstForStoringGlobalVariable(index, value, module, global);
+            }
         }
 
 
@@ -53,10 +53,9 @@ public abstract class IRStore extends IRNode
             IRAllocate irAllocate = new IRAllocate(name, new Variable("0", Type.INTEGER));
             method.addNewChildAfterChild(this, irAllocate);
             register = irAllocate.getRegister();
-            addVariableToConstIfAppropriated(value, method);
         }
 
-
+        addVariableToConstIfAppropriated(value, method);
         return getInstForStoringLocalVariable(arrayAccess, index, value);
     }
 
@@ -71,7 +70,10 @@ public abstract class IRStore extends IRNode
         {
             String valueString = ((IRArith) value).getStringValueIfBothConstant();
             if(valueString != null)
-                method.addToConstVarNameToConstValue(name, new IRConstant(valueString));
+            {
+                String varName = getVarNameForConstantName(name, index);
+                method.addToConstVarNameToConstValue(varName, new IRConstant(valueString));
+            }
         }
     }
 
@@ -118,6 +120,7 @@ public abstract class IRStore extends IRNode
         else
         {
             //Type = Integer or type = Variable
+            inst.addAll(value.getInstructions());
             String instruction = "putstatic " + module.getName() + "/" + name + " I";
             inst.add(instruction);
         }

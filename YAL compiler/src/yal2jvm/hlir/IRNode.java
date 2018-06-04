@@ -360,4 +360,18 @@ public abstract class IRNode
 		this.nodeType = nodeType;
 	}
 
+    /**
+     *
+     * @param name
+     * @param index
+     */
+    public String getVarNameForConstantName(String name, IRNode index)
+    {
+        String varName = name; //not array access, so integer
+        if(index != null && index instanceof IRConstant) //array access then
+            varName = name + "-" + ((IRConstant)index).getValue();
+
+        return varName;
+    }
+
 }
