@@ -25,7 +25,8 @@ public class IntGraph implements Serializable
         }
         catch (Exception ex)
         {
-            System.out.println("Exception thrown during test: " + ex.toString());
+            System.out.println("Exception thrown during IntGraph copy: " + ex.toString());
+            System.exit(-1);
         }
 
         try
@@ -40,7 +41,8 @@ public class IntGraph implements Serializable
         }
         catch (Exception ex)
         {
-            System.out.println("Exception thrown during test: " + ex.toString());
+			System.out.println("Exception thrown during IntGraph copy: " + ex.toString());
+			System.exit(-1);
         }
 	}
 
