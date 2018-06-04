@@ -54,11 +54,11 @@ public class IRMethod extends IRNode
     private Variable[] args;
     private HashMap<String, IRConstant> constVarNameToConstValue = new HashMap<>();
     private ArrayList<HashMap<String, IRConstant>> listConstVarNameToConstValueWhileOrIfInitState = new ArrayList<>();
+    private boolean insideWhile = false;
 
     private int labelN = 0;
     private int regN = 0;
     private int varN = 0;
-
     /**
      *
      * @param name
@@ -227,6 +227,9 @@ public class IRMethod extends IRNode
                 constVarNameToConstValue = listConstVarNameToConstValueWhileOrIfInitState.get(
                         listConstVarNameToConstValueWhileOrIfInitState.size() - 1);
             }
+
+            if((label.contains("while_init") && irNode instanceof IRLabel))
+                insideWhile = true;
         }
         else if(label.contains("_end") && irNode instanceof IRLabel)//end label
             removeEntryFromConstVarNameAndSetAsBefore();
@@ -366,6 +369,9 @@ public class IRMethod extends IRNode
      */
     public IRConstant getConstValueByConstVarName(String constVarName)
     {
+        if(insideWhile)
+            return null;
+
         return constVarNameToConstValue.get(constVarName);
     }
 

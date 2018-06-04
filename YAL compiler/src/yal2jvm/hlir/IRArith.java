@@ -153,16 +153,16 @@ public class IRArith extends IRNode {
 
     private String getValueIfConstant(IRMethod method, IRNode node)
     {
-        String lhsValue;
         if(node instanceof IRConstant)
-            lhsValue = ((IRConstant)node).getValue();
+            return ((IRConstant)node).getValue();
         else
         {
             IRLoad load = (IRLoad)node;
             String varName = getVarNameForConstantName(load.getName(), load.getIndex());
-            lhsValue = method.getConstValueByConstVarName(varName).getValue();
+            IRConstant constant = method.getConstValueByConstVarName(varName);
+            if(constant == null)
+                return null;
+            return constant.getValue();
         }
-
-        return lhsValue;
     }
 }
