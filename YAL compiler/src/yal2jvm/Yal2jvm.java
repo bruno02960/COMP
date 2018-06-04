@@ -194,19 +194,12 @@ public class Yal2jvm
 
     private void compileToBytecode(String fileName)
     {
-        try
+    	Jasmin.main(new String[] {fileName});
+    	
+        if(!keepJFile)
         {
-            Runtime.getRuntime().exec("java -jar jasmin.jar " + fileName).waitFor();
-            if(!keepJFile)
-            {
-                File file = new File(fileName);
-                file.delete();
-            }
-        }
-        catch (IOException | InterruptedException e)
-        {
-            System.out.println("Unable to find or execute jasmin.jar");
-            System.exit(-1);
+            File file = new File(fileName);
+            file.delete();
         }
     }
 
