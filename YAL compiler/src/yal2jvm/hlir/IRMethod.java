@@ -174,8 +174,8 @@ public class IRMethod extends IRNode
                 i++;
                 numChilds = getChildren().size();
             }
-            if(HLIR.optimize && node instanceof IRLabel)
-                handleWhileOrIfConstantPropagationOptimization((IRLabel) node);
+            if(HLIR.optimize && (node instanceof IRLabel || node instanceof IRComparison))
+                handleWhileOrIfConstantPropagationOptimization(node);
         }
 
 
@@ -200,13 +200,23 @@ public class IRMethod extends IRNode
 
     /**
      *
-     * @param irLabel
+     * @param irNode
      */
-    private void handleWhileOrIfConstantPropagationOptimization(IRLabel irLabel)
+    private void handleWhileOrIfConstantPropagationOptimization(IRNode irNode)
     {
-        String label = irLabel.getLabel();
-        if(label.contains("while_init") || (label.contains("if_end") && irLabel.getInstructions().get(0).endsWith(":") == false)
-                || label.contains("if_false")) //init label, while_init ou if_... if_false ou if_... if_end ou if_falseN:
+        String label;
+        if(irNode instanceof IRLabel)
+            label = ((IRLabel)irNode).getLabel();
+        else
+            label = ((IRComparison)irNode).getLabel();
+
+        if(irNode instanceof IRLabel && label.contains("if_false")) // for cases when we have an init false body label that indicates the a previously true body was made and is changes need to be undone
+        {
+            removeEntryFromConstVarNameAndSetAsBefore();
+            listConstVarNameToConstValueWhileOrIfInitState.add(new HashMap<>(constVarNameToConstValue));
+        }
+        else if((label.contains("while_init") && irNode instanceof IRLabel) ||
+                ((label.contains("if_end") || label.contains("if_false")) && irNode instanceof IRComparison))  //init label, can be: while_init ou if_... if_false ou if_... if_end ou if_falseN:
         {
             //store curr for the end
             listConstVarNameToConstValueWhileOrIfInitState.add(new HashMap<>(constVarNameToConstValue));
@@ -218,26 +228,30 @@ public class IRMethod extends IRNode
                         listConstVarNameToConstValueWhileOrIfInitState.size() - 1);
             }
         }
-        else if(label.contains("_end"))//end label
+        else if(label.contains("_end") && irNode instanceof IRLabel)//end label
+            removeEntryFromConstVarNameAndSetAsBefore();
+
+    }
+
+    private void removeEntryFromConstVarNameAndSetAsBefore()
+    {
+        //remove list entry
+        HashMap<String, IRConstant> oldHashMap = listConstVarNameToConstValueWhileOrIfInitState.remove(
+                listConstVarNameToConstValueWhileOrIfInitState.size() - 1);
+
+        //remove constant altered on the way
+        Iterator it = oldHashMap.entrySet().iterator();
+        while (it.hasNext())
         {
-            //remove list entry
-            HashMap<String, IRConstant> oldHashMap = listConstVarNameToConstValueWhileOrIfInitState.remove(
-                    listConstVarNameToConstValueWhileOrIfInitState.size() - 1);
-
-            //remove constant altered on the way
-            Iterator it = oldHashMap.entrySet().iterator();
-            while (it.hasNext())
-            {
-                Map.Entry pair = (Map.Entry)it.next();
-                String key = (String) pair.getKey();
-                String value = ((IRConstant) pair.getValue()).getValue();
-                if(constVarNameToConstValue.get(key).getValue().equals(value) == false)
-                    it.remove();
-            }
-
-            //set the constVarNameToConstValue as the old except the defined in the interval
-            constVarNameToConstValue = oldHashMap;
+            Map.Entry pair = (Map.Entry)it.next();
+            String key = (String) pair.getKey();
+            String value = ((IRConstant) pair.getValue()).getValue();
+            if(constVarNameToConstValue.get(key).getValue().equals(value) == false)
+                it.remove();
         }
+
+        //set the constVarNameToConstValue as the old except the defined in the interval
+        constVarNameToConstValue = oldHashMap;
     }
 
     /**
@@ -363,6 +377,11 @@ public class IRMethod extends IRNode
     public void addToConstVarNameToConstValue(String constVarName, IRConstant constValue)
     {
         this.constVarNameToConstValue.put(constVarName, constValue);
+    }
+
+    public void removeFromConstVarNameToConstValue(String constVarName)
+    {
+        this.constVarNameToConstValue.remove(constVarName);
     }
 
     /**

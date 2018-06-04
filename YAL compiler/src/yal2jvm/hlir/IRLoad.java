@@ -99,6 +99,15 @@ public class IRLoad extends IRNode
      *
      * @return
      */
+    public IRNode getIndex()
+    {
+        return index;
+    }
+
+    /**
+     *
+     * @return
+     */
     @Override
     public ArrayList<String> getInstructions()
     {
@@ -164,7 +173,8 @@ public class IRLoad extends IRNode
      */
     private ArrayList<String> getConstantCodeIfConstant(IRMethod method)
     {
-        IRConstant constValue = method.getConstValueByConstVarName(name);
+        String varName = getVarNameForConstantName(name, index);
+        IRConstant constValue = method.getConstValueByConstVarName(varName);
         if(constValue != null)
         {
             loadedConstantValue = constValue.getValue();
