@@ -19,6 +19,7 @@ public class HLIR
     private SimpleNode ast;
 	private HashMap<String, IntGraph> intGraphs;
 	public static boolean optimize;
+    public static HashMap<String, HashMap<String, Integer>> allocatedRegisterByMethodName;
 
     /**
      *
@@ -67,11 +68,10 @@ public class HLIR
      */
     public boolean allocateRegisters(int maxLocals)
     {
-    	//selectInstructions();
         RegisterAllocator allocator = new RegisterAllocator(this.intGraphs);
         boolean allocateSuccessfully = allocator.allocate(maxLocals);
 
-        HashMap<String, HashMap<String, Integer>> allocatedRegisterByMethodName = allocator.getAllocatedRegisterByMethodName();
+        allocatedRegisterByMethodName = allocator.getAllocatedRegisterByMethodName();
 
         if (allocateSuccessfully)
         	assignNewRegisters(allocatedRegisterByMethodName);
