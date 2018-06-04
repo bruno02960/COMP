@@ -36,7 +36,7 @@ module liveness
 			ret = arg2;
 		}
 		a = 0;
-		while (a < 10)
+		while (ret < 10)
 		{
 			ret = ret + 1;
 		}

@@ -11,18 +11,18 @@
 .limit locals 255
 .limit stack 2
 iconst_2
-istore_1
+istore_2
 iload_0
-istore_1
-iconst_2
+istore_2
+iload_2
 iload_0
 iadd
-istore_1
-iconst_2
+istore_2
+iload_2
 iload_1
 iadd
-istore_1
-iconst_2
+istore_2
+iload_2
 istore_0
 getstatic liveness/g2 I
 putstatic liveness/g1 I
@@ -32,15 +32,15 @@ getstatic liveness/g1 I
 getstatic liveness/g2 I
 iadd
 istore_0
-iconst_2
+iload_0
 invokestatic liveness/f2(I)V
 iload_1
-iconst_2
+iload_2
 invokestatic liveness/f3(II)I
 istore_0
-iconst_2
+iload_0
 istore_0
-iconst_2
+iload_0
 ireturn
 .end method
 
@@ -60,29 +60,29 @@ return
 .limit locals 255
 .limit stack 2
 iconst_0
-istore_1
+istore_0
 iload_0
 iload_1
 if_icmple if_false1
 iload_0
-istore_1
+istore_0
 goto if_end1
 if_false1:
 iload_1
-istore_1
+istore_0
 if_end1:
 iconst_0
 istore_0
-iconst_0
+iload_0
 bipush 10
 if_icmpge while_end2
 while_init2:
-iinc 1 1
-iconst_0
+iinc 0 1
+iload_0
 bipush 10
 if_icmplt while_init2
 while_end2:
-iconst_0
+iload_0
 ireturn
 .end method
 
