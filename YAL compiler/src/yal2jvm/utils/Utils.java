@@ -8,14 +8,15 @@ import java.util.TreeSet;
 import yal2jvm.symbol_tables.Symbol;
 
 /**
- *
+ * Class containing useful functions
  */
 public class Utils
 {
     /**
+     * Receives an hashmap of key String and value Symbol and returns a copy of it
      *
-     * @param original
-     * @return
+     * @param original  original hashmap to be copied
+     * @return          hashmap that is a copy of the parameter
      */
     public static HashMap<String, Symbol> copyHashMap(HashMap<String, Symbol> original)
     {
@@ -27,10 +28,12 @@ public class Utils
     }
 
     /**
+     * Checks whether or not the character parameter is the last character of the String string
      *
-     * @param character
-     * @param string
-     * @return
+     * @param character used to check if it is the last character of string
+     * @param string    the string used to check for the character
+     * @return          true if the last character of string is equal to character.
+     *                  False if it isn't.
      */
     public static boolean isLastCharacterOfString(String character, String string)
     {
@@ -38,10 +41,12 @@ public class Utils
     }
 
     /**
+     * Searches an array to see if it contains the String string
      *
-     * @param array
-     * @param string
-     * @return
+     * @param array     the array that will be searched
+     * @param string    the string that will be searched in array
+     * @return          index of the string in the array.
+     *                  -1 if the array doesn't contain the string.
      */
     public static int stringArrayContains(String[] array, String string)
     {
@@ -55,10 +60,11 @@ public class Utils
     }
 
     /**
-     *
-     * @param array
-     * @param regex
-     * @return
+     * Searches an array for a regex expression match
+     * @param array the array that will be searched
+     * @param regex the regex expression that will be searched in the array
+     * @return      index of the regex expression in the array.
+     *              -1 if the array doesn't match the regex expression.
      */
     public static int stringArrayMatches(String[] array, String regex)
     {
@@ -72,10 +78,11 @@ public class Utils
     }
 
     /**
-     *
-     * @param array
-     * @param regex
-     * @return
+     * Searches an array for the first time it doesn't match a regex expression
+     * @param array the array that will be searched
+     * @param regex the regex expression that will be searched in the array
+     * @return      index of the first occurrence where the regex expression doesn't match in the array.
+     *              -1 if the regex expression matches all elements of the array.
      */
     public static int stringArrayNotMatches(String[] array, String regex)
     {
@@ -89,11 +96,13 @@ public class Utils
     }
 
     /**
-     *
-     * @param var1
-     * @param var2
-     * @param operator
-     * @return
+     * Receives two string variables and the operator between them and checks which operator the string is.
+     * After finding out which operator it is, it is returned the value of the operation between the integer
+     * of the two string variables
+     * @param var1      left side variable
+     * @param var2      right side variable
+     * @param operator  operator between the two variables
+     * @return          the result of the operation between the variables. 0 if the operator isn't recognized.
      */
     public static int getOperationValue(String var1, String var2, String operator)
     {
@@ -125,10 +134,11 @@ public class Utils
     }
 
     /**
+     * Receives a TreeSet and copies its elements to an arrayList and returns it.
      *
-     * @param set
-     * @param <T>
-     * @return
+     * @param set   the TreeSet that will be copied
+     * @param <T>   elements of collection T
+     * @return      new ArrayList with the elements of set
      */
     public static <T> ArrayList<T> setToList(TreeSet<T> set)
     {
