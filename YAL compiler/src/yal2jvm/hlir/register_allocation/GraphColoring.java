@@ -73,12 +73,11 @@ public class  GraphColoring
             }
         }
 
-        if(listNodesGraphCopy.size() - 1 > lastRegisterNumber)
+        if(listNodesGraphCopy.size() > lastRegisterNumber + 1)  // lastRegisterNumber + 1 = number of registers
             return false;
 
         int expectedValue = lastRegisterNumber;
-        int i = 0;
-        while(listNodesGraphCopy.isEmpty() == false)
+        for(int i = 0; i < listNodesGraphCopy.size(); i++)
         {
             IntNode node = listNodesGraphCopy.get(i);
             if(node.indegree() < numRegisters || node.getRequiredRegister() == expectedValue) //indegree less than numRegisters
@@ -88,10 +87,9 @@ public class  GraphColoring
                 graphCopy.removeNode(node);
                 i = -1;
             }
-            i++;
         }
 
-        return true;
+        return listNodesGraphCopy.size() == 0;
     }
 
     /**
@@ -116,7 +114,7 @@ public class  GraphColoring
                     usedRegisters.add(registerNumber);
             }
 
-            Integer register = findFirstUnusedRegisterThatMatchesRequired(usedRegisters);
+            Integer register = findFirstUnusedRegisterThatMatchesRequired(usedRegisters, node.getRequiredRegister());
             if(register == null)
             {
                 System.out.println("Internal error coloring graph - colorGraph of class GraphColoring.");
@@ -134,11 +132,11 @@ public class  GraphColoring
      * @param usedRegisters
      * @return
      */
-    private Integer findFirstUnusedRegisterThatMatchesRequired(ArrayList<Integer> usedRegisters)
+    private Integer findFirstUnusedRegisterThatMatchesRequired(ArrayList<Integer> usedRegisters, int requiredRegister)
     {
         for(Integer register : registers)
         {
-            if(usedRegisters.contains(register) == false)
+            if(usedRegisters.contains(register) == false && (requiredRegister == -1 || register.intValue() == requiredRegister))
                 return register;
         }
 
