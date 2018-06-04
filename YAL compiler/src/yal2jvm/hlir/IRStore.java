@@ -73,8 +73,11 @@ public abstract class IRStore extends IRNode
             {
                 String varName = getVarNameForConstantName(name, index);
                 method.addToConstVarNameToConstValue(varName, new IRConstant(valueString));
+                return;
             }
         }
+
+        method.removeFromConstVarNameToConstValue(name);
     }
 
     /**
