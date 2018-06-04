@@ -24,7 +24,7 @@ import yal2jvm.utils.Utils;
 /**
  *
  */
-public class MethodSetBuilder
+public class SetBuilder
 {
 	private IRMethod node;
 	private HashMap<String, Integer> varToBit;
@@ -36,7 +36,7 @@ public class MethodSetBuilder
 	 *
 	 * @param method
 	 */
-	public MethodSetBuilder(IRMethod method)
+	public SetBuilder(IRMethod method)
 	{
 		this.node = method;
 		this.lines = new ArrayList<>();
@@ -562,7 +562,7 @@ public class MethodSetBuilder
 
 	/**
 	 *
-	 * @param in
+	 * @param out
 	 * @param def
 	 */
 	private BitSet difference(BitSet out, BitSet def)
@@ -571,7 +571,7 @@ public class MethodSetBuilder
 		
 		for (int i = 0; i < out.size(); i++)
 		{
-			if (!def.get(i) && out.get(i))
+			if (out.get(i) && !def.get(i))
 				diff.set(i);
 		}
 		return diff;

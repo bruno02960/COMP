@@ -211,6 +211,8 @@ public class IRCall extends IRNode
 					callInst += "V";
 					type = Type.VOID;
 					break;
+				default:
+					break;
 			}
         }
         else //return undefined
