@@ -2,11 +2,19 @@ package yal2jvm.hlir;
 
 import java.util.ArrayList;
 
+/**
+ *
+ */
 public class IRReturn extends IRNode
 {
     private String name;
     private Type type;
 
+    /**
+     *
+     * @param name
+     * @param type
+     */
     public IRReturn(String name, Type type)
     {
         this.name = name;
@@ -14,6 +22,10 @@ public class IRReturn extends IRNode
         this.setNodeType("Return");
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public ArrayList<String> getInstructions()
     {
@@ -34,11 +46,19 @@ public class IRReturn extends IRNode
         return inst;
     }
 
+    /**
+     *
+     * @return
+     */
 	public String getName()
 	{
 		return name;
 	}
 
+    /**
+     *
+     * @param name
+     */
 	public void setName(String name)
 	{
 		this.name = name;

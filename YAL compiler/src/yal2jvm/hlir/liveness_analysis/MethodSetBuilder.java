@@ -21,6 +21,9 @@ import yal2jvm.hlir.IRStoreCall;
 import yal2jvm.hlir.Variable;
 import yal2jvm.utils.Utils;
 
+/**
+ *
+ */
 public class MethodSetBuilder
 {
 	private IRMethod node;
@@ -28,7 +31,11 @@ public class MethodSetBuilder
 	private ArrayList<Line> lines;
 	private ArrayList<String> locals;
 	private int lineCount = 0;
-	
+
+	/**
+	 *
+	 * @param method
+	 */
 	public MethodSetBuilder(IRMethod method)
 	{
 		this.node = method;
@@ -36,6 +43,10 @@ public class MethodSetBuilder
 		this.varToBit = new HashMap<>();
 	}
 
+	/**
+	 *
+	 * @return
+	 */
 	public ArrayList<String> getAllVars()
 	{
 		IRModule module = (IRModule)this.node.findParent("Module");
@@ -51,6 +62,10 @@ public class MethodSetBuilder
 		return list;
 	}
 
+	/**
+	 *
+	 * @return
+	 */
 	private TreeSet<String> findLocals()
 	{
 		TreeSet<String> locals = new TreeSet<String>();
@@ -91,6 +106,11 @@ public class MethodSetBuilder
 		return locals;
 	}
 
+	/**
+	 *
+	 * @param id
+	 * @return
+	 */
 	public Line getLine(int id)
 	{
 		for (Line line : this.lines)
@@ -101,11 +121,18 @@ public class MethodSetBuilder
 		return null;
 	}
 
+	/**
+	 *
+	 * @return
+	 */
 	public String getName()
 	{
 		return this.node.getName();
 	}
 
+	/**
+	 *
+	 */
 	public void buildAllLines()
 	{
 		this.lines.add(createMethodArgumentsLine());
@@ -147,6 +174,10 @@ public class MethodSetBuilder
 		setSuccessors();
 	}
 
+	/**
+	 *
+	 * @return
+	 */
 	private Line createMethodArgumentsLine()
 	{
 		Line line = new Line(this.lineCount, this.varToBit);
@@ -159,6 +190,9 @@ public class MethodSetBuilder
 		return line;
 	}
 
+	/**
+	 *
+	 */
 	private void setSuccessors()
 	{
 		for (int i = 0; i < this.lines.size() - 1; i++)
@@ -183,6 +217,11 @@ public class MethodSetBuilder
 		}
 	}
 
+	/**
+	 *
+	 * @param label
+	 * @return
+	 */
 	private Line findLabelLine(String label)
 	{
 		for (Line line : this.lines)
@@ -193,16 +232,31 @@ public class MethodSetBuilder
 		return null;
 	}
 
+	/**
+	 *
+	 * @param node
+	 * @param line
+	 */
 	private void buildLineJump(IRJump node, Line line)
 	{
 		line.setJump(true);
 	}
 
+	/**
+	 *
+	 * @param node
+	 * @param line
+	 */
 	private void buildLineLabel(IRLabel node, Line line)
 	{
 		line.addLabel(node.getLabel());
 	}
 
+	/**
+	 *
+	 * @param node
+	 * @param line
+	 */
 	private void buildLineCall(IRCall node, Line line)
 	{
 		ArrayList<Variable> args = node.getArguments();
@@ -213,6 +267,11 @@ public class MethodSetBuilder
 		}
 	}
 
+	/**
+	 *
+	 * @param node
+	 * @param line
+	 */
 	private void buildLineComparison(IRComparison node, Line line)
 	{
 		line.setJumpLabel(node.getLabel());
@@ -255,6 +314,11 @@ public class MethodSetBuilder
 		}	
 	}
 
+	/**
+	 *
+	 * @param node
+	 * @param line
+	 */
 	private void buildLineReturn(IRReturn node, Line line)
 	{
 		if (isNotGlobal(node.getName()))
@@ -263,6 +327,11 @@ public class MethodSetBuilder
 		}
 	}
 
+	/**
+	 *
+	 * @param node
+	 * @param line
+	 */
 	private void buildLineStoreCall(IRStoreCall node, Line line)
 	{
 		if (isNotGlobal(node.getName()))
@@ -279,6 +348,11 @@ public class MethodSetBuilder
 		
 	}
 
+	/**
+	 *
+	 * @param node
+	 * @param line
+	 */
 	private void buildLineStoreArith(IRStoreArith node, Line line)
 	{
 		if (isNotGlobal(node.getName()))
@@ -303,6 +377,11 @@ public class MethodSetBuilder
 		}
 	}
 
+	/**
+	 *
+	 * @param node
+	 * @param line
+	 */
 	private void buildLineAllocate(IRAllocate node, Line line)
 	{
 		if (isNotGlobal(node.getName()))
@@ -318,22 +397,38 @@ public class MethodSetBuilder
 			}
 		}
 	}
-	
+
+	/**
+	 *
+	 * @param var
+	 * @return
+	 */
 	private boolean isNotGlobal(String var)
 	{
 		return this.locals.indexOf(var) != -1;
 	}
 
+	/**
+	 *
+	 * @return
+	 */
 	public ArrayList<Line> getLines()
 	{
 		return lines;
 	}
 
+	/**
+	 *
+	 * @param lines
+	 */
 	public void setLines(ArrayList<Line> lines)
 	{
 		this.lines = lines;
 	}
 
+	/**
+	 *
+	 */
 	public void calculateSets()
 	{
 		ArrayList<BitSet> insOld;
@@ -360,6 +455,12 @@ public class MethodSetBuilder
 		}
 	}
 
+	/**
+	 *
+	 * @param oldSet
+	 * @param newSet
+	 * @return
+	 */
 	private boolean compareSetLists(ArrayList<BitSet> oldSet, ArrayList<BitSet> newSet)
 	{
 		for (int i = 0; i < oldSet.size(); i++)
@@ -370,6 +471,10 @@ public class MethodSetBuilder
 		return true;
 	}
 
+	/**
+	 *
+	 * @return
+	 */
 	private ArrayList<BitSet> getAllOutSets()
 	{
 		ArrayList<BitSet> sets = new ArrayList<>();
@@ -379,6 +484,10 @@ public class MethodSetBuilder
 		return sets;
 	}
 
+	/**
+	 *
+	 * @return
+	 */
 	private ArrayList<BitSet> getAllInSets()
 	{
 		ArrayList<BitSet> sets = new ArrayList<>();
@@ -388,6 +497,9 @@ public class MethodSetBuilder
 		return sets;
 	}
 
+	/**
+	 *
+	 */
 	private void doIteration()
 	{
 		for (int i = this.lines.size() - 1; i > -1; i--)
@@ -402,7 +514,12 @@ public class MethodSetBuilder
 			line.setIn(in);
 		}
 	}
-	
+
+	/**
+	 *
+	 * @param line
+	 * @return
+	 */
 	private BitSet calculateOut(Line line)
 	{
 		BitSet out = new BitSet(varToBit.size());
@@ -412,7 +529,12 @@ public class MethodSetBuilder
 		
 		return out;
 	}
-	
+
+	/**
+	 *
+	 * @param line
+	 * @return
+	 */
 	private BitSet calculateIn(Line line)
 	{
 		BitSet out = line.getOut();
@@ -427,6 +549,11 @@ public class MethodSetBuilder
 		return in;
 	}
 
+	/**
+	 *
+	 * @param in
+	 * @param def
+	 */
 	private void difference(BitSet in, BitSet def)
 	{
 		for (int i = 0; i < in.size(); i++)
@@ -436,6 +563,10 @@ public class MethodSetBuilder
 		}
 	}
 
+	/**
+	 *
+	 * @return
+	 */
 	public ArrayList<IntPair> getAllPairs()
 	{
 		ArrayList<IntPair> pairs = new ArrayList<>();
@@ -451,6 +582,11 @@ public class MethodSetBuilder
 		return pairs;
 	}
 
+	/**
+	 *
+	 * @param set
+	 * @return
+	 */
 	private ArrayList<IntPair> getInterferences(BitSet set)
 	{
 		ArrayList<String> varList = new ArrayList<>();

@@ -3,10 +3,17 @@ package yal2jvm.hlir.liveness_analysis;
 import java.io.*;
 import java.util.ArrayList;
 
+/**
+ *
+ */
 public class IntGraph implements Serializable
 {
 	private ArrayList<IntNode> nodes;
 
+	/**
+	 *
+	 * @param graph
+	 */
 	public IntGraph(IntGraph graph)
 	{
         try
@@ -36,12 +43,20 @@ public class IntGraph implements Serializable
             System.out.println("Exception thrown during test: " + ex.toString());
         }
 	}
-	
+
+	/**
+	 *
+	 */
 	public IntGraph()
 	{
 		this.nodes = new ArrayList<>();
 	}
-	
+
+	/**
+	 *
+	 * @param var1
+	 * @param var2
+	 */
 	public void addInterference(String var1, String var2)
 	{
 		IntNode n1 = findNode(var1);
@@ -51,6 +66,10 @@ public class IntGraph implements Serializable
 		n2.addInterference(n1);
 	}
 
+	/**
+	 *
+	 * @param node
+	 */
 	public void addNode(IntNode node)
 	{
 		ArrayList<IntNode> graphNodeInterferences = node.getInterferences();
@@ -62,6 +81,10 @@ public class IntGraph implements Serializable
 		nodes.add(node);
 	}
 
+	/**
+	 *
+	 * @param node
+	 */
 	public void removeNode(IntNode node)
 	{
 		int nodeIndex = nodes.indexOf(node);
@@ -73,7 +96,11 @@ public class IntGraph implements Serializable
 			graphNodeToRemoveInterference.removeInterference(graphNodeToRemove);
 		}
 	}
-	
+
+	/**
+	 *
+	 * @param var
+	 */
 	public void addVariable(String var)
 	{
 		for (IntNode n : this.nodes)
@@ -85,6 +112,11 @@ public class IntGraph implements Serializable
 		this.nodes.add(node);
 	}
 
+	/**
+	 *
+	 * @param var
+	 * @return
+	 */
 	private IntNode findNode(String var)
 	{
 		for (IntNode n : this.nodes)
@@ -97,11 +129,19 @@ public class IntGraph implements Serializable
 		return node;
 	}
 
+	/**
+	 *
+	 * @return
+	 */
 	public ArrayList<IntNode> getNodes()
 	{
 		return nodes;
 	}
 
+	/**
+	 *
+	 * @return
+	 */
 	@Override
 	public String toString()
 	{

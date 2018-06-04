@@ -2,6 +2,9 @@ package yal2jvm.hlir;
 
 import java.util.ArrayList;
 
+/**
+ *
+ */
 public abstract class IRStore extends IRNode
 {
     protected String name;
@@ -9,6 +12,13 @@ public abstract class IRStore extends IRNode
     protected IRNode index = null;
     private int register;
 
+    /**
+     *
+     * @param arrayAccess
+     * @param index
+     * @param value
+     * @return
+     */
     protected ArrayList<String> getInstForStoring(boolean arrayAccess, IRNode index, IRNode value)
     {
         IRMethod method = (IRMethod) parent;
@@ -50,6 +60,11 @@ public abstract class IRStore extends IRNode
         return getInstForStoringLocalVariable(arrayAccess, index, value);
     }
 
+    /**
+     *
+     * @param value
+     * @param method
+     */
     private void addVariableToConstIfAppropriated(IRNode value, IRMethod method)
     {
         if(value instanceof IRArith)
@@ -60,6 +75,13 @@ public abstract class IRStore extends IRNode
         }
     }
 
+    /**
+     *
+     * @param arrayAccess
+     * @param index
+     * @param value
+     * @return
+     */
     private ArrayList<String> getInstForStoringLocalVariable(boolean arrayAccess, IRNode index, IRNode value)
     {
         ArrayList<String> inst = new ArrayList<>();
@@ -80,6 +102,14 @@ public abstract class IRStore extends IRNode
         return inst;
     }
 
+    /**
+     *
+     * @param index
+     * @param value
+     * @param module
+     * @param global
+     * @return
+     */
     private ArrayList<String> getInstForStoringGlobalVariable(IRNode index, IRNode value, IRModule module, IRGlobal global)
     {
         ArrayList<String> inst = new ArrayList<>();
@@ -95,11 +125,19 @@ public abstract class IRStore extends IRNode
         return inst;
     }
 
+    /**
+     *
+     * @return
+     */
 	public String getName()
 	{
 		return name;
 	}
 
+    /**
+     *
+     * @param name
+     */
 	public void setName(String name)
 	{
 		this.name = name;

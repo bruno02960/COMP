@@ -7,17 +7,27 @@ import yal2jvm.hlir.IRMethod;
 import yal2jvm.hlir.IRModule;
 import yal2jvm.hlir.IRNode;
 
+/**
+ *
+ */
 public class LivenessAnalyzer 
 {
 	private IRModule ir;
 	private HashMap<String,IntGraph> intGraphs;
 
+	/**
+	 *
+	 * @param ir
+	 */
 	public LivenessAnalyzer(IRModule ir)
 	{
 		this.ir = ir;
 		this.intGraphs = new HashMap<String,IntGraph>();
 	}
-	
+
+	/**
+	 *
+	 */
 	public void analyze()
 	{
 		ArrayList<IRNode> children = ir.getChildren();
@@ -33,7 +43,11 @@ public class LivenessAnalyzer
 			}
 		}
 	}
-	
+
+	/**
+	 *
+	 * @return
+	 */
 	public HashMap<String,IntGraph> getInterferenceGraphs()
 	{
 		return intGraphs;	

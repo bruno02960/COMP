@@ -7,7 +7,9 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-
+/**
+ *
+ */
 public class  GraphColoring
 {
     private IntGraph graph;
@@ -16,6 +18,11 @@ public class  GraphColoring
     private Stack<IntNode> nodesToColorStack = new Stack<>();
     private HashMap<String, Integer> varNameToRegisterNumber = new HashMap<>();
 
+    /**
+     *
+     * @param graph
+     * @param numRegisters
+     */
     public GraphColoring(IntGraph graph, int numRegisters)
     {
         this.graph = graph;
@@ -23,17 +30,29 @@ public class  GraphColoring
         this.registers = IntStream.rangeClosed(0, numRegisters - 1).boxed().collect(Collectors.toList());
     }
 
+    /**
+     *
+     * @param numRegisters
+     */
     public void setNumRegisters(int numRegisters)
     {
         this.numRegisters = numRegisters;
         this.registers = IntStream.rangeClosed(0, numRegisters - 1).boxed().collect(Collectors.toList());
     }
 
+    /**
+     *
+     * @return
+     */
     public HashMap<String, Integer> getVarNameToRegisterNumber()
     {
         return varNameToRegisterNumber;
     }
 
+    /**
+     *
+     * @return
+     */
     private boolean buildStackOfNodesToColor()
     {
         ArrayList<IntNode> listNodesOriginalGraph = graph.getNodes();
@@ -53,6 +72,10 @@ public class  GraphColoring
         return listNodesGraphCopy.size() == 0;
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean colorGraph()
     {
         if(buildStackOfNodesToColor() == false)
@@ -84,6 +107,11 @@ public class  GraphColoring
         return true;
     }
 
+    /**
+     *
+     * @param usedRegisters
+     * @return
+     */
     private Integer findFirstUnusedRegister(ArrayList<Integer> usedRegisters)
     {
         for(Integer register : registers)
@@ -131,6 +159,10 @@ public class  GraphColoring
 
     }*/
 
+    /**
+     *
+     * @param hashMap
+     */
     private static void printHashMap(HashMap<String, Integer> hashMap)
     {
         Iterator it = hashMap.entrySet().iterator();

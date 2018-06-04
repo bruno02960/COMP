@@ -3,17 +3,28 @@ package yal2jvm.hlir.liveness_analysis;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+/**
+ *
+ */
 public class IntNode implements Serializable
 {
 	private String name;
 	private ArrayList<IntNode> interferences;
 
+	/**
+	 *
+	 * @param name
+	 */
 	public IntNode(String name)
 	{
 		this.name = name;
 		this.interferences = new ArrayList<>();
 	}
-	
+
+	/**
+	 *
+	 * @param node
+	 */
 	public void addInterference(IntNode node)
 	{
 		if (node.getName().equals(this.name))
@@ -22,37 +33,66 @@ public class IntNode implements Serializable
 			this.interferences.add(node);
 	}
 
+	/**
+	 *
+	 * @param node
+	 */
 	public void removeInterference(IntNode node)
 	{
 		this.interferences.remove(node);
 	}
 
+	/**
+	 *
+	 * @param o
+	 * @return
+	 */
 	@Override
 	public boolean equals(Object o)
 	{
 		return this.name.equals(((IntNode)o).getName());
 	}
 
+	/**
+	 *
+	 * @return
+	 */
 	public String getName()
 	{
 		return name;
 	}
 
+	/**
+	 *
+	 * @param name
+	 */
 	public void setName(String name)
 	{
 		this.name = name;
 	}
 
+	/**
+	 *
+	 * @return
+	 */
 	public ArrayList<IntNode> getInterferences()
 	{
 		return interferences;
 	}
 
+	/**
+	 *
+	 * @return
+	 */
 	public int indegree()
 	{
 		return this.interferences.size();
 	}
-	
+
+	/**
+	 *
+	 * @return
+	 */
 	@Override
 	public String toString()
 	{

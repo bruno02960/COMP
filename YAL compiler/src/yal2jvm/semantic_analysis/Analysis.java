@@ -43,8 +43,16 @@ public abstract class Analysis
     protected abstract void parse();
 
     /**
+     * Checks, separately, if the inheritedSymbols and the mySymbols hashMaps are set to null.
+     * If they are both true, the elements of each checked hashMap are stored
+     * inside another hashMap variable and the new variable is returned.
+     * If one check is true and the other is not, the elements of the hashMap
+     * that passed the validation will be stored inside the new hashMap variable.
+     * If they are both false, the new hashMap variable will return an empty hashMap.
      *
-     * @return
+     * @return  the hashmap containing all of the elements of inheritedSymbols
+     *          plus all of the elements of mySymbols. Returns an empty hashMap when both
+     *          are set to null.
      */
     protected HashMap<String, Symbol> getUnifiedSymbolTable()
     {
@@ -58,9 +66,20 @@ public abstract class Analysis
     }
 
     /**
+     * Checks if the value of the parameter symbolId is a key of the hashMap mySymbols.
+     * If true, the value mapped to that key is stored in a new Symbol variable and is
+     * returned.
+     * If false, checks if the hashMap inheritedSymbols has a key with the parameter's
+     * value.
+     * If true, the value mapped to that key is stored in the new Symbol variable.
+     * If all checks fail, the new variable is returned with a null value.
      *
-     * @param symbolId
-     * @return
+     * @param symbolId  id of the symbol that will be used to check if it is contained
+     *                  in any of the two hashMaps(mySymbols and inheritedSymbols)
+     * @return          value mapped to the key symbolId in the mySymbols hashMap or
+     *                  the inheritedSymbols hashmap if the first is set to null or
+     *                  that key value doesn't exit. Return value is null when the key
+     *                  doesn't exist in any of the two hashMaps
      */
     private Symbol hasAccessToSymbol(String symbolId)
     {
@@ -79,9 +98,14 @@ public abstract class Analysis
     }
 
     /**
+     * Checks the type of the lhsTree first child.
+     * If the child node is an array access the function parseArrayAccess is returned.
+     * If the child node is a scalar access the function parseScalarAccess is returned.
+     * If the child node isn't any of the two, no function is called a null value is returned.
      *
-     * @param lhsTree
-     * @return
+     * @param lhsTree   contains the entire lhs tree
+     * @return          the functions that will process the two accesses. Array and Scalar.
+     *                  Returns null if the child node isn't any of the two accesses.
      */
     private VarSymbol parseLhs(SimpleNode lhsTree)
     {
@@ -98,9 +122,20 @@ public abstract class Analysis
     }
 
     /**
+     * Checks the type of the rhsTree first child.
+     * If the child node is an "ARRAYSIZE" this node will be stored in a ASTARRAYSIZE variable.
+     * It will then be processed by the parseArraySize function and it's return value stored
+     * in a VarSymbol variable(retval). If the value of the variable retval is null, this function
+     * will return null. If not, it will return a copy of itself with the type "ARRAYSIZE".
+     * <p>
+     * If the child node isn't of type "ARRAYSIZE", all of the rhs tree children will be processed.
+     * This process will check if the children have the same type "term". Returning null when they
+     * are of different type and when they are of type array. Returning the return value of the
+     * parseTerm function of the last child processed.
      *
-     * @param rhsTree
-     * @return
+     * @param rhsTree   contains the entire rhs tree.
+     * @return          null if the function fails the validations. ASTARRAYSIZE variable if the
+     *                  first child is of type "ARRAYSIZE" and VarSymbol variable if not.
      */
     private VarSymbol parseRhs(SimpleNode rhsTree)
     {
@@ -151,9 +186,16 @@ public abstract class Analysis
     }
 
     /**
+     * Receives a variable of type "ASTARRAYSIZE" and if it is an integer, the function
+     * returns a new object of type ImmediateSymbol with that variable as a parameter
+     * for the constructor.
+     * <p>
+     * If the variable isn't an integer, then it is a scalar access. The first child of
+     * the variable will be the parameter of the return function parseScalarAccess
      *
-     * @param arraySizeTree
-     * @return
+     * @param arraySizeTree contains the entire arraySize tree.
+     * @return              object of type ImmediateSymbol, if arraySizeTree is an integer.
+     *                      parseScalarAccess(child) if arraySizeTree isn't an integer.
      */
     private VarSymbol parseArraySize(ASTARRAYSIZE arraySizeTree)
     {
@@ -168,9 +210,17 @@ public abstract class Analysis
     }
 
     /**
+     * Receives a parameter of type "ASTTERM" and checks if it is an integer.
+     * If it is, the functions returns a new object of type immediateSymbol with that
+     * value as a parameter for the constructor.
+     * If it isn't, the type of it's first child will be checked.
+     * If it is of type "CALL", the function parseCall will process it and check for errors.
+     * If it is of type "ARRAYACCESS" the function parseArrayAccess will be returned with that child.
+     * If it is of type "SCALARACCESS" the function parseArrayAccess will be returned with that child.
      *
-     * @param termTree
-     * @return
+     * @param termTree  contains the entire term tree.
+     * @return          object of type ImmediateSymbol. VarSymbol from the parseCall.
+     *                  parseArrayAccess or parseScalarAccess function. Null
      */
     private VarSymbol parseTerm(ASTTERM termTree)
     {

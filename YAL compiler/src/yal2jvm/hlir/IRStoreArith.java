@@ -2,10 +2,17 @@ package yal2jvm.hlir;
 
 import java.util.ArrayList;
 
+/**
+ *
+ */
 public class IRStoreArith extends IRStore
 {
     private IRArith irArith;
 
+    /**
+     *
+     * @param op
+     */
     public IRStoreArith(Operation op)
     {
         this.setNodeType("StoreArith");
@@ -13,6 +20,11 @@ public class IRStoreArith extends IRStore
         this.addChild(irArith);
     }
 
+    /**
+     *
+     * @param name
+     * @param op
+     */
     //a = b + c
     public IRStoreArith(String name, Operation op)
     {
@@ -20,6 +32,11 @@ public class IRStoreArith extends IRStore
         this.name = name;
     }
 
+    /**
+     *
+     * @param name
+     * @param op
+     */
     //a[i] = b + c;
     public IRStoreArith(VariableArray name, Operation op)
     {
@@ -34,26 +51,46 @@ public class IRStoreArith extends IRStore
         this.addChild(index);
     }
 
+    /**
+     *
+     * @return
+     */
     public IRNode getRhs()
     {
         return irArith.getRhs();
     }
 
+    /**
+     *
+     * @param rhs
+     */
     public void setRhs(IRNode rhs)
     {
         this.irArith.setRhs(rhs);
     }
 
+    /**
+     *
+     * @return
+     */
     public IRNode getLhs()
     {
         return irArith.getLhs();
     }
 
+    /**
+     *
+     * @param lhs
+     */
     public void setLhs(IRNode lhs)
     {
         this.irArith.setLhs(lhs);
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public ArrayList<String> getInstructions()
     {
@@ -69,6 +106,11 @@ public class IRStoreArith extends IRStore
         return inst;
     }
 
+    /**
+     *
+     * @param inst
+     * @return
+     */
     private boolean checkIfIsIinc(ArrayList<String> inst)
     {
         boolean isIinc = false;
@@ -108,6 +150,11 @@ public class IRStoreArith extends IRStore
         return isIinc;
     }
 
+    /**
+     *
+     * @param irConstant
+     * @return
+     */
     private String getIincInstruction(IRConstant irConstant) {
         String instruction = "iinc ";
 

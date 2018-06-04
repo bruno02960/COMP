@@ -2,6 +2,9 @@ package yal2jvm.hlir;
 
 import java.util.ArrayList;
 
+/**
+ *
+ */
 public class IRLoad extends IRNode
 {
     private String name;
@@ -11,18 +14,31 @@ public class IRLoad extends IRNode
     private boolean arraySizeAccess;
     private String loadedConstantValue = null;
 
+    /**
+     *
+     * @param name
+     */
     private IRLoad(String name)
     {
         this.name = name;
         this.setNodeType("Load");
     }
 
+    /**
+     *
+     * @param name
+     * @param type
+     */
     public IRLoad(String name, Type type)
     {
         this(name);
         this.type = type;
     }
 
+    /**
+     *
+     * @param value
+     */
     public IRLoad(Variable value)
     {
         this(value.getVar());
@@ -34,6 +50,10 @@ public class IRLoad extends IRNode
         }
     }
 
+    /**
+     *
+     * @param value
+     */
     public IRLoad(VariableArray value)
     {
         this(value.getVar());
@@ -48,21 +68,37 @@ public class IRLoad extends IRNode
         this.addChild(index);
     }
 
+    /**
+     *
+     * @return
+     */
     public String getLoadedConstantValue()
     {
         return loadedConstantValue;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getRegister()
     {
         return register;
     }
 
+    /**
+     *
+     * @param register
+     */
     public void setRegister(int register)
     {
         this.register = register;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public ArrayList<String> getInstructions()
     {
@@ -75,6 +111,11 @@ public class IRLoad extends IRNode
             return getLocalVariableInstructions(method);
     }
 
+    /**
+     *
+     * @param method
+     * @return
+     */
     private ArrayList<String> getLocalVariableInstructions(IRMethod method)
     {
         ArrayList<String> inst = new ArrayList<>();
@@ -116,6 +157,11 @@ public class IRLoad extends IRNode
         return inst;
     }
 
+    /**
+     *
+     * @param method
+     * @return
+     */
     private ArrayList<String> getConstantCodeIfConstant(IRMethod method)
     {
         IRConstant constValue = method.getConstValueByConstVarName(name);
@@ -128,6 +174,11 @@ public class IRLoad extends IRNode
         return null;
     }
 
+    /**
+     *
+     * @param method
+     * @return
+     */
     private ArrayList<String> getGlobalVariableInstructions(IRMethod method)
     {
         ArrayList<String> inst = new ArrayList<>();
@@ -155,20 +206,36 @@ public class IRLoad extends IRNode
         return inst;
     }
 
+    /**
+     *
+     * @return
+     */
     public Type getType()
 	{
 		return type;
 	}
 
+    /**
+     *
+     * @param type
+     */
 	public void setType(Type type)
 	{
 		this.type = type;
 	}
 
+    /**
+     *
+     * @return
+     */
 	public String getName() {
         return name;
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean isArraySizeAccess()
     {
         return arraySizeAccess;

@@ -13,6 +13,11 @@ public enum Operation
     OR,
     XOR;
 
+    /**
+     *
+     * @param operator
+     * @return
+     */
     static Operation parseOperator(String operator) {
         switch(operator) {
             case "+":
@@ -40,6 +45,10 @@ public enum Operation
         return null;
     }
 
+    /**
+     *
+     * @return
+     */
     String getSymbol() {
         switch(this) {
             case ADD:

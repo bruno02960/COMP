@@ -2,6 +2,9 @@ package yal2jvm.hlir;
 
 import java.util.ArrayList;
 
+/**
+ *
+ */
 public class IRAllocate extends IRNode
 {
     private String name;
@@ -12,6 +15,11 @@ public class IRAllocate extends IRNode
 	private boolean storeVarGlobal = false;
 	private IRGlobal global;
 
+    /**
+     *
+     * @param name
+     * @param value
+     */
 	//a = 1;
     public IRAllocate(String name, Variable value)
     {
@@ -27,6 +35,12 @@ public class IRAllocate extends IRNode
         this.addChild(this.rhs);
     }
 
+    /**
+     *
+     * @param name
+     * @param value
+     * @param arraySize
+     */
     //a = [5];
     public IRAllocate(String name, Variable value, Type arraySize)
     {
@@ -43,6 +57,11 @@ public class IRAllocate extends IRNode
         this.addChild(this.rhs);
     }
 
+    /**
+     *
+     * @param name
+     * @param value
+     */
     //a[i] = 5;
     IRAllocate(VariableArray name, Variable value)
     {
@@ -64,6 +83,11 @@ public class IRAllocate extends IRNode
         this.addChild(this.rhs);
     }
 
+    /**
+     *
+     * @param name
+     * @param value
+     */
     //a = b[5];
     IRAllocate(Variable name, VariableArray value)
     {
@@ -75,6 +99,11 @@ public class IRAllocate extends IRNode
         this.addChild(this.rhs);
     }
 
+    /**
+     *
+     * @param name
+     * @param value
+     */
     //a[i] = b[5];
     IRAllocate(VariableArray name, VariableArray value)
     {
@@ -93,16 +122,28 @@ public class IRAllocate extends IRNode
         this.addChild(this.rhs);
     }
 
+    /**
+     *
+     * @return
+     */
     public Type getType()
     {
         return type;
     }
 
+    /**
+     *
+     * @return
+     */
     public IRNode getRhs()
     {
         return rhs;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public ArrayList<String> getInstructions()
     {
@@ -137,6 +178,9 @@ public class IRAllocate extends IRNode
         return inst;
     }
 
+    /**
+     *
+     */
     private void handleConstantRhsForConstantPropagationOptimisation()
     {
         IRMethod method = (IRMethod) parent;
@@ -152,6 +196,10 @@ public class IRAllocate extends IRNode
         }
     }
 
+    /**
+     *
+     * @return
+     */
     private ArrayList<String> getStoreInst()
 	{
         ArrayList<String> inst = new ArrayList<>();
@@ -244,6 +292,10 @@ public class IRAllocate extends IRNode
         return inst;
 	}
 
+    /**
+     *
+     * @return
+     */
     private ArrayList<String> setAllArrayElements()
     {
         int reg = -1;
@@ -272,12 +324,19 @@ public class IRAllocate extends IRNode
         return getCodeForSetAllArrayElements(arrayRefJVMCode, valueJVMCode);
     }
 
+    /**
+     *
+     * @return
+     */
     private IRGlobal storeVarGlobal()
 	{
 		IRModule module = (IRModule)findParent("Module");
 		return module.getGlobal(name);
 	}
 
+    /**
+     *
+     */
     private void initRegister()
     {
         if (!this.storeVarGlobal && this.register == -1)
@@ -287,23 +346,39 @@ public class IRAllocate extends IRNode
         }
     }
 
+    /**
+     *
+     * @return
+     */
     public int getRegister()
     {
         initRegister();
         return register;
     }
 
+    /**
+     *
+     * @param register
+     */
     public void setRegister(int register)
     {
     	if (!this.storeVarGlobal)
     		this.register = register;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getName()
     {
         return name;
     }
 
+    /**
+     *
+     * @param name
+     */
     public void setName(String name)
     {
         this.name = name;

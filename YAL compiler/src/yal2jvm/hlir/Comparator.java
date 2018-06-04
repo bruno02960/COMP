@@ -10,6 +10,11 @@ public enum Comparator
 	STE		//<=
 ;
 
+	/**
+	 *
+	 * @param comp
+	 * @return
+	 */
 	public static Comparator invert(Comparator comp)
 	{
 		switch(comp)

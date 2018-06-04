@@ -5,6 +5,9 @@ import yal2jvm.ast.ASTRHS;
 
 import java.util.ArrayList;
 
+/**
+ *
+ */
 public class IRAssign {
     String operator;
     boolean isSize = false;
@@ -15,6 +18,11 @@ public class IRAssign {
 
     ArrayList<Variable> operands = new ArrayList<>();
 
+    /**
+     *
+     * @param astlhs
+     * @param astrhs
+     */
     IRAssign(ASTLHS astlhs, ASTRHS astrhs) {
         this.astlhs = astlhs;
         this.astrhs = astrhs;

@@ -9,6 +9,9 @@ import yal2jvm.hlir.liveness_analysis.LivenessAnalyzer;
 import yal2jvm.hlir.register_allocation.RegisterAllocator;
 import yal2jvm.utils.Utils;
 
+/**
+ *
+ */
 public class HLIR
 {
     private IRModule root;
@@ -16,12 +19,20 @@ public class HLIR
 	private HashMap<String, IntGraph> intGraphs;
 	public static boolean optimize;
 
+    /**
+     *
+     * @param ast
+     */
     public HLIR(SimpleNode ast)
     {
         this.ast = ast;
         this.root = createHHIR();
     }
 
+    /**
+     *
+     * @return
+     */
     private IRModule createHHIR()
     {
         ASTMODULE astModule = (ASTMODULE) ast;
@@ -30,11 +41,17 @@ public class HLIR
         return root;
     }
 
+    /**
+     *
+     */
     public void optimize()
     {
         this.optimize = true;
     }
 
+    /**
+     *
+     */
     public void dataflowAnalysis()
     {
         LivenessAnalyzer analyzer = new LivenessAnalyzer(this.root);
@@ -42,6 +59,11 @@ public class HLIR
         this.intGraphs = analyzer.getInterferenceGraphs();
     }
 
+    /**
+     *
+     * @param maxLocals
+     * @return
+     */
     public boolean allocateRegisters(int maxLocals)
     {
     	selectInstructions();
@@ -56,12 +78,21 @@ public class HLIR
         return allocateSuccessfully;
     }
 
+    /**
+     *
+     * @param methods
+     */
     private void assignNewRegisters(HashMap<String, HashMap<String, Integer>> methods)
 	{
     	for (String key : methods.keySet())
     		assignNewRegistersMethod(methods.get(key), key);
 	}
 
+    /**
+     *
+     * @param methodVars
+     * @param methodName
+     */
 	private void assignNewRegistersMethod(HashMap<String, Integer> methodVars, String methodName)
 	{
 		IRMethod method = null;
@@ -82,6 +113,10 @@ public class HLIR
 			method.assignNewRegister(key, methodVars.get(key));
 	}
 
+    /**
+     *
+     * @return
+     */
 	public ArrayList<String> selectInstructions()
     {
         ArrayList<String> inst = new ArrayList<>();
@@ -91,6 +126,10 @@ public class HLIR
         return inst;
     }
 
+    /**
+     *
+     * @return
+     */
     private ArrayList<String> getMethodClInit()
     {
         ArrayList<String> inst = new ArrayList<>();
@@ -112,6 +151,10 @@ public class HLIR
         return inst;
     }
 
+    /**
+     *
+     * @return
+     */
     private ArrayList<String> getAllIRGlobalStaticInstructions()
     {
         ArrayList<String> irGlobalsWithStaticInstructions = new ArrayList<>();
@@ -130,11 +173,19 @@ public class HLIR
        return irGlobalsWithStaticInstructions;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getModuleName()
     {
         return this.root.getName();
     }
 
+    /**
+     *
+     * @param astModule
+     */
     private void createModuleHHIR(ASTMODULE astModule)
     {
         String moduleName = astModule.name;
@@ -151,6 +202,10 @@ public class HLIR
         }
     }
 
+    /**
+     *
+     * @param astFunction
+     */
     private void createFunctionHHIR(ASTFUNCTION astFunction)
     {
         String functionId = astFunction.id;
@@ -237,6 +292,11 @@ public class HLIR
         createStatementsHHIR((ASTSTATEMENTS) currNode, function);
     }
 
+    /**
+     *
+     * @param aststatements
+     * @param irmethod
+     */
     private void createStatementsHHIR(ASTSTATEMENTS aststatements, IRMethod irmethod)
     {
         for (int i = 0; i < aststatements.jjtGetNumChildren(); i++)
@@ -268,6 +328,11 @@ public class HLIR
         }
     }
 
+    /**
+     *
+     * @param astIf
+     * @param irmethod
+     */
     private void createIfHHIR(ASTIF astIf, IRMethod irmethod)
     {
         /* using template:
@@ -317,6 +382,11 @@ public class HLIR
         irmethod.addChild(irLabelEnd);
     }
 
+    /**
+     *
+     * @param astLhs
+     * @return
+     */
     private IRNode getLhsIRNode(ASTLHS astLhs)
     {
         Node child = astLhs.jjtGetChild(0);
@@ -334,6 +404,11 @@ public class HLIR
         }
     }
 
+    /**
+     *
+     * @param astRhs
+     * @return
+     */
     private IRNode getRhsIRNodeOfExprtest(ASTRHS astRhs)
     {
         ArrayList<IRNode> termNodes =  new ArrayList<>();
@@ -355,6 +430,11 @@ public class HLIR
         return irLoadArith;
     }
 
+    /**
+     *
+     * @param astTerm
+     * @return
+     */
     private IRNode getTermIRNode(ASTTERM astTerm)
     {
         String operator = astTerm.operator;
@@ -379,6 +459,11 @@ public class HLIR
             return getScalarAccessIRNode((ASTSCALARACCESS) astTermChild);
     }
 
+    /**
+     *
+     * @param astScalarAccess
+     * @return
+     */
     private IRNode getScalarAccessIRNode(ASTSCALARACCESS astScalarAccess)
     {
         String id = astScalarAccess.id;
@@ -395,6 +480,11 @@ public class HLIR
         return new IRLoad(indexID);
     }*/
 
+    /**
+     *
+     * @param astWhile
+     * @param irmethod
+     */
     private void createWhileHHIR(ASTWHILE astWhile, IRMethod irmethod)
     {
         /* using template:
@@ -430,12 +520,24 @@ public class HLIR
         irmethod.addChild(irLabelEnd);
     }
 
+    /**
+     *
+     * @param irmethod
+     * @param labelEnd
+     */
     private void createJumpEndHHIR(IRMethod irmethod, String labelEnd)
     {
         IRJump irJump = new IRJump(labelEnd);
         irmethod.addChild(irJump);
     }
 
+    /**
+     *
+     * @param astNode
+     * @param irmethod
+     * @param label
+     * @param invert
+     */
     private void createExprTestHHIR(Node astNode, IRMethod irmethod, String label, boolean invert)
     {
         ASTEXPRTEST astExprtest = (ASTEXPRTEST) astNode.jjtGetChild(0);
@@ -542,6 +644,11 @@ public class HLIR
         createAssignIR(irAssign, irmethod);
     }
 
+    /**
+     *
+     * @param child
+     * @return
+     */
     private VariableArray getArrayAccessIRNode(ASTARRAYACCESS child)
     {
         ASTARRAYACCESS astarrayaccess = child;
@@ -553,6 +660,11 @@ public class HLIR
             return new VariableArray(astarrayaccess.arrayID, new Variable(astindex.indexValue.toString(), Type.INTEGER));
     }
 
+    /**
+     *
+     * @param irAssign
+     * @param irmethod
+     */
     private void createAssignImmediateIR(IRAssign irAssign, IRMethod irmethod) {
         IRStoreCall irStoreCall;
         Variable variable = irAssign.operands.get(0);
@@ -595,6 +707,11 @@ public class HLIR
         }
     }
 
+    /**
+     *
+     * @param irAssign
+     * @param irmethod
+     */
     private void createAssignOperationIR(IRAssign irAssign, IRMethod irmethod) {
         IRStoreArith irStoreArith;
 
@@ -649,6 +766,11 @@ public class HLIR
         }
     }
 
+    /**
+     *
+     * @param irAssign
+     * @param irmethod
+     */
     private void createAssignIR(IRAssign irAssign, IRMethod irmethod) {
         if(irAssign.operator.equals("")) {          // a = IMMEDIATE
             createAssignImmediateIR(irAssign, irmethod);
@@ -658,6 +780,12 @@ public class HLIR
         }
     }
 
+    /**
+     *
+     * @param astCall
+     * @param lhsVarName
+     * @return
+     */
     private IRCall getIRCall(ASTCALL astCall, String lhsVarName)
     {
         String moduleId = astCall.module;
@@ -675,6 +803,11 @@ public class HLIR
         return new IRCall(methodId, moduleId, arguments, lhsVarName);
     }
 
+    /**
+     *
+     * @param astCall
+     * @return
+     */
     private IRCall getCallHHIR(ASTCALL astCall)
     {
         String moduleId = astCall.module;
@@ -690,6 +823,11 @@ public class HLIR
         return getIRCall(astCall, null);
     }
 
+    /**
+     *
+     * @param astArguments
+     * @return
+     */
     private ArrayList<Variable> getFunctionCallArgumentsIds(ASTARGUMENTS astArguments)
     {
         ArrayList<Variable> arguments = new ArrayList<>();

@@ -2,13 +2,23 @@ package yal2jvm.hlir;
 
 import java.util.ArrayList;
 
+/**
+ *
+ */
 public class IRStoreCall extends IRStore
 {
+    /**
+     *
+     */
     public IRStoreCall()
     {
         this.setNodeType("StoreCall");
     }
 
+    /**
+     *
+     * @param name
+     */
     // a = f();
     public IRStoreCall(String name)
     {
@@ -16,6 +26,10 @@ public class IRStoreCall extends IRStore
         this.name = name;
     }
 
+    /**
+     *
+     * @param name
+     */
     // a[i] = f();
     public IRStoreCall(VariableArray name)
     {
@@ -29,6 +43,10 @@ public class IRStoreCall extends IRStore
             this.index = new IRLoad(at);
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public ArrayList<String> getInstructions()
     {

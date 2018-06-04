@@ -4,16 +4,27 @@ import yal2jvm.utils.Utils;
 
 import java.util.ArrayList;
 
+/**
+ *
+ */
 public class IRArith extends IRNode {
     private Operation op;
     private IRNode rhs, lhs;
 
+    /**
+     *
+     * @param op
+     */
     public IRArith(Operation op)
     {
         this.op = op;
         this.setNodeType("Arith");
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public ArrayList<String> getInstructions()
     {
@@ -65,32 +76,56 @@ public class IRArith extends IRNode {
         return inst;
     }
 
+    /**
+     *
+     * @return
+     */
     public IRNode getRhs()
     {
         return rhs;
     }
 
+    /**
+     *
+     * @param rhs
+     */
     public void setRhs(IRNode rhs)
     {
         this.rhs = rhs;
         this.rhs.setParent(this);
     }
 
+    /**
+     *
+     * @return
+     */
     public IRNode getLhs()
     {
         return lhs;
     }
 
+    /**
+     *
+     * @param lhs
+     */
     public void setLhs(IRNode lhs)
     {
         this.lhs = lhs;
         this.lhs.setParent(this);
     }
 
+    /**
+     *
+     * @return
+     */
     public Operation getOp() {
         return op;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getStringValueIfBothConstant()
     {
         IRMethod method = (IRMethod) findParent("Method");

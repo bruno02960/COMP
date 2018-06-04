@@ -5,6 +5,9 @@ import yal2jvm.semantic_analysis.ModuleAnalysis;
 
 import java.util.ArrayList;
 
+/**
+ *
+ */
 public class FunctionSymbol extends Symbol
 {
 
@@ -13,6 +16,11 @@ public class FunctionSymbol extends Symbol
     private VarSymbol returnValue;
     private int statementsChildNumber = 0;
 
+    /**
+     *
+     * @param functionAST
+     * @param id
+     */
     public FunctionSymbol(SimpleNode functionAST, String id)
     {
         super(id);
@@ -20,26 +28,45 @@ public class FunctionSymbol extends Symbol
         this.arguments = new ArrayList<>();
     }
 
+    /**
+     *
+     * @return
+     */
     public SimpleNode getFunctionAST()
     {
         return functionAST;
     }
 
+    /**
+     *
+     * @return
+     */
     public ArrayList<VarSymbol> getArguments()
     {
         return arguments;
     }
 
+    /**
+     *
+     * @return
+     */
     public VarSymbol getReturnValue()
     {
         return returnValue;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getStatementsChildNumber()
     {
         return statementsChildNumber;
     }
 
+    /**
+     *
+     */
     public void parseFunctionHeader()
     {
         //indicates the index(child num) of the arguments. 0 if no return value, or 1 if has return value
@@ -66,6 +93,10 @@ public class FunctionSymbol extends Symbol
         parseArguments(argumentsNode);
     }
 
+    /**
+     *
+     * @param argumentsNode
+     */
     private void parseArguments(SimpleNode argumentsNode)
     {
         for (int i = 0; i < argumentsNode.jjtGetNumChildren(); i++)
@@ -88,6 +119,11 @@ public class FunctionSymbol extends Symbol
         }
     }
 
+    /**
+     *
+     * @param child
+     * @param varSymbol
+     */
     private void checkArgumentAlreadyExists(SimpleNode child, VarSymbol varSymbol)
     {
         for (VarSymbol argument: arguments)
@@ -101,6 +137,11 @@ public class FunctionSymbol extends Symbol
         }
     }
 
+    /**
+     *
+     * @param child
+     * @return
+     */
     private VarSymbol parseArrayElementArgument(ASTARRAYELEMENT child)
     {
         ASTARRAYELEMENT astarrayelement = child;
@@ -123,6 +164,11 @@ public class FunctionSymbol extends Symbol
         return new VarSymbol(astArrayElementId, astArrayElementType, true);
     }
 
+    /**
+     *
+     * @param child
+     * @return
+     */
     private VarSymbol parseScalarElementArgument(ASTSCALARELEMENT child)
     {
         ASTSCALARELEMENT astscalarelement = child;
@@ -143,6 +189,10 @@ public class FunctionSymbol extends Symbol
         return new VarSymbol(astScalarElementId, astScalarElementType, true);
     }
 
+    /**
+     *
+     * @param returnValueNode
+     */
     private void parseFunctionReturnValue(SimpleNode returnValueNode)
     {
         if (returnValueNode instanceof ASTSCALARELEMENT)

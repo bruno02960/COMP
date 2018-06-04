@@ -2,18 +2,28 @@ package yal2jvm.hlir.liveness_analysis;
 
 import java.util.ArrayList;
 
+/**
+ *
+ */
 public class MethodAnalyzer
 {
 	private MethodSetBuilder method;
 	private String methodName;
-	
+
+	/**
+	 *
+	 * @param method
+	 */
 	public MethodAnalyzer(MethodSetBuilder method)
 	{
 		this.method = method;
 		this.methodName = method.getName();
 		analyze();
 	}
-	
+
+	/**
+	 *
+	 */
 	public void analyze()
 	{
 		method.getAllVars();
@@ -33,6 +43,10 @@ public class MethodAnalyzer
 		
 	}
 
+	/**
+	 *
+	 * @return
+	 */
 	public IntGraph getGraph()
 	{
 		ArrayList<IntPair> interferences = method.getAllPairs();

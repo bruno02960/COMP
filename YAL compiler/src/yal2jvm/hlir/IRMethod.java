@@ -5,6 +5,9 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+/**
+ *
+ */
 public class IRMethod extends IRNode
 {
     private static final Map<String, Integer> instructionToStackCountValue = new HashMap<>();
@@ -56,6 +59,13 @@ public class IRMethod extends IRNode
     private int regN = 0;
     private int varN = 0;
 
+    /**
+     *
+     * @param name
+     * @param returnType
+     * @param returnVar
+     * @param args
+     */
     public IRMethod(String name, Type returnType, String returnVar, Variable[] args)
     {
         this.name = name;
@@ -66,6 +76,10 @@ public class IRMethod extends IRNode
         this.regN = this.args.length;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public ArrayList<String> getInstructions()
     {
@@ -85,6 +99,10 @@ public class IRMethod extends IRNode
         return inst;
     }
 
+    /**
+     *
+     * @return
+     */
     private String getMethodDeclarationInstructions()
     {
         String methodDeclarationInst = ".method public static ";
@@ -137,6 +155,10 @@ public class IRMethod extends IRNode
         return methodDeclarationInst;
     }
 
+    /**
+     *
+     * @return
+     */
     private ArrayList<String> getMethodBody()
     {
         ArrayList<String> inst = new ArrayList<>();
@@ -176,6 +198,10 @@ public class IRMethod extends IRNode
         return inst;
     }
 
+    /**
+     *
+     * @param irLabel
+     */
     private void handleWhileOrIfConstantPropagationOptimization(IRLabel irLabel)
     {
         String label = irLabel.getLabel();
@@ -214,6 +240,11 @@ public class IRMethod extends IRNode
         }
     }
 
+    /**
+     *
+     * @param inst
+     * @return
+     */
     public static int stackValueCount(ArrayList<String> inst)
     {
         //search in child's code for instruction that put or remove elements from the stack
@@ -235,6 +266,11 @@ public class IRMethod extends IRNode
         return maxStackCount;
     }
 
+    /**
+     *
+     * @param currInstruction
+     * @return
+     */
     private static Integer getInstructionStackValue(String currInstruction)
     {
         //invoke has a more difficult behaviour
@@ -275,6 +311,11 @@ public class IRMethod extends IRNode
         return 0;*/
     }
 
+    /**
+     *
+     * @param currInstruction
+     * @return
+     */
     private static Integer getInvokeStaticStackValue(String currInstruction)
     {
         //must return the number of parameters, minus one if not return void
@@ -290,23 +331,45 @@ public class IRMethod extends IRNode
             return -numberOfParameters;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getRegN()
     {
         return regN;
     }
 
+    /**
+     *
+     */
     public void incrementRegN() { this.regN++; }
 
+    /**
+     *
+     * @param constVarName
+     * @return
+     */
     public IRConstant getConstValueByConstVarName(String constVarName)
     {
         return constVarNameToConstValue.get(constVarName);
     }
 
+    /**
+     *
+     * @param constVarName
+     * @param constValue
+     */
     public void addToConstVarNameToConstValue(String constVarName, IRConstant constValue)
     {
         this.constVarNameToConstValue.put(constVarName, constValue);
     }
 
+    /**
+     *
+     * @param name
+     * @return
+     */
     public int getArgumentRegister(String name)
     {
         for (int i = 0; i < args.length; i++)
@@ -317,6 +380,11 @@ public class IRMethod extends IRNode
         return -1;
     }
 
+    /**
+     *
+     * @param name
+     * @return
+     */
     public Type getArgumentType(String name)
     {
         for (int i = 0; i < args.length; i++)
@@ -327,6 +395,11 @@ public class IRMethod extends IRNode
         return null;
     }
 
+    /**
+     *
+     * @param name
+     * @return
+     */
     public int getVarRegister(String name)
     {
         //TODO SERÃ� QUE PODIA SER ATE AO THIS, OU SEJA Ã� CURR INSTRUCTION?
@@ -345,6 +418,12 @@ public class IRMethod extends IRNode
         return -1;
     }
 
+    /**
+     *
+     * @param name
+     * @param callerNodeThis
+     * @return
+     */
     public IRAllocate getVarDeclaredUntilThis(String name, IRNode callerNodeThis)
     {
         //TODO SERÃ� QUE PODIA SER ATE AO THIS, OU SEJA Ã� CURR INSTRUCTION?
@@ -366,6 +445,12 @@ public class IRMethod extends IRNode
         return null;
     }
 
+    /**
+     *
+     * @param name
+     * @param callerNodeThis
+     * @return
+     */
     public int getVarRegisterDeclaredUntilThis(String name, IRNode callerNodeThis)
     {
         //TODO SERÃ� QUE PODIA SER ATE AO THIS, OU SEJA Ã� CURR INSTRUCTION?
@@ -378,6 +463,11 @@ public class IRMethod extends IRNode
         return var.getRegister();
     }
 
+    /**
+     *
+     * @param name
+     * @return
+     */
     public Type getVarType(String name)
     {
         for (int i = 0; i < children.size(); i++)
@@ -393,26 +483,48 @@ public class IRMethod extends IRNode
         return null;
     }
 
+    /**
+     *
+     * @return
+     */
 	public String getName()
 	{
 		return name;
 	}
 
+    /**
+     *
+     *
+     * @param name
+     */
 	public void setName(String name)
 	{
 		this.name = name;
 	}
 
+    /**
+     *
+     * @return
+     */
 	public Type getReturnType()
 	{
 		return returnType;
 	}
 
+    /**
+     *
+     * @param returnType
+     */
 	public void setReturnType(Type returnType)
 	{
 		this.returnType = returnType;
 	}
 
+    /**
+     *
+     * @param child
+     * @param newChild
+     */
     public void addNewChildAfterChild(IRNode child, IRNode newChild)
     {
         int myIndex = children.indexOf(child);
@@ -420,16 +532,29 @@ public class IRMethod extends IRNode
         newChild.setParent(this);
     }
 
+    /**
+     *
+     * @return
+     */
 	public Variable[] getArgs()
 	{
 		return args;
 	}
 
+    /**
+     *
+     * @param args
+     */
 	public void setArgs(Variable[] args)
 	{
 		this.args = args;
 	}
 
+    /**
+     *
+     * @param key
+     * @param integer
+     */
 	public void assignNewRegister(String key, Integer integer)
 	{
 		

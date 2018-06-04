@@ -2,22 +2,37 @@ package yal2jvm.hlir;
 
 import java.util.ArrayList;
 
+/**
+ *
+ */
 public class IRConstant extends IRNode
 {
     private String value;
 
+    /**
+     *
+     * @param irConstant
+     */
     public IRConstant(IRConstant irConstant)
     {
         super(irConstant);
         this.value = new String(irConstant.getValue());
     }
 
+    /**
+     *
+     * @param value
+     */
     public IRConstant(String value)
     {
         this.value = value;
         this.setNodeType("Constant");
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public ArrayList<String> getInstructions()
     {
@@ -35,6 +50,11 @@ public class IRConstant extends IRNode
         return inst;
     }
 
+    /**
+     *
+     * @param value
+     * @return
+     */
     public static String getLoadConstantInstruction(int value)
     {
         if(value <= 5 && value >= -1) {
@@ -60,16 +80,28 @@ public class IRConstant extends IRNode
         }
     }
 
+    /**
+     *
+     * @return
+     */
 	public String getValue()
 	{
 		return value;
 	}
 
+    /**
+     *
+     * @param value
+     */
 	public void setValue(String value)
 	{
 		this.value = value;
 	}
 
+    /**
+     *
+     * @return
+     */
     public Object clone()
     {
         return new IRConstant(this);

@@ -5,6 +5,9 @@ import yal2jvm.utils.Utils;
 
 import java.util.ArrayList;
 
+/**
+ *
+ */
 public class IRCall extends IRNode
 {
     private String method;
@@ -13,6 +16,13 @@ public class IRCall extends IRNode
 	private Type type;
     private ArrayList<Variable> arguments;
 
+	/**
+	 *
+	 * @param method
+	 * @param module
+	 * @param arguments
+	 * @param lhsVarName
+	 */
     public IRCall(String method, String module, ArrayList<Variable> arguments, String lhsVarName)
     {
         this.method = method;
@@ -22,6 +32,10 @@ public class IRCall extends IRNode
         this.setNodeType("Call");
     }
 
+	/**
+	 *
+	 * @return
+	 */
     @Override
     public ArrayList<String> getInstructions()
     {
@@ -38,7 +52,11 @@ public class IRCall extends IRNode
 
         return inst;
     }
-    
+
+	/**
+	 *
+	 * @return
+	 */
     private ArrayList<String> getArgumentsInstructions()
     {
     	 ArrayList<String> inst = new ArrayList<>();
@@ -92,6 +110,12 @@ public class IRCall extends IRNode
          return inst;
     }
 
+	/**
+	 *
+	 * @param arg
+	 * @param initType
+	 * @return
+	 */
 	private Type getArgumentsType(Variable arg, Type initType)
 	{
 		IRMethod method = (IRMethod) findParent("Method");
@@ -115,11 +139,19 @@ public class IRCall extends IRNode
 			return ret_type;
 	}
 
+	/**
+	 *
+	 * @return
+	 */
 	public Type getType()
 	{
 		return type;
 	}
 
+	/**
+	 *
+	 * @return
+	 */
 	private String getCallInstruction()
     {
        	String callInst = "invokestatic ";
@@ -250,11 +282,19 @@ public class IRCall extends IRNode
         return callInst;
     }
 
+	/**
+	 *
+	 * @return
+	 */
 	public ArrayList<Variable> getArguments()
 	{
 		return arguments;
 	}
 
+	/**
+	 *
+	 * @param arguments
+	 */
 	public void setArguments(ArrayList<Variable> arguments)
 	{
 		this.arguments = arguments;

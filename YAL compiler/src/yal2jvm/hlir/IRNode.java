@@ -4,12 +4,19 @@ import yal2jvm.Yal2jvm;
 
 import java.util.ArrayList;
 
+/**
+ *
+ */
 public abstract class IRNode
 {
     protected IRNode parent;
     protected ArrayList<IRNode> children;
     protected String nodeType;
 
+    /**
+     *
+     * @param irNode
+     */
     public IRNode(IRNode irNode)
     {
         this.children = new ArrayList<>(irNode.getChildren());
@@ -17,39 +24,72 @@ public abstract class IRNode
         this.nodeType = new String(irNode.getNodeType());
     }
 
+    /**
+     *
+     */
     public IRNode()
     {
         children = new ArrayList<>();
     }
 
+    /**
+     *
+     * @param child
+     */
     public void addChild(IRNode child)
     {
         children.add(child);
         child.setParent(this);
     }
 
+    /**
+     *
+     * @return
+     */
     public IRNode getParent()
     {
         return parent;
     }
 
+    /**
+     *
+     * @param parent
+     */
     public void setParent(IRNode parent)
     {
         this.parent = parent;
     }
 
+    /**
+     *
+     * @return
+     */
     public ArrayList<IRNode> getChildren()
     {
         return children;
     }
 
+    /**
+     *
+     * @param children
+     */
     public void setChildren(ArrayList<IRNode> children)
     {
         this.children = children;
     }
 
+    /**
+     *
+     * @return
+     */
     public abstract ArrayList<String> getInstructions();
 
+    /**
+     *
+     * @param instruction
+     * @param registerNumber
+     * @return
+     */
     private String getInstructionLoadOrStoreInstructionMoreEfficient(String instruction, int registerNumber)
     {
         if(registerNumber < 4)
@@ -58,44 +98,85 @@ public abstract class IRNode
             return instruction + " " + registerNumber;
     }
 
+    /**
+     *
+     * @param registerNumber
+     * @return
+     */
     protected String getInstructionToLoadIntFromRegisterToStack(int registerNumber)
     {
         return getInstructionLoadOrStoreInstructionMoreEfficient("iload", registerNumber);
     }
 
+    /**
+     *
+     * @param registerNumber
+     * @return
+     */
     protected String getInstructionToStoreIntInRegister(int registerNumber)
     {
         return getInstructionLoadOrStoreInstructionMoreEfficient("istore", registerNumber);
     }
 
+    /**
+     *
+     * @param registerNumber
+     * @return
+     */
     protected String getInstructionToLoadArrayFromRegisterToStack(int registerNumber)
     {
         return getInstructionLoadOrStoreInstructionMoreEfficient("aload", registerNumber);
     }
 
+    /**
+     *
+     * @param registerNumber
+     * @return
+     */
     protected String getInstructionToStoreArrayInRegister(int registerNumber)
     {
         return getInstructionLoadOrStoreInstructionMoreEfficient("astore", registerNumber);
     }
 
+    /**
+     *
+     * @param type
+     * @param name
+     * @return
+     */
     protected String getInstructionToLoadGlobalToStack(Type type, String name)
     {
         String varType = type == Type.INTEGER ? "I" : "[I";
         return "getstatic " + Yal2jvm.moduleName + "/" + name + " " + varType;
     }
 
+    /**
+     *
+     * @param type
+     * @param name
+     * @return
+     */
     protected String getInstructionToStoreGlobal(Type type, String name)
     {
         String varType = type == Type.INTEGER ? "I" : "[I";
         return "putstatic " + Yal2jvm.moduleName + "/" + name + " " + varType;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public String toString()
     {
         return this.nodeType;
     }
-    
+
+    /**
+     *
+     * @param nodeType
+     * @return
+     */
     public IRNode findParent(String nodeType)
     {
         IRNode res = null;
@@ -120,6 +201,11 @@ public abstract class IRNode
         return res;
     }
 
+    /**
+     *
+     * @param varName
+     * @return
+     */
     protected IRNode getVarIfExists(String varName)
     {
         IRModule module = (IRModule) findParent("Module");
@@ -149,18 +235,40 @@ public abstract class IRNode
         return null;
     }
 
+    /**
+     *
+     * @param index
+     * @param register
+     * @param value
+     * @return
+     */
     protected ArrayList<String> setLocalArrayElementByIRNode(IRNode index, int register, IRNode value)
     {
         String loadArrayRefInstruction = getInstructionToLoadArrayFromRegisterToStack(register);
         return setArrayElement(index.getInstructions(), loadArrayRefInstruction, value);
     }
 
+    /**
+     *
+     * @param index
+     * @param type
+     * @param name
+     * @param value
+     * @return
+     */
     protected ArrayList<String> setGlobalArrayElementByIRNode(IRNode index, Type type, String name, IRNode value)
     {
         String loadArrayRefInstruction = getInstructionToLoadGlobalToStack(type, name);
         return setArrayElement(index.getInstructions(), loadArrayRefInstruction, value);
     }
 
+    /**
+     *
+     * @param indexInstructions
+     * @param loadArrayRefInstruction
+     * @param value
+     * @return
+     */
     protected ArrayList<String> setArrayElement(ArrayList<String> indexInstructions, String loadArrayRefInstruction, IRNode value)
     {
         ArrayList<String> inst = new ArrayList<>();
@@ -173,6 +281,12 @@ public abstract class IRNode
         return inst;
     }
 
+    /**
+     *
+     * @param name
+     * @param module
+     * @return
+     */
     protected String getGlobalVariableGetCode(String name, IRModule module)
     {
         IRGlobal global = module.getGlobal(name);
@@ -188,12 +302,24 @@ public abstract class IRNode
         return in;
     }
 
+    /**
+     *
+     * @param name
+     * @param method
+     * @return
+     */
     protected String getGlobalVariableGetCodeByIRMethod(String name, IRMethod method)
     {
         IRModule module = ((IRModule) method.getParent());
         return getGlobalVariableGetCode(name, module);
     }
 
+    /**
+     *
+     * @param arrayRefJVMCode
+     * @param valueJVMCode
+     * @return
+     */
     protected ArrayList<String> getCodeForSetAllArrayElements(String arrayRefJVMCode, ArrayList<String> valueJVMCode)
     {
         ArrayList<String> inst = new ArrayList<>();
@@ -216,11 +342,19 @@ public abstract class IRNode
         return inst;
     }
 
+    /**
+     *
+     * @return
+     */
 	public String getNodeType()
 	{
 		return nodeType;
 	}
 
+    /**
+     *
+     * @param nodeType
+     */
 	public void setNodeType(String nodeType)
 	{
 		this.nodeType = nodeType;

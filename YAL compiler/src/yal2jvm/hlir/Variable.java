@@ -1,11 +1,19 @@
 package yal2jvm.hlir;
 
+/**
+ *
+ */
 public class Variable
 {
     private String var = null;
     private boolean sizeAccess = false;
     private Type type;
 
+    /**
+     *
+     * @param var
+     * @param type
+     */
     Variable(String var, Type type)
     {
         this.type = type;
@@ -23,19 +31,35 @@ public class Variable
         }
     }
 
+    /**
+     *
+     * @param type
+     */
     public void setType(Type type) {
         this.type = type;
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean isSizeAccess()
     {
         return sizeAccess;
     }
 
+    /**
+     *
+     * @return
+     */
     public Type getType() {
         return type;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getVar() {
         return var;
     }

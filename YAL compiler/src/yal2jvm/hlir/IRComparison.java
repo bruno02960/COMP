@@ -2,6 +2,9 @@ package yal2jvm.hlir;
 
 import java.util.ArrayList;
 
+/**
+ *
+ */
 public class IRComparison extends IRNode
 {
 	private Comparator comp;
@@ -9,6 +12,12 @@ public class IRComparison extends IRNode
 	private IRNode lhs;
 	private String label;
 
+	/**
+	 *
+	 * @param comp
+	 * @param label
+	 * @param invert
+	 */
 	public IRComparison(Comparator comp, String label, boolean invert)
 	{
 		this.comp = invert ? Comparator.invert(comp) : comp;
@@ -16,6 +25,12 @@ public class IRComparison extends IRNode
 		this.setNodeType("Comparison");
 	}
 
+	/**
+	 *
+	 * @param operator
+	 * @param label
+	 * @param invert
+	 */
 	public IRComparison(String operator, String label, boolean invert)
 	{
 		Comparator comp = getComparatorGivenOperator(operator);
@@ -24,6 +39,11 @@ public class IRComparison extends IRNode
 		this.setNodeType("Comparison");
 	}
 
+	/**
+	 *
+	 * @param operator
+	 * @return
+	 */
 	private Comparator getComparatorGivenOperator(String operator)
 	{
 		switch (operator)
@@ -54,6 +74,10 @@ public class IRComparison extends IRNode
 		return null; //unreachable
 	}
 
+	/**
+	 *
+	 * @return
+	 */
 	@Override
 	public ArrayList<String> getInstructions()
 	{
@@ -86,7 +110,12 @@ public class IRComparison extends IRNode
 		inst.add(branchInst);
 		return inst;
 	}
-	
+
+	/**
+	 *
+	 * @param node
+	 * @return
+	 */
 	boolean isConstantZero(IRNode node)
 	{
 		if (node.getNodeType().equals("Constant"))
@@ -98,6 +127,10 @@ public class IRComparison extends IRNode
 		return false;
 	}
 
+	/**
+	 *
+	 * @return
+	 */
 	private boolean useArrayOperations()
 	{
 		if (rhs.getNodeType().equals("Constant") || rhs.getNodeType().equals("Constant"))
@@ -119,7 +152,11 @@ public class IRComparison extends IRNode
 
 		return false;
 	}
-	
+
+	/**
+	 *
+	 * @return
+	 */
 	public String getZeroComparison()
 	{
 		String branchInst = "";
@@ -148,7 +185,11 @@ public class IRComparison extends IRNode
 		}
 		return branchInst;
 	}
-	
+
+	/**
+	 *
+	 * @return
+	 */
 	public String getArrayComparison()
 	{
 		String branchInst = "";
@@ -165,7 +206,11 @@ public class IRComparison extends IRNode
 		}
 		return branchInst;
 	}
-	
+
+	/**
+	 *
+	 * @return
+	 */
 	public String getIntegerComparison()
 	{
 		String branchInst = "";
@@ -195,33 +240,57 @@ public class IRComparison extends IRNode
 		return branchInst;
 	}
 
+	/**
+	 *
+	 * @return
+	 */
 	public IRNode getRhs()
 	{
 		return rhs;
 	}
 
+	/**
+	 *
+	 * @param rhs
+	 */
 	public void setRhs(IRNode rhs)
 	{
 		this.rhs = rhs;
 		this.rhs.setParent(this);
 	}
 
+	/**
+	 *
+	 * @return
+	 */
 	public IRNode getLhs()
 	{
 		return lhs;
 	}
 
+	/**
+	 *
+	 * @param lhs
+	 */
 	public void setLhs(IRNode lhs)
 	{
 		this.lhs = lhs;
 		this.lhs.setParent(this);
 	}
 
+	/**
+	 *
+	 * @return
+	 */
 	public String getLabel()
 	{
 		return label;
 	}
 
+	/**
+	 *
+	 * @param label
+	 */
 	public void setLabel(String label)
 	{
 		this.label = label;

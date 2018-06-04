@@ -3,11 +3,18 @@ package yal2jvm.hlir;
 import java.util.ArrayList;
 import java.util.TreeSet;
 
+/**
+ *
+ */
 public class IRModule extends IRNode
 {
     private String name;
     private int currLabelNumber = 1;
 
+    /**
+     *
+     * @param name
+     */
     public IRModule(String name)
     {
         super();
@@ -15,6 +22,10 @@ public class IRModule extends IRNode
         this.setNodeType("Module");
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public ArrayList<String> getInstructions()
     {
@@ -37,21 +48,38 @@ public class IRModule extends IRNode
         return inst;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getName()
     {
         return name;
     }
 
+    /**
+     *
+     * @param name
+     */
     public void setName(String name)
     {
         this.name = name;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getAndIncrementCurrLabelNumber()
     {
         return currLabelNumber++;
     }
 
+    /**
+     *
+     * @param name
+     * @return
+     */
     public IRGlobal getGlobal(String name)
     {
         for (int i = 0; i < children.size(); i++)
@@ -66,6 +94,11 @@ public class IRModule extends IRNode
         return null;
     }
 
+    /**
+     *
+     * @param name
+     * @return
+     */
     public IRMethod getChildMethod(String name)
     {
         for (int i = 0; i < children.size(); i++)
@@ -80,6 +113,11 @@ public class IRModule extends IRNode
         return null;
     }
 
+    /**
+     *
+     * @param varName
+     * @return
+     */
     public boolean removeAllocateChildByName(String varName)
     {
         for (int i = 0; i < children.size(); i++)
@@ -98,11 +136,20 @@ public class IRModule extends IRNode
         return false;
     }
 
+    /**
+     *
+     * @param irNode
+     * @return
+     */
     public boolean removeChild(IRNode irNode)
     {
         return children.remove(irNode);
     }
 
+    /**
+     *
+     * @return
+     */
 	public TreeSet<String> getAllGlobals()
 	{
 		TreeSet<String> globals = new TreeSet<>();

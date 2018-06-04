@@ -4,6 +4,9 @@ import yal2jvm.Yal2jvm;
 
 import java.util.ArrayList;
 
+/**
+ *
+ */
 public class IRGlobal extends IRNode
 {
     private String name;
@@ -12,6 +15,10 @@ public class IRGlobal extends IRNode
     private boolean arraySize = false;
     private ArrayList<String> staticArraysInstructions = new ArrayList<>();
 
+    /**
+     *
+     * @param variable
+     */
     public IRGlobal(Variable variable) // a[]; ou a;
     {
         this.name = variable.getVar();
@@ -19,12 +26,23 @@ public class IRGlobal extends IRNode
         this.setNodeType("Global");
     }
 
+    /**
+     *
+     * @param variable
+     * @param value
+     */
     public IRGlobal(Variable variable, Variable value)
     {
         this(variable);
         this.value = value;
     }
 
+    /**
+     *
+     * @param variable
+     * @param value
+     * @param arraySize
+     */
     public IRGlobal(Variable variable, Variable value, Type arraySize) // a[] = [50]; ou a = [50];
     {
         this(variable, value);
@@ -32,6 +50,10 @@ public class IRGlobal extends IRNode
         this.arraySize = true;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public ArrayList<String> getInstructions()
     {
@@ -64,6 +86,10 @@ public class IRGlobal extends IRNode
         }
     }
 
+    /**
+     *
+     * @return
+     */
     private ArrayList<String> createGlobalInteger()
     {
         ArrayList<String> insts = new ArrayList<>();
@@ -74,6 +100,11 @@ public class IRGlobal extends IRNode
         return insts;
     }
 
+    /**
+     *
+     * @param sizeInstructions
+     * @return
+     */
     private ArrayList<String> createGlobalArray(ArrayList<String> sizeInstructions)
     {
         //declare array as global
@@ -89,6 +120,10 @@ public class IRGlobal extends IRNode
         return insts;
     }
 
+    /**
+     *
+     * @return
+     */
     private ArrayList<String> createGlobalArrayWithSize0()
     {
         ArrayList<String> sizeInstructions = new ArrayList<>();
@@ -97,12 +132,22 @@ public class IRGlobal extends IRNode
         return createGlobalArray(sizeInstructions);
     }
 
+    /**
+     *
+     * @param value
+     * @return
+     */
     private ArrayList<String> createGlobalArrayWithSize(Variable value)
     {
         IRNode valueNode = getValueIRNode(value);
         return createGlobalArray(valueNode.getInstructions());
     }
 
+    /**
+     *
+     * @param value
+     * @return
+     */
     private IRNode getValueIRNode(Variable value)
     {
         IRNode valueNode;
@@ -114,6 +159,10 @@ public class IRGlobal extends IRNode
         return valueNode;
     }
 
+    /**
+     *
+     * @param value
+     */
     private void assignAllArrayElements(Variable value)
     {
         IRNode valueNode = getValueIRNode(value);
@@ -123,26 +172,46 @@ public class IRGlobal extends IRNode
         staticArraysInstructions.addAll(getCodeForSetAllArrayElements(globalVariableJVMCode, valueNode.getInstructions()));
     }
 
+    /**
+     *
+     * @return
+     */
     public String getName()
     {
         return name;
     }
 
+    /**
+     *
+     * @param name
+     */
     public void setName(String name)
     {
         this.name = name;
     }
 
+    /**
+     *
+     * @return
+     */
     public Type getType()
     {
         return this.type;
     }
 
+    /**
+     *
+     * @return
+     */
     public ArrayList<String> getStaticArraysInstructions()
     {
         return staticArraysInstructions;
     }
-    
+
+    /**
+     *
+     * @return
+     */
     public ArrayList<String>getInitializationInstructions()
     {
 		ArrayList<String> inst = new ArrayList<>();

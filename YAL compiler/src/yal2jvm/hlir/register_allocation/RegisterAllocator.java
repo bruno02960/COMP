@@ -6,16 +6,28 @@ import java.util.Map;
 
 import yal2jvm.hlir.liveness_analysis.IntGraph;
 
+/**
+ *
+ */
 public class RegisterAllocator
 {
 	private HashMap<String, IntGraph> intGraphs;
 	private HashMap<String, HashMap<String, Integer>> allocatedRegisterByMethodName = new HashMap<>();
 
+	/**
+	 *
+	 * @param intGraphs
+	 */
 	public RegisterAllocator(HashMap<String, IntGraph> intGraphs)
 	{
 		this.intGraphs = intGraphs;
 	}
-	
+
+	/**
+	 *
+	 * @param numberRegisters
+	 * @return
+	 */
 	public boolean allocate(int numberRegisters)
 	{
 		Iterator it = intGraphs.entrySet().iterator();
@@ -41,6 +53,12 @@ public class RegisterAllocator
 		return true;
 	}
 
+	/**
+	 *
+	 * @param graphColoring
+	 * @param currNumberOfRegisters
+	 * @return
+	 */
 	private int findNumberOfRegisterThatAllowToAllocate(GraphColoring graphColoring, int currNumberOfRegisters)
 	{
 		do
@@ -53,6 +71,10 @@ public class RegisterAllocator
 		return currNumberOfRegisters;
 	}
 
+	/**
+	 *
+	 * @return
+	 */
 	public HashMap<String, HashMap<String, Integer>> getAllocatedRegisterByMethodName()
 	{
 		return allocatedRegisterByMethodName;
