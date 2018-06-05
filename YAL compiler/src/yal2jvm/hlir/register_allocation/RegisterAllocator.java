@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import yal2jvm.Yal2jvm;
 import yal2jvm.hlir.liveness_analysis.IntGraph;
 
 /**
@@ -30,6 +31,12 @@ public class RegisterAllocator
 	 */
 	public boolean allocate(int numberRegisters)
 	{
+		if (Yal2jvm.VERBOSE)
+		{
+			System.out.println("--------------------------------------------------");
+			System.out.println("Doing register allocation for each method\n");
+		}
+		
 		Iterator it = intGraphs.entrySet().iterator();
 		while (it.hasNext())
 		{
@@ -45,7 +52,8 @@ public class RegisterAllocator
 			}
 			else
 			{
-				System.out.println("Successfull register allocation with max. " + numberRegisters + " registers for method " + methodName);
+				if (Yal2jvm.VERBOSE)
+					System.out.println("Successfull register allocation with a maximum of " + numberRegisters + " registers for method " + methodName);
 				allocatedRegisterByMethodName.put(methodName, graphColoring.getVarNameToRegisterNumber());
 			}
 		}

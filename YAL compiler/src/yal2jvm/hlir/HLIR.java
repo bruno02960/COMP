@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.TreeSet;
 
+import yal2jvm.Yal2jvm;
 import yal2jvm.ast.*;
 import yal2jvm.hlir.liveness_analysis.IntGraph;
 import yal2jvm.hlir.liveness_analysis.LivenessAnalyzer;
@@ -84,7 +85,9 @@ public class HLIR
      */
     public void dumpIR()
     {
+    	System.out.println("\nHLIR of module " + this.root.getName() + ":");
     	dumpIR(this.root, 0);
+    	System.out.println("");
     }
     
     /**
@@ -107,8 +110,14 @@ public class HLIR
      */
     private void assignNewRegisters(HashMap<String, HashMap<String, Integer>> methods)
 	{
+    	if (Yal2jvm.VERBOSE)
+    		System.out.println("\nRegisters assigned per method:");
+    	
     	for (String key : methods.keySet())
     		assignNewRegistersMethod(methods.get(key), key);
+    	
+    	if (Yal2jvm.VERBOSE)
+    		System.out.println("--------------------------------------------------");
 	}
 
     /**
@@ -119,7 +128,10 @@ public class HLIR
 	private void assignNewRegistersMethod(HashMap<String, Integer> methodVars, String methodName)
 	{
 		IRMethod method = null;
-		System.out.println("\nMethod " + methodName);
+		
+		if (Yal2jvm.VERBOSE)
+			System.out.println("\nMethod " + methodName);
+		
 		for (IRNode child : this.root.getChildren())
 		{
 			if (child.getNodeType().equals("Method"))
@@ -136,7 +148,8 @@ public class HLIR
 		
 		for (String key : methodVars.keySet())
 		{
-			System.out.println("Var " + key + " -> " + methodVars.get(key));
+			if (Yal2jvm.VERBOSE)
+				System.out.println("Var " + key + " -> " + methodVars.get(key));
 			method.assignNewRegister(key, methodVars.get(key));
 			uniqueRegs.add(methodVars.get(key));
 		}

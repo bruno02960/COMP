@@ -89,13 +89,7 @@ public class Yal2jvm
 
         if (!validInput || inputFile == null)
         {
-            System.out.println("Insufficient or incorrect arguments for the Yal2jvm compiler");
-            System.out.println("\nUsage:\tjava -jar Yal2jvm [-r=<0..255>] [-o] [-S] [-v] <input_file.yal>\n");
-            System.out.println("\t-r=<0..255>       number of JVM local vars per function (default 255)  (optional)");
-            System.out.println("\t-o                run three additional code optimizations              (optional)");
-            System.out.println("\t-S                keep the intermediate Jasmin file (.j) on the CWD    (optional)");
-            System.out.println("\t-v                allow verbose output of all compilation stages       (optional)");
-            System.out.println("\t<input_file>.yal  path to the .yal file to compile.                    (mandatory)");
+        	printUsage();
             System.exit(-5);
         }
         else
@@ -151,6 +145,20 @@ public class Yal2jvm
         saveToJasminFile(instructions, moduleName);
         compileToBytecode(moduleName + ".j");
         log("Bytecode generated");
+    }
+    
+    /**
+     * 
+     */
+    private static void printUsage()
+    {
+        System.out.println("Insufficient or incorrect arguments for the Yal2jvm compiler");
+        System.out.println("\nUsage:\tjava -jar Yal2jvm [-r=<0..255>] [-o] [-S] [-v] <input_file.yal>\n");
+        System.out.println("\t-r=<0..255>       number of JVM local vars per function (default 255)  (optional)");
+        System.out.println("\t-o                run three additional code optimizations              (optional)");
+        System.out.println("\t-S                keep the intermediate Jasmin file (.j) on the CWD    (optional)");
+        System.out.println("\t-v                allow verbose output of all compilation stages       (optional)");
+        System.out.println("\t<input_file>.yal  path to the .yal file to compile.                    (mandatory)");
     }
 
     /**
