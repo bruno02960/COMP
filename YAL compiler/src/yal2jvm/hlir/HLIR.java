@@ -91,8 +91,8 @@ public class HLIR
 	}
 
 	/**
-     * TODO
-     * @param methods
+     * This method assigns the registers to the HLIR, according to the register allocation results, using auxiliar method assignNewRegistersMethod.
+     * @param methods hashMap that maps the method name to its own hashMap with it's variables registers
      */
     private void assignNewRegisters(HashMap<String, HashMap<String, Integer>> methods)
 	{
@@ -107,9 +107,9 @@ public class HLIR
 	}
 
     /**
-     * TODO
-     * @param methodVars
-     * @param methodName
+     * This method assigns the registers to the HLIR for a method, according to the register allocation results.
+     * @param methodVars hashMap with method's variables and corresponding registers
+     * @param methodName the name of the method whose variable's registers will be set
      */
 	private void assignNewRegistersMethod(HashMap<String, Integer> methodVars, String methodName)
 	{
@@ -182,8 +182,8 @@ public class HLIR
     }
 
     /**
-     * TODO
-     * @return
+     * This method goes over the HLIR and gets all instructions of IRGlobal objects, that need to be executed in the clinit method
+     * @return list of the instructions it get
      */
     private ArrayList<String> getAllIRGlobalStaticInstructions()
     {
