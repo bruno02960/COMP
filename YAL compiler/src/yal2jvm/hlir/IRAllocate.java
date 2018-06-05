@@ -384,7 +384,11 @@ public class IRAllocate extends IRNode
     public int getRegister()
     {
         IRMethod method = (IRMethod) findParent("Method");
-        return HLIR.allocatedRegisterByMethodName.get(method.getName()).get(name);
+        Integer registerNumber = HLIR.allocatedRegisterByMethodName.get(method.getName()).get(name);
+        if(registerNumber == null)
+            return -1;
+        else
+            return registerNumber;
     }
 
     /**
