@@ -267,30 +267,6 @@ public class HLIR
             }
         }
         IRMethod function = new IRMethod(functionId, returnType, returnName, arguments);
-
-        //TODO: debug
-//        if (functionDebug)
-//        {
-//            System.out.println("name= " + functionId);
-//            System.out.println("return type= " + returnType.toString());
-//            if (returnName != null)
-//                System.out.println("return name= " + returnName);
-//
-//            if (argumentsTypes != null)
-//            {
-//                System.out.println("argumentsTypes= ");
-//                for (Type argumentsType : argumentsTypes)
-//                    System.out.println(argumentsType);
-//            }
-//
-//            if (argumentsNames != null)
-//            {
-//                System.out.println("argumentsNames= ");
-//                for (String argumentsName : argumentsNames)
-//                    System.out.println(argumentsName);
-//            }
-//        }
-
         root.addChild(function);
 
         //parse statements
