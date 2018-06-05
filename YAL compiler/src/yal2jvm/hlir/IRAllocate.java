@@ -126,8 +126,8 @@ public class IRAllocate extends IRNode
     }
 
     /**
-     *
-     * @return
+     * Returns the value of field type
+     * @return value of field type
      */
     public Type getType()
     {
@@ -135,8 +135,8 @@ public class IRAllocate extends IRNode
     }
 
     /**
-     *
-     * @return
+     * Returns the value of field rhs
+     * @return value of field rhs
      */
     public IRNode getRhs()
     {
@@ -144,7 +144,7 @@ public class IRAllocate extends IRNode
     }
 
     /**
-     *
+     * TODO
      * @return
      */
     @Override
@@ -182,7 +182,7 @@ public class IRAllocate extends IRNode
     }
 
     /**
-     *
+     * TODO
      */
     private void handleConstantRhsForConstantPropagationOptimisation()
     {
@@ -214,6 +214,11 @@ public class IRAllocate extends IRNode
         }
     }
 
+    /**
+     * Checks if rhs and lhs is an Integer.
+     * @param method    TODO
+     * @return          True if the validation is confirmed. False if not.
+     */
     private boolean isRhsArrayAndLhsInteger(IRMethod method)
     {
         String varType = getVarType(method);
@@ -224,7 +229,7 @@ public class IRAllocate extends IRNode
     }
 
     /**
-     *
+     * TODO
      * @return
      */
     private ArrayList<String> getStoreInst()
@@ -319,6 +324,11 @@ public class IRAllocate extends IRNode
         return inst;
 	}
 
+    /**
+     * TODO
+     * @param method
+     * @return
+     */
     private String getVarType(IRMethod method)
     {
         String varType;
@@ -334,7 +344,7 @@ public class IRAllocate extends IRNode
     }
 
     /**
-     *
+     * TODO
      * @return
      */
     private ArrayList<String> setAllArrayElements()
@@ -366,7 +376,7 @@ public class IRAllocate extends IRNode
     }
 
     /**
-     *
+     * TODO
      */
     private void initRegister()
     {
@@ -378,7 +388,7 @@ public class IRAllocate extends IRNode
     }
 
     /**
-     *
+     * TODO
      * @return
      */
     public int getRegister()
@@ -392,8 +402,8 @@ public class IRAllocate extends IRNode
     }
 
     /**
-     *
-     * @param register
+     * Sets the value of the field register to the value of the parameter register
+     * @param register  TODO
      */
     public void setRegister(int register)
     {
@@ -402,8 +412,8 @@ public class IRAllocate extends IRNode
     }
 
     /**
-     *
-     * @return
+     * Returns the value of field name
+     * @return  value of field name
      */
     public String getName()
     {
@@ -411,14 +421,18 @@ public class IRAllocate extends IRNode
     }
 
     /**
-     *
-     * @param name
+     * Sets the value of field name to the value of the parameter name
+     * @param name  new value of the field name
      */
     public void setName(String name)
     {
         this.name = name;
     }
 
+    /**
+     * TODO
+     * @return
+     */
 	public boolean isRedundant()
 	{
 		ArrayList<IRNode> siblings = this.parent.getChildren();
