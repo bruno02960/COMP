@@ -281,11 +281,6 @@ public class IRMethod extends IRNode
                 maxStackCount = currStackCount;
         }
 
-        //TODO DEBUG
-        System.out.println(currStackCount);
-        System.out.println(maxStackCount);
-        System.out.println();
-        System.out.println();
         return maxStackCount;
     }
 
