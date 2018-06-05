@@ -151,7 +151,8 @@ public class IntGraph implements Serializable
 	{
 		int maxAttempts = 10;
 		int counter = 0;
-		while(counter < maxAttempts)
+        boolean fileSuccessfullyDeleted = false;
+		while(counter < maxAttempts && fileSuccessfullyDeleted == false)
 		{
 			try
 			{
@@ -168,7 +169,7 @@ public class IntGraph implements Serializable
 				ois.close();
 
 				//delete temp file
-				new File("tempdata.ser").delete();
+				fileSuccessfullyDeleted = new File("tempdata.ser").delete();
 
 				return graphRead;
 			}
