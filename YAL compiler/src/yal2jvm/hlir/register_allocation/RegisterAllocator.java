@@ -33,7 +33,6 @@ public class RegisterAllocator
 	{
 		if (Yal2jvm.VERBOSE)
 		{
-			System.out.println("--------------------------------------------------");
 			System.out.println("Doing register allocation for each method\n");
 		}
 		

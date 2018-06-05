@@ -101,9 +101,6 @@ public class HLIR
     	
     	for (String key : methods.keySet())
     		assignNewRegistersMethod(methods.get(key), key);
-    	
-    	if (Yal2jvm.VERBOSE)
-    		System.out.println("--------------------------------------------------");
 	}
 
     /**
@@ -1022,6 +1019,8 @@ public class HLIR
                         root.addChild(new IRGlobal(variable, value));
                     }
                     break;
+				default:
+					break;
             }
         }
     }

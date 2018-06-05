@@ -39,7 +39,6 @@ public class MethodAnalyzer
 		if (!Yal2jvm.VERBOSE)
 			return;
 		
-		System.out.println("--------------------------------------------------");
 		System.out.println("Liveness analysis of method " + methodName + ":\n");
 		ArrayList<Line> lines = method.getLines();
 		System.out.println("Local vars: " + method.getLocals() + "\n");
@@ -47,7 +46,6 @@ public class MethodAnalyzer
 			System.out.println(l);
 		System.out.println("\nInterferences and mandatory registers:");
 		System.out.println(getGraph().toString());
-		System.out.println("--------------------------------------------------");
 	}
 
 	/**
