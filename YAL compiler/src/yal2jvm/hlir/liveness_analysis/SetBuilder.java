@@ -189,17 +189,6 @@ public class SetBuilder
 			line.addDef(arg.getVar());
 		
 		return line;
-		/*
-		BitSet set = new BitSet(this.varToBit.size());
-		
-		Variable[] args = this.node.getArgs();
-		for (Variable arg : args)
-			set.set(this.varToBit.get(arg.getVar()));
-		
-		Line line = new Line(this.lineCount, this.varToBit);
-		line.setIn(set);
-		this.lineCount++;
-		return line;*/
 	}
 
 	/**
@@ -404,6 +393,7 @@ public class SetBuilder
 	private void buildLineAllocate(IRAllocate node, Line line)
 	{
 		line.setType("Allocate");
+		
 		if (isNotGlobal(node.getName()))
 		{
 			line.addDef(node.getName());

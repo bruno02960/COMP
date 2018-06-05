@@ -392,4 +392,20 @@ public class IRAllocate extends IRNode
     {
         this.name = name;
     }
+
+	public boolean isRedundant()
+	{
+		ArrayList<IRNode> siblings = this.parent.getChildren();
+		for (int i = 0; i < siblings.size(); i++)
+		{
+			if (siblings.get(i) == this)
+			{
+				for (int s = i; s < siblings.size(); s++)
+				{
+					
+				}
+			}
+		}
+		return false;
+	}
 }
