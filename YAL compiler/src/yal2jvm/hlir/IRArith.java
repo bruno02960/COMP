@@ -7,7 +7,8 @@ import java.util.ArrayList;
 /**
  *
  */
-public class IRArith extends IRNode {
+public class IRArith extends IRNode
+{
     private Operation op;
     private IRNode rhs, lhs;
 
@@ -52,6 +53,10 @@ public class IRArith extends IRNode {
         return inst;
     }
 
+    /**
+     * This method checks if both lhs and rhs of arith are constant, and if so, returns the result of the operation between them.
+     * @return the string with the value of the operation, otherwise, null.
+     */
     private String getOperandsInstructionsIfConstantness()
     {
         String lhsValue = checkOperandForConstantness(lhs);
@@ -67,6 +72,10 @@ public class IRArith extends IRNode {
         return operationValue.toString();
     }
 
+    /**
+     * This method checks if the node given is constant, returning its constant value.
+     * @return the string const value of the node, otherwise, null.
+     */
     private String checkOperandForConstantness(IRNode node)
     {
         if(node instanceof IRConstant)
@@ -78,8 +87,8 @@ public class IRArith extends IRNode {
     }
 
     /**
-     *
-     * @return the jvm code as string of the attribute operation
+     * Finds the the jvm code as string of the attribute operation.
+     * @return the jvm code as string of the attribute operation.
      */
     private String getOpInstructions()
     {
