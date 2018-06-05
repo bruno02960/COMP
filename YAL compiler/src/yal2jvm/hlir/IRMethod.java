@@ -521,15 +521,23 @@ public class IRMethod extends IRNode
     }
 
     /**
-     *
-     * @return
+     * Gets an array with all the arguments of the method.
+     * 
+     * If this method is the equivalent of Java's main,
+     * then it assumes one and only variable as an argument,
+     * that is, the equivalent of Java's String[] args. The
+     * name of this variable is 0-mainArgs, which is not a 
+     * valid Yal variable name, to avoid conflicts with other
+     * variables that exist in the rest of the method.
+     * 
+     * @return an ordered array of Variable objects representing the method's arguments
      */
 	public Variable[] getArgs()
 	{
 		if (this.name.equals("main") && this.args.length == 0)
 		{
 			Variable[] ret = new Variable[1];
-			ret[0] = new Variable("mainArgs", Type.ARRAY);
+			ret[0] = new Variable("0-mainArgs", Type.ARRAY);
 			return ret;
 		}
 		return args;
