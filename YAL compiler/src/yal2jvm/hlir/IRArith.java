@@ -32,7 +32,57 @@ public class IRArith extends IRNode {
 
         ArrayList<String> lhsInst = lhs.getInstructions();
         ArrayList<String> rhsInst = rhs.getInstructions();
+        String opInst = getOpInstructions();
 
+        if(HLIR.optimize)
+        {
+            String constantenessValue = getOperandsInstructionsIfConstantness();
+            if(constantenessValue != null)
+            {
+                IRConstant constant = new IRConstant(constantenessValue);
+                inst.addAll(constant.getInstructions());
+                return inst;
+            }
+        }
+
+
+        inst.addAll(lhsInst);
+        inst.addAll(rhsInst);
+        inst.add(opInst);
+        return inst;
+    }
+
+    private String getOperandsInstructionsIfConstantness()
+    {
+        String lhsValue = checkOperandForConstantness(lhs);
+        if(lhsValue == null)
+            return null;
+
+        String rhsValue = checkOperandForConstantness(rhs);
+        if(rhsValue == null)
+            return null;
+
+        Integer operationValue = Utils.getOperationValueByOperator(lhsValue, rhsValue, op);
+
+        return operationValue.toString();
+    }
+
+    private String checkOperandForConstantness(IRNode node)
+    {
+        if(node instanceof IRConstant)
+            return ((IRConstant)node).getValue();
+        else if(node instanceof IRLoad)
+            return ((IRLoad)node).getLoadedConstantValue();
+        else
+            return null;
+    }
+
+    /**
+     *
+     * @return the jvm code as string of the attribute operation
+     */
+    private String getOpInstructions()
+    {
         String opInst = null;
 
         switch (op)
@@ -68,12 +118,7 @@ public class IRArith extends IRNode {
                 opInst = "lxor";
                 break;
         }
-
-
-        inst.addAll(lhsInst);
-        inst.addAll(rhsInst);
-        inst.add(opInst);
-        return inst;
+        return opInst;
     }
 
     /**
@@ -164,14 +209,15 @@ public class IRArith extends IRNode {
     {
         if(node instanceof IRConstant)
             return ((IRConstant)node).getValue();
-        else
+        else if(node instanceof IRLoad)
         {
             IRLoad load = (IRLoad)node;
             String varName = getVarNameForConstantName(load.getName(), load.getIndex());
             IRConstant constant = method.getConstValueByConstVarName(varName);
-            if(constant == null)
-                return null;
-            return constant.getValue();
+            if(constant != null)
+                return constant.getValue();
         }
+
+        return null;
     }
 }
