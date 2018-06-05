@@ -373,5 +373,4 @@ public abstract class IRNode
 
         return varName;
     }
-
 }

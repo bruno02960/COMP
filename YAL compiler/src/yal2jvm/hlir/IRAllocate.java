@@ -392,5 +392,4 @@ public class IRAllocate extends IRNode
     {
         this.name = name;
     }
-
 }

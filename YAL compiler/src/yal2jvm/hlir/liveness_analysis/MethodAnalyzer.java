@@ -2,6 +2,8 @@ package yal2jvm.hlir.liveness_analysis;
 
 import java.util.ArrayList;
 
+import yal2jvm.Yal2jvm;
+
 /**
  *
  */
@@ -26,20 +28,25 @@ public class MethodAnalyzer
 	public void analyze()
 	{
 		method.getAllVars();
-		
-		System.out.println("Liveness analysis of method " + methodName);
-		//TODO REMOVE
-		//System.out.print("Local vars: ");
-		//System.out.println(allVars);
-		
 		method.buildAllLines();
 		method.calculateSets();
+		getGraph();
+		printResults();
+	}
+	
+	private void printResults()
+	{
+		if (!Yal2jvm.VERBOSE)
+			return;
 		
-		//TODO remove
+		System.out.println("--------------------------------------------------");
+		System.out.println("Liveness analysis of method " + methodName + ":");
 		ArrayList<Line> lines = method.getLines();
 		for (Line l : lines)
 			System.out.println(l);
-		System.out.println("");
+		System.out.println("\nInterferences and mandatory registers:");
+		System.out.println(getGraph().toString());
+		System.out.println("--------------------------------------------------");
 	}
 
 	/**
@@ -60,8 +67,6 @@ public class MethodAnalyzer
 			
 		ArrayList<String> args = method.getAllArgs();
 		graph.setRequiredRegisters(args);
-		
-		System.out.println(graph.toString());
 		
 		return graph;
 	}
