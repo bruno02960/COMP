@@ -22,7 +22,7 @@ public class LivenessAnalyzer
 	public LivenessAnalyzer(IRModule ir)
 	{
 		this.ir = ir;
-		this.intGraphs = new HashMap<String,IntGraph>();
+		this.intGraphs = new HashMap<>();
 	}
 
 	/**

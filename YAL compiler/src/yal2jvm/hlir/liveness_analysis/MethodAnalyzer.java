@@ -27,7 +27,8 @@ public class MethodAnalyzer
 	{
 		method.getAllVars();
 		
-		System.out.println("Liveness analysis of method " + method.getName());
+		System.out.println("Liveness analysis of method " + methodName);
+		//TODO REMOVE
 		//System.out.print("Local vars: ");
 		//System.out.println(allVars);
 		
