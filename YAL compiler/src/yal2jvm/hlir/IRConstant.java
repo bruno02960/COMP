@@ -10,7 +10,7 @@ public class IRConstant extends IRNode
     private String value;
 
     /**
-     *
+     * Constructor for the class IRConstant
      * @param irConstant
      */
     public IRConstant(IRConstant irConstant)

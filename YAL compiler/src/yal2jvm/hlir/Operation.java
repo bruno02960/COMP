@@ -14,9 +14,9 @@ public enum Operation
     XOR;
 
     /**
-     *
-     * @param operator
-     * @return
+     * Receives an operator as a String and return the equivalent Operation enum value
+     * @param operator  operator that will be used to retrieve it's Operation enum equivalent
+     * @return          Operation enum value if operator is recognized. Null if it isn't.
      */
     static Operation parseOperator(String operator) {
         switch(operator) {
@@ -46,8 +46,9 @@ public enum Operation
     }
 
     /**
+     * Retrieves this object's symbol as a String operator
      *
-     * @return
+     * @return  this object as a String operator. Empty string if this object isn't a valid operator.
      */
     String getSymbol() {
         switch(this) {

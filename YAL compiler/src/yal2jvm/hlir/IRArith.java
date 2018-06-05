@@ -77,8 +77,8 @@ public class IRArith extends IRNode {
     }
 
     /**
-     *
-     * @return
+     * Returns this object's rhs field
+     * @return  rhs field value
      */
     public IRNode getRhs()
     {
@@ -86,8 +86,8 @@ public class IRArith extends IRNode {
     }
 
     /**
-     *
-     * @param rhs
+     * Sets this object's rhs field to the rhs parameter
+     * @param rhs   the new value of this object's rhs field
      */
     public void setRhs(IRNode rhs)
     {
@@ -96,8 +96,8 @@ public class IRArith extends IRNode {
     }
 
     /**
-     *
-     * @return
+     * Returns this object's lhs field
+     * @return lhs field value
      */
     public IRNode getLhs()
     {
@@ -105,8 +105,8 @@ public class IRArith extends IRNode {
     }
 
     /**
-     *
-     * @param lhs
+     * Sets this object's lhs field to the rhs parameter
+     * @param lhs    the new value of this object's lhs field
      */
     public void setLhs(IRNode lhs)
     {
@@ -115,16 +115,19 @@ public class IRArith extends IRNode {
     }
 
     /**
-     *
-     * @return
+     * Returns this object's op field
+     * @return  op field value
      */
     public Operation getOp() {
         return op;
     }
 
     /**
-     *
-     * @return
+     * Confirms if the lhs and rhs values are constants or not, and calls the function that processes
+     * the operation between the two values and turns the result of that function into a String
+     * @return  the value of the operation between the lhs and rhs if they are both constants.
+     *          null if one or both of them are not constants or the operator between them isn't recognized
+     *          in the function getOperationValue
      */
     public String getStringValueIfBothConstant()
     {
@@ -151,6 +154,12 @@ public class IRArith extends IRNode {
         return String.valueOf(Utils.getOperationValue(lhsValue, rhsValue, op.getSymbol()));
     }
 
+    /**
+     *
+     * @param method
+     * @param node
+     * @return
+     */
     private String getValueIfConstant(IRMethod method, IRNode node)
     {
         if(node instanceof IRConstant)

@@ -19,9 +19,10 @@ public class IRAssign {
     ArrayList<Variable> operands = new ArrayList<>();
 
     /**
-     *
-     * @param astlhs
-     * @param astrhs
+     * Constructor for class IRAssign that takes the astLhs and astrhs values in the parameters
+     * to put them in their respective fields
+     * @param astlhs    contains the lhs tree
+     * @param astrhs    contains the rhs tree
      */
     IRAssign(ASTLHS astlhs, ASTRHS astrhs) {
         this.astlhs = astlhs;
