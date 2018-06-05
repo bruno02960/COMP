@@ -179,7 +179,7 @@ public abstract class IRNode
      */
     public IRNode findParent(String nodeType)
     {
-        IRNode res = null;
+        IRNode res;
         IRNode par = this.parent;
         while (true)
         {

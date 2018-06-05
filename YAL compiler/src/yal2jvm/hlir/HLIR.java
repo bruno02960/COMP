@@ -288,13 +288,15 @@ public class HLIR
                 }
             }
         }
-        IRMethod function = new IRMethod(functionId, returnType, returnName, arguments);
+        IRMethod function = new IRMethod(functionId, returnType, arguments);
         root.addChild(function);
 
         //parse statements
         if (!(currNode instanceof ASTSTATEMENTS))
             currNode = (SimpleNode) astFunction.jjtGetChild(++argumentsIndex);
         createStatementsHHIR((ASTSTATEMENTS) currNode, function);
+        IRReturn irReturn = new IRReturn(returnName, returnType);
+        function.addChild(irReturn);
     }
 
     /**
@@ -315,7 +317,7 @@ public class HLIR
                     break;
 
                 case "CALL":
-                    irmethod.addChild(getCallHHIR((ASTCALL) child));
+                    irmethod.addChild(getIRCall((ASTCALL) child, null));
                     break;
 
                 case "IF":
@@ -453,7 +455,7 @@ public class HLIR
 
         Node astTermChild = astTerm.jjtGetChild(0);
         if(astTermChild instanceof ASTCALL)
-            return getCallHHIR((ASTCALL) astTermChild);
+            return getIRCall((ASTCALL) astTermChild, null);
         else if(astTermChild instanceof ASTARRAYACCESS)
         {
             VariableArray variable = getArrayAccessIRNode((ASTARRAYACCESS) astTermChild);
@@ -795,26 +797,6 @@ public class HLIR
         }
 
         return new IRCall(methodId, moduleId, arguments, lhsVarName);
-    }
-
-    /**
-     *
-     * @param astCall
-     * @return
-     */
-    private IRCall getCallHHIR(ASTCALL astCall)
-    {
-        String moduleId = astCall.module;
-        String methodId = astCall.method;
-        ArrayList<Variable> arguments = null;
-
-        if (astCall.jjtGetNumChildren() > 0)
-        {
-            ASTARGUMENTS astarguments = (ASTARGUMENTS) astCall.jjtGetChild(0);
-            arguments = getFunctionCallArgumentsIds(astarguments);
-        }
-
-        return getIRCall(astCall, null);
     }
 
     /**
