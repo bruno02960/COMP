@@ -466,21 +466,6 @@ public class IRMethod extends IRNode
     /**
      *
      * @param name
-     * @param callerNodeThis
-     * @return
-     */
-    public int getVarRegisterDeclaredUntilThis(String name, IRNode callerNodeThis)
-    {
-        IRAllocate var = getVarDeclaredUntilThis(name, callerNodeThis);
-        if(var == null)
-            return -1;
-
-        return var.getRegister();
-    }
-
-    /**
-     *
-     * @param name
      * @return
      */
     public Type getVarType(String name)
