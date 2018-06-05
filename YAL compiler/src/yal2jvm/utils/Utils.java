@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeSet;
 
+import yal2jvm.hlir.Operation;
 import yal2jvm.symbol_tables.Symbol;
 
 /**
@@ -127,6 +128,44 @@ public class Utils
             case "|":
                 return Integer.parseInt(var1) | Integer.parseInt(var2);
             case "^":
+                return Integer.parseInt(var1) ^ Integer.parseInt(var2);
+        }
+
+        return 0;
+    }
+
+    /**
+     * Receives two string variables and the operator, enum from class Operation, between them and checks which operator the string is.
+     * After finding out which operator it is, it is returned the value of the operation between the integer
+     * of the two string variables
+     * @param var1      left side variable
+     * @param var2      right side variable
+     * @param operator  operator between the two variables, of class Operaion
+     * @return          the result of the operation between the variables. 0 if the operator isn't recognized.
+     */
+    public static int getOperationValueByOperator(String var1, String var2, Operation operator)
+    {
+        switch(operator)
+        {
+            case ADD:
+                return Integer.parseInt(var1) + Integer.parseInt(var2);
+            case SUB:
+                return Integer.parseInt(var1) - Integer.parseInt(var2);
+            case MULT:
+                return Integer.parseInt(var1) * Integer.parseInt(var2);
+            case DIV:
+                return Integer.parseInt(var1) / Integer.parseInt(var2);
+            case SHIFT_R:
+                return Integer.parseInt(var1) >> Integer.parseInt(var2);
+            case SHIFT_L:
+                return Integer.parseInt(var1) << Integer.parseInt(var2);
+            case USHIFT_R:
+                return Integer.parseInt(var1) >>> Integer.parseInt(var2);
+            case AND:
+                return Integer.parseInt(var1) & Integer.parseInt(var2);
+            case OR:
+                return Integer.parseInt(var1) | Integer.parseInt(var2);
+            case XOR:
                 return Integer.parseInt(var1) ^ Integer.parseInt(var2);
         }
 
