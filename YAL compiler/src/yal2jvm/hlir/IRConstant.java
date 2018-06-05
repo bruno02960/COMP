@@ -42,9 +42,9 @@ public class IRConstant extends IRNode
             int integer = Integer.parseInt(value);
             inst.add(getLoadConstantInstruction(integer));
         }
-        catch(NumberFormatException nfe)
+        catch(NumberFormatException nfe) // if value is string type
         {
-            inst.add("ldc " + value);                       /* if value is string type */
+            inst.add("ldc " + value);
         }
 
         return inst;
