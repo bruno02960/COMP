@@ -11,8 +11,10 @@ public class IntGraph implements Serializable
 	private ArrayList<IntNode> nodes;
 
 	/**
-	 *
-	 * @param graph
+	 * Copy constructor of the IntGraph, it creates a new IntGraph based on the graph passed by argument.
+	 * As the graph has a list of nodes (IntNode objects) that have themselves a list of nodes (we had problems with recursivity in contructors)
+	 * and the only solution we found was to to make a copy using serialization., method getGraphCopy.
+	 * @param graph based on the new IntGraph will be created
 	 */
 	public IntGraph(IntGraph graph)
 	{
@@ -41,6 +43,7 @@ public class IntGraph implements Serializable
 		n2.addInterference(n1);
 	}
 
+	//TODO REMOVE IF NOT USED
 	/**
 	 *
 	 * @param node
@@ -144,8 +147,10 @@ public class IntGraph implements Serializable
 	}
 
 	/**
+	 * Uses serialization to create a deep copy of the graph. It saves the graph object to a file tempdata.ser and read it again.
+	 * This method a retry count, in order to prevent common errors deleting temp file or with stream fail.
 	 * @param graph
-	 * @return
+	 * @return a deep copy of the graph passed in by argument
 	 */
 	private IntGraph getGraphCopy(IntGraph graph)
 	{
