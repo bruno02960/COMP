@@ -131,7 +131,7 @@ public class Yal2jvm
         	hlir.dumpIR();
         
         if (this.optimize)
-            hlir.optimize();
+            hlir.setOptimize();
 
         hlir.dataflowAnalysis();
         boolean allocated = hlir.allocateRegisters(this.localVars);

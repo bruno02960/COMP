@@ -17,43 +17,29 @@ import yal2jvm.utils.Utils;
 public class HLIR
 {
     private IRModule root;
-    private SimpleNode ast;
 	private HashMap<String, IntGraph> intGraphs;
 	public static boolean optimize;
     public static HashMap<String, HashMap<String, Integer>> allocatedRegisterByMethodName;
 
     /**
-     *
+     * Creates a HLIR
      * @param ast
      */
-    public HLIR(SimpleNode ast)
-    {
-        this.ast = ast;
-        this.root = createHHIR();
-    }
-
-    /**
-     *
-     * @return
-     */
-    private IRModule createHHIR()
-    {
+    public HLIR(SimpleNode ast) {
         ASTMODULE astModule = (ASTMODULE) ast;
         createModuleHHIR(astModule);
-
-        return root;
     }
 
     /**
-     *
+     * Sets the optimize attribute to true
      */
-    public void optimize()
+    public void setOptimize()
     {
         HLIR.optimize = true;
     }
 
     /**
-     *
+     * Performs the dataflow analysis
      */
     public void dataflowAnalysis()
     {
@@ -63,9 +49,9 @@ public class HLIR
     }
 
     /**
-     *
-     * @param maxLocals
-     * @return
+     * Allocates registers
+     * @param maxLocals locals maximum
+     * @return true if the allocation could be done, false otherwise
      */
     public boolean allocateRegisters(int maxLocals)
     {
@@ -81,7 +67,7 @@ public class HLIR
     }
 
     /**
-     * 
+     * Prints the intermediate representation
      */
     public void dumpIR()
     {
@@ -91,9 +77,9 @@ public class HLIR
     }
     
     /**
-     * 
-     * @param node
-     * @param x
+     * Recursive function used in dumpIR with no args
+     * @param node Node to be printed
+     * @param x node level
      */
     private void dumpIR(IRNode node, int x)
 	{
@@ -105,7 +91,7 @@ public class HLIR
 	}
 
 	/**
-     *
+     * TODO
      * @param methods
      */
     private void assignNewRegisters(HashMap<String, HashMap<String, Integer>> methods)
@@ -121,7 +107,7 @@ public class HLIR
 	}
 
     /**
-     *
+     * TODO
      * @param methodVars
      * @param methodName
      */
@@ -150,15 +136,17 @@ public class HLIR
 		{
 			if (Yal2jvm.VERBOSE)
 				System.out.println("Var " + key + " -> " + methodVars.get(key));
-			method.assignNewRegister(key, methodVars.get(key));
+            assert method != null;
+            method.assignNewRegister(key, methodVars.get(key));
 			uniqueRegs.add(methodVars.get(key));
 		}
-		method.setRegisterCount(uniqueRegs.size());
+        assert method != null;
+        method.setRegisterCount(uniqueRegs.size());
 	}
 
     /**
-     *
-     * @return
+     * Gets the instructions from code generation
+     * @return an arrayList with the instructions
      */
 	public ArrayList<String> selectInstructions()
     {
@@ -170,8 +158,8 @@ public class HLIR
     }
 
     /**
-     *
-     * @return
+     * Gets clInit method instructions
+     * @return an array list with the instructions
      */
     private ArrayList<String> getMethodClInit()
     {
@@ -194,7 +182,7 @@ public class HLIR
     }
 
     /**
-     *
+     * TODO
      * @return
      */
     private ArrayList<String> getAllIRGlobalStaticInstructions()
@@ -216,8 +204,8 @@ public class HLIR
     }
 
     /**
-     *
-     * @return
+     * Gets the module name
+     * @return module name
      */
     public String getModuleName()
     {
@@ -225,8 +213,8 @@ public class HLIR
     }
 
     /**
-     *
-     * @param astModule
+     * Creates the module intermediate representation
+     * @param astModule ASTMODULE
      */
     private void createModuleHHIR(ASTMODULE astModule)
     {
@@ -245,14 +233,13 @@ public class HLIR
     }
 
     /**
-     *
-     * @param astFunction
+     * Creates the function intermediate representation
+     * @param astFunction ASTFUNCTION
      */
     private void createFunctionHHIR(ASTFUNCTION astFunction)
     {
         String functionId = astFunction.id;
-        Type returnType = Type.VOID;
-        String returnName = null;
+        Variable returnVar = new Variable(null, Type.VOID);
         Variable[] arguments = null;
 
         //indicates the index(child num) of the arguments. 0 if no return value, or 1 if has return value
@@ -265,17 +252,15 @@ public class HLIR
             argumentsIndex++;
             if (currNode instanceof ASTSCALARELEMENT)
             {
-                returnType = Type.INTEGER;
-                returnName = ((ASTSCALARELEMENT) currNode).id;
+                returnVar = new Variable(((ASTSCALARELEMENT) currNode).id, Type.INTEGER);
             }
             else if (currNode instanceof ASTARRAYELEMENT)
             {
-                returnType = Type.ARRAY;
-                returnName = ((ASTARRAYELEMENT) currNode).id;
+                returnVar = new Variable(((ASTARRAYELEMENT) currNode).id, Type.ARRAY);
             }
             else
             {
-                returnType = Type.VOID;
+                returnVar = new Variable(null, Type.VOID);
             }
         }
 
@@ -301,21 +286,34 @@ public class HLIR
                 }
             }
         }
-        IRMethod function = new IRMethod(functionId, returnType, arguments);
+
+        IRMethod function = new IRMethod(functionId, returnVar.getType(), arguments);
         root.addChild(function);
 
         //parse statements
+        parseStatements(astFunction, returnVar, argumentsIndex, currNode, function);
+    }
+
+    /**
+     * Parses the function statements
+     * @param astFunction ASTFUNCTION
+     * @param returnVar return variable
+     * @param argumentsIndex arguments index
+     * @param currNode current node
+     * @param function IRMethod
+     */
+    private void parseStatements(ASTFUNCTION astFunction, Variable returnVar, int argumentsIndex, SimpleNode currNode, IRMethod function) {
         if (!(currNode instanceof ASTSTATEMENTS))
             currNode = (SimpleNode) astFunction.jjtGetChild(++argumentsIndex);
         createStatementsHHIR((ASTSTATEMENTS) currNode, function);
-        IRReturn irReturn = new IRReturn(returnName, returnType);
+        IRReturn irReturn = new IRReturn(returnVar);
         function.addChild(irReturn);
     }
 
     /**
-     *
-     * @param aststatements
-     * @param irmethod
+     * Creates the statements intermediate representation
+     * @param aststatements ASTSTATEMENTS
+     * @param irmethod IRMethod
      */
     private void createStatementsHHIR(ASTSTATEMENTS aststatements, IRMethod irmethod)
     {
@@ -349,9 +347,9 @@ public class HLIR
     }
 
     /**
-     *
-     * @param astIf
-     * @param irmethod
+     * Creates the If intermediate representation
+     * @param astIf ASTIF
+     * @param irmethod IRMethod
      */
     private void createIfHHIR(ASTIF astIf, IRMethod irmethod)
     {
@@ -381,6 +379,21 @@ public class HLIR
         createStatementsHHIR(astIfStatements, irmethod);
 
         // if 2 childs, so else exists
+        createElseHHIR(astIf, irmethod, labelFalse, labelEnd);
+
+        //label true
+        IRLabel irLabelEnd = new IRLabel(labelEnd);
+        irmethod.addChild(irLabelEnd);
+    }
+
+    /**
+     * Creates the Else intermediate representation
+     * @param astIf ASTIF
+     * @param irmethod IRMethod
+     * @param labelFalse label for false statement
+     * @param labelEnd label for end
+     */
+    private void createElseHHIR(ASTIF astIf, IRMethod irmethod, String labelFalse, String labelEnd) {
         if(astIf.jjtGetNumChildren() > 2)
         {
             //jump end
@@ -395,16 +408,12 @@ public class HLIR
             ASTSTATEMENTS astElseStatements = (ASTSTATEMENTS) astElse.jjtGetChild(0);
             createStatementsHHIR(astElseStatements, irmethod);
         }
-
-        //label true
-        IRLabel irLabelEnd = new IRLabel(labelEnd);
-        irmethod.addChild(irLabelEnd);
     }
 
     /**
-     *
-     * @param astLhs
-     * @return
+     * Gets the lhs IRNode
+     * @param astLhs ASTLHS
+     * @return lhs IRNode
      */
     private IRNode getLhsIRNode(ASTLHS astLhs)
     {
@@ -424,9 +433,9 @@ public class HLIR
     }
 
     /**
-     *
-     * @param astRhs
-     * @return
+     * Gets the rhs intermediate representation node of Exprtest
+     * @param astRhs ASTRHS
+     * @return rhs IRNode of Exprtest
      */
     private IRNode getRhsIRNodeOfExprtest(ASTRHS astRhs)
     {
@@ -450,9 +459,9 @@ public class HLIR
     }
 
     /**
-     *
-     * @param astTerm
-     * @return
+     * Gets the term intermediate representation node
+     * @param astTerm ASTTERM
+     * @return term IRNode
      */
     private IRNode getTermIRNode(ASTTERM astTerm)
     {
@@ -479,9 +488,9 @@ public class HLIR
     }
 
     /**
-     *
-     * @param astScalarAccess
-     * @return
+     * Gets the scalar access intermediate representation node
+     * @param astScalarAccess ASTSCALARACCESS
+     * @return scalar access IRNode
      */
     private IRNode getScalarAccessIRNode(ASTSCALARACCESS astScalarAccess)
     {
@@ -490,9 +499,9 @@ public class HLIR
     }
 
     /**
-     *
-     * @param astWhile
-     * @param irmethod
+     * Creates the while intermediate representation
+     * @param astWhile ASTWHILE
+     * @param irmethod IRMethdod
      */
     private void createWhileHHIR(ASTWHILE astWhile, IRMethod irmethod)
     {
@@ -530,9 +539,9 @@ public class HLIR
     }
 
     /**
-     *
-     * @param irmethod
-     * @param labelEnd
+     * Creates the jump end intermediate representation
+     * @param irmethod IRMethod
+     * @param labelEnd end label
      */
     private void createJumpEndHHIR(IRMethod irmethod, String labelEnd)
     {
@@ -541,11 +550,11 @@ public class HLIR
     }
 
     /**
-     *
-     * @param astNode
-     * @param irmethod
-     * @param label
-     * @param invert
+     * Creates the exprtest intermediate representation
+     * @param astNode ASTNODE
+     * @param irmethod IRMethod
+     * @param label label
+     * @param invert inverted conditions
      */
     private void createExprTestHHIR(Node astNode, IRMethod irmethod, String label, boolean invert)
     {
@@ -574,6 +583,97 @@ public class HLIR
     {
         IRAssign irAssign = new IRAssign((ASTLHS) child.jjtGetChild(0), (ASTRHS) child.jjtGetChild(1));
 
+        createAssignLhsHHIR(irAssign);
+
+        irAssign.operator = irAssign.astrhs.operator; /* operator == null? IRAllocate : IRStoreArith */
+        int numChildren = irAssign.astrhs.jjtGetNumChildren();
+        for (int i = 0; i < numChildren; i++)
+        {
+            SimpleNode rhchild = (SimpleNode) irAssign.astrhs.jjtGetChild(i);
+            createAssignRhsHHIR(irAssign, rhchild);
+        }
+
+        createAssignIR(irAssign, irmethod);
+    }
+
+    /**
+     * Creates the assign rhs intermediate representation
+     * @param irAssign IRAssign
+     * @param rhchild rhchild
+     */
+    private void createAssignRhsHHIR(IRAssign irAssign, SimpleNode rhchild) {
+        switch (rhchild.toString())
+        {
+            case "TERM":
+                ASTTERM term = (ASTTERM) rhchild;
+
+                if (term.integer != null)
+                {
+                    String str_value = term.operator + term.integer;
+                    irAssign.operands.add(new Variable(str_value, Type.INTEGER));
+                }
+                else
+                {
+                    SimpleNode termChild = (SimpleNode) term.jjtGetChild(0);
+
+                    createAssignRhsVariableHHIR(irAssign, term, termChild);
+                }
+                break;
+            case "ARRAYSIZE":
+                ASTARRAYSIZE astarraysize = (ASTARRAYSIZE) rhchild;
+
+                if (astarraysize.jjtGetNumChildren() == 0)
+                {
+                    irAssign.operands.add(new Variable(astarraysize.integer.toString(), Type.INTEGER));
+                } else
+                {
+                    ASTSCALARACCESS astscalaraccess = (ASTSCALARACCESS) astarraysize.jjtGetChild(0);
+                    irAssign.operands.add(new Variable(astscalaraccess.id, Type.VARIABLE));
+                }
+                irAssign.isSize = true;
+                break;
+        }
+    }
+
+    /**
+     * Creates the assign rhs intermediate representation for variable access
+     * @param irAssign IRAssign
+     * @param term ASTTERM
+     * @param termChild termChild
+     */
+    private void createAssignRhsVariableHHIR(IRAssign irAssign, ASTTERM term, SimpleNode termChild) {
+        switch (termChild.toString())
+        {
+            case "CALL":
+
+                ASTCALL astcall = (ASTCALL) termChild;
+                IRCall irCall = getIRCall(astcall, irAssign.lhs.getVar());
+
+                irAssign.operands.add(new VariableCall(null, Type.CALL, irCall));
+                break;
+
+            case "ARRAYACCESS":
+                ASTARRAYACCESS astarrayaccess = ((ASTARRAYACCESS) termChild);
+                ASTINDEX astindex = (ASTINDEX) termChild.jjtGetChild(0);
+                String arrayaccess = term.operator + astarrayaccess.arrayID;
+
+                if (astindex.indexID != null)
+                    irAssign.operands.add(new VariableArray(arrayaccess, new Variable(astindex.indexID, Type.VARIABLE)));
+                else
+                    irAssign.operands.add(new VariableArray(arrayaccess, new Variable(astindex.indexValue.toString(), Type.INTEGER)));
+                break;
+            case "SCALARACCESS":
+                String id = ((ASTSCALARACCESS) termChild).id;
+                irAssign.operands.add(new Variable(id, Type.VARIABLE));
+                break;
+        }
+    }
+
+    /**
+     * Creates the assign lhs intermediate representation
+     * @param irAssign IRAssign
+     */
+    private void createAssignLhsHHIR(IRAssign irAssign) {
         SimpleNode lhchild = (SimpleNode) irAssign.astlhs.jjtGetChild(0);
         switch (lhchild.toString())
         {
@@ -587,92 +687,27 @@ public class HLIR
                 irAssign.lhs = new Variable(astscalaraccess.id, Type.VARIABLE);
                 break;
         }
-
-        irAssign.operator = irAssign.astrhs.operator; /* operator == null? IRAllocate : IRStoreArith */
-        int numChildren = irAssign.astrhs.jjtGetNumChildren();
-        for (int i = 0; i < numChildren; i++)
-        {
-            SimpleNode rhchild = (SimpleNode) irAssign.astrhs.jjtGetChild(i);
-            switch (rhchild.toString())
-            {
-                case "TERM":
-                    ASTTERM term = (ASTTERM) rhchild;
-
-                    if (term.integer != null)
-                    {
-                        String str_value = term.operator + term.integer;
-                        irAssign.operands.add(new Variable(str_value, Type.INTEGER));
-                    }
-                    else
-                    {
-                        SimpleNode termChild = (SimpleNode) term.jjtGetChild(0);
-
-                        switch (termChild.toString())
-                        {
-                            case "CALL":
-
-                                ASTCALL astcall = (ASTCALL) termChild;
-                                IRCall irCall = getIRCall(astcall, irAssign.lhs.getVar());
-
-                                irAssign.operands.add(new VariableCall(null, Type.CALL, irCall));
-                                break;
-
-                            case "ARRAYACCESS":
-                                ASTARRAYACCESS astarrayaccess = ((ASTARRAYACCESS) termChild);
-                                ASTINDEX astindex = (ASTINDEX) termChild.jjtGetChild(0);
-                                String arrayaccess = term.operator + astarrayaccess.arrayID;
-
-                                if (astindex.indexID != null)
-                                    irAssign.operands.add(new VariableArray(arrayaccess, new Variable(astindex.indexID, Type.VARIABLE)));
-                                else
-                                    irAssign.operands.add(new VariableArray(arrayaccess, new Variable(astindex.indexValue.toString(), Type.INTEGER)));
-                                break;
-                            case "SCALARACCESS":
-                                String id = ((ASTSCALARACCESS) termChild).id;
-                                irAssign.operands.add(new Variable(id, Type.VARIABLE));
-                                break;
-                        }
-                    }
-                    break;
-                case "ARRAYSIZE":
-                    ASTARRAYSIZE astarraysize = (ASTARRAYSIZE) rhchild;
-
-                    if (astarraysize.jjtGetNumChildren() == 0)
-                    {
-                        irAssign.operands.add(new Variable(astarraysize.integer.toString(), Type.INTEGER));
-                    } else
-                    {
-                        ASTSCALARACCESS astscalaraccess = (ASTSCALARACCESS) astarraysize.jjtGetChild(0);
-                        irAssign.operands.add(new Variable(astscalaraccess.id, Type.VARIABLE));
-                    }
-                    irAssign.isSize = true;
-                    break;
-            }
-        }
-
-        createAssignIR(irAssign, irmethod);
     }
 
     /**
-     *
-     * @param child
-     * @return
+     * Returns the array access IRNode
+     * @param child ASTARRAYACCESS
+     * @return array access IRNode
      */
     private VariableArray getArrayAccessIRNode(ASTARRAYACCESS child)
     {
-        ASTARRAYACCESS astarrayaccess = child;
-        ASTINDEX astindex = (ASTINDEX) astarrayaccess.jjtGetChild(0);
+        ASTINDEX astindex = (ASTINDEX) child.jjtGetChild(0);
 
         if (astindex.indexID != null)
-            return new VariableArray(astarrayaccess.arrayID, new Variable(astindex.indexID, Type.VARIABLE));
+            return new VariableArray(child.arrayID, new Variable(astindex.indexID, Type.VARIABLE));
         else
-            return new VariableArray(astarrayaccess.arrayID, new Variable(astindex.indexValue.toString(), Type.INTEGER));
+            return new VariableArray(child.arrayID, new Variable(astindex.indexValue.toString(), Type.INTEGER));
     }
 
     /**
-     *
-     * @param irAssign
-     * @param irmethod
+     * Creates the assign intermediate representation for immediate values
+     * @param irAssign IRAssign
+     * @param irmethod IRMethod
      */
     private void createAssignImmediateIR(IRAssign irAssign, IRMethod irmethod) {
         IRStoreCall irStoreCall;
@@ -717,9 +752,9 @@ public class HLIR
     }
 
     /**
-     *
-     * @param irAssign
-     * @param irmethod
+     * Creates the assign intermediate representation for operations
+     * @param irAssign IRAssign
+     * @param irmethod IRMethod
      */
     private void createAssignOperationIR(IRAssign irAssign, IRMethod irmethod) {
         IRStoreArith irStoreArith;
@@ -734,6 +769,26 @@ public class HLIR
             irStoreArith = new IRStoreArith((VariableArray) irAssign.lhs, Operation.parseOperator(irAssign.operator));
         }
 
+        setIRStoreArithLhs(irStoreArith, var1);
+        setIRStoreArithRhs(irStoreArith, var2);
+
+        boolean mayOptimize = var1.getType().equals(Type.INTEGER) && var2.getType().equals(Type.INTEGER);
+
+        if(mayOptimize && optimize) {
+            irmethod.addChild(new IRAllocate(irAssign.lhs.getVar(),
+                    new Variable(String.valueOf(Utils.getOperationValue(var1.getVar(), var2.getVar(), irAssign.operator)), Type.INTEGER)));
+        }
+        else {
+            irmethod.addChild(irStoreArith);
+        }
+    }
+
+    /**
+     * Sets lhs on irStoreArith
+     * @param irStoreArith IRStoreArith
+     * @param var1 variable on lhs
+     */
+    private void setIRStoreArithLhs(IRStoreArith irStoreArith, Variable var1) {
         if(var1.getType().equals(Type.CALL)) {           // a = f1() + X
             irStoreArith.setLhs(((VariableCall) var1).getIrCall());
         } else {
@@ -748,7 +803,15 @@ public class HLIR
                 }
             }
         }
+    }
 
+
+    /**
+     * Sets rhs on irStoreArith
+     * @param irStoreArith IRStoreArith
+     * @param var2 variable on rhs
+     */
+    private void setIRStoreArithRhs(IRStoreArith irStoreArith, Variable var2) {
         if(var2.getType().equals(Type.CALL)) {           // a = f1() + X
             irStoreArith.setRhs(((VariableCall) var2).getIrCall());
         } else {
@@ -763,22 +826,12 @@ public class HLIR
                 }
             }
         }
-
-        boolean mayOptimize = var1.getType().equals(Type.INTEGER) && var2.getType().equals(Type.INTEGER);
-
-        if(mayOptimize && optimize) {
-            irmethod.addChild(new IRAllocate(irAssign.lhs.getVar(),
-                    new Variable(String.valueOf(Utils.getOperationValue(var1.getVar(), var2.getVar(), irAssign.operator)), Type.INTEGER)));
-        }
-        else {
-            irmethod.addChild(irStoreArith);
-        }
     }
 
     /**
-     *
-     * @param irAssign
-     * @param irmethod
+     * Creates the assign intermediate representation
+     * @param irAssign IRAssign
+     * @param irmethod IRMethod
      */
     private void createAssignIR(IRAssign irAssign, IRMethod irmethod) {
         if(irAssign.operator.equals("")) {          // a = IMMEDIATE
@@ -790,10 +843,10 @@ public class HLIR
     }
 
     /**
-     *
-     * @param astCall
-     * @param lhsVarName
-     * @return
+     * Returns IRCall
+     * @param astCall ASTCALL
+     * @param lhsVarName name of lhs variable
+     * @return IRCall
      */
     private IRCall getIRCall(ASTCALL astCall, String lhsVarName)
     {
@@ -813,9 +866,9 @@ public class HLIR
     }
 
     /**
-     *
-     * @param astArguments
-     * @return
+     * Returns function call arguments ids
+     * @param astArguments ASTARGUMENTS
+     * @return arguments variable arrayList
      */
     private ArrayList<Variable> getFunctionCallArgumentsIds(ASTARGUMENTS astArguments)
     {
@@ -869,14 +922,7 @@ public class HLIR
                 {
                     ASTARRAYSIZE astarraysize = (ASTARRAYSIZE) astdeclaration.jjtGetChild(1);
 
-                    if (astarraysize.jjtGetNumChildren() == 0)
-                    {
-                        value = new Variable(astarraysize.integer.toString(), Type.INTEGER);
-                    } else
-                    {
-                        ASTSCALARACCESS astscalaraccess = (ASTSCALARACCESS) astarraysize.jjtGetChild(0);
-                        value = new Variable((astdeclaration.operator + astscalaraccess.id), Type.VARIABLE);
-                    }
+                    value = getArraySizeVariable(astdeclaration, astarraysize);
 
                     arraySize = true;
 
@@ -892,13 +938,7 @@ public class HLIR
                         value = new Variable(str_value, Type.INTEGER);
                     }
 
-                    IRGlobal irGlobal = root.getGlobal(variable.getVar());
-                    if(irGlobal != null && initialized)
-                    {
-                        variable.setType(Type.ARRAY);
-                        root.addChild(new IRGlobal(variable, value));
-                        return;
-                    }
+                    if (setGlobalVariableToArray(variable, value, initialized)) return;
 
                     variable.setType(Type.INTEGER);
                 }
@@ -953,5 +993,29 @@ public class HLIR
                     break;
             }
         }
+    }
+
+    private boolean setGlobalVariableToArray(Variable variable, Variable value, boolean initialized) {
+        IRGlobal irGlobal = root.getGlobal(variable.getVar());
+        if(irGlobal != null && initialized)
+        {
+            variable.setType(Type.ARRAY);
+            root.addChild(new IRGlobal(variable, value));
+            return true;
+        }
+        return false;
+    }
+
+    private Variable getArraySizeVariable(ASTDECLARATION astdeclaration, ASTARRAYSIZE astarraysize) {
+        Variable value;
+        if (astarraysize.jjtGetNumChildren() == 0)
+        {
+            value = new Variable(astarraysize.integer.toString(), Type.INTEGER);
+        } else
+        {
+            ASTSCALARACCESS astscalaraccess = (ASTSCALARACCESS) astarraysize.jjtGetChild(0);
+            value = new Variable((astdeclaration.operator + astscalaraccess.id), Type.VARIABLE);
+        }
+        return value;
     }
 }
