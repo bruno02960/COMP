@@ -701,10 +701,13 @@ public abstract class Analysis
 
         if (rhsSymbol.getType().equals("ARRAYSIZE"))
         {
-            // if is from type A = [VALUE] with A already declared or still not declared
-            lhsSymbol.setType(SymbolType.ARRAY.toString());
-            lhsSymbol.setInitialized(true);
-            return addToSymbolTable(lhsSymbol);
+            // if is from type A = [VALUE] with A already declared as array or still not declared
+            if(lhsSymbol.getType().equals(SymbolType.ARRAY.toString()) || lhsSymbol.getType().equals(SymbolType.UNDEFINED.toString()))
+            {
+                lhsSymbol.setType(SymbolType.ARRAY.toString());
+                lhsSymbol.setInitialized(true);
+                return addToSymbolTable(lhsSymbol);
+            }
         }
 
         if (lhsSymbol.getType().equals(SymbolType.UNDEFINED.toString()))
