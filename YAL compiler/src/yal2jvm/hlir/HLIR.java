@@ -12,7 +12,7 @@ import yal2jvm.hlir.register_allocation.RegisterAllocator;
 import yal2jvm.utils.Utils;
 
 /**
- *
+ * HLIR class
  */
 public class HLIR
 {
