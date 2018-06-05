@@ -321,7 +321,6 @@ public class HLIR
         /* using template:
 
                     <do the test>
-                    boper …, lab_false
                     <true_body>
                     jump lab_end
             lab_false:
@@ -453,16 +452,6 @@ public class HLIR
         return new IRLoad(new Variable(id, Type.INTEGER));
     }
 
-    /*private IRNode getIndexIRNode(ASTINDEX astIndex)
-    {
-        Integer indexValue = astIndex.indexValue;
-        if(indexValue != null)
-            return new IRConstant(indexValue.toString());
-
-        String indexID = astIndex.indexID;
-        return new IRLoad(indexID);
-    }*/
-
     /**
      *
      * @param astWhile
@@ -471,13 +460,13 @@ public class HLIR
     private void createWhileHHIR(ASTWHILE astWhile, IRMethod irmethod)
     {
         /* using template:
+
                       <test>
-                      boper …, lab_end
             lab_init:
                       <body>
                       <test>
-                      boper …, lab_init
             lab_end:
+
          */
 
         int labelNumber = root.getAndIncrementCurrLabelNumber();
