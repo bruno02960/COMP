@@ -450,8 +450,8 @@ public class HLIR
 
         //for multiples terms (2) return IRLoadArith
         IRLoadArith irLoadArith = new IRLoadArith(Operation.parseOperator(astRhs.operator));
-        irLoadArith.addChild(termNodes.get(0));
-        irLoadArith.addChild(termNodes.get(1));
+        irLoadArith.setLhs(termNodes.get(0));
+        irLoadArith.setRhs(termNodes.get(1));
         return irLoadArith;
     }
 
