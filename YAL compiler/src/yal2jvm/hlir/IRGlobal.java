@@ -16,10 +16,11 @@ public class IRGlobal extends IRNode
     private ArrayList<String> staticArraysInstructions = new ArrayList<>();
 
     /**
-     *
-     * @param variable
+     * Constructor for cases when we have only declaration of a global variable, integer or array.
+     * Cases like a[]; or a;
+     * @param variable the variable being declared
      */
-    public IRGlobal(Variable variable) // a[]; ou a;
+    public IRGlobal(Variable variable) //
     {
         this.name = variable.getVar();
         this.type = variable.getType();
@@ -27,9 +28,9 @@ public class IRGlobal extends IRNode
     }
 
     /**
-     *
-     * @param variable
-     * @param value
+     * Constructor for cases when we have definition after declaration, or just definition of a global variable, integer or array.
+     * @param variable the variable being declared
+     * @param value the value to be set in the variable
      */
     public IRGlobal(Variable variable, Variable value)
     {
@@ -38,12 +39,13 @@ public class IRGlobal extends IRNode
     }
 
     /**
-     *
-     * @param variable
-     * @param value
-     * @param arraySize
+     * Constructor for cases when we have a declaration of an array with a given size.
+     * Cases like a[]=[50]; or a=[50];
+     * @param variable the array whose size is being set
+     * @param value the value of the array size
+     * @param arraySize the Type.ARRAYSIZE, it's mandatory
      */
-    public IRGlobal(Variable variable, Variable value, Type arraySize) // a[] = [50]; ou a = [50];
+    public IRGlobal(Variable variable, Variable value, Type arraySize)
     {
         this(variable, value);
         assert arraySize == Type.ARRAYSIZE;
@@ -73,7 +75,7 @@ public class IRGlobal extends IRNode
                 else // a[] = 50;
                 {
                     assignAllArrayElements(value);
-                    return new ArrayList<String>();
+                    return new ArrayList<>();
                 }
             }
             else // a = ...
@@ -208,19 +210,5 @@ public class IRGlobal extends IRNode
         return staticArraysInstructions;
     }
 
-    /**
-     *
-     * @return
-     */
-    public ArrayList<String>getInitializationInstructions()
-    {
-		ArrayList<String> inst = new ArrayList<>();
-		
-		//if size
-		
-		//else if init 
-		
-		return inst;
-    }
 }
 
