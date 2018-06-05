@@ -189,28 +189,23 @@ public class Yal2jvm
 	}
 
 	/**
-	 * @param hlir
-	 * @return
+	 * @param inputStream
 	 */
-	private String instructionSelection(HLIR hlir)
+	private void syntacticAnalysis(FileInputStream inputStream)
 	{
-		ArrayList<String> instructions = hlir.selectInstructions();
-        String moduleName = hlir.getModuleName();
-        saveToJasminFile(instructions, moduleName);
-		return moduleName;
+		ast = createAst(inputStream);
+        if (ast == null)
+            System.exit(-2);
 	}
-
-	/**
-	 * @param hlir
-	 */
-	private void registerAllocation(HLIR hlir)
+	
+	private void semanticAnalysis()
 	{
-		hlir.dataflowAnalysis();
-        boolean allocated = hlir.allocateRegisters(this.localVars);
-        if (!allocated)
-        	System.exit(-6);
+		ModuleAnalysis moduleAnalysis = new ModuleAnalysis(ast);
+        moduleAnalysis.parse();
+        if (ModuleAnalysis.hasErrors)
+            System.exit(-3);
 	}
-
+	
 	/**
 	 * @return
 	 */
@@ -221,29 +216,31 @@ public class Yal2jvm
         	hlir.dumpIR();
         
         if (this.optimize)
-            hlir.optimize();
+            hlir.setOptimize();
 		return hlir;
 	}
-
+	
 	/**
-	 * 
+	 * @param hlir
 	 */
-	private void semanticAnalysis()
+	private void registerAllocation(HLIR hlir)
 	{
-		ModuleAnalysis moduleAnalysis = new ModuleAnalysis(ast);
-        moduleAnalysis.parse();
-        if (ModuleAnalysis.hasErrors)
-            System.exit(-3);
+		hlir.dataflowAnalysis();
+        boolean allocated = hlir.allocateRegisters(this.localVars);
+        if (!allocated)
+        	System.exit(-6);
 	}
-
+	
 	/**
-	 * @param inputStream
+	 * @param hlir
+	 * @return
 	 */
-	private void syntacticAnalysis(FileInputStream inputStream)
+	private String instructionSelection(HLIR hlir)
 	{
-		ast = createAst(inputStream);
-        if (ast == null)
-            System.exit(-2);
+		ArrayList<String> instructions = hlir.selectInstructions();
+        String moduleName = hlir.getModuleName();
+        saveToJasminFile(instructions, moduleName);
+		return moduleName;
 	}
     
     /**

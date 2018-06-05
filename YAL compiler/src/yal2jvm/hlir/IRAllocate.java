@@ -186,8 +186,13 @@ public class IRAllocate extends IRNode
      */
     private void handleConstantRhsForConstantPropagationOptimisation()
     {
+        IRMethod method = (IRMethod) findParent("Method");
+
+        //do nothing if variable type is array
+        if(isRhsArrayAndLhsInteger(method) == false)
+            return;
+
         String varName = getVarNameForConstantName(name, lhsIndex);
-        IRMethod method = (IRMethod) parent;
         if(rhs instanceof IRConstant)
         {
             ///TODO ver se nao dá porblema usar o mesmo rhs, secalhar copia pode ser mehor
@@ -207,6 +212,18 @@ public class IRAllocate extends IRNode
             else
                 method.removeFromConstVarNameToConstValue(varName);
         }
+    }
+
+    private boolean isRhsArrayAndLhsInteger(IRMethod method)
+    {
+        if(this.storeVarGlobal && global.getType() == Type.ARRAY && type == Type.INTEGER)
+            return false;
+
+        String varType = getVarType(method);
+        if(varType.equals(Type.ARRAY.name()) && type == Type.INTEGER)
+            return false;
+
+        return true;
     }
 
     /**
@@ -245,7 +262,6 @@ public class IRAllocate extends IRNode
             if(typeStr.equals(Type.ARRAY.name()) && lhsIndex == null)
                 inst.addAll(setAllArrayElements()); // i = 5; com i array
             else
-
             {
                 if(lhsIndex != null) // a[i] = 5;
                     inst.addAll(setGlobalArrayElementByIRNode(lhsIndex, type, name, rhs));
@@ -254,13 +270,8 @@ public class IRAllocate extends IRNode
 		}
 		else
 		{
-            String varType;
             IRMethod method = (IRMethod) findParent("Method");
-            IRNode node = getVarIfExists(name);
-            if(node instanceof IRAllocate)
-                varType = ((IRAllocate)node).getType().name();
-            else
-                varType = method.getArgumentType(name).name();
+            String varType = getVarType(method);
 
             if(varType != null && varType.equals(Type.INTEGER.name())) // i = 5;
             {
@@ -310,6 +321,16 @@ public class IRAllocate extends IRNode
 
         return inst;
 	}
+
+    private String getVarType(IRMethod method)
+    {
+        String varType;IRNode node = getVarIfExists(name);
+        if(node instanceof IRAllocate)
+            varType = ((IRAllocate)node).getType().name();
+        else
+            varType = method.getArgumentType(name).name();
+        return varType;
+    }
 
     /**
      *

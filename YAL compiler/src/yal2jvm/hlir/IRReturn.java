@@ -12,13 +12,12 @@ public class IRReturn extends IRNode
 
     /**
      *
-     * @param name
-     * @param type
+     * @param returnVar
      */
-    public IRReturn(String name, Type type)
+    public IRReturn(Variable returnVar)
     {
-        this.name = name;
-        this.type = type;
+        this.name = returnVar.getVar();
+        this.type = returnVar.getType();
         this.setNodeType("Return");
     }
 
