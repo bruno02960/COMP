@@ -13,20 +13,6 @@ public class IRComparison extends IRNode
 	private String label;
 
 	/**
-	 * Constructor for the class IRComparison using class Comparator comp
-	 *
-	 * @param comp
-	 * @param label
-	 * @param invert
-	 */
-	public IRComparison(Comparator comp, String label, boolean invert)
-	{
-		this.comp = invert ? Comparator.invert(comp) : comp;
-		this.label = label;
-		this.setNodeType("Comparison");
-	}
-
-	/**
 	 * Constructor for the class IRComparison using String operator
 	 *
 	 * @param operator
@@ -85,8 +71,7 @@ public class IRComparison extends IRNode
 	public ArrayList<String> getInstructions()
 	{
 		ArrayList<String> inst = new ArrayList<>();
-		
-		String branchInst = "";
+		String branchInst;
 		
 		if (isConstantZero(rhs))
 		{
