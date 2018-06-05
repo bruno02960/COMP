@@ -10,18 +10,20 @@ package jas;
 
 import java.io.*;
 
-
 public class LookupswitchInsn extends Insn implements RuntimeConstants
 {
-  /**
-   * @param def default Label for switch
-   * @param match array of match values for switch
-   * @param target Label array of corresponding targets for each match
-   */
+	/**
+	 * @param def
+	 *            default Label for switch
+	 * @param match
+	 *            array of match values for switch
+	 * @param target
+	 *            Label array of corresponding targets for each match
+	 */
 
-  public LookupswitchInsn(LabelOrOffset def, int match[],
-                                    LabelOrOffset target[]) {
-    opc = opc_lookupswitch;
-    operand = new LookupswitchOperand(this, def, match, target);
-  }
+	public LookupswitchInsn(LabelOrOffset def, int match[], LabelOrOffset target[])
+	{
+		opc = opc_lookupswitch;
+		operand = new LookupswitchOperand(this, def, match, target);
+	}
 }

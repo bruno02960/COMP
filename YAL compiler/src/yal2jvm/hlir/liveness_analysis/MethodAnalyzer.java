@@ -5,7 +5,8 @@ import java.util.ArrayList;
 import yal2jvm.Yal2jvm;
 
 /**
- * Wrapper class for the dataflow and liveness analysis of a method using the SetBuilder class
+ * Wrapper class for the dataflow and liveness analysis of a method using the
+ * SetBuilder class
  */
 public class MethodAnalyzer
 {
@@ -14,7 +15,9 @@ public class MethodAnalyzer
 
 	/**
 	 * Constructor
-	 * @param method the method to analyze
+	 * 
+	 * @param method
+	 *            the method to analyze
 	 */
 	public MethodAnalyzer(SetBuilder method)
 	{
@@ -33,7 +36,7 @@ public class MethodAnalyzer
 		getGraph();
 		printResults();
 	}
-	
+
 	/**
 	 * Prints the results of the liveness analysis
 	 */
@@ -41,7 +44,7 @@ public class MethodAnalyzer
 	{
 		if (!Yal2jvm.VERBOSE)
 			return;
-		
+
 		System.out.println("Liveness analysis of method " + methodName + ":\n");
 		ArrayList<Line> lines = method.getLines();
 		System.out.println("Local vars: " + method.getLocals() + "\n");
@@ -53,23 +56,24 @@ public class MethodAnalyzer
 
 	/**
 	 * Gets the interference graph for this method
+	 * 
 	 * @return the interference graph
 	 */
 	public IntGraph getGraph()
 	{
 		ArrayList<IntPair> interferences = method.getAllPairs();
-		
+
 		IntGraph graph = new IntGraph();
 		for (IntPair pair : interferences)
 			graph.addInterference(pair.getVar1(), pair.getVar2());
-		
+
 		ArrayList<String> locals = method.getLocals();
 		for (String local : locals)
 			graph.addVariable(local);
-			
+
 		ArrayList<String> args = method.getAllArgs();
 		graph.setRequiredRegisters(args);
-		
+
 		return graph;
 	}
 }

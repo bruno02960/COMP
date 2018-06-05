@@ -7,57 +7,57 @@ import java.util.ArrayList;
  */
 public class IRReturn extends IRNode
 {
-    private String name;
-    private Type type;
+	private String name;
+	private Type type;
 
-    /**
-     *
-     * @param returnVar
-     */
-    public IRReturn(Variable returnVar)
-    {
-        this.name = returnVar.getVar();
-        this.type = returnVar.getType();
-        this.setNodeType("Return");
-    }
+	/**
+	 *
+	 * @param returnVar
+	 */
+	public IRReturn(Variable returnVar)
+	{
+		this.name = returnVar.getVar();
+		this.type = returnVar.getType();
+		this.setNodeType("Return");
+	}
 
-    /**
-     *
-     * @return
-     */
-    @Override
-    public ArrayList<String> getInstructions()
-    {
-        ArrayList<String> inst = new ArrayList<>();
-        if(type == Type.VOID)
-            inst.add("return");
-        else
-        {
-            IRLoad irLoad = new IRLoad(name, type);
-            addChild(irLoad);
-            inst.addAll(irLoad.getInstructions());
-            if(type == Type.ARRAY)
-                inst.add("areturn");
-            else
-                inst.add("ireturn");
-        }
+	/**
+	 *
+	 * @return
+	 */
+	@Override
+	public ArrayList<String> getInstructions()
+	{
+		ArrayList<String> inst = new ArrayList<>();
+		if (type == Type.VOID)
+			inst.add("return");
+		else
+		{
+			IRLoad irLoad = new IRLoad(name, type);
+			addChild(irLoad);
+			inst.addAll(irLoad.getInstructions());
+			if (type == Type.ARRAY)
+				inst.add("areturn");
+			else
+				inst.add("ireturn");
+		}
 
-        return inst;
-    }
+		return inst;
+	}
 
-    /**
-     *
-     * @return
-     */
+	/**
+	 *
+	 * @return
+	 */
 	public String getName()
 	{
 		return name;
 	}
 
-    /**
-     *
-     * @param name
-     */
+	/**
+	 *
+	 * @param name
+	 */
 	public void setName(String name)
 	{
 		this.name = name;

@@ -4,55 +4,35 @@ package yal2jvm.ast;
 public interface YalParserTreeConstants
 {
 
-    public int JJTMODULE = 0;
-    public int JJTDECLARATION = 1;
-    public int JJTFUNCTION = 2;
-    public int JJTVARS = 3;
-    public int JJTARRAYELEMENT = 4;
-    public int JJTSCALARELEMENT = 5;
-    public int JJTSTATEMENTS = 6;
-    public int JJTVOID = 7;
-    public int JJTCALL = 8;
-    public int JJTASSIGN = 9;
-    public int JJTLHS = 10;
-    public int JJTRHS = 11;
-    public int JJTARRAYSIZE = 12;
-    public int JJTTERM = 13;
-    public int JJTEXPRTEST = 14;
-    public int JJTWHILE = 15;
-    public int JJTIF = 16;
-    public int JJTELSE = 17;
-    public int JJTARGUMENTS = 18;
-    public int JJTARGUMENT = 19;
-    public int JJTARRAYACCESS = 20;
-    public int JJTSCALARACCESS = 21;
-    public int JJTINDEX = 22;
+	public int JJTMODULE = 0;
+	public int JJTDECLARATION = 1;
+	public int JJTFUNCTION = 2;
+	public int JJTVARS = 3;
+	public int JJTARRAYELEMENT = 4;
+	public int JJTSCALARELEMENT = 5;
+	public int JJTSTATEMENTS = 6;
+	public int JJTVOID = 7;
+	public int JJTCALL = 8;
+	public int JJTASSIGN = 9;
+	public int JJTLHS = 10;
+	public int JJTRHS = 11;
+	public int JJTARRAYSIZE = 12;
+	public int JJTTERM = 13;
+	public int JJTEXPRTEST = 14;
+	public int JJTWHILE = 15;
+	public int JJTIF = 16;
+	public int JJTELSE = 17;
+	public int JJTARGUMENTS = 18;
+	public int JJTARGUMENT = 19;
+	public int JJTARRAYACCESS = 20;
+	public int JJTSCALARACCESS = 21;
+	public int JJTINDEX = 22;
 
-    public String[] jjtNodeName =
-    {
-        "MODULE",
-        "DECLARATION",
-        "FUNCTION",
-        "VARS",
-        "ARRAYELEMENT",
-        "SCALARELEMENT",
-        "STATEMENTS",
-        "void",
-        "CALL",
-        "ASSIGN",
-        "LHS",
-        "RHS",
-        "ARRAYSIZE",
-        "TERM",
-        "EXPRTEST",
-        "WHILE",
-        "IF",
-        "ELSE",
-        "ARGUMENTS",
-        "ARGUMENT",
-        "ARRAYACCESS",
-        "SCALARACCESS",
-        "INDEX",
-    };
+	public String[] jjtNodeName = { "MODULE", "DECLARATION", "FUNCTION", "VARS", "ARRAYELEMENT", "SCALARELEMENT",
+			"STATEMENTS", "void", "CALL", "ASSIGN", "LHS", "RHS", "ARRAYSIZE", "TERM", "EXPRTEST", "WHILE", "IF",
+			"ELSE", "ARGUMENTS", "ARGUMENT", "ARRAYACCESS", "SCALARACCESS", "INDEX", };
 }
-/* JavaCC - OriginalChecksum=c05cd5902472de347e5bf4f5430c0650 (do not edit this line) */
+/*
+ * JavaCC - OriginalChecksum=c05cd5902472de347e5bf4f5430c0650 (do not edit this
+ * line)
+ */

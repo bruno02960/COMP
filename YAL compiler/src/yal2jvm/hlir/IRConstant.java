@@ -7,103 +7,107 @@ import java.util.ArrayList;
  */
 public class IRConstant extends IRNode
 {
-    private String value;
+	private String value;
 
-    /**
-     * Constructor for the class IRConstant
-     * @param irConstant
-     */
-    public IRConstant(IRConstant irConstant)
-    {
-        super(irConstant);
-        this.value = new String(irConstant.getValue());
-    }
+	/**
+	 * Constructor for the class IRConstant
+	 * 
+	 * @param irConstant
+	 */
+	public IRConstant(IRConstant irConstant)
+	{
+		super(irConstant);
+		this.value = new String(irConstant.getValue());
+	}
 
-    /**
-     *
-     * @param value
-     */
-    public IRConstant(String value)
-    {
-        this.value = value;
-        this.setNodeType("Constant");
-    }
+	/**
+	 *
+	 * @param value
+	 */
+	public IRConstant(String value)
+	{
+		this.value = value;
+		this.setNodeType("Constant");
+	}
 
-    /**
-     *
-     * @return
-     */
-    @Override
-    public ArrayList<String> getInstructions()
-    {
-        ArrayList<String> inst = new ArrayList<>();
-        try
-        {
-            int integer = Integer.parseInt(value);
-            inst.add(getLoadConstantInstruction(integer));
-        }
-        catch(NumberFormatException nfe) // if value is string type
-        {
-            inst.add("ldc " + value);
-        }
+	/**
+	 *
+	 * @return
+	 */
+	@Override
+	public ArrayList<String> getInstructions()
+	{
+		ArrayList<String> inst = new ArrayList<>();
+		try
+		{
+			int integer = Integer.parseInt(value);
+			inst.add(getLoadConstantInstruction(integer));
+		} catch (NumberFormatException nfe) // if value is string type
+		{
+			inst.add("ldc " + value);
+		}
 
-        return inst;
-    }
+		return inst;
+	}
 
-    /**
-     *
-     * @param value
-     * @return
-     */
-    public static String getLoadConstantInstruction(int value)
-    {
-        if(value <= 5 && value >= -1) {
-            if(value == -1) {
-                return "iconst_m1";
-            }
-            else {
-                return "iconst_" + value;
-            }
-        }
-        else {
-            if (value <= 32767 && value >= -32768) {
-                if(value <= 127 && value >= -128 ) {
-                    return "bipush " + value;
-                }
-                else {
-                    return "sipush " + value;
-                }
-            }
-            else {
-                return "ldc " + value;
-            }
-        }
-    }
+	/**
+	 *
+	 * @param value
+	 * @return
+	 */
+	public static String getLoadConstantInstruction(int value)
+	{
+		if (value <= 5 && value >= -1)
+		{
+			if (value == -1)
+			{
+				return "iconst_m1";
+			} else
+			{
+				return "iconst_" + value;
+			}
+		} else
+		{
+			if (value <= 32767 && value >= -32768)
+			{
+				if (value <= 127 && value >= -128)
+				{
+					return "bipush " + value;
+				} else
+				{
+					return "sipush " + value;
+				}
+			} else
+			{
+				return "ldc " + value;
+			}
+		}
+	}
 
-    /**
-     *
-     * @return
-     */
+	/**
+	 *
+	 * @return
+	 */
 	public String getValue()
 	{
 		return value;
 	}
 
-    /**
-     *
-     * @param value
-     */
+	/**
+	 *
+	 * @param value
+	 */
 	public void setValue(String value)
 	{
 		this.value = value;
 	}
 
-    /**
-     *
-     * @return
-     */
-    public Object clone()
-    {
-        return new IRConstant(this);
-    }
+	/**
+	 *
+	 * @return
+	 */
+	public Object clone()
+	{
+		return new IRConstant(this);
+	}
 }

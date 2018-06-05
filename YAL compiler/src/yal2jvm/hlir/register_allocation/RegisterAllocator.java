@@ -35,24 +35,26 @@ public class RegisterAllocator
 		{
 			System.out.println("Doing register allocation for each method\n");
 		}
-		
+
 		Iterator it = intGraphs.entrySet().iterator();
 		while (it.hasNext())
 		{
-			Map.Entry pair = (Map.Entry)it.next();
+			Map.Entry pair = (Map.Entry) it.next();
 			String methodName = (String) pair.getKey();
 			GraphColoring graphColoring = new GraphColoring((IntGraph) pair.getValue(), numberRegisters);
-			if(graphColoring.colorGraph() == false)
+			if (graphColoring.colorGraph() == false)
 			{
 				System.out.println("Error allocating registers to method " + methodName + ".");
-				int numRegisterThatAllowToAllocate = findNumberOfRegisterThatAllowToAllocate(graphColoring, numberRegisters);
-				System.out.println("Number of registers must be equal or higher than " + numRegisterThatAllowToAllocate + ".");
+				int numRegisterThatAllowToAllocate = findNumberOfRegisterThatAllowToAllocate(graphColoring,
+						numberRegisters);
+				System.out.println(
+						"Number of registers must be equal or higher than " + numRegisterThatAllowToAllocate + ".");
 				return false;
-			}
-			else
+			} else
 			{
 				if (Yal2jvm.VERBOSE)
-					System.out.println("Successfull register allocation with a maximum of " + numberRegisters + " registers for method " + methodName);
+					System.out.println("Successfull register allocation with a maximum of " + numberRegisters
+							+ " registers for method " + methodName);
 				allocatedRegisterByMethodName.put(methodName, graphColoring.getVarNameToRegisterNumber());
 			}
 		}
@@ -72,8 +74,7 @@ public class RegisterAllocator
 		{
 			currNumberOfRegisters++;
 			graphColoring.setNumRegisters(currNumberOfRegisters);
-		}
-		while(graphColoring.colorGraph() == false);
+		} while (graphColoring.colorGraph() == false);
 
 		return currNumberOfRegisters;
 	}

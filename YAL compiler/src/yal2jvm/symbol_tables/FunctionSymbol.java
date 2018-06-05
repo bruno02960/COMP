@@ -11,201 +11,212 @@ import java.util.ArrayList;
 public class FunctionSymbol extends Symbol
 {
 
-    private SimpleNode functionAST;
-    private ArrayList<VarSymbol> arguments;
-    private VarSymbol returnValue;
-    private int statementsChildNumber = 0;
+	private SimpleNode functionAST;
+	private ArrayList<VarSymbol> arguments;
+	private VarSymbol returnValue;
+	private int statementsChildNumber = 0;
 
-    /**
-     * Constructor for the class FunctionSymbol
-     * @param functionAST   tree containing the subtrees of function
-     * @param id            object id
-     */
-    public FunctionSymbol(SimpleNode functionAST, String id)
-    {
-        super(id);
-        this.functionAST = functionAST;
-        this.arguments = new ArrayList<>();
-    }
+	/**
+	 * Constructor for the class FunctionSymbol
+	 * 
+	 * @param functionAST
+	 *            tree containing the subtrees of function
+	 * @param id
+	 *            object id
+	 */
+	public FunctionSymbol(SimpleNode functionAST, String id)
+	{
+		super(id);
+		this.functionAST = functionAST;
+		this.arguments = new ArrayList<>();
+	}
 
-    /**
-     * Returns the field functionAST
-     * @return  functionAST field value
-     */
-    public SimpleNode getFunctionAST()
-    {
-        return functionAST;
-    }
+	/**
+	 * Returns the field functionAST
+	 * 
+	 * @return functionAST field value
+	 */
+	public SimpleNode getFunctionAST()
+	{
+		return functionAST;
+	}
 
-    /**
-     * Returns the field arguments
-     * @return  arguments field value
-     */
-    public ArrayList<VarSymbol> getArguments()
-    {
-        return arguments;
-    }
+	/**
+	 * Returns the field arguments
+	 * 
+	 * @return arguments field value
+	 */
+	public ArrayList<VarSymbol> getArguments()
+	{
+		return arguments;
+	}
 
-    /**
-     * Returns the field returnValue
-     * @return  returnValue field value
-     */
-    public VarSymbol getReturnValue()
-    {
-        return returnValue;
-    }
+	/**
+	 * Returns the field returnValue
+	 * 
+	 * @return returnValue field value
+	 */
+	public VarSymbol getReturnValue()
+	{
+		return returnValue;
+	}
 
-    /**
-     * Returns the statementsChildNumber field
-     * @return  statementsChildNumber field value
-     */
-    public int getStatementsChildNumber()
-    {
-        return statementsChildNumber;
-    }
+	/**
+	 * Returns the statementsChildNumber field
+	 * 
+	 * @return statementsChildNumber field value
+	 */
+	public int getStatementsChildNumber()
+	{
+		return statementsChildNumber;
+	}
 
-    /**
-     * Calls functions that process the arguments and return value of a function
-     */
-    public void parseFunctionHeader()
-    {
-        //indicates the index(child num) of the arguments. 0 if no return value, or 1 if has return value
-        int argumentsIndex = 0;
+	/**
+	 * Calls functions that process the arguments and return value of a function
+	 */
+	public void parseFunctionHeader()
+	{
+		// indicates the index(child num) of the arguments. 0 if no return value, or 1
+		// if has return value
+		int argumentsIndex = 0;
 
-        //get return value if existent
-        SimpleNode returnValueNode = (SimpleNode) functionAST.jjtGetChild(0);
-        if (returnValueNode instanceof ASTSTATEMENTS)
-            return;
+		// get return value if existent
+		SimpleNode returnValueNode = (SimpleNode) functionAST.jjtGetChild(0);
+		if (returnValueNode instanceof ASTSTATEMENTS)
+			return;
 
-        if (!(returnValueNode instanceof ASTVARS))
-        {
-            argumentsIndex++;
-            statementsChildNumber++;
-            parseFunctionReturnValue(returnValueNode);
-        }
+		if (!(returnValueNode instanceof ASTVARS))
+		{
+			argumentsIndex++;
+			statementsChildNumber++;
+			parseFunctionReturnValue(returnValueNode);
+		}
 
-        //get arguments if existent
-        SimpleNode argumentsNode = (SimpleNode) functionAST.jjtGetChild(argumentsIndex);
-        if (!(argumentsNode instanceof ASTVARS))
-            return;
+		// get arguments if existent
+		SimpleNode argumentsNode = (SimpleNode) functionAST.jjtGetChild(argumentsIndex);
+		if (!(argumentsNode instanceof ASTVARS))
+			return;
 
-        statementsChildNumber++;
-        parseArguments(argumentsNode);
-    }
+		statementsChildNumber++;
+		parseArguments(argumentsNode);
+	}
 
-    /**
-     * Processes all of the arguments of a function, calling the function that process scalar elements
-     * and array elements.
-     * @param argumentsNode node containing all of the function's arguments
-     */
-    private void parseArguments(SimpleNode argumentsNode)
-    {
-        for (int i = 0; i < argumentsNode.jjtGetNumChildren(); i++)
-        {
-            SimpleNode child = (SimpleNode) argumentsNode.jjtGetChild(i);
-            if (child != null)
-            {
-                VarSymbol varSymbol;
-                if (child instanceof ASTSCALARELEMENT)
-                    varSymbol = parseScalarElementArgument((ASTSCALARELEMENT) child);
-                else
-                    varSymbol = parseArrayElementArgument((ASTARRAYELEMENT) child);
+	/**
+	 * Processes all of the arguments of a function, calling the function that
+	 * process scalar elements and array elements.
+	 * 
+	 * @param argumentsNode
+	 *            node containing all of the function's arguments
+	 */
+	private void parseArguments(SimpleNode argumentsNode)
+	{
+		for (int i = 0; i < argumentsNode.jjtGetNumChildren(); i++)
+		{
+			SimpleNode child = (SimpleNode) argumentsNode.jjtGetChild(i);
+			if (child != null)
+			{
+				VarSymbol varSymbol;
+				if (child instanceof ASTSCALARELEMENT)
+					varSymbol = parseScalarElementArgument((ASTSCALARELEMENT) child);
+				else
+					varSymbol = parseArrayElementArgument((ASTARRAYELEMENT) child);
 
-                if (varSymbol == null)
-                    continue;
+				if (varSymbol == null)
+					continue;
 
-                checkArgumentAlreadyExists(child, varSymbol);
-                arguments.add(varSymbol);
-            }
-        }
-    }
+				checkArgumentAlreadyExists(child, varSymbol);
+				arguments.add(varSymbol);
+			}
+		}
+	}
 
-    /**
-     * Checks whether or not a function's argument already exists
-     * @param child     argument node child
-     * @param varSymbol argument being processed
-     */
-    private void checkArgumentAlreadyExists(SimpleNode child, VarSymbol varSymbol)
-    {
-        for (VarSymbol argument: arguments)
-        {
-            if(argument.getId().equals(varSymbol.getId()))
-            {
-                System.out.println("Line " + child.getBeginLine() + ": Argument " +
-                        varSymbol.getId() + " already declared.");
-                ModuleAnalysis.hasErrors = true;
-            }
-        }
-    }
+	/**
+	 * Checks whether or not a function's argument already exists
+	 * 
+	 * @param child
+	 *            argument node child
+	 * @param varSymbol
+	 *            argument being processed
+	 */
+	private void checkArgumentAlreadyExists(SimpleNode child, VarSymbol varSymbol)
+	{
+		for (VarSymbol argument : arguments)
+		{
+			if (argument.getId().equals(varSymbol.getId()))
+			{
+				System.out.println(
+						"Line " + child.getBeginLine() + ": Argument " + varSymbol.getId() + " already declared.");
+				ModuleAnalysis.hasErrors = true;
+			}
+		}
+	}
 
-    /**
-     *
-     * @param child
-     * @return
-     */
-    private VarSymbol parseArrayElementArgument(ASTARRAYELEMENT child)
-    {
-        ASTARRAYELEMENT astarrayelement = child;
-        String astArrayElementId = astarrayelement.id;
-        String astArrayElementType = SymbolType.ARRAY.toString();
-        if (returnValue != null && returnValue.getId().equals(astArrayElementId))
-        {
-            if (!returnValue.getType().equals(astArrayElementType))
-            {
-                System.out.println("Line " + astarrayelement.getBeginLine() + ": Argument " + astarrayelement.id
-                        + " already declared as " + returnValue.getType() + ".");
-                return null;
-            }
-            else
-            {
-                returnValue.setInitialized(true);
-            }
-        }
+	/**
+	 *
+	 * @param child
+	 * @return
+	 */
+	private VarSymbol parseArrayElementArgument(ASTARRAYELEMENT child)
+	{
+		ASTARRAYELEMENT astarrayelement = child;
+		String astArrayElementId = astarrayelement.id;
+		String astArrayElementType = SymbolType.ARRAY.toString();
+		if (returnValue != null && returnValue.getId().equals(astArrayElementId))
+		{
+			if (!returnValue.getType().equals(astArrayElementType))
+			{
+				System.out.println("Line " + astarrayelement.getBeginLine() + ": Argument " + astarrayelement.id
+						+ " already declared as " + returnValue.getType() + ".");
+				return null;
+			} else
+			{
+				returnValue.setInitialized(true);
+			}
+		}
 
-        return new VarSymbol(astArrayElementId, astArrayElementType, true);
-    }
+		return new VarSymbol(astArrayElementId, astArrayElementType, true);
+	}
 
-    /**
-     *
-     * @param child
-     * @return
-     */
-    private VarSymbol parseScalarElementArgument(ASTSCALARELEMENT child)
-    {
-        ASTSCALARELEMENT astscalarelement = child;
-        String astScalarElementId = astscalarelement.id;
-        String astScalarElementType = SymbolType.INTEGER.toString();
-        if (returnValue != null && returnValue.getId().equals(astScalarElementId))
-        {
-            if (!returnValue.getType().equals(astScalarElementType))
-            {
-                System.out.println("Line " + astscalarelement.getBeginLine() + ": Argument " + astscalarelement.id
-                        + " already declared as " + returnValue.getType() + ".");
-                return null;
-            }
-            else
-                returnValue.setInitialized(true);
-        }
+	/**
+	 *
+	 * @param child
+	 * @return
+	 */
+	private VarSymbol parseScalarElementArgument(ASTSCALARELEMENT child)
+	{
+		ASTSCALARELEMENT astscalarelement = child;
+		String astScalarElementId = astscalarelement.id;
+		String astScalarElementType = SymbolType.INTEGER.toString();
+		if (returnValue != null && returnValue.getId().equals(astScalarElementId))
+		{
+			if (!returnValue.getType().equals(astScalarElementType))
+			{
+				System.out.println("Line " + astscalarelement.getBeginLine() + ": Argument " + astscalarelement.id
+						+ " already declared as " + returnValue.getType() + ".");
+				return null;
+			} else
+				returnValue.setInitialized(true);
+		}
 
-        return new VarSymbol(astScalarElementId, astScalarElementType, true);
-    }
+		return new VarSymbol(astScalarElementId, astScalarElementType, true);
+	}
 
-    /**
-     *
-     * @param returnValueNode
-     */
-    private void parseFunctionReturnValue(SimpleNode returnValueNode)
-    {
-        if (returnValueNode instanceof ASTSCALARELEMENT)
-        {
-            ASTSCALARELEMENT astscalarelement = (ASTSCALARELEMENT) returnValueNode;
-            String returnValueId = astscalarelement.id;
-            returnValue = new VarSymbol(returnValueId, SymbolType.INTEGER.toString(), false);
-        } else
-        {
-            ASTARRAYELEMENT astarrayelement = (ASTARRAYELEMENT) returnValueNode;
-            String returnValueId = astarrayelement.id;
-            returnValue = new VarSymbol(returnValueId, SymbolType.ARRAY.toString(), false);
-        }
-    }
+	/**
+	 *
+	 * @param returnValueNode
+	 */
+	private void parseFunctionReturnValue(SimpleNode returnValueNode)
+	{
+		if (returnValueNode instanceof ASTSCALARELEMENT)
+		{
+			ASTSCALARELEMENT astscalarelement = (ASTSCALARELEMENT) returnValueNode;
+			String returnValueId = astscalarelement.id;
+			returnValue = new VarSymbol(returnValueId, SymbolType.INTEGER.toString(), false);
+		} else
+		{
+			ASTARRAYELEMENT astarrayelement = (ASTARRAYELEMENT) returnValueNode;
+			String returnValueId = astarrayelement.id;
+			returnValue = new VarSymbol(returnValueId, SymbolType.ARRAY.toString(), false);
+		}
+	}
 }

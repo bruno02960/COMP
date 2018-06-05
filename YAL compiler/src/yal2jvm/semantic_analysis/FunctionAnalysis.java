@@ -8,73 +8,73 @@ import yal2jvm.symbol_tables.VarSymbol;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-
 /**
  *
  */
 public class FunctionAnalysis extends Analysis
 {
 
-    /**
-     *
-     * @param ast
-     * @param inheritedSymbols
-     * @param functionNameToFunctionSymbolOfModule
-     */
-    FunctionAnalysis(SimpleNode ast, HashMap<String, Symbol> inheritedSymbols,
-            HashMap<String, Symbol> functionNameToFunctionSymbolOfModule)
-    {
-        super(ast, inheritedSymbols, functionNameToFunctionSymbolOfModule);
-    }
+	/**
+	 *
+	 * @param ast
+	 * @param inheritedSymbols
+	 * @param functionNameToFunctionSymbolOfModule
+	 */
+	FunctionAnalysis(SimpleNode ast, HashMap<String, Symbol> inheritedSymbols,
+			HashMap<String, Symbol> functionNameToFunctionSymbolOfModule)
+	{
+		super(ast, inheritedSymbols, functionNameToFunctionSymbolOfModule);
+	}
 
-    /**
-     *
-     */
-    @Override
-    protected void parse()
-    {
-        FunctionSymbol astFunction = (FunctionSymbol) functionNameToFunctionSymbol.get(((ASTFUNCTION) ast).id);
+	/**
+	 *
+	 */
+	@Override
+	protected void parse()
+	{
+		FunctionSymbol astFunction = (FunctionSymbol) functionNameToFunctionSymbol.get(((ASTFUNCTION) ast).id);
 
-        addArgumentsToMySymbols(astFunction);
-        addReturnValueToMySymbols(astFunction);
+		addArgumentsToMySymbols(astFunction);
+		addReturnValueToMySymbols(astFunction);
 
-        int statementsChildNumber = astFunction.getStatementsChildNumber();
-        ASTSTATEMENTS statementsNode = (ASTSTATEMENTS) ast.jjtGetChild(statementsChildNumber);
-        parseStmtLst(statementsNode);
+		int statementsChildNumber = astFunction.getStatementsChildNumber();
+		ASTSTATEMENTS statementsNode = (ASTSTATEMENTS) ast.jjtGetChild(statementsChildNumber);
+		parseStmtLst(statementsNode);
 
-        //verify return value is defined if exists
-        VarSymbol returnValue = astFunction.getReturnValue();
-        if (returnValue != null)
-        {
-            if (!returnValue.isInitialized())
-            {
-                System.out.println("Line " + astFunction.getFunctionAST().getBeginLine() + ": Return variable " + returnValue.getId()
-                        + " might not have been initialized. Function " + astFunction.getId() + " must have return variable initialized.");
-                ModuleAnalysis.hasErrors = true;
-            }
-        }
-    }
+		// verify return value is defined if exists
+		VarSymbol returnValue = astFunction.getReturnValue();
+		if (returnValue != null)
+		{
+			if (!returnValue.isInitialized())
+			{
+				System.out.println("Line " + astFunction.getFunctionAST().getBeginLine() + ": Return variable "
+						+ returnValue.getId() + " might not have been initialized. Function " + astFunction.getId()
+						+ " must have return variable initialized.");
+				ModuleAnalysis.hasErrors = true;
+			}
+		}
+	}
 
-    /**
-     *
-     * @param astFunction
-     */
-    private void addArgumentsToMySymbols(FunctionSymbol astFunction)
-    {
-        ArrayList<VarSymbol> arguments = astFunction.getArguments();
-        for (VarSymbol argument : arguments)
-            mySymbols.put(argument.getId(), argument);
-    }
+	/**
+	 *
+	 * @param astFunction
+	 */
+	private void addArgumentsToMySymbols(FunctionSymbol astFunction)
+	{
+		ArrayList<VarSymbol> arguments = astFunction.getArguments();
+		for (VarSymbol argument : arguments)
+			mySymbols.put(argument.getId(), argument);
+	}
 
-    /**
-     *
-     * @param astFunction
-     */
-    private void addReturnValueToMySymbols(FunctionSymbol astFunction)
-    {
-        VarSymbol returnValue = astFunction.getReturnValue();
-        if (returnValue != null)
-            mySymbols.put(returnValue.getId(), returnValue);
-    }
+	/**
+	 *
+	 * @param astFunction
+	 */
+	private void addReturnValueToMySymbols(FunctionSymbol astFunction)
+	{
+		VarSymbol returnValue = astFunction.getReturnValue();
+		if (returnValue != null)
+			mySymbols.put(returnValue.getId(), returnValue);
+	}
 
 }

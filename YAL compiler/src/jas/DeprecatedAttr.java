@@ -10,23 +10,26 @@ import java.io.*;
 
 public class DeprecatedAttr
 {
-  static final CP attr = new AsciiCP("Deprecated");
+	static final CP attr = new AsciiCP("Deprecated");
 
-  /**
-   * Create a deprecated attribute.
-   * @see ClassEnv#setDeprecated
-   */
+	/**
+	 * Create a deprecated attribute.
+	 * 
+	 * @see ClassEnv#setDeprecated
+	 */
 
-  public DeprecatedAttr() { }
+	public DeprecatedAttr()
+	{
+	}
 
-  void resolve(ClassEnv e) 
-     { e.addCPItem(attr); }
+	void resolve(ClassEnv e)
+	{
+		e.addCPItem(attr);
+	}
 
-  void write(ClassEnv e, DataOutputStream out)
-    throws IOException, jasError
-  {
-    out.writeShort(e.getCPIndex(attr));
-    out.writeInt(0);
-  }
+	void write(ClassEnv e, DataOutputStream out) throws IOException, jasError
+	{
+		out.writeShort(e.getCPIndex(attr));
+		out.writeInt(0);
+	}
 }
-

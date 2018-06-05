@@ -10,12 +10,11 @@ package jas;
 
 import java.io.*;
 
-
 public class InvokeinterfaceInsn extends Insn implements RuntimeConstants
 {
-  public InvokeinterfaceInsn(CP cpe, int nargs)
-  {
-    opc = opc_invokeinterface;
-    operand = new InvokeinterfaceOperand(cpe, nargs);
-  }
+	public InvokeinterfaceInsn(CP cpe, int nargs)
+	{
+		opc = opc_invokeinterface;
+		operand = new InvokeinterfaceOperand(cpe, nargs);
+	}
 }
