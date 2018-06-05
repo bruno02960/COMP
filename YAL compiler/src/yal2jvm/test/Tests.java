@@ -1,11 +1,10 @@
-package yal2jvm.utils;
+package yal2jvm.test;
 
 import static org.junit.Assert.*;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import org.junit.Test;
 
@@ -16,7 +15,7 @@ import org.junit.Test;
 //-4  File not found error
 //-5  Invalid arguments error
 
-public class UnitTests
+public class Tests
 {
 	public ArrayList<String> testAllFilesInFolder(String path)
 	{
