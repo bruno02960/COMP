@@ -5,6 +5,7 @@ import java.util.BitSet;
 import java.util.HashMap;
 import java.util.TreeSet;
 
+import yal2jvm.Yal2jvm;
 import yal2jvm.hlir.IRAllocate;
 import yal2jvm.hlir.IRArith;
 import yal2jvm.hlir.IRCall;
@@ -188,6 +189,17 @@ public class SetBuilder
 			line.addDef(arg.getVar());
 		
 		return line;
+		/*
+		BitSet set = new BitSet(this.varToBit.size());
+		
+		Variable[] args = this.node.getArgs();
+		for (Variable arg : args)
+			set.set(this.varToBit.get(arg.getVar()));
+		
+		Line line = new Line(this.lineCount, this.varToBit);
+		line.setIn(set);
+		this.lineCount++;
+		return line;*/
 	}
 
 	/**
@@ -443,6 +455,7 @@ public class SetBuilder
 		ArrayList<BitSet> outsOld;
 
 		doIteration();
+		int iterN = 1;
 		
 		insOld = getAllInSets();
 		outsOld = getAllOutSets();
@@ -452,6 +465,7 @@ public class SetBuilder
 		while (!isEqual)
 		{
 			doIteration();
+			iterN++;
 			
 			ArrayList<BitSet> insNew = getAllInSets();
 			ArrayList<BitSet> outsNew = getAllOutSets();
@@ -504,6 +518,24 @@ public class SetBuilder
 			sets.add((BitSet)this.lines.get(i).getIn().clone());
 		return sets;
 	}
+	
+	private ArrayList<BitSet> getAllDefSets()
+	{
+		ArrayList<BitSet> sets = new ArrayList<>();
+		
+		for (int i = 0; i < this.lines.size(); i++)
+			sets.add((BitSet)this.lines.get(i).getDef().clone());
+		return sets;
+	}
+	
+	private ArrayList<BitSet> getAllUseSets()
+	{
+		ArrayList<BitSet> sets = new ArrayList<>();
+		
+		for (int i = 0; i < this.lines.size(); i++)
+			sets.add((BitSet)this.lines.get(i).getUse().clone());
+		return sets;
+	}
 
 	/**
 	 *
@@ -518,7 +550,6 @@ public class SetBuilder
 			line.setOut(out);
 			
 			BitSet in = calculateIn(line);
-			
 			line.setIn(in);
 		}
 	}
@@ -569,7 +600,7 @@ public class SetBuilder
 	{
 		BitSet diff = new BitSet(varToBit.size());
 		
-		for (int i = 0; i < out.size(); i++)
+		for (int i = 0; i < varToBit.size(); i++)
 		{
 			if (out.get(i) && !def.get(i))
 				diff.set(i);
@@ -588,10 +619,18 @@ public class SetBuilder
 		ArrayList<BitSet> ins = getAllInSets();
 		for (BitSet set : ins)
 			pairs.addAll(getInterferences(set));
-		
+		/*
 		ArrayList<BitSet> outs = getAllOutSets();
 		for (BitSet set : outs)
-			pairs.addAll(getInterferences(set));
+			pairs.addAll(getInterferences(set));*/
+		
+		ArrayList<BitSet> outs = getAllOutSets();
+		ArrayList<BitSet> defs = getAllDefSets();
+		for (int i = 0; i < outs.size(); i++)
+		{
+			outs.get(i).or(defs.get(i));
+			pairs.addAll(getInterferences(outs.get(i)));
+		}
 
 		return pairs;
 	}

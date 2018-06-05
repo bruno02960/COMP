@@ -31,10 +31,10 @@ public class Line
 	{
 		this.id = id;
 		this.varToBit = varToBit;
-		this.use = new BitSet();
-		this.def = new BitSet();
-		this.in = new BitSet();
-		this.out = new BitSet();
+		this.use = new BitSet(this.varToBit.size());
+		this.def = new BitSet(this.varToBit.size());
+		this.in = new BitSet(this.varToBit.size());
+		this.out = new BitSet(this.varToBit.size());
 		this.successors = new ArrayList<>();
 	}
 
@@ -46,11 +46,11 @@ public class Line
 	public String toString()
 	{
 		String s = "Line " + this.id + " (" + this.type + ") -> "; 
-		s += "USE: [" + stringifySet(this.use) + "] ";
-		s += "DEF: [" + stringifySet(this.def) + "] ";
+		//s += "USE: [" + stringifySet(this.use) + "] ";
+		//s += "DEF: [" + stringifySet(this.def) + "] ";
 		s += "IN:  [" + stringifySet(this.in) + "] ";
 		s += "OUT: [" + stringifySet(this.out) + "] ";
-		s += "SUCC: [" + getSuccString() + "]";
+		//s += "SUCC: [" + getSuccString() + "]";
 		return s;
 	}
 

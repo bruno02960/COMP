@@ -11,7 +11,7 @@ module liveness
 		c = c + a;		//def: c	use: a, c
 		c = c + b;		//def: c	use: b, c
 		d = c;			//def: d	use: c
-		g1 = g2;		
+		g1 = g2;
 		d = g3;			//def: d
 		d = g1 + g2;	//def: d
 		f2(d);			//use: d
@@ -72,8 +72,8 @@ module liveness
 	
 	function main()
 	{
-		a = f1(1, 2);
-		b = f3(a, 3);
+		a = f1(1, 2);	//a = 4;
+		b = f3(a, 3);	//b = 10;
 		io.println("a = ", a);
 		io.println("b = ", b);
 	}

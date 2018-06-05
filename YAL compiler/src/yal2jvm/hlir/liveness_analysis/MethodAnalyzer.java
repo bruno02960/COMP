@@ -40,8 +40,9 @@ public class MethodAnalyzer
 			return;
 		
 		System.out.println("--------------------------------------------------");
-		System.out.println("Liveness analysis of method " + methodName + ":");
+		System.out.println("Liveness analysis of method " + methodName + ":\n");
 		ArrayList<Line> lines = method.getLines();
+		System.out.println("Local vars: " + method.getLocals() + "\n");
 		for (Line l : lines)
 			System.out.println(l);
 		System.out.println("\nInterferences and mandatory registers:");
