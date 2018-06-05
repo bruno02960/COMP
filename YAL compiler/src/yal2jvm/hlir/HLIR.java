@@ -266,13 +266,15 @@ public class HLIR
                 }
             }
         }
-        IRMethod function = new IRMethod(functionId, returnType, returnName, arguments);
+        IRMethod function = new IRMethod(functionId, returnType, arguments);
         root.addChild(function);
 
         //parse statements
         if (!(currNode instanceof ASTSTATEMENTS))
             currNode = (SimpleNode) astFunction.jjtGetChild(++argumentsIndex);
         createStatementsHHIR((ASTSTATEMENTS) currNode, function);
+        IRReturn irReturn = new IRReturn(returnName, returnType);
+        function.addChild(irReturn);
     }
 
     /**

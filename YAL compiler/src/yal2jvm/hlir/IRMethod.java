@@ -56,7 +56,6 @@ public class IRMethod extends IRNode
 
     private String name;
     private Type returnType;
-    private String returnVar;
     private Variable[] args;
     private HashMap<String, IRConstant> constVarNameToConstValue = new HashMap<>();
     private ArrayList<HashMap<String, IRConstant>> listConstVarNameToConstValueWhileOrIfInitState = new ArrayList<>();
@@ -68,14 +67,12 @@ public class IRMethod extends IRNode
      *
      * @param name
      * @param returnType
-     * @param returnVar
      * @param args
      */
-    public IRMethod(String name, Type returnType, String returnVar, Variable[] args)
+    public IRMethod(String name, Type returnType, Variable[] args)
     {
         this.name = name;
         this.returnType = returnType;
-        this.returnVar = returnVar;
         this.args = args == null ? this.args = new Variable[0] : args;
         this.setNodeType("Method");
         this.regN = this.args.length;
@@ -91,10 +88,6 @@ public class IRMethod extends IRNode
         ArrayList<String> inst = new ArrayList<>();
 
         String methodDeclarationInst = getMethodDeclarationInstructions();
-
-        //parse return
-        IRReturn irReturn = new IRReturn(returnVar, returnType);
-        this.addChild(irReturn);
 
         ArrayList<String> methodBody = getMethodBody();
 
