@@ -8,14 +8,13 @@ import java.util.ArrayList;
 /**
  *
  */
-public class IRAssign {
+public class IRAssign
+{
     String operator;
     boolean isSize = false;
-
     Variable lhs = null;
     ASTLHS astlhs;
     ASTRHS astrhs;
-
     ArrayList<Variable> operands = new ArrayList<>();
 
     /**

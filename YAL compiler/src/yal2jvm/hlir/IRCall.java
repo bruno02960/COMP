@@ -30,7 +30,7 @@ public class IRCall extends IRNode
         this.module = module;
         this.arguments = arguments;
         this.lhsVarName = lhsVarName;
-        this.setNodeType("Call");
+        this.nodeType = "Call";
     }
 
 	/**
