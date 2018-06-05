@@ -129,6 +129,10 @@ public class Yal2jvm
         System.exit(0);
     }
 
+    /**
+     * This method run all the necessary steps to compile the file, convert yal code into jvm code.
+     * It runs with logging to inform of compiling process.
+     */
 	private void runWithLogging()
 	{
     	log("--------------------------------------------------");
@@ -189,7 +193,9 @@ public class Yal2jvm
 	}
 
 	/**
-	 * @param inputStream
+     * This method does syntactic Analysis and creates AST, using createAst method
+     * It terminates the compiler with error code -2 if errors found.
+	 * @param inputStream FileInputStream object to the file .yal to be analysed
 	 */
 	private void syntacticAnalysis(FileInputStream inputStream)
 	{
@@ -197,7 +203,11 @@ public class Yal2jvm
         if (ast == null)
             System.exit(-2);
 	}
-	
+
+    /**
+     * This method does semantic Analysis.
+     * It terminates the compiler with error code -3 if errors found.
+     */
 	private void semanticAnalysis()
 	{
 		ModuleAnalysis moduleAnalysis = new ModuleAnalysis(ast);
@@ -205,10 +215,12 @@ public class Yal2jvm
         if (ModuleAnalysis.hasErrors)
             System.exit(-3);
 	}
-	
-	/**
-	 * @return
-	 */
+
+    /**
+     * This method creates HLIR (High level intermediate representation), using the ast produced by syntactic analysis
+     * It terminates the compiler with error code -2 if errors found.
+     * @return the created HLIR, object from class HLIR
+     */
 	private HLIR createHLIR()
 	{
 		HLIR hlir = new HLIR(ast);
@@ -219,10 +231,12 @@ public class Yal2jvm
             hlir.setOptimize();
 		return hlir;
 	}
-	
-	/**
-	 * @param hlir
-	 */
+
+    /**
+     * This method does register allocation using data flow analysis and graph coloring
+     * It terminates the compiler with error code -6 if errors found.
+     * @param hlir HLIR (High level intermediate representation)
+     */
 	private void registerAllocation(HLIR hlir)
 	{
 		hlir.dataflowAnalysis();
@@ -230,11 +244,14 @@ public class Yal2jvm
         if (!allocated)
         	System.exit(-6);
 	}
-	
-	/**
-	 * @param hlir
-	 * @return
-	 */
+
+    /**
+     * This method does instructions selection, getting from the HLIR the jvm code for the file.
+     * It starts at the root, and recursively gets all the instructions.
+     * It also save the instructions on the jasmin (.j) file.
+     * @param hlir HLIR (High level intermediate representation) from which the jvm code will be generated
+     * @return module name of the compiled file
+     */
 	private String instructionSelection(HLIR hlir)
 	{
 		ArrayList<String> instructions = hlir.selectInstructions();
