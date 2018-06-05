@@ -8,7 +8,8 @@ import yal2jvm.hlir.IRModule;
 import yal2jvm.hlir.IRNode;
 
 /**
- *
+ * Class to perform liveness analysis of an entire module, producing an interference
+ * graph for each of the module's methods as a result
  */
 public class LivenessAnalyzer 
 {
@@ -16,8 +17,8 @@ public class LivenessAnalyzer
 	private HashMap<String,IntGraph> intGraphs;
 
 	/**
-	 *
-	 * @param ir
+	 * Constructor
+	 * @param ir root node of the HLIR
 	 */
 	public LivenessAnalyzer(IRModule ir)
 	{
@@ -26,7 +27,7 @@ public class LivenessAnalyzer
 	}
 
 	/**
-	 *
+	 * Performs a liveness analysis for each of the module's methods
 	 */
 	public void analyze()
 	{

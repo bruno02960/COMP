@@ -4,16 +4,18 @@ import java.io.*;
 import java.util.ArrayList;
 
 /**
- *
+ * Class that represents an interference graph of the variables from a method.
+ * It is used to bridge the gap between the dataflow analysis and the register allocation.
  */
 public class IntGraph implements Serializable
 {
+	private static final long serialVersionUID = -567491277226468354L;
 	private ArrayList<IntNode> nodes;
 
 	/**
 	 * Copy constructor of the IntGraph, it creates a new IntGraph based on the graph passed by argument.
-	 * As the graph has a list of nodes (IntNode objects) that have themselves a list of nodes (we had problems with recursivity in contructors)
-	 * and the only solution we found was to to make a copy using serialization., method getGraphCopy.
+	 * As the graph has a list of nodes (IntNode objects) that have themselves a list of nodes (we had problems with recursivity in constructors)
+	 * and the only solution we found was to to make a copy using serialization, method getGraphCopy.
 	 * @param graph based on the new IntGraph will be created
 	 */
 	public IntGraph(IntGraph graph)
@@ -22,7 +24,7 @@ public class IntGraph implements Serializable
 	}
 
 	/**
-	 *
+	 * Creates a new empty graph
 	 */
 	public IntGraph()
 	{
@@ -30,9 +32,10 @@ public class IntGraph implements Serializable
 	}
 
 	/**
-	 *
-	 * @param var1
-	 * @param var2
+	 * Adds an interference between two variables, and creates the variables (nodes of the graph)
+	 * if they don't yet exist. It is idempotent.
+	 * @param var1 name of the first variable
+	 * @param var2 name of the second variable
 	 */
 	public void addInterference(String var1, String var2)
 	{
@@ -43,10 +46,9 @@ public class IntGraph implements Serializable
 		n2.addInterference(n1);
 	}
 
-	//TODO REMOVE IF NOT USED
 	/**
-	 *
-	 * @param node
+	 * Adds a new node to the graph
+	 * @param node the node to be added
 	 */
 	public void addNode(IntNode node)
 	{
@@ -60,8 +62,8 @@ public class IntGraph implements Serializable
 	}
 
 	/**
-	 *
-	 * @param node
+	 * Removes a node from the graph
+	 * @param node node to be removed
 	 */
 	public void removeNode(IntNode node)
 	{
@@ -76,8 +78,8 @@ public class IntGraph implements Serializable
 	}
 
 	/**
-	 *
-	 * @param var
+	 * Adds a new variable to the graph, creating a node for it. It is idempotent.
+	 * @param var the name of the variable
 	 */
 	public void addVariable(String var)
 	{
@@ -91,9 +93,9 @@ public class IntGraph implements Serializable
 	}
 
 	/**
-	 *
-	 * @param var
-	 * @return
+	 * Finds the node with the specified variable name. If it doesn't exist, it is created
+	 * @param var the variable name
+	 * @return the node of the variable
 	 */
 	private IntNode findNode(String var)
 	{
@@ -108,8 +110,8 @@ public class IntGraph implements Serializable
 	}
 
 	/**
-	 *
-	 * @return
+	 * Gets all the nodes
+	 * @return list with all the nodes
 	 */
 	public ArrayList<IntNode> getNodes()
 	{
@@ -117,8 +119,8 @@ public class IntGraph implements Serializable
 	}
 
 	/**
-	 *
-	 * @return
+	 * Build a string of the graph, containing, in each line, a variable and its interferences
+	 * @return a String representation of the graph
 	 */
 	@Override
 	public String toString()
@@ -130,7 +132,9 @@ public class IntGraph implements Serializable
 	}
 
 	/**
-	 *
+	 * Sets the mandatory registers for the method arguments. Argument 1 will have register 0,
+	 * argument 2 register 1, and so on. This information must be assigned right now in order
+	 * to prevent misassigns during the register allocation phase.
 	 * @param args
 	 * @return
 	 */

@@ -5,7 +5,8 @@ import java.util.BitSet;
 import java.util.HashMap;
 
 /**
- *
+ * Class to represent a line of a method. While it is not guaranteed that one of these lines
+ * matches a real line from the source code, in most cases there is a direct correlation.
  */
 public class Line
 {
@@ -24,8 +25,8 @@ public class Line
 
 	/**
 	 *
-	 * @param id
-	 * @param varToBit
+	 * @param id the line number
+	 * @param varToBit HashMap to map each of the method's variables into an integer
 	 */
 	public Line(int id, HashMap<String, Integer> varToBit)
 	{
@@ -39,8 +40,8 @@ public class Line
 	}
 
 	/**
-	 *
-	 * @return
+	 * Returns a String representation of this line, including its USE, DEF, IN, OUT and SUCC sets
+	 * @return a String representation of the line
 	 */
 	@Override
 	public String toString()
@@ -55,8 +56,8 @@ public class Line
 	}
 
 	/**
-	 *
-	 * @return
+	 * Gets a String representation of the SUCC set
+	 * @return a String representation of the SUCC set
 	 */
 	private String getSuccString()
 	{
@@ -71,9 +72,9 @@ public class Line
 	}
 
 	/**
-	 *
-	 * @param set
-	 * @return
+	 * Stringifies a BitSet, translating the bits to their variable counterparts
+	 * @param set the BitSet to stringiy
+	 * @return a String representing the set
 	 */
 	private String stringifySet(BitSet set)
 	{
@@ -90,8 +91,8 @@ public class Line
 	}
 
 	/**
-	 *
-	 * @param var
+	 * Adds a variable to the USE set
+	 * @param var the variable to add
 	 */
 	public void addUse(String var)
 	{
@@ -100,8 +101,8 @@ public class Line
 	}
 
 	/**
-	 *
-	 * @param var
+	 * Adds a variable to the DEF set
+	 * @param var the variable to add
 	 */
 	public void addDef(String var)
 	{
@@ -110,8 +111,8 @@ public class Line
 	}
 
 	/**
-	 *
-	 * @return
+	 * Gets the line number
+	 * @return the line number
 	 */
 	public int getId()
 	{
@@ -119,8 +120,8 @@ public class Line
 	}
 
 	/**
-	 *
-	 * @param id
+	 * Sets the line number
+	 * @param id the line number
 	 */
 	public void setId(int id)
 	{
@@ -128,8 +129,8 @@ public class Line
 	}
 
 	/**
-	 *
-	 * @param label
+	 * Adds a label to this line
+	 * @param label the label to add
 	 */
 	public void addLabel(String label)
 	{
@@ -137,8 +138,8 @@ public class Line
 	}
 
 	/**
-	 *
-	 * @return
+	 * Gets the label of this line
+	 * @return the label of the line
 	 */
 	public String getLabel()
 	{
@@ -146,8 +147,8 @@ public class Line
 	}
 
 	/**
-	 *
-	 * @param line
+	 * Adds a line as a successor to this one
+	 * @param line the successor line
 	 */
 	public void addSuccessor(Line line)
 	{
@@ -155,8 +156,8 @@ public class Line
 	}
 
 	/**
-	 *
-	 * @param b
+	 * Sets a flag about whether this line has a jump or not
+	 * @param b the flag value
 	 */
 	public void setJump(boolean b)
 	{
@@ -164,8 +165,8 @@ public class Line
 	}
 
 	/**
-	 *
-	 * @return
+	 * Gets the jump label of this line.
+	 * @return jump label if it has one, empty String otherwise
 	 */
 	public String getJumpLabel()
 	{
@@ -173,8 +174,8 @@ public class Line
 	}
 
 	/**
-	 *
-	 * @param jumpLabel
+	 * Sets the jump label of this line
+	 * @param jumpLabel the jump label to set
 	 */
 	public void setJumpLabel(String jumpLabel)
 	{
@@ -182,8 +183,8 @@ public class Line
 	}
 
 	/**
-	 *
-	 * @return
+	 * Checks if the line has a jump
+	 * @return true if it has a jump, false otherwise
 	 */
 	public boolean isJump()
 	{
@@ -191,8 +192,8 @@ public class Line
 	}
 
 	/**
-	 *
-	 * @return
+	 * Gets all the successors of this line
+	 * @return a list with the successors of this line
 	 */
 	public ArrayList<Line> getSuccessors()
 	{
@@ -200,17 +201,8 @@ public class Line
 	}
 
 	/**
-	 *
-	 * @param successors
-	 */
-	public void setSuccessors(ArrayList<Line> successors)
-	{
-		this.successors = successors;
-	}
-
-	/**
-	 *
-	 * @return
+	 * Gets the USE set of this line
+	 * @return the USE set of this line
 	 */
 	public BitSet getUse()
 	{
@@ -218,8 +210,8 @@ public class Line
 	}
 
 	/**
-	 *
-	 * @param use
+	 * Sets the USE set of this line
+	 * @param use the USE set to set
 	 */
 	public void setUse(BitSet use)
 	{
@@ -227,8 +219,8 @@ public class Line
 	}
 
 	/**
-	 *
-	 * @return
+	 * Gets the DEF set of this line
+	 * @return the DEF set of this line
 	 */
 	public BitSet getDef()
 	{
@@ -236,8 +228,8 @@ public class Line
 	}
 
 	/**
-	 *
-	 * @param def
+	 * Sets the DEF set of this line
+	 * @param def the DEF set to set
 	 */
 	public void setDef(BitSet def)
 	{
@@ -245,8 +237,8 @@ public class Line
 	}
 
 	/**
-	 *
-	 * @return
+	 * Gets the IN set of this line
+	 * @return the IN set of this line
 	 */
 	public BitSet getIn()
 	{
@@ -254,8 +246,8 @@ public class Line
 	}
 
 	/**
-	 *
-	 * @param in
+	 * Sets the IN set of this line
+	 * @param in the IN set to set
 	 */
 	public void setIn(BitSet in)
 	{
@@ -263,8 +255,8 @@ public class Line
 	}
 
 	/**
-	 *
-	 * @return
+	 * Gets the OUT set of this line
+	 * @return the OUT set of this line
 	 */
 	public BitSet getOut()
 	{
@@ -272,29 +264,45 @@ public class Line
 	}
 
 	/**
-	 *
-	 * @param out
+	 * Sets the OUT set of this line
+	 * @param out the OUT set to set
 	 */
 	public void setOut(BitSet out)
 	{
 		this.out = out;
 	}
 
+	/**
+	 * Checks if this line has a successor
+	 * @return true if it has, false otherwise
+	 */
 	public boolean hasSuccessor()
 	{
 		return this.hasSuccessor;
 	}
 
+	/**
+	 * Sets whether this line has a successor or not
+	 * @param hasSuccessor true to set as having a successor, false otherwise
+	 */
 	public void setHasSuccessor(boolean hasSuccessor)
 	{
 		this.hasSuccessor = hasSuccessor;
 	}
 
+	/**
+	 * Gets the type of line
+	 * @return the type of line
+	 */
 	public String getType()
 	{
 		return type;
 	}
 
+	/**
+	 * Sets the type of line
+	 * @param type the type of line to set
+	 */
 	public void setType(String type)
 	{
 		this.type = type;

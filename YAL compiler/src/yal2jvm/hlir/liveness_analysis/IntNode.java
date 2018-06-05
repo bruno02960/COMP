@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
- *
+ * Class that represents a node of an interference graph
  */
 public class IntNode implements Serializable
 {
@@ -13,8 +13,8 @@ public class IntNode implements Serializable
 	private int requiredRegister = -1;
 
 	/**
-	 *
-	 * @param name
+	 * Constructor
+	 * @param name name of the variable
 	 */
 	public IntNode(String name)
 	{
@@ -23,8 +23,8 @@ public class IntNode implements Serializable
 	}
 
 	/**
-	 *
-	 * @param node
+	 * Adds an interference to this node
+	 * @param node the node to add the interference to
 	 */
 	public void addInterference(IntNode node)
 	{
@@ -35,8 +35,8 @@ public class IntNode implements Serializable
 	}
 
 	/**
-	 *
-	 * @param node
+	 * Removes an interference with a node
+	 * @param node the node to remove the interference with
 	 */
 	public void removeInterference(IntNode node)
 	{
@@ -44,9 +44,9 @@ public class IntNode implements Serializable
 	}
 
 	/**
-	 *
-	 * @param o
-	 * @return
+	 * Checks this node for equality with another. Two nodes are equal if they represent the same variable
+	 * @param o the node to compare with
+	 * @return true if they are equal, false otherwise
 	 */
 	@Override
 	public boolean equals(Object o)
@@ -55,8 +55,8 @@ public class IntNode implements Serializable
 	}
 
 	/**
-	 *
-	 * @return
+	 * Gets the name of the variable represented by this node
+	 * @return the variable name
 	 */
 	public String getName()
 	{
@@ -64,8 +64,8 @@ public class IntNode implements Serializable
 	}
 
 	/**
-	 *
-	 * @param name
+	 * Sets the name of the variable represented by this node
+	 * @param name the variable name
 	 */
 	public void setName(String name)
 	{
@@ -73,8 +73,8 @@ public class IntNode implements Serializable
 	}
 
 	/**
-	 *
-	 * @return
+	 * Gets all the interferences of this node
+	 * @return a list with the nodes that interfere with this one
 	 */
 	public ArrayList<IntNode> getInterferences()
 	{
@@ -82,7 +82,7 @@ public class IntNode implements Serializable
 	}
 
 	/**
-	 *
+	 * Gets the indegree of the node, that is, its number of edges (interferences with other variables)
 	 * @return
 	 */
 	public int indegree()
@@ -91,8 +91,8 @@ public class IntNode implements Serializable
 	}
 
 	/**
-	 *
-	 * @return
+	 * Gets a String representation of this node, showing all its interferences.
+	 * @return a String representation of the node
 	 */
 	@Override
 	public String toString()
@@ -109,7 +109,8 @@ public class IntNode implements Serializable
 	}
 
 	/**
-	 * 
+	 * Gets the required register of the variable represented by this node.
+	 * If there is no required register, it returns -1.
 	 * @return
 	 */
 	public int getRequiredRegister()
@@ -118,8 +119,8 @@ public class IntNode implements Serializable
 	}
 
 	/**
-	 * 
-	 * @param requiredRegister
+	 * Sets a required register for the variable represented by this node
+	 * @param requiredRegister the required register number
 	 */
 	public void setRequiredRegister(int requiredRegister)
 	{

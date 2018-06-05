@@ -1,7 +1,7 @@
 package yal2jvm.hlir.liveness_analysis;
 
 /**
- *
+ * Class to represent an interference between two variables
  */
 public class IntPair
 {
@@ -9,9 +9,9 @@ public class IntPair
 	private String var2;
 
 	/**
-	 *
-	 * @param var1
-	 * @param var2
+	 * Constructor
+	 * @param var1 name of the first variable
+	 * @param var2 name of the second variable
 	 */
 	public IntPair(String var1, String var2)
 	{
@@ -20,8 +20,8 @@ public class IntPair
 	}
 
 	/**
-	 *
-	 * @return
+	 * Gets the first variabe
+	 * @return first variable
 	 */
 	public String getVar1()
 	{
@@ -29,8 +29,8 @@ public class IntPair
 	}
 
 	/**
-	 *
-	 * @param var1
+	 * Sets the first variable
+	 * @param var1 first variable
 	 */
 	public void setVar1(String var1)
 	{
@@ -38,8 +38,8 @@ public class IntPair
 	}
 
 	/**
-	 *
-	 * @return
+	 * Gets the second variabe
+	 * @return second variable
 	 */
 	public String getVar2()
 	{
@@ -47,8 +47,8 @@ public class IntPair
 	}
 
 	/**
-	 *
-	 * @param var2
+	 * Sets the second variable
+	 * @param var1 second variable
 	 */
 	public void setVar2(String var2)
 	{
