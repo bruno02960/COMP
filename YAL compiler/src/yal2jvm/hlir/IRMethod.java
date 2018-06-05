@@ -228,12 +228,13 @@ public class IRMethod extends IRNode
             //store curr for the end
             listConstVarNameToConstValueWhileOrIfInitState.add(new HashMap<>(constVarNameToConstValue));
 
-            //set curr as the previous if existent, if more than one if or while stacked
+            //TODO REMOVE
+           /* //set curr as the previous if existent, if more than one if or while stacked
             if(listConstVarNameToConstValueWhileOrIfInitState.size() > 1)
             {
                 constVarNameToConstValue = listConstVarNameToConstValueWhileOrIfInitState.get(
                         listConstVarNameToConstValueWhileOrIfInitState.size() - 1);
-            }
+            }*/
 
             if((label.contains("while_init") && irNode instanceof IRLabel))
                 insideWhile = true;
@@ -271,6 +272,15 @@ public class IRMethod extends IRNode
 
         //set the constVarNameToConstValue as the old except the defined in the interval
         constVarNameToConstValue = oldHashMap;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public HashMap<String, IRConstant> getConstVarNameToConstValue()
+    {
+        return constVarNameToConstValue;
     }
 
     /**

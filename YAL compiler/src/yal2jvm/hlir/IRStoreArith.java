@@ -173,12 +173,14 @@ public class IRStoreArith extends IRStore
 
     private void addNewValueOfVariableNameToConstsHashMap(IRMethod method, String increment)
     {
-        IRConstant previousValue = method.getConstValueByConstVarName(name);
+        IRConstant previousValue = method.getConstVarNameToConstValue().remove(name);
         if(previousValue == null)
             return;
 
-        Integer newValue = Integer.parseInt(previousValue.getValue()) + Integer.parseInt(increment);
-        previousValue.setValue(newValue.toString());
+        Integer newValueInteger = Integer.parseInt(previousValue.getValue()) + Integer.parseInt(increment);
+        IRConstant newValue = new IRConstant(previousValue);
+        newValue.setValue(newValueInteger.toString());
+        method.getConstVarNameToConstValue().put(name, newValue);
     }
 
 }
