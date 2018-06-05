@@ -188,8 +188,8 @@ public class IRAllocate extends IRNode
     {
         IRMethod method = (IRMethod) findParent("Method");
 
-        //do nothing if variable type is array
-        if(isRhsArrayAndLhsInteger(method) == false)
+        //do nothing if variable type is array and we are setting all its position to the value in rhs
+        if(isRhsArrayAndLhsInteger(method))
             return;
 
         String varName = getVarNameForConstantName(name, lhsIndex);
@@ -216,14 +216,11 @@ public class IRAllocate extends IRNode
 
     private boolean isRhsArrayAndLhsInteger(IRMethod method)
     {
-        if(this.storeVarGlobal && global.getType() == Type.ARRAY && type == Type.INTEGER)
-            return false;
-
         String varType = getVarType(method);
         if(varType.equals(Type.ARRAY.name()) && type == Type.INTEGER)
+            return true;
+        else
             return false;
-
-        return true;
     }
 
     /**
@@ -324,11 +321,15 @@ public class IRAllocate extends IRNode
 
     private String getVarType(IRMethod method)
     {
-        String varType;IRNode node = getVarIfExists(name);
+        String varType;
+        IRNode node = getVarIfExists(name);
         if(node instanceof IRAllocate)
             varType = ((IRAllocate)node).getType().name();
-        else
+        else if(node instanceof IRGlobal)
+            varType = ((IRGlobal)node).getType().name();
+         else
             varType = method.getArgumentType(name).name();
+
         return varType;
     }
 
