@@ -245,15 +245,6 @@ public class Yal2jvm
 
     /**
      *
-     * @param inputFile
-     */
-    public void setInputFile(String inputFile)
-    {
-        this.inputFile = inputFile;
-    }
-
-    /**
-     *
      * @param msg
      */
     public static void log(String msg)
