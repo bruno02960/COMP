@@ -46,8 +46,8 @@ public class LivenessAnalyzer
 	}
 
 	/**
-	 *
-	 * @return
+	 * Retrieves an HashMap containing, for each method, the interference graph of its variables
+	 * @return the HashMap with the interference graphs
 	 */
 	public HashMap<String,IntGraph> getInterferenceGraphs()
 	{

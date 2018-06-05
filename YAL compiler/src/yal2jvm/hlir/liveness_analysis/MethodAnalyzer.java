@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import yal2jvm.Yal2jvm;
 
 /**
- *
+ * Wrapper class for the dataflow and liveness analysis of a method using the SetBuilder class
  */
 public class MethodAnalyzer
 {
@@ -13,8 +13,8 @@ public class MethodAnalyzer
 	private String methodName;
 
 	/**
-	 *
-	 * @param method
+	 * Constructor
+	 * @param method the method to analyze
 	 */
 	public MethodAnalyzer(SetBuilder method)
 	{
@@ -23,7 +23,7 @@ public class MethodAnalyzer
 	}
 
 	/**
-	 *
+	 * Analyzes the method and fetches the resultant interference graph internally
 	 */
 	public void analyze()
 	{
@@ -34,6 +34,9 @@ public class MethodAnalyzer
 		printResults();
 	}
 	
+	/**
+	 * Prints the results of the liveness analysis
+	 */
 	private void printResults()
 	{
 		if (!Yal2jvm.VERBOSE)
@@ -49,8 +52,8 @@ public class MethodAnalyzer
 	}
 
 	/**
-	 *
-	 * @return
+	 * Gets the interference graph for this method
+	 * @return the interference graph
 	 */
 	public IntGraph getGraph()
 	{

@@ -23,7 +23,10 @@ import yal2jvm.hlir.Variable;
 import yal2jvm.utils.Utils;
 
 /**
- *
+ * Class to perform dataflow and liveness analysis on a single method.
+ * It calculates DEF, USE, IN, OUT and SUCC sets in order to determine
+ * which are the interferences between variables, producing an interference
+ * graph holding that information
  */
 public class SetBuilder
 {
@@ -34,8 +37,8 @@ public class SetBuilder
 	private int lineCount = 0;
 
 	/**
-	 *
-	 * @param method
+	 * Constructor
+	 * @param method HLIR node that represents the whole method
 	 */
 	public SetBuilder(IRMethod method)
 	{
@@ -45,8 +48,9 @@ public class SetBuilder
 	}
 
 	/**
-	 *
-	 * @return
+	 * Gets a list with all the local variables of the method, including arguments.
+	 * It also creates a mapping between each variable and sequential integers
+	 * @return list with the local variables
 	 */
 	public ArrayList<String> getAllVars()
 	{
@@ -64,8 +68,8 @@ public class SetBuilder
 	}
 
 	/**
-	 *
-	 * @return
+	 * Finds all the local variables of the method, including arguments
+	 * @return list with all the local variables
 	 */
 	private TreeSet<String> findLocals()
 	{
@@ -108,9 +112,9 @@ public class SetBuilder
 	}
 
 	/**
-	 *
-	 * @param id
-	 * @return
+	 * Gets a method line
+	 * @param id the number of the line
+	 * @return the line
 	 */
 	public Line getLine(int id)
 	{
@@ -123,8 +127,8 @@ public class SetBuilder
 	}
 
 	/**
-	 *
-	 * @return
+	 * Gets the method name
+	 * @return the method name
 	 */
 	public String getName()
 	{
@@ -132,7 +136,7 @@ public class SetBuilder
 	}
 
 	/**
-	 *
+	 * Builds all method lines based on the HLIR of the method
 	 */
 	public void buildAllLines()
 	{
@@ -176,8 +180,8 @@ public class SetBuilder
 	}
 
 	/**
-	 *
-	 * @return
+	 * Creates a special line for the arguments of the method
+	 * @return a line for the arguments of the method
 	 */
 	private Line createMethodArgumentsLine()
 	{
@@ -192,7 +196,11 @@ public class SetBuilder
 	}
 
 	/**
-	 *
+	 * Sets the successors to all the generated lines.
+	 * Lines can have:
+	 * - 0 successors (for example, the return line of a method)
+	 * - 1 successor (direct successor or a jump to another line)
+	 * - 2 successors (direct successor and a jump to another line, like in a comparison)
 	 */
 	private void setSuccessors()
 	{
@@ -200,25 +208,22 @@ public class SetBuilder
 		{
 			Line currLine = this.lines.get(i);
 			
-			//line has a jump
 			if (currLine.isJump())
 			{
 				Line dest = findLabelLine(currLine.getJumpLabel());
 				currLine.addSuccessor(dest);
 			}
-			//line has a direct successor
 			if (currLine.hasSuccessor())
 			{
 				currLine.addSuccessor(this.lines.get(i + 1));
 			}
-			//it can have both a jump and a direct successor (like an if)
 		}
 	}
 
 	/**
-	 *
-	 * @param label
-	 * @return
+	 * Finds the line with the specified label
+	 * @param label the label
+	 * @return the line with the specified label
 	 */
 	private Line findLabelLine(String label)
 	{
@@ -231,9 +236,9 @@ public class SetBuilder
 	}
 
 	/**
-	 *
-	 * @param node
-	 * @param line
+	 * Builds a line based on an IRJump HLIR node
+	 * @param node the node
+	 * @param line the line to build
 	 */
 	private void buildLineJump(IRJump node, Line line)
 	{
@@ -244,9 +249,9 @@ public class SetBuilder
 	}
 
 	/**
-	 *
-	 * @param node
-	 * @param line
+	 * Builds a line based on an IRLabel HLIR node
+	 * @param node the node
+	 * @param line the line to build
 	 */
 	private void buildLineLabel(IRLabel node, Line line)
 	{
@@ -255,9 +260,9 @@ public class SetBuilder
 	}
 
 	/**
-	 *
-	 * @param node
-	 * @param line
+	 * Builds a line based on an IRCall HLIR node
+	 * @param node the node
+	 * @param line the line to build
 	 */
 	private void buildLineCall(IRCall node, Line line)
 	{
@@ -271,9 +276,9 @@ public class SetBuilder
 	}
 
 	/**
-	 *
-	 * @param node
-	 * @param line
+	 * Builds a line based on an IRComparison HLIR node
+	 * @param node the node
+	 * @param line the line to build
 	 */
 	private void buildLineComparison(IRComparison node, Line line)
 	{
@@ -320,9 +325,9 @@ public class SetBuilder
 	}
 
 	/**
-	 *
-	 * @param node
-	 * @param line
+	 * Builds a line based on an IRReturn HLIR node
+	 * @param node the node
+	 * @param line the line to build
 	 */
 	private void buildLineReturn(IRReturn node, Line line)
 	{
@@ -334,9 +339,9 @@ public class SetBuilder
 	}
 
 	/**
-	 *
-	 * @param node
-	 * @param line
+	 * Builds a line based on an IRStoreCall HLIR node
+	 * @param node the node
+	 * @param line the line to build
 	 */
 	private void buildLineStoreCall(IRStoreCall node, Line line)
 	{
@@ -356,9 +361,9 @@ public class SetBuilder
 	}
 
 	/**
-	 *
-	 * @param node
-	 * @param line
+	 * Builds a line based on an IRStoreArith HLIR node
+	 * @param node the node
+	 * @param line the line to build
 	 */
 	private void buildLineStoreArith(IRStoreArith node, Line line)
 	{
@@ -386,9 +391,9 @@ public class SetBuilder
 	}
 
 	/**
-	 *
-	 * @param node
-	 * @param line
+	 * Builds a line based on an IRAllocate HLIR node
+	 * @param node the node
+	 * @param line the line to build
 	 */
 	private void buildLineAllocate(IRAllocate node, Line line)
 	{
@@ -409,9 +414,9 @@ public class SetBuilder
 	}
 
 	/**
-	 *
-	 * @param var
-	 * @return
+	 * Checks if a variable is not a global variable
+	 * @param var the variable to check
+	 * @return true if not global, false otherwise
 	 */
 	private boolean isNotGlobal(String var)
 	{
@@ -419,8 +424,8 @@ public class SetBuilder
 	}
 
 	/**
-	 *
-	 * @return
+	 * Gets all the generated method lines
+	 * @return list with the generated method lines
 	 */
 	public ArrayList<Line> getLines()
 	{
@@ -428,16 +433,9 @@ public class SetBuilder
 	}
 
 	/**
-	 *
-	 * @param lines
-	 */
-	public void setLines(ArrayList<Line> lines)
-	{
-		this.lines = lines;
-	}
-
-	/**
-	 *
+	 * Calculates the IN and OUT sets for all the generated method lines.
+	 * It does multiple iterations, and it stops when the result of the latest two iterations is the same.
+	 * In each iteration it performs a bottom-up calculation, going from the last line to the first.
 	 */
 	public void calculateSets()
 	{
@@ -468,10 +466,10 @@ public class SetBuilder
 	}
 
 	/**
-	 *
-	 * @param oldSet
-	 * @param newSet
-	 * @return
+	 * Compares two lists of sets
+	 * @param oldSet the first set
+	 * @param newSet the second set
+	 * @return true if each set in a list equals the corresponding set in the other list, false otherwise
 	 */
 	private boolean compareSetLists(ArrayList<BitSet> oldSet, ArrayList<BitSet> newSet)
 	{
@@ -484,8 +482,8 @@ public class SetBuilder
 	}
 
 	/**
-	 *
-	 * @return
+	 * Gets a list with all the current OUT sets from all lines
+	 * @return list with the OUT sets
 	 */
 	private ArrayList<BitSet> getAllOutSets()
 	{
@@ -497,8 +495,8 @@ public class SetBuilder
 	}
 
 	/**
-	 *
-	 * @return
+	 * Gets a list with all the current IN sets from all lines
+	 * @return list with the IN sets
 	 */
 	private ArrayList<BitSet> getAllInSets()
 	{
@@ -509,6 +507,10 @@ public class SetBuilder
 		return sets;
 	}
 	
+	/**
+	 * Gets a list with all the current DEF sets from all lines
+	 * @return list with the DEF sets
+	 */
 	private ArrayList<BitSet> getAllDefSets()
 	{
 		ArrayList<BitSet> sets = new ArrayList<>();
@@ -517,18 +519,10 @@ public class SetBuilder
 			sets.add((BitSet)this.lines.get(i).getDef().clone());
 		return sets;
 	}
-	
-	private ArrayList<BitSet> getAllUseSets()
-	{
-		ArrayList<BitSet> sets = new ArrayList<>();
-		
-		for (int i = 0; i < this.lines.size(); i++)
-			sets.add((BitSet)this.lines.get(i).getUse().clone());
-		return sets;
-	}
 
 	/**
-	 *
+	 * Does an iteration in the IN and OUT calculus.
+	 * It performs a bottom-up calculation, going from the last line to the first.
 	 */
 	private void doIteration()
 	{
@@ -545,9 +539,10 @@ public class SetBuilder
 	}
 
 	/**
-	 *
-	 * @param line
-	 * @return
+	 * Calculates the OUT set of a line using the formula
+	 * OUT set = Union of IN sets of all successors
+	 * @param line the line to calculate the OUT set of
+	 * @return the calculated OUT set
 	 */
 	private BitSet calculateOut(Line line)
 	{
@@ -562,9 +557,10 @@ public class SetBuilder
 	}
 
 	/**
-	 *
-	 * @param line
-	 * @return
+	 * Calculates the IN set of a line using the formula
+	 * IN set = union of USE set with the difference between the OUT and DEF sets
+	 * @param line the line to calculate the IN set of
+	 * @return the calculated IN set
 	 */
 	private BitSet calculateIn(Line line)
 	{
@@ -582,9 +578,10 @@ public class SetBuilder
 	}
 
 	/**
-	 *
-	 * @param out
-	 * @param def
+	 * Calculates the difference between and OUT and a DEF set
+	 * @param out the OUT set
+	 * @param def the DEF set
+	 * @return the calculated difference set
 	 */
 	private BitSet difference(BitSet out, BitSet def)
 	{
@@ -599,8 +596,8 @@ public class SetBuilder
 	}
 
 	/**
-	 *
-	 * @return
+	 * Gets all the interference pairs based on the IN and OUT sets
+	 * @return list with all the interference pairs
 	 */
 	public ArrayList<IntPair> getAllPairs()
 	{
@@ -609,10 +606,6 @@ public class SetBuilder
 		ArrayList<BitSet> ins = getAllInSets();
 		for (BitSet set : ins)
 			pairs.addAll(getInterferences(set));
-		/*
-		ArrayList<BitSet> outs = getAllOutSets();
-		for (BitSet set : outs)
-			pairs.addAll(getInterferences(set));*/
 		
 		ArrayList<BitSet> outs = getAllOutSets();
 		ArrayList<BitSet> defs = getAllDefSets();
@@ -626,9 +619,10 @@ public class SetBuilder
 	}
 
 	/**
-	 *
-	 * @param set
-	 * @return
+	 * Calculates all interferences using the IN and OUT sets,
+	 * with no regard for duplicates
+	 * @param set the set to use in order to find interferences
+	 * @return a list of interference pairs
 	 */
 	private ArrayList<IntPair> getInterferences(BitSet set)
 	{
@@ -656,8 +650,8 @@ public class SetBuilder
 	}
 
 	/**
-	 * 
-	 * @return
+	 * Gets all the arguments of the method
+	 * @return a list with all the method arguments
 	 */
 	public ArrayList<String> getAllArgs()
 	{
@@ -671,8 +665,8 @@ public class SetBuilder
 	}
 
 	/**
-	 * 
-	 * @return
+	 * Gets all the local variables of the method
+	 * @return a list with all the local variables
 	 */
 	public ArrayList<String> getLocals()
 	{
