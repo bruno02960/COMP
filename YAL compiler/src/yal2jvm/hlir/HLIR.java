@@ -973,9 +973,8 @@ public class HLIR
      * @return variable value
      */
     private Variable createScalarElementDeclarationArraySizeHHIR(ASTDECLARATION astdeclaration, Variable variable) {
-        Variable value;ASTARRAYSIZE astarraysize = (ASTARRAYSIZE) astdeclaration.jjtGetChild(1);
-
-        value = getArraySizeVariable(astdeclaration, astarraysize);
+        ASTARRAYSIZE astarraysize = (ASTARRAYSIZE) astdeclaration.jjtGetChild(1);
+        Variable value = getArraySizeVariable(astdeclaration, astarraysize);
 
         variable.setType(Type.ARRAY);
         return value;
@@ -1027,6 +1026,13 @@ public class HLIR
         }
     }
 
+    /**
+     * TODO
+     * @param variable variable to add
+     * @param value value to add
+     * @param initialized true if is initialized, false otherwise
+     * @return TODO
+     */
     private boolean setGlobalVariableToArray(Variable variable, Variable value, boolean initialized) {
         IRGlobal irGlobal = root.getGlobal(variable.getVar());
         if(irGlobal != null && initialized)
@@ -1038,6 +1044,12 @@ public class HLIR
         return false;
     }
 
+    /**
+     * TODO
+     * @param astdeclaration the tree of the declaration
+     * @param astarraysize the tree of the array size
+     * @return the created variable with the array size value
+     */
     private Variable getArraySizeVariable(ASTDECLARATION astdeclaration, ASTARRAYSIZE astarraysize) {
         Variable value;
         if (astarraysize.jjtGetNumChildren() == 0)
