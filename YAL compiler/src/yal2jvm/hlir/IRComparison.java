@@ -138,7 +138,7 @@ public class IRComparison extends IRNode
 	 */
 	private boolean useArrayOperations()
 	{
-		if (rhs.getNodeType().equals("Constant") || rhs.getNodeType().equals("Constant"))
+		if (lhs.getNodeType().equals("Constant") || rhs.getNodeType().equals("Constant"))
 			return false;
 
 		if (rhs.getNodeType().equals("Load"))
