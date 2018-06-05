@@ -115,9 +115,6 @@ public class HLIR
     	
     	for (String key : methods.keySet())
     		assignNewRegistersMethod(methods.get(key), key);
-    	
-    	if (Yal2jvm.VERBOSE)
-    		System.out.println("--------------------------------------------------");
 	}
 
     /**
