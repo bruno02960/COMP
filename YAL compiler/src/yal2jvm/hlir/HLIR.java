@@ -920,13 +920,9 @@ public class HLIR
 
                 if (astdeclaration.jjtGetNumChildren() == 2)
                 {
-                    ASTARRAYSIZE astarraysize = (ASTARRAYSIZE) astdeclaration.jjtGetChild(1);
-
-                    value = getArraySizeVariable(astdeclaration, astarraysize);
+                    value = createScalarElementDeclarationArraySizeHHIR(astdeclaration, variable);
 
                     arraySize = true;
-
-                    variable.setType(Type.ARRAY);
                 } else                              // a = 4;       a;
                 {
                     String str_value = astdeclaration.operator + astdeclaration.integer;
@@ -949,15 +945,7 @@ public class HLIR
 
                 if (astdeclaration.jjtGetNumChildren() == 2)
                 {
-                    ASTARRAYSIZE astarraysize = (ASTARRAYSIZE) astdeclaration.jjtGetChild(1);
-                    if (astarraysize.jjtGetNumChildren() == 0)
-                    {
-                        value = new Variable(astarraysize.integer.toString(), Type.INTEGER);
-                    } else
-                    {
-                        ASTSCALARACCESS astscalaraccess = (ASTSCALARACCESS) astarraysize.jjtGetChild(0);
-                        value = new Variable(astscalaraccess.id, Type.VARIABLE);
-                    }
+                    value = createArrayElementDeclarationArraySizeHHIR(astdeclaration);
 
                     arraySize = true;
                 } else
@@ -975,6 +963,50 @@ public class HLIR
                 break;
         }
 
+        addChildToRoot(variable, value, arraySize, initialized);
+    }
+
+    /**
+     * Creates a scalarElement intermediate representation declaration for arraySize
+     * @param astdeclaration ASTDECLARATION
+     * @param variable scalarElement variable
+     * @return variable value
+     */
+    private Variable createScalarElementDeclarationArraySizeHHIR(ASTDECLARATION astdeclaration, Variable variable) {
+        Variable value;ASTARRAYSIZE astarraysize = (ASTARRAYSIZE) astdeclaration.jjtGetChild(1);
+
+        value = getArraySizeVariable(astdeclaration, astarraysize);
+
+        variable.setType(Type.ARRAY);
+        return value;
+    }
+
+    /**
+     * Creates an arrayElement intermediate representation declaration for arraySize
+     * @param astdeclaration
+     * @return
+     */
+    private Variable createArrayElementDeclarationArraySizeHHIR(ASTDECLARATION astdeclaration) {
+        Variable value;ASTARRAYSIZE astarraysize = (ASTARRAYSIZE) astdeclaration.jjtGetChild(1);
+        if (astarraysize.jjtGetNumChildren() == 0)
+        {
+            value = new Variable(astarraysize.integer.toString(), Type.INTEGER);
+        } else
+        {
+            ASTSCALARACCESS astscalaraccess = (ASTSCALARACCESS) astarraysize.jjtGetChild(0);
+            value = new Variable(astscalaraccess.id, Type.VARIABLE);
+        }
+        return value;
+    }
+
+    /**
+     * Adds declaration child to root
+     * @param variable variable to add
+     * @param value value to add
+     * @param arraySize true if is array size, false otherwise
+     * @param initialized true if is initialized, false otherwise
+     */
+    private void addChildToRoot(Variable variable, Variable value, boolean arraySize, boolean initialized) {
         if(!initialized) {
             root.addChild(new IRGlobal(variable));
         }

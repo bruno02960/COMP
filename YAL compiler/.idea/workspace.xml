@@ -26,12 +26,14 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="HLIR.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="HLIR.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/yal2jvm/hlir/HLIR.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="345">
-              <caret line="996" column="0" lean-forward="true" selection-start-line="996" selection-start-column="0" selection-end-line="996" selection-end-column="0" />
-              <folding />
+              <caret line="1028" column="0" lean-forward="true" selection-start-line="1028" selection-start-column="0" selection-end-line="1028" selection-end-column="0" />
+              <folding>
+                <element signature="method#createDeclarationHHIR#0;class#HLIR#0" expanded="false" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -56,11 +58,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="programa2.yal" pinned="false" current-in-tab="true">
+      <file leaf-file-name="programa2.yal" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/examples/MyFirstYalExamples/programa2.yal">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+            <state relative-caret-position="578">
+              <caret line="34" column="32" lean-forward="true" selection-start-line="34" selection-start-column="32" selection-end-line="34" selection-end-column="32" />
               <folding />
             </state>
           </provider>
@@ -255,17 +257,6 @@
             <path>
               <item name="YAL compiler" type="b2602c69:ProjectViewProjectNode" />
               <item name="YAL compiler" type="462c0819:PsiDirectoryNode" />
-              <item name="examples" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="YAL compiler" type="b2602c69:ProjectViewProjectNode" />
-              <item name="YAL compiler" type="462c0819:PsiDirectoryNode" />
-              <item name="examples" type="462c0819:PsiDirectoryNode" />
-              <item name="MyFirstYalExamples" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="YAL compiler" type="b2602c69:ProjectViewProjectNode" />
-              <item name="YAL compiler" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -280,14 +271,6 @@
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="yal2jvm" type="462c0819:PsiDirectoryNode" />
               <item name="hlir" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="YAL compiler" type="b2602c69:ProjectViewProjectNode" />
-              <item name="YAL compiler" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="yal2jvm" type="462c0819:PsiDirectoryNode" />
-              <item name="hlir" type="462c0819:PsiDirectoryNode" />
-              <item name="liveness_analysis" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="YAL compiler" type="b2602c69:ProjectViewProjectNode" />
@@ -976,14 +959,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/yal2jvm/hlir/HLIR.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="345">
-          <caret line="996" column="0" lean-forward="true" selection-start-line="996" selection-start-column="0" selection-end-line="996" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/examples/MyFirstYalExamples/programa3.j">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -1002,9 +977,19 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/examples/MyFirstYalExamples/programa2.yal">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        <state relative-caret-position="578">
+          <caret line="34" column="32" lean-forward="true" selection-start-line="34" selection-start-column="32" selection-end-line="34" selection-end-column="32" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/yal2jvm/hlir/HLIR.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="345">
+          <caret line="1028" column="0" lean-forward="true" selection-start-line="1028" selection-start-column="0" selection-end-line="1028" selection-end-column="0" />
+          <folding>
+            <element signature="method#createDeclarationHHIR#0;class#HLIR#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
