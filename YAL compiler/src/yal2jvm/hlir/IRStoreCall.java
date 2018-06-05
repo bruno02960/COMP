@@ -8,7 +8,7 @@ import java.util.ArrayList;
 public class IRStoreCall extends IRStore
 {
     /**
-     *
+     * Default constructor of IRStoreCall used by other constructors of the class that has basic and common action, setNodeType.
      */
     public IRStoreCall()
     {
@@ -16,10 +16,10 @@ public class IRStoreCall extends IRStore
     }
 
     /**
-     *
-     * @param name
+     * Constructor used for store call when lhs (the variable being set) has type integer.
+     * Example: a = f();
+     * @param name name of the variable where call will be stored
      */
-    // a = f();
     public IRStoreCall(String name)
     {
         this();
@@ -27,10 +27,10 @@ public class IRStoreCall extends IRStore
     }
 
     /**
-     *
-     * @param name
+     * Constructor used for store call when lhs (the variable being set) has type array. Value must be set at given index of the array.
+     * Example: a[i] = f();
+     * @param name name of the variable where call will be stored
      */
-    // a[i] = f();
     public IRStoreCall(VariableArray name)
     {
         this();

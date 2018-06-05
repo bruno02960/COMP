@@ -10,8 +10,8 @@ public class IRStoreArith extends IRStore
     private IRArith irArith;
 
     /**
-     *
-     * @param op
+     * Default constructor used by other constructors of the class that has some basic and common actions.
+     * @param op the arith operation operator
      */
     public IRStoreArith(Operation op)
     {
@@ -21,9 +21,9 @@ public class IRStoreArith extends IRStore
     }
 
     /**
-     *
-     * @param name
-     * @param op
+     * Constructor for IRStoreArith used when lhs (the variable being set) has type integer.
+     * @param name the lhs variable that will be set with the value of the arith operation
+     * @param op the arith operation operator
      */
     //a = b + c
     public IRStoreArith(String name, Operation op)
@@ -33,9 +33,9 @@ public class IRStoreArith extends IRStore
     }
 
     /**
-     *
-     * @param name
-     * @param op
+     * Constructor for IRStoreArith used when lhs (the variable being set) has type array, and the arith result must be putted at a given index of the array.
+     * @param name the lhs variable that will be set with the value of the arith operation
+     * @param op the arith operation operator
      */
     //a[i] = b + c;
     public IRStoreArith(VariableArray name, Operation op)
@@ -173,12 +173,14 @@ public class IRStoreArith extends IRStore
 
     private void addNewValueOfVariableNameToConstsHashMap(IRMethod method, String increment)
     {
-        IRConstant previousValue = method.getConstValueByConstVarName(name);
+        IRConstant previousValue = method.getConstVarNameToConstValue().remove(name);
         if(previousValue == null)
             return;
 
-        Integer newValue = Integer.parseInt(previousValue.getValue()) + Integer.parseInt(increment);
-        previousValue.setValue(newValue.toString());
+        Integer newValueInteger = Integer.parseInt(previousValue.getValue()) + Integer.parseInt(increment);
+        IRConstant newValue = new IRConstant(previousValue);
+        newValue.setValue(newValueInteger.toString());
+        method.getConstVarNameToConstValue().put(name, newValue);
     }
 
 }

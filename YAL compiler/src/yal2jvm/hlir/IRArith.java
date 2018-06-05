@@ -7,7 +7,8 @@ import java.util.ArrayList;
 /**
  *
  */
-public class IRArith extends IRNode {
+public class IRArith extends IRNode
+{
     private Operation op;
     private IRNode rhs, lhs;
 
@@ -32,7 +33,65 @@ public class IRArith extends IRNode {
 
         ArrayList<String> lhsInst = lhs.getInstructions();
         ArrayList<String> rhsInst = rhs.getInstructions();
+        String opInst = getOpInstructions();
 
+        if(HLIR.optimize)
+        {
+            String constantenessValue = getOperandsInstructionsIfConstantness();
+            if(constantenessValue != null)
+            {
+                IRConstant constant = new IRConstant(constantenessValue);
+                inst.addAll(constant.getInstructions());
+                return inst;
+            }
+        }
+
+
+        inst.addAll(lhsInst);
+        inst.addAll(rhsInst);
+        inst.add(opInst);
+        return inst;
+    }
+
+    /**
+     * This method checks if both lhs and rhs of arith are constant, and if so, returns the result of the operation between them.
+     * @return the string with the value of the operation, otherwise, null.
+     */
+    private String getOperandsInstructionsIfConstantness()
+    {
+        String lhsValue = checkOperandForConstantness(lhs);
+        if(lhsValue == null)
+            return null;
+
+        String rhsValue = checkOperandForConstantness(rhs);
+        if(rhsValue == null)
+            return null;
+
+        Integer operationValue = Utils.getOperationValueByOperator(lhsValue, rhsValue, op);
+
+        return operationValue.toString();
+    }
+
+    /**
+     * This method checks if the node given is constant, returning its constant value.
+     * @return the string const value of the node, otherwise, null.
+     */
+    private String checkOperandForConstantness(IRNode node)
+    {
+        if(node instanceof IRConstant)
+            return ((IRConstant)node).getValue();
+        else if(node instanceof IRLoad)
+            return ((IRLoad)node).getLoadedConstantValue();
+        else
+            return null;
+    }
+
+    /**
+     * Finds the the jvm code as string of the attribute operation.
+     * @return the jvm code as string of the attribute operation.
+     */
+    private String getOpInstructions()
+    {
         String opInst = null;
 
         switch (op)
@@ -68,17 +127,12 @@ public class IRArith extends IRNode {
                 opInst = "lxor";
                 break;
         }
-
-
-        inst.addAll(lhsInst);
-        inst.addAll(rhsInst);
-        inst.add(opInst);
-        return inst;
+        return opInst;
     }
 
     /**
-     *
-     * @return
+     * Returns this object's rhs field
+     * @return  rhs field value
      */
     public IRNode getRhs()
     {
@@ -86,8 +140,8 @@ public class IRArith extends IRNode {
     }
 
     /**
-     *
-     * @param rhs
+     * Sets this object's rhs field to the rhs parameter
+     * @param rhs   the new value of this object's rhs field
      */
     public void setRhs(IRNode rhs)
     {
@@ -96,8 +150,8 @@ public class IRArith extends IRNode {
     }
 
     /**
-     *
-     * @return
+     * Returns this object's lhs field
+     * @return lhs field value
      */
     public IRNode getLhs()
     {
@@ -105,8 +159,8 @@ public class IRArith extends IRNode {
     }
 
     /**
-     *
-     * @param lhs
+     * Sets this object's lhs field to the rhs parameter
+     * @param lhs    the new value of this object's lhs field
      */
     public void setLhs(IRNode lhs)
     {
@@ -115,16 +169,19 @@ public class IRArith extends IRNode {
     }
 
     /**
-     *
-     * @return
+     * Returns this object's op field
+     * @return  op field value
      */
     public Operation getOp() {
         return op;
     }
 
     /**
-     *
-     * @return
+     * Confirms if the lhs and rhs values are constants or not, and calls the function that processes
+     * the operation between the two values and turns the result of that function into a String
+     * @return  the value of the operation between the lhs and rhs if they are both constants.
+     *          null if one or both of them are not constants or the operator between them isn't recognized
+     *          in the function getOperationValue
      */
     public String getStringValueIfBothConstant()
     {
@@ -151,18 +208,25 @@ public class IRArith extends IRNode {
         return String.valueOf(Utils.getOperationValue(lhsValue, rhsValue, op.getSymbol()));
     }
 
+    /**
+     *
+     * @param method
+     * @param node
+     * @return
+     */
     private String getValueIfConstant(IRMethod method, IRNode node)
     {
         if(node instanceof IRConstant)
             return ((IRConstant)node).getValue();
-        else
+        else if(node instanceof IRLoad)
         {
             IRLoad load = (IRLoad)node;
             String varName = getVarNameForConstantName(load.getName(), load.getIndex());
             IRConstant constant = method.getConstValueByConstVarName(varName);
-            if(constant == null)
-                return null;
-            return constant.getValue();
+            if(constant != null)
+                return constant.getValue();
         }
+
+        return null;
     }
 }

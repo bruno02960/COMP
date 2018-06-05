@@ -122,7 +122,7 @@ public abstract class IRStore extends IRNode
             inst.addAll(setGlobalArrayElementByIRNode(index, Type.ARRAY, name, value));
         else
         {
-            //Type = Integer or type = Variable
+            //type = integer or type = variable
             inst.addAll(value.getInstructions());
             String instruction = "putstatic " + module.getName() + "/" + name + " I";
             inst.add(instruction);

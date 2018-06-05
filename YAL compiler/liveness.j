@@ -8,7 +8,7 @@
 
 
 .method public static f1(II)I
-.limit locals 255
+.limit locals 3
 .limit stack 2
 iconst_2
 istore_2
@@ -46,7 +46,7 @@ ireturn
 
 
 .method public static f2(I)V
-.limit locals 255
+.limit locals 1
 .limit stack 2
 iconst_1
 getstatic liveness/g3 I
@@ -57,7 +57,7 @@ return
 
 
 .method public static f3(II)I
-.limit locals 255
+.limit locals 2
 .limit stack 2
 iconst_0
 istore_0
@@ -88,7 +88,7 @@ ireturn
 
 
 .method public static f4(II)I
-.limit locals 255
+.limit locals 3
 .limit stack 2
 iload_0
 istore_2
@@ -109,14 +109,14 @@ while_end3:
 iload_1
 iload_0
 iadd
-istore_2
-iload_2
+istore_0
+iload_0
 ireturn
 .end method
 
 
 .method public static f5(II)I
-.limit locals 255
+.limit locals 3
 .limit stack 2
 iload_1
 istore_2
@@ -140,7 +140,7 @@ ireturn
 
 
 .method public static main([Ljava/lang/String;)V
-.limit locals 255
+.limit locals 2
 .limit stack 5
 iconst_1
 iconst_2
@@ -149,12 +149,12 @@ istore_1
 iload_1
 iconst_3
 invokestatic liveness/f3(II)I
-istore_2
+istore_0
 ldc "a = "
 iload_1
 invokestatic io/println(Ljava/lang/String;I)V
 ldc "b = "
-iload_2
+iload_0
 invokestatic io/println(Ljava/lang/String;I)V
 return
 .end method

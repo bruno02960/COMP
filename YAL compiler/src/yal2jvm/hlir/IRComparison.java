@@ -13,19 +13,7 @@ public class IRComparison extends IRNode
 	private String label;
 
 	/**
-	 *
-	 * @param comp
-	 * @param label
-	 * @param invert
-	 */
-	public IRComparison(Comparator comp, String label, boolean invert)
-	{
-		this.comp = invert ? Comparator.invert(comp) : comp;
-		this.label = label;
-		this.setNodeType("Comparison");
-	}
-
-	/**
+	 * Constructor for the class IRComparison using String operator
 	 *
 	 * @param operator
 	 * @param label
@@ -40,9 +28,10 @@ public class IRComparison extends IRNode
 	}
 
 	/**
+	 * Receives a comparator as a String and returns it's Comparator enum equivalent
 	 *
-	 * @param operator
-	 * @return
+	 * @param operator	operator that will be checked for it's Comparator equivalent
+	 * @return			the Comparator enum value
 	 */
 	private Comparator getComparatorGivenOperator(String operator)
 	{
@@ -82,8 +71,7 @@ public class IRComparison extends IRNode
 	public ArrayList<String> getInstructions()
 	{
 		ArrayList<String> inst = new ArrayList<>();
-		
-		String branchInst = "";
+		String branchInst;
 		
 		if (isConstantZero(rhs))
 		{
@@ -112,9 +100,11 @@ public class IRComparison extends IRNode
 	}
 
 	/**
+	 * Checks if node type is equal to constant and if it's value is equal to 0
 	 *
-	 * @param node
-	 * @return
+	 * @param node	node that will be used to check it's content
+	 * @return		true if the node type is equal to constant and it's value is equal to 0.
+	 * 				false if it fails at least one of these conditions.
 	 */
 	boolean isConstantZero(IRNode node)
 	{
@@ -128,12 +118,12 @@ public class IRComparison extends IRNode
 	}
 
 	/**
-	 *
-	 * @return
+	 * Checks if it supposed to use array operations.
+	 * @return	true if it is an array operation. False if not.
 	 */
 	private boolean useArrayOperations()
 	{
-		if (rhs.getNodeType().equals("Constant") || rhs.getNodeType().equals("Constant"))
+		if (lhs.getNodeType().equals("Constant") || rhs.getNodeType().equals("Constant"))
 			return false;
 
 		if (rhs.getNodeType().equals("Load"))
@@ -241,8 +231,8 @@ public class IRComparison extends IRNode
 	}
 
 	/**
-	 *
-	 * @return
+	 * Returns the value of the field rhs
+	 * @return	value of the field rhs
 	 */
 	public IRNode getRhs()
 	{
@@ -250,7 +240,7 @@ public class IRComparison extends IRNode
 	}
 
 	/**
-	 *
+	 * Sets the value of the field rhs to the value of the parameter rhs
 	 * @param rhs
 	 */
 	public void setRhs(IRNode rhs)
@@ -260,8 +250,8 @@ public class IRComparison extends IRNode
 	}
 
 	/**
-	 *
-	 * @return
+	 * Returns the value of the field lhs
+	 * @return value of the field lhs
 	 */
 	public IRNode getLhs()
 	{
@@ -269,7 +259,7 @@ public class IRComparison extends IRNode
 	}
 
 	/**
-	 *
+	 * Sets the value of the field lhs to the value of the parameter lhs
 	 * @param lhs
 	 */
 	public void setLhs(IRNode lhs)
@@ -279,7 +269,7 @@ public class IRComparison extends IRNode
 	}
 
 	/**
-	 *
+	 * Returns the value of the field label
 	 * @return
 	 */
 	public String getLabel()
@@ -288,7 +278,7 @@ public class IRComparison extends IRNode
 	}
 
 	/**
-	 *
+	 * Sets the value of the field label to the value of the parameter label
 	 * @param label
 	 */
 	public void setLabel(String label)

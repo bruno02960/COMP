@@ -11,9 +11,9 @@ public enum Comparator
 ;
 
 	/**
-	 *
-	 * @param comp
-	 * @return
+	 * Receives a comparator and returns the opposite comparator
+	 * @param comp	comparator object that will be used to get it's opposite comparator
+	 * @return		the opposite comparator of the argument comp
 	 */
 	public static Comparator invert(Comparator comp)
 	{

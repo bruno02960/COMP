@@ -2,6 +2,7 @@ package yal2jvm.hlir;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.TreeSet;
 
 import yal2jvm.ast.*;
 import yal2jvm.hlir.liveness_analysis.IntGraph;
@@ -18,6 +19,7 @@ public class HLIR
     private SimpleNode ast;
 	private HashMap<String, IntGraph> intGraphs;
 	public static boolean optimize;
+    public static HashMap<String, HashMap<String, Integer>> allocatedRegisterByMethodName;
 
     /**
      *
@@ -46,7 +48,7 @@ public class HLIR
      */
     public void optimize()
     {
-        this.optimize = true;
+        HLIR.optimize = true;
     }
 
     /**
@@ -66,11 +68,10 @@ public class HLIR
      */
     public boolean allocateRegisters(int maxLocals)
     {
-    	//selectInstructions();
         RegisterAllocator allocator = new RegisterAllocator(this.intGraphs);
         boolean allocateSuccessfully = allocator.allocate(maxLocals);
 
-        HashMap<String, HashMap<String, Integer>> allocatedRegisterByMethodName = allocator.getAllocatedRegisterByMethodName();
+        allocatedRegisterByMethodName = allocator.getAllocatedRegisterByMethodName();
 
         if (allocateSuccessfully)
         	assignNewRegisters(allocatedRegisterByMethodName);
@@ -79,6 +80,28 @@ public class HLIR
     }
 
     /**
+     * 
+     */
+    public void dumpIR()
+    {
+    	dumpIR(this.root, 0);
+    }
+    
+    /**
+     * 
+     * @param node
+     * @param x
+     */
+    private void dumpIR(IRNode node, int x)
+	{
+		for (int i = 0; i < x; i++)
+			System.out.print("  ");
+		System.out.println(node.getNodeType());
+		for (int i = 0; i < node.getChildren().size(); i++)
+			dumpIR(node.getChildren().get(i), x + 1);
+	}
+
+	/**
      *
      * @param methods
      */
@@ -109,11 +132,15 @@ public class HLIR
 			}
 		}
 		
+		TreeSet<Integer> uniqueRegs = new TreeSet<>();
+		
 		for (String key : methodVars.keySet())
 		{
 			System.out.println("Var " + key + " -> " + methodVars.get(key));
 			method.assignNewRegister(key, methodVars.get(key));
+			uniqueRegs.add(methodVars.get(key));
 		}
+		method.setRegisterCount(uniqueRegs.size());
 	}
 
     /**
@@ -261,37 +288,15 @@ public class HLIR
                 }
             }
         }
-        IRMethod function = new IRMethod(functionId, returnType, returnName, arguments);
-
-        //TODO: debug
-//        if (functionDebug)
-//        {
-//            System.out.println("name= " + functionId);
-//            System.out.println("return type= " + returnType.toString());
-//            if (returnName != null)
-//                System.out.println("return name= " + returnName);
-//
-//            if (argumentsTypes != null)
-//            {
-//                System.out.println("argumentsTypes= ");
-//                for (Type argumentsType : argumentsTypes)
-//                    System.out.println(argumentsType);
-//            }
-//
-//            if (argumentsNames != null)
-//            {
-//                System.out.println("argumentsNames= ");
-//                for (String argumentsName : argumentsNames)
-//                    System.out.println(argumentsName);
-//            }
-//        }
-
+        IRMethod function = new IRMethod(functionId, returnType, arguments);
         root.addChild(function);
 
         //parse statements
         if (!(currNode instanceof ASTSTATEMENTS))
             currNode = (SimpleNode) astFunction.jjtGetChild(++argumentsIndex);
         createStatementsHHIR((ASTSTATEMENTS) currNode, function);
+        IRReturn irReturn = new IRReturn(returnName, returnType);
+        function.addChild(irReturn);
     }
 
     /**
@@ -312,7 +317,7 @@ public class HLIR
                     break;
 
                 case "CALL":
-                    irmethod.addChild(getCallHHIR((ASTCALL) child));
+                    irmethod.addChild(getIRCall((ASTCALL) child, null));
                     break;
 
                 case "IF":
@@ -340,7 +345,6 @@ public class HLIR
         /* using template:
 
                     <do the test>
-                    boper …, lab_false
                     <true_body>
                     jump lab_end
             lab_false:
@@ -451,7 +455,7 @@ public class HLIR
 
         Node astTermChild = astTerm.jjtGetChild(0);
         if(astTermChild instanceof ASTCALL)
-            return getCallHHIR((ASTCALL) astTermChild);
+            return getIRCall((ASTCALL) astTermChild, null);
         else if(astTermChild instanceof ASTARRAYACCESS)
         {
             VariableArray variable = getArrayAccessIRNode((ASTARRAYACCESS) astTermChild);
@@ -472,16 +476,6 @@ public class HLIR
         return new IRLoad(new Variable(id, Type.INTEGER));
     }
 
-    /*private IRNode getIndexIRNode(ASTINDEX astIndex)
-    {
-        Integer indexValue = astIndex.indexValue;
-        if(indexValue != null)
-            return new IRConstant(indexValue.toString());
-
-        String indexID = astIndex.indexID;
-        return new IRLoad(indexID);
-    }*/
-
     /**
      *
      * @param astWhile
@@ -490,13 +484,13 @@ public class HLIR
     private void createWhileHHIR(ASTWHILE astWhile, IRMethod irmethod)
     {
         /* using template:
+
                       <test>
-                      boper …, lab_end
             lab_init:
                       <body>
                       <test>
-                      boper …, lab_init
             lab_end:
+
          */
 
         int labelNumber = root.getAndIncrementCurrLabelNumber();
@@ -803,26 +797,6 @@ public class HLIR
         }
 
         return new IRCall(methodId, moduleId, arguments, lhsVarName);
-    }
-
-    /**
-     *
-     * @param astCall
-     * @return
-     */
-    private IRCall getCallHHIR(ASTCALL astCall)
-    {
-        String moduleId = astCall.module;
-        String methodId = astCall.method;
-        ArrayList<Variable> arguments = null;
-
-        if (astCall.jjtGetNumChildren() > 0)
-        {
-            ASTARGUMENTS astarguments = (ASTARGUMENTS) astCall.jjtGetChild(0);
-            arguments = getFunctionCallArgumentsIds(astarguments);
-        }
-
-        return getIRCall(astCall, null);
     }
 
     /**

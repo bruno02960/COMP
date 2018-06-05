@@ -115,39 +115,6 @@ public class IRModule extends IRNode
 
     /**
      *
-     * @param varName
-     * @return
-     */
-    public boolean removeAllocateChildByName(String varName)
-    {
-        for (int i = 0; i < children.size(); i++)
-        {
-            if (children.get(i).toString().equals("Allocate"))
-            {
-                IRAllocate alloc = (IRAllocate) children.get(i);
-                if (alloc.getName().equals(varName))
-                {
-                    children.remove(i);
-                    return true;
-                }
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     *
-     * @param irNode
-     * @return
-     */
-    public boolean removeChild(IRNode irNode)
-    {
-        return children.remove(irNode);
-    }
-
-    /**
-     *
      * @return
      */
 	public TreeSet<String> getAllGlobals()

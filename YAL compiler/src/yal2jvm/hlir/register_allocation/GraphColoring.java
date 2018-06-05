@@ -136,56 +136,13 @@ public class  GraphColoring
     {
         for(Integer register : registers)
         {
+            //if the register is not occupied and this variable does not require a specific register (requiredRegister == -1)
+            // or the specific register that requires is the one being given
             if(usedRegisters.contains(register) == false && (requiredRegister == -1 || register.intValue() == requiredRegister))
                 return register;
         }
 
         return null;
     }
-/*
-    public static void main(String args[])
-    {
-        IntNode node1 = new IntNode("1");
-        IntNode node2 = new IntNode("2");
-        IntNode node3 = new IntNode("3");
-        IntNode node4 = new IntNode("4");
 
-        node1.addInterference(node2);
-        node1.addInterference(node3);
-        node1.addInterference(node4);
-
-        node3.addInterference(node4);
-
-        node2.addInterference(node4);
-
-        IntGraph graph = new IntGraph();
-        graph.addNode(node1);
-        graph.addNode(node2);
-        graph.addNode(node3);
-        graph.addNode(node4);
-
-        GraphColoring graphColoring = new GraphColoring(graph, 1);
-
-        graphColoring.colorGraph();
-        printHashMap(graphColoring.varNameToRegisterNumber);
-
-        graphColoring.setNumRegisters(3);
-        graphColoring.colorGraph();
-        printHashMap(graphColoring.varNameToRegisterNumber);
-
-        graphColoring.setNumRegisters(4);
-        graphColoring.colorGraph();
-        printHashMap(graphColoring.varNameToRegisterNumber);
-
-    }
-
-    private static void printHashMap(HashMap<String, Integer> hashMap)
-    {
-        Iterator it = hashMap.entrySet().iterator();
-        while (it.hasNext())
-        {
-            Map.Entry pair = (Map.Entry)it.next();
-            System.out.println(pair.getKey() + " = " + pair.getValue());
-        }
-    }*/
 }

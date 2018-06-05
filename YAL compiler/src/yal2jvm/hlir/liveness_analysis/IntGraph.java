@@ -11,39 +11,14 @@ public class IntGraph implements Serializable
 	private ArrayList<IntNode> nodes;
 
 	/**
-	 *
-	 * @param graph
+	 * Copy constructor of the IntGraph, it creates a new IntGraph based on the graph passed by argument.
+	 * As the graph has a list of nodes (IntNode objects) that have themselves a list of nodes (we had problems with recursivity in contructors)
+	 * and the only solution we found was to to make a copy using serialization., method getGraphCopy.
+	 * @param graph based on the new IntGraph will be created
 	 */
 	public IntGraph(IntGraph graph)
 	{
-        try
-        {
-            FileOutputStream fos = new FileOutputStream("tempdata.ser");
-            ObjectOutputStream oos = new ObjectOutputStream(fos);
-            oos.writeObject(graph);
-            oos.close();
-        }
-        catch (Exception ex)
-        {
-            System.out.println("Exception thrown during IntGraph copy: " + ex.toString());
-            System.exit(-1);
-        }
-
-        try
-        {
-            FileInputStream fis = new FileInputStream("tempdata.ser");
-            ObjectInputStream ois = new ObjectInputStream(fis);
-            IntGraph graphRead = (IntGraph) ois.readObject();
-            nodes = graphRead.getNodes();
-            ois.close();
-
-            new File("tempdata.ser").delete();
-        }
-        catch (Exception ex)
-        {
-			System.out.println("Exception thrown during IntGraph copy: " + ex.toString());
-			System.exit(-1);
-        }
+		nodes = getGraphCopy(graph).getNodes();
 	}
 
 	/**
@@ -68,6 +43,7 @@ public class IntGraph implements Serializable
 		n2.addInterference(n1);
 	}
 
+	//TODO REMOVE IF NOT USED
 	/**
 	 *
 	 * @param node
@@ -153,6 +129,11 @@ public class IntGraph implements Serializable
 		return s;
 	}
 
+	/**
+	 *
+	 * @param args
+	 * @return
+	 */
 	public void setRequiredRegisters(ArrayList<String> args)
 	{
 		for (int i = 0; i < args.size(); i++)
@@ -163,5 +144,48 @@ public class IntGraph implements Serializable
 					node.setRequiredRegister(i);
 			}
 		}
+	}
+
+	/**
+	 * Uses serialization to create a deep copy of the graph. It saves the graph object to a file tempdata.ser and read it again.
+	 * This method a retry count, in order to prevent common errors deleting temp file or with stream fail.
+	 * @param graph
+	 * @return a deep copy of the graph passed in by argument
+	 */
+	private IntGraph getGraphCopy(IntGraph graph)
+	{
+		int maxAttempts = 10;
+		int counter = 0;
+        boolean fileSuccessfullyDeleted = false;
+		while(counter < maxAttempts && fileSuccessfullyDeleted == false)
+		{
+			try
+			{
+				//write data
+				FileOutputStream fos = new FileOutputStream("tempdata.ser");
+				ObjectOutputStream oos = new ObjectOutputStream(fos);
+				oos.writeObject(graph);
+				oos.close();
+
+				//read data
+				FileInputStream fis = new FileInputStream("tempdata.ser");
+				ObjectInputStream ois = new ObjectInputStream(fis);
+				IntGraph graphRead = (IntGraph) ois.readObject();
+				ois.close();
+
+				//delete temp file
+				fileSuccessfullyDeleted = new File("tempdata.ser").delete();
+
+				return graphRead;
+			}
+			catch (Exception ex)
+			{
+				counter++;
+			}
+		}
+
+		System.out.println("Exception thrown during IntGraph copy");
+		System.exit(-1);
+		return null;
 	}
 }

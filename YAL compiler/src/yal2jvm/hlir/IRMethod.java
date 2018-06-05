@@ -56,27 +56,23 @@ public class IRMethod extends IRNode
 
     private String name;
     private Type returnType;
-    private String returnVar;
     private Variable[] args;
     private HashMap<String, IRConstant> constVarNameToConstValue = new HashMap<>();
     private ArrayList<HashMap<String, IRConstant>> listConstVarNameToConstValueWhileOrIfInitState = new ArrayList<>();
     private boolean insideWhile = false;
+    private int regN;
+	private int registerCount;
 
-    private int labelN = 0;
-    private int regN = 0;
-    private int varN = 0;
     /**
      *
      * @param name
      * @param returnType
-     * @param returnVar
      * @param args
      */
-    public IRMethod(String name, Type returnType, String returnVar, Variable[] args)
+    public IRMethod(String name, Type returnType, Variable[] args)
     {
         this.name = name;
         this.returnType = returnType;
-        this.returnVar = returnVar;
         this.args = args == null ? this.args = new Variable[0] : args;
         this.setNodeType("Method");
         this.regN = this.args.length;
@@ -92,10 +88,6 @@ public class IRMethod extends IRNode
         ArrayList<String> inst = new ArrayList<>();
 
         String methodDeclarationInst = getMethodDeclarationInstructions();
-
-        //parse return
-        IRReturn irReturn = new IRReturn(returnVar, returnType);
-        this.addChild(irReturn);
 
         ArrayList<String> methodBody = getMethodBody();
 
@@ -184,18 +176,7 @@ public class IRMethod extends IRNode
                 handleWhileOrIfConstantPropagationOptimization(node);
         }
 
-
-        int localsCount = 0;
-        for (int i = 0; i < getChildren().size(); i++)
-        {
-            IRNode node = getChildren().get(i);
-            if (node.toString().equals("Allocate"))
-                localsCount++;
-        }
-        localsCount += this.args.length;
-
-        localsCount = 255;
-        inst.add(".limit locals " + localsCount); //TODO ver o que contar aqui...a register allocaton vai dar isso
+        inst.add(".limit locals " + registerCount);
 
         int stackValue = stackValueCount(childsInstructions);
         inst.add(".limit stack " + stackValue);
@@ -227,12 +208,13 @@ public class IRMethod extends IRNode
             //store curr for the end
             listConstVarNameToConstValueWhileOrIfInitState.add(new HashMap<>(constVarNameToConstValue));
 
-            //set curr as the previous if existent, if more than one if or while stacked
+            //TODO REMOVE
+           /* //set curr as the previous if existent, if more than one if or while stacked
             if(listConstVarNameToConstValueWhileOrIfInitState.size() > 1)
             {
                 constVarNameToConstValue = listConstVarNameToConstValueWhileOrIfInitState.get(
                         listConstVarNameToConstValueWhileOrIfInitState.size() - 1);
-            }
+            }*/
 
             if((label.contains("while_init") && irNode instanceof IRLabel))
                 insideWhile = true;
@@ -270,6 +252,15 @@ public class IRMethod extends IRNode
 
         //set the constVarNameToConstValue as the old except the defined in the interval
         constVarNameToConstValue = oldHashMap;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public HashMap<String, IRConstant> getConstVarNameToConstValue()
+    {
+        return constVarNameToConstValue;
     }
 
     /**
@@ -325,22 +316,6 @@ public class IRMethod extends IRNode
 
 
         return instructionStackValue;
-
-        //TODO REMOVE PROBABLY NOT NECESSARY
-       /* Iterator it = instructionToStackCountValue.entrySet().iterator();
-        while (it.hasNext())
-        {
-            Map.Entry pair = (Map.Entry)it.next();
-            String instructionName = (String) pair.getKey();
-            if(currInstruction.contains(instructionName))
-            {
-                Integer instructionStackValue = (Integer) pair.getValue();
-                return instructionStackValue;
-            }
-        }
-
-        // if not detected instruction, is an instruction that not alter stack size
-        return 0;*/
     }
 
     /**
@@ -442,8 +417,6 @@ public class IRMethod extends IRNode
      */
     public int getVarRegister(String name)
     {
-        //TODO SERÃ� QUE PODIA SER ATE AO THIS, OU SEJA Ã� CURR INSTRUCTION?
-        // TODO ASSIM JA NAO FALHAVA O ENCONTRAR VARAIVEIS QUE SO FORAM DECLARADAS DEPOIS
         for (int i = 0; i < children.size(); i++)
         {
             String childrenType = children.get(i).toString();
@@ -466,8 +439,6 @@ public class IRMethod extends IRNode
      */
     public IRAllocate getVarDeclaredUntilThis(String name, IRNode callerNodeThis)
     {
-        //TODO SERÃ� QUE PODIA SER ATE AO THIS, OU SEJA Ã� CURR INSTRUCTION?
-        // TODO ASSIM JA NAO FALHAVA O ENCONTRAR VARAIVEIS QUE SO FORAM DECLARADAS DEPOIS
         for (int i = 0; i < children.size(); i++)
         {
             IRNode currChild = children.get(i);
@@ -483,24 +454,6 @@ public class IRMethod extends IRNode
         }
 
         return null;
-    }
-
-    /**
-     *
-     * @param name
-     * @param callerNodeThis
-     * @return
-     */
-    public int getVarRegisterDeclaredUntilThis(String name, IRNode callerNodeThis)
-    {
-        //TODO SERÃ� QUE PODIA SER ATE AO THIS, OU SEJA Ã� CURR INSTRUCTION?
-        // TODO ASSIM JA NAO FALHAVA O ENCONTRAR VARAIVEIS QUE SO FORAM DECLARADAS DEPOIS
-
-        IRAllocate var = getVarDeclaredUntilThis(name, callerNodeThis);
-        if(var == null)
-            return -1;
-
-        return var.getRegister();
     }
 
     /**
@@ -612,5 +565,15 @@ public class IRMethod extends IRNode
 					alloc.setRegister(register);
 			}
 		}
+	}
+
+	public int getRegisterCount()
+	{
+		return registerCount;
+	}
+
+	public void setRegisterCount(int registerCount)
+	{
+		this.registerCount = registerCount;
 	}
 }

@@ -17,6 +17,7 @@ public class IRCall extends IRNode
     private ArrayList<Variable> arguments;
 
 	/**
+	 * Constructor for class IRCall 
 	 *
 	 * @param method
 	 * @param module
@@ -29,12 +30,12 @@ public class IRCall extends IRNode
         this.module = module;
         this.arguments = arguments;
         this.lhsVarName = lhsVarName;
-        this.setNodeType("Call");
+        this.nodeType = "Call";
     }
 
 	/**
-	 *
-	 * @return
+	 * Adds the arguments and call instructions to a new ArrayList variable and returns it
+	 * @return	Arraylist containing the arguments and call instructions
 	 */
     @Override
     public ArrayList<String> getInstructions()
@@ -140,8 +141,8 @@ public class IRCall extends IRNode
 	}
 
 	/**
-	 *
-	 * @return
+	 * Returns the value of the field type
+	 * @return	value of field type
 	 */
 	public Type getType()
 	{
@@ -210,6 +211,8 @@ public class IRCall extends IRNode
 				case VOID:
 					callInst += "V";
 					type = Type.VOID;
+					break;
+				default:
 					break;
 			}
         }
@@ -283,8 +286,8 @@ public class IRCall extends IRNode
     }
 
 	/**
-	 *
-	 * @return
+	 * Returns the field arguments' value
+	 * @return	the value of the field arguments
 	 */
 	public ArrayList<Variable> getArguments()
 	{
@@ -292,8 +295,8 @@ public class IRCall extends IRNode
 	}
 
 	/**
-	 *
-	 * @param arguments
+	 * Sets the value of the field arguments to the parameter arguments
+	 * @param arguments	ArrayList of arguments that will be copied to the field arguments
 	 */
 	public void setArguments(ArrayList<Variable> arguments)
 	{

@@ -13,6 +13,9 @@ import yal2jvm.hlir.HLIR;
 import yal2jvm.semantic_analysis.ModuleAnalysis;
 import yal2jvm.utils.Utils;
 
+/**
+ * Yal2jvm class that reads the console's arguments and calls the project's main functions
+ */
 public class Yal2jvm
 {
     private static final int MAX_LOCAL_VARS = 255;
@@ -25,6 +28,15 @@ public class Yal2jvm
     private String inputFile;
     private SimpleNode ast;
 
+    /**
+     * Constructor for the class Yal2jvm
+     *
+     * @param localVars
+     * @param optimize
+     * @param keepJFile
+     * @param verbose
+     * @param inputFile
+     */
     public Yal2jvm(int localVars, boolean optimize, boolean keepJFile, boolean verbose, String inputFile)
     {
         this.localVars = localVars;
@@ -34,6 +46,10 @@ public class Yal2jvm
         this.inputFile = inputFile;
     }
 
+    /**
+     * Reads the console's arguments and the flags set, keeping this values for the constructor
+     * @param args  list of arguments
+     */
     public static void main(String args[])
     {
         String inputFile = null;
@@ -89,6 +105,10 @@ public class Yal2jvm
         }
     }
 
+    /**
+     *
+     *
+     */
     public void run()
     {
         FileInputStream inputStream = getFileStream();
@@ -113,6 +133,8 @@ public class Yal2jvm
         
         log("Initiating JVM code generation");
         HLIR hlir = new HLIR(ast);
+        if (VERBOSE)
+        	hlir.dumpIR();
         
         if (this.optimize)
             hlir.optimize();
@@ -131,6 +153,10 @@ public class Yal2jvm
         log("Bytecode generated");
     }
 
+    /**
+     *
+     * @return
+     */
     private FileInputStream getFileStream()
     {
         FileInputStream inputStream = null;
@@ -145,6 +171,11 @@ public class Yal2jvm
         return inputStream;
     }
 
+    /**
+     *
+     * @param inputStream
+     * @return
+     */
     private SimpleNode createAst(FileInputStream inputStream)
     {
         new YalParser(inputStream);
@@ -172,6 +203,11 @@ public class Yal2jvm
         return root;
     }
 
+    /**
+     *
+     * @param instructions
+     * @param moduleName
+     */
     private void saveToJasminFile(ArrayList<String> instructions, String moduleName)
     {
         try
@@ -192,6 +228,10 @@ public class Yal2jvm
         }
     }
 
+    /**
+     *
+     * @param fileName
+     */
     private void compileToBytecode(String fileName)
     {
     	Jasmin.main(new String[] {fileName});
@@ -203,11 +243,19 @@ public class Yal2jvm
         }
     }
 
+    /**
+     *
+     * @param inputFile
+     */
     public void setInputFile(String inputFile)
     {
         this.inputFile = inputFile;
     }
-    
+
+    /**
+     *
+     * @param msg
+     */
     public static void log(String msg)
     {
     	if (Yal2jvm.VERBOSE)
