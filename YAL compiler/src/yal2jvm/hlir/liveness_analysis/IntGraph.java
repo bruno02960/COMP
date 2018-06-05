@@ -16,34 +16,7 @@ public class IntGraph implements Serializable
 	 */
 	public IntGraph(IntGraph graph)
 	{
-        try
-        {
-            FileOutputStream fos = new FileOutputStream("tempdata.ser");
-            ObjectOutputStream oos = new ObjectOutputStream(fos);
-            oos.writeObject(graph);
-            oos.close();
-        }
-        catch (Exception ex)
-        {
-            System.out.println("Exception thrown during IntGraph copy: " + ex.toString());
-            System.exit(-1);
-        }
-
-        try
-        {
-            FileInputStream fis = new FileInputStream("tempdata.ser");
-            ObjectInputStream ois = new ObjectInputStream(fis);
-            IntGraph graphRead = (IntGraph) ois.readObject();
-            nodes = graphRead.getNodes();
-            ois.close();
-
-            new File("tempdata.ser").delete();
-        }
-        catch (Exception ex)
-        {
-			System.out.println("Exception thrown during IntGraph copy: " + ex.toString());
-			System.exit(-1);
-        }
+		nodes = getGraphCopy(graph).getNodes();
 	}
 
 	/**
@@ -153,6 +126,11 @@ public class IntGraph implements Serializable
 		return s;
 	}
 
+	/**
+	 *
+	 * @param args
+	 * @return
+	 */
 	public void setRequiredRegisters(ArrayList<String> args)
 	{
 		for (int i = 0; i < args.size(); i++)
@@ -163,5 +141,45 @@ public class IntGraph implements Serializable
 					node.setRequiredRegister(i);
 			}
 		}
+	}
+
+	/**
+	 * @param graph
+	 * @return
+	 */
+	private IntGraph getGraphCopy(IntGraph graph)
+	{
+		int maxAttempts = 10;
+		int counter = 0;
+		while(counter < maxAttempts)
+		{
+			try
+			{
+				//write data
+				FileOutputStream fos = new FileOutputStream("tempdata.ser");
+				ObjectOutputStream oos = new ObjectOutputStream(fos);
+				oos.writeObject(graph);
+				oos.close();
+
+				//read data
+				FileInputStream fis = new FileInputStream("tempdata.ser");
+				ObjectInputStream ois = new ObjectInputStream(fis);
+				IntGraph graphRead = (IntGraph) ois.readObject();
+				ois.close();
+
+				//delete temp file
+				new File("tempdata.ser").delete();
+
+				return graphRead;
+			}
+			catch (Exception ex)
+			{
+				counter++;
+			}
+		}
+
+		System.out.println("Exception thrown during IntGraph copy");
+		System.exit(-1);
+		return null;
 	}
 }
