@@ -18,7 +18,7 @@ public enum Operation
      * @param operator  operator that will be used to retrieve it's Operation enum equivalent
      * @return          Operation enum value if operator is recognized. Null if it isn't.
      */
-    static Operation parseOperator(String operator) {
+    public static Operation parseOperator(String operator) {
         switch(operator) {
             case "+":
                 return ADD;

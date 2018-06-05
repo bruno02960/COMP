@@ -14,10 +14,10 @@ import yal2jvm.symbol_tables.Symbol;
 public class Utils
 {
     /**
-     * Receives an hashmap of key String and value Symbol and returns a copy of it
+     * Receives an HashMap of key String and value Symbol and returns a copy of it
      *
-     * @param original  original hashmap to be copied
-     * @return          hashmap that is a copy of the parameter
+     * @param original  original HashMap to be copied
+     * @return          HashMap that is a copy of the parameter
      */
     public static HashMap<String, Symbol> copyHashMap(HashMap<String, Symbol> original)
     {
@@ -100,38 +100,15 @@ public class Utils
      * Receives two string variables and the operator between them and checks which operator the string is.
      * After finding out which operator it is, it is returned the value of the operation between the integer
      * of the two string variables
-     * @param var1      left side variable
-     * @param var2      right side variable
-     * @param operator  operator between the two variables
-     * @return          the result of the operation between the variables. 0 if the operator isn't recognized.
+     * @param var1              left side variable
+     * @param var2              right side variable
+     * @param stringOperator    operator between the two variables
+     * @return                  the result of the operation between the variables. 0 if the operator isn't recognized.
      */
-    public static int getOperationValue(String var1, String var2, String operator)
+    public static int getOperationValue(String var1, String var2, String stringOperator)
     {
-        switch(operator)
-        {
-            case "+":
-                return Integer.parseInt(var1) + Integer.parseInt(var2);
-            case "-":
-                return Integer.parseInt(var1) - Integer.parseInt(var2);
-            case "*":
-                return Integer.parseInt(var1) * Integer.parseInt(var2);
-            case "/":
-                return Integer.parseInt(var1) / Integer.parseInt(var2);
-            case ">>":
-                return Integer.parseInt(var1) >> Integer.parseInt(var2);
-            case "<<":
-                return Integer.parseInt(var1) << Integer.parseInt(var2);
-            case ">>>":
-                return Integer.parseInt(var1) >>> Integer.parseInt(var2);
-            case "&":
-                return Integer.parseInt(var1) & Integer.parseInt(var2);
-            case "|":
-                return Integer.parseInt(var1) | Integer.parseInt(var2);
-            case "^":
-                return Integer.parseInt(var1) ^ Integer.parseInt(var2);
-        }
-
-        return 0;
+        Operation operator = Operation.parseOperator(stringOperator);
+        return getOperationValueByOperator(var1, var2, operator);
     }
 
     /**
@@ -140,7 +117,7 @@ public class Utils
      * of the two string variables
      * @param var1      left side variable
      * @param var2      right side variable
-     * @param operator  operator between the two variables, of class Operaion
+     * @param operator  operator between the two variables, of class Operation
      * @return          the result of the operation between the variables. 0 if the operator isn't recognized.
      */
     public static int getOperationValueByOperator(String var1, String var2, Operation operator)
