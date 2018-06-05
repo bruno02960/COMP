@@ -133,6 +133,8 @@ public class Yal2jvm
         
         log("Initiating JVM code generation");
         HLIR hlir = new HLIR(ast);
+        if (VERBOSE)
+        	hlir.dumpIR();
         
         if (this.optimize)
             hlir.optimize();

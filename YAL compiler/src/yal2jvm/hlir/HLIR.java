@@ -80,6 +80,28 @@ public class HLIR
     }
 
     /**
+     * 
+     */
+    public void dumpIR()
+    {
+    	dumpIR(this.root, 0);
+    }
+    
+    /**
+     * 
+     * @param node
+     * @param x
+     */
+    private void dumpIR(IRNode node, int x)
+	{
+		for (int i = 0; i < x; i++)
+			System.out.print("  ");
+		System.out.println(node.getNodeType());
+		for (int i = 0; i < node.getChildren().size(); i++)
+			dumpIR(node.getChildren().get(i), x + 1);
+	}
+
+	/**
      *
      * @param methods
      */

@@ -325,6 +325,7 @@ public class SetBuilder
 	 */
 	private void buildLineReturn(IRReturn node, Line line)
 	{
+		System.out.println("\n\nIN RETURN\n\n");
 		if (isNotGlobal(node.getName()))
 		{
 			line.addUse(node.getName());
