@@ -16,11 +16,11 @@ public class IRAllocate extends IRNode
 	private IRGlobal global;
 
     /**
-     *
-     * @param name
-     * @param value
+     * Constructor for cases when we have a lhs variable, previously allocated or not, and an integer or a variable on rhs.
+     * Cases like a=1 or a=b.
+     * @param name of the lhs variable
+     * @param value of the rhs, constant or variable
      */
-	//a = 1;
     public IRAllocate(String name, Variable value)
     {
         this.type = Type.INTEGER;
@@ -36,12 +36,12 @@ public class IRAllocate extends IRNode
     }
 
     /**
-     *
-     * @param name
-     * @param value
-     * @param arraySize
+     * Constructor for cases when we have a lhs variable, previously allocated or not, and an integer or a variable on rhs indicating array size.
+     * Cases like a = [5].
+     * @param name the lhs variable
+     * @param value the array size
+     * @param arraySize indicate Type.ARRAYSIZE, It's mandatory
      */
-    //a = [5];
     public IRAllocate(String name, Variable value, Type arraySize)
     {
         assert arraySize == Type.ARRAYSIZE;
@@ -58,12 +58,13 @@ public class IRAllocate extends IRNode
     }
 
     /**
-     *
-     * @param name
-     * @param value
+     * Constructor for cases when we have a lhs variable array, previously allocated, and set an element of the array.
+     * The element set is at an index, as is set with an integer or a variable on rhs.
+     * Cases like a[i] = 5.
+     * @param name the lhs variable, an array at a given index
+     * @param value the rhs value
      */
-    //a[i] = 5;
-    IRAllocate(VariableArray name, Variable value)
+    public IRAllocate(VariableArray name, Variable value)
     {
         this.type = Type.ARRAY;
         this.setNodeType("Allocate");
@@ -84,12 +85,13 @@ public class IRAllocate extends IRNode
     }
 
     /**
-     *
-     * @param name
-     * @param value
+     * Constructor for cases when we have a lhs variable integer, previously allocated or not, and set its value with an array element.
+     * The element is at an index, as it's value is set to the lhs variable.
+     * Cases like a = b[5].
+     * @param name the lhs variable
+     * @param value the rhs value, an array at a given index
      */
-    //a = b[5];
-    IRAllocate(Variable name, VariableArray value)
+    public IRAllocate(Variable name, VariableArray value)
     {
         this.setNodeType("Allocate");
         this.name = name.getVar();
@@ -100,12 +102,13 @@ public class IRAllocate extends IRNode
     }
 
     /**
-     *
-     * @param name
-     * @param value
+     * Constructor for cases when we have a lhs variable array, previously allocated, and set an element of the array.
+     * The element is at an index, as it's value is set to the lhs variable at another index because rhs is also an array.
+     * Cases like a[i] = b[5].
+     * @param name the lhs variable, an array at a given index
+     * @param value the rhs variable, an array at a given index
      */
-    //a[i] = b[5];
-    IRAllocate(VariableArray name, VariableArray value)
+    public IRAllocate(VariableArray name, VariableArray value)
     {
         this.setNodeType("Allocate");
         this.name = name.getVar();
@@ -265,7 +268,7 @@ public class IRAllocate extends IRNode
                 inst.add(getInstructionToStoreIntInRegister(this.register));
 
                 //this is done after getInstructions of rhs, because loadConstant is set there
-                //this puts in the hashmap the new value of the variable name or replace it
+                //this puts in the hashMap the new value of the variable name or replace it
                 String varName = getVarNameForConstantName(name, lhsIndex);
 
                 if(rhs instanceof IRConstant)
@@ -339,16 +342,6 @@ public class IRAllocate extends IRNode
         ArrayList<String> valueJVMCode = rhs.getInstructions();
         return getCodeForSetAllArrayElements(arrayRefJVMCode, valueJVMCode);
     }
-
-    /**
-     *
-     * @return
-     */
-    public IRGlobal storeVarGlobal()
-	{
-		IRModule module = (IRModule)findParent("Module");
-		return module.getGlobal(name);
-	}
 
     /**
      *
