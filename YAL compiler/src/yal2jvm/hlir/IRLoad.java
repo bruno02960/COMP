@@ -3,7 +3,7 @@ package yal2jvm.hlir;
 import java.util.ArrayList;
 
 /**
- * TODO
+ *	Class responsible for the intermediate representation for loads. Class that extend IRNode class.
  */
 public class IRLoad extends IRNode
 {
@@ -15,8 +15,8 @@ public class IRLoad extends IRNode
 	private String loadedConstantValue = null;
 
 	/**
-	 * TODO
-	 * @param name
+	 * Constructor for IRLoad
+	 * @param name of the variable  to load
 	 */
 	private IRLoad(String name)
 	{
@@ -25,9 +25,9 @@ public class IRLoad extends IRNode
 	}
 
 	/**
-	 * TODO
-	 * @param name
-	 * @param type
+	 * Constructor for IRLoad
+	 * @param name of the variable  to load
+	 * @param type of the variable  to load
 	 */
 	public IRLoad(String name, Type type)
 	{
@@ -36,8 +36,8 @@ public class IRLoad extends IRNode
 	}
 
 	/**
-	 * TODO
-	 * @param value
+	 * Constructor for IRLoad
+	 * @param value of the variable to load, type INTEGER
 	 */
 	public IRLoad(Variable value)
 	{
@@ -51,8 +51,8 @@ public class IRLoad extends IRNode
 	}
 
 	/**
-	 * TODO
-	 * @param value
+	 * Constructor for IRLoad
+	 * @param value of the variable to load, type ARRAY
 	 */
 	public IRLoad(VariableArray value)
 	{
@@ -105,8 +105,8 @@ public class IRLoad extends IRNode
 	}
 
 	/**
-	 * TODO
-	 * @return
+	 * Gets the instructions on code generation
+	 * @return instructions list
 	 */
 	@Override
 	public ArrayList<String> getInstructions()
@@ -121,9 +121,9 @@ public class IRLoad extends IRNode
 	}
 
 	/**
-	 * TODO
-	 * @param method
-	 * @return
+	 * get Local Variable Instructions
+	 * @param method method parent of this object
+	 * @return the list of instructions for local variables
 	 */
 	private ArrayList<String> getLocalVariableInstructions(IRMethod method)
 	{
@@ -168,9 +168,9 @@ public class IRLoad extends IRNode
 	}
 
 	/**
-	 * TODO
-	 * @param method
-	 * @return
+	 * get Constant Code If Constant
+	 * @param method method parent of this object
+	 * @return the list of instructions for constant
 	 */
 	private ArrayList<String> getConstantCodeIfConstant(IRMethod method)
 	{
@@ -186,9 +186,9 @@ public class IRLoad extends IRNode
 	}
 
 	/**
-	 * TODO
-	 * @param method
-	 * @return
+	 * get global Variable Instructions
+	 * @param method method parent of this object
+	 * @return the list of instructions for globals variables
 	 */
 	private ArrayList<String> getGlobalVariableInstructions(IRMethod method)
 	{
