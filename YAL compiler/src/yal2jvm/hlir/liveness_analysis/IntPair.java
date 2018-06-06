@@ -56,7 +56,7 @@ public class IntPair
 	/**
 	 * Sets the second variable
 	 * 
-	 * @param var1
+	 * @param var2
 	 *            second variable
 	 */
 	public void setVar2(String var2)
