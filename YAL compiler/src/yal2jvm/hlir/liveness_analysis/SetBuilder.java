@@ -13,6 +13,7 @@ import yal2jvm.hlir.IRComparison;
 import yal2jvm.hlir.IRJump;
 import yal2jvm.hlir.IRLabel;
 import yal2jvm.hlir.IRLoad;
+import yal2jvm.hlir.IRLoadArith;
 import yal2jvm.hlir.IRMethod;
 import yal2jvm.hlir.IRModule;
 import yal2jvm.hlir.IRNode;
@@ -306,7 +307,7 @@ public class SetBuilder
 		line.setJump(true);
 		line.setJumpLabel(node.getLabel());
 		line.setType("Comp");
-
+		
 		if (node.getRhs().getNodeType().equals("Load"))
 		{
 			IRLoad load = (IRLoad) node.getRhs();
@@ -318,17 +319,19 @@ public class SetBuilder
 		if (node.getLhs().getNodeType().equals("Load"))
 		{
 			IRLoad load = (IRLoad) node.getLhs();
+
 			if (isNotGlobal(load.getName()))
 			{
 				line.addUse(load.getName());
 			}
 		}
-		if (node.getLhs().getNodeType().equals("Arith"))
+		if (node.getRhs().getNodeType().equals("LoadArith"))
 		{
-			IRArith arith = (IRArith) node.getLhs();
+			IRLoadArith arith = (IRLoadArith) node.getRhs();
+			
 			if (arith.getRhs().getNodeType().equals("Load"))
 			{
-				IRLoad load = (IRLoad) node.getRhs();
+				IRLoad load = (IRLoad) arith.getRhs();
 				if (isNotGlobal(load.getName()))
 				{
 					line.addUse(load.getName());
@@ -336,7 +339,7 @@ public class SetBuilder
 			}
 			if (arith.getLhs().getNodeType().equals("Load"))
 			{
-				IRLoad load = (IRLoad) node.getLhs();
+				IRLoad load = (IRLoad) arith.getLhs();
 				if (isNotGlobal(load.getName()))
 				{
 					line.addUse(load.getName());
