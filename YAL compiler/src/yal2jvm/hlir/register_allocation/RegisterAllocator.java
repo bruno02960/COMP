@@ -8,7 +8,8 @@ import yal2jvm.Yal2jvm;
 import yal2jvm.hlir.liveness_analysis.IntGraph;
 
 /**
- * TODO
+ * Class responsible for register allocation, receiving the hashMap with functions names and the respective interferences graphs.
+ * Using GraphColoring class finds the suitable registers for each variable
  */
 public class RegisterAllocator
 {
@@ -16,8 +17,8 @@ public class RegisterAllocator
 	private HashMap<String, HashMap<String, Integer>> allocatedRegisterByMethodName = new HashMap<>();
 
 	/**
-	 * TODO
-	 * @param intGraphs
+	 * Constructor to RegisterAllocator
+	 * @param intGraphs hashMap with functions names and the respective interferences graphs
 	 */
 	public RegisterAllocator(HashMap<String, IntGraph> intGraphs)
 	{
@@ -25,9 +26,11 @@ public class RegisterAllocator
 	}
 
 	/**
-	 * TODO
-	 * @param numberRegisters
-	 * @return
+	 * Method responsible for register allocation, receiving the hashMap with functions names and the respective interferences graphs.
+	 * Using GraphColoring class finds the suitable registers for each variable
+	 * Outputs an error if could not allocate.
+	 * @param numberRegisters number of registers allowed to use in register allocation
+	 * @return true if could allocate all methods with the specified number od registers, false otherwise
 	 */
 	public boolean allocate(int numberRegisters)
 	{
@@ -63,10 +66,10 @@ public class RegisterAllocator
 	}
 
 	/**
-	 * TODO
-	 * @param graphColoring
-	 * @param currNumberOfRegisters
-	 * @return
+	 * finds the less number of registers with which an allocate with the used algorithm in GraphColoring is possible
+	 * @param graphColoring the GraphColoring object used to find the suitable registers
+	 * @param currNumberOfRegisters curr number of registers, the number of registers specified in class constructor
+	 * @return the number of registers with which the allocation was possible
 	 */
 	private int findNumberOfRegisterThatAllowToAllocate(GraphColoring graphColoring, int currNumberOfRegisters)
 	{

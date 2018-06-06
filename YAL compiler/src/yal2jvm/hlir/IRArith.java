@@ -206,17 +206,9 @@ public class IRArith extends IRNode
 		if (lhsValue == null)
 			return null;
 
-		// TODO
-		// else if(((IRLoad)lhs).getLoadedConstantValue() != null)
-		// lhsValue = ((IRLoad)lhs).getLoadedConstantValue();
-
 		String rhsValue = getValueIfConstant(method, rhs);
 		if (rhsValue == null)
 			return null;
-
-		// TODO
-		// else if(((IRLoad)rhs).getLoadedConstantValue() != null)
-		// rhsValue = ((IRLoad)rhs).getLoadedConstantValue();
 
 		return String.valueOf(Utils.getOperationValue(lhsValue, rhsValue, op.getSymbol()));
 	}

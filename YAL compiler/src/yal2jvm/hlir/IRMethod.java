@@ -203,31 +203,10 @@ public class IRMethod extends IRNode
 			removeEntryFromConstVarNameAndSetAsBefore();
 			listConstVarNameToConstValueWhileOrIfInitState.add(new HashMap<>(constVarNameToConstValue));
 		} else if ((label.contains("while_init") && irNode instanceof IRLabel)
-				|| ((label.contains("if_end") || label.contains("if_false")) && irNode instanceof IRComparison)) // init
-																													// label,
-																													// can
-																													// be:
-																													// while_init
-																													// ou
-																													// if_...
-																													// if_false
-																													// ou
-																													// if_...
-																													// if_end
-																													// ou
-																													// if_falseN:
+				|| ((label.contains("if_end") || label.contains("if_false")) && irNode instanceof IRComparison)) // init label, can be: while_init ou if_..., if_false ou if..., if_end ou if_falseN
 		{
 			// store curr for the end
 			listConstVarNameToConstValueWhileOrIfInitState.add(new HashMap<>(constVarNameToConstValue));
-
-			// TODO REMOVE
-			/*
-			 * //set curr as the previous if existent, if more than one if or while stacked
-			 * if(listConstVarNameToConstValueWhileOrIfInitState.size() > 1) {
-			 * constVarNameToConstValue =
-			 * listConstVarNameToConstValueWhileOrIfInitState.get(
-			 * listConstVarNameToConstValueWhileOrIfInitState.size() - 1); }
-			 */
 
 			if ((label.contains("while_init") && irNode instanceof IRLabel))
 				insideWhile = true;
@@ -288,8 +267,7 @@ public class IRMethod extends IRNode
 	 */
 	public static int stackValueCount(ArrayList<String> inst)
 	{
-		// search in child's code for instruction that put or remove elements from the
-		// stack
+		// search in child's code for instruction that put or remove elements from the stack
 		int currStackCount = 0;
 		int maxStackCount = 0;
 		for (int i = 0; i < inst.size(); i++)

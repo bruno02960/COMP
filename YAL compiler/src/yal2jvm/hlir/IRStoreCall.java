@@ -59,8 +59,6 @@ public class IRStoreCall extends IRStore
 
 		ArrayList<IRNode> childs = getChildren(); // one and only one child, an IRCall
 		IRCall irCall = (IRCall) childs.get(0);
-		// inst.addAll(irCall.getInstructions()); //TODO VER se nao causa problemas,
-		// assim evita o pop depois
 		inst.addAll(getInstForStoring(arrayAccess, index, irCall));
 
 		return inst;

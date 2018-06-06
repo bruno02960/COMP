@@ -91,7 +91,6 @@ public abstract class IRStore extends IRNode
 		ArrayList<String> inst = new ArrayList<>();
 		if (arrayAccess)
 		{
-			// inst.add("pop");//TODO VER se nao causa problemas, assim evita o pop depois
 			inst.addAll(setLocalArrayElementByIRNode(index, register, value));
 		} else
 		{
