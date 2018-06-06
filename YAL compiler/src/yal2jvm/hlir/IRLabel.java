@@ -3,15 +3,15 @@ package yal2jvm.hlir;
 import java.util.ArrayList;
 
 /**
- * TODO
+ *	Class responsible for the intermediate representation for lables. Class that extend IRNode class.
  */
 public class IRLabel extends IRNode
 {
 	private String label;
 
 	/**
-	 * TODO
-	 * @param label
+	 * IRLabel constructor
+	 * @param label name of the label to create
 	 */
 	public IRLabel(String label)
 	{
@@ -20,8 +20,8 @@ public class IRLabel extends IRNode
 	}
 
 	/**
-	 * TODO
-	 * @return
+	 * Gets the instructions for code generation
+	 * @return instructions list
 	 */
 	@Override
 	public ArrayList<String> getInstructions()
