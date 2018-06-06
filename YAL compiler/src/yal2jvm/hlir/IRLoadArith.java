@@ -3,14 +3,14 @@ package yal2jvm.hlir;
 import java.util.ArrayList;
 
 /**
- * Class responsible for the intermediate representation fro load of arith operation.
+ * Class responsible for the intermediate representation for load of arith operation.
  */
 public class IRLoadArith extends IRNode
 {
 	private IRArith irArith;
 
 	/**
-	 * Contructor for IRLoadArith
+	 * Constructor for IRLoadArith
 	 * @param op the operator used in the operation
 	 */
 	public IRLoadArith(Operation op)
