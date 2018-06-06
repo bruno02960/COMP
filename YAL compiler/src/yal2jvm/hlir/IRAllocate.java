@@ -195,7 +195,6 @@ public class IRAllocate extends IRNode
         String varName = getVarNameForConstantName(name, lhsIndex);
         if(rhs instanceof IRConstant)
         {
-            ///TODO ver se nao d� porblema usar o mesmo rhs, secalhar copia pode ser mehor
             if(type == Type.INTEGER || type == Type.ARRAY)
                 method.addToConstVarNameToConstValue(varName, (IRConstant) rhs);
         }
@@ -428,24 +427,4 @@ public class IRAllocate extends IRNode
     {
         this.name = name;
     }
-
-    /**
-     * TODO
-     * @return
-     */
-	public boolean isRedundant()
-	{
-		ArrayList<IRNode> siblings = this.parent.getChildren();
-		for (int i = 0; i < siblings.size(); i++)
-		{
-			if (siblings.get(i) == this)
-			{
-				for (int s = i; s < siblings.size(); s++)
-				{
-					
-				}
-			}
-		}
-		return false;
-	}
 }
