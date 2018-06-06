@@ -9,12 +9,12 @@ import yal2jvm.utils.Utils;
 import java.util.HashMap;
 
 /**
- *
+ *TODO
  */
 public class WhileAnalysis extends Analysis
 {
 	/**
-	 *
+	 *TODO
 	 * @param ast
 	 * @param inheritedSymbols
 	 * @param functionNameToFunctionSymbolOfModule
@@ -26,7 +26,7 @@ public class WhileAnalysis extends Analysis
 	}
 
 	/**
-	 *
+	 *TODO
 	 */
 	@Override
 	public void parse()

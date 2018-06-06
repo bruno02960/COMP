@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 /**
- *
+ * TODO
  */
 public class GraphColoring
 {
@@ -19,7 +19,7 @@ public class GraphColoring
 	private HashMap<String, Integer> varNameToRegisterNumber = new HashMap<>();
 
 	/**
-	 *
+	 * TODO
 	 * @param graph
 	 * @param numRegisters
 	 */
@@ -31,7 +31,7 @@ public class GraphColoring
 	}
 
 	/**
-	 *
+	 * TODO
 	 * @param numRegisters
 	 */
 	public void setNumRegisters(int numRegisters)
@@ -41,7 +41,7 @@ public class GraphColoring
 	}
 
 	/**
-	 *
+	 * TODO
 	 * @return
 	 */
 	public HashMap<String, Integer> getVarNameToRegisterNumber()
@@ -50,7 +50,7 @@ public class GraphColoring
 	}
 
 	/**
-	 *
+	 * TODO
 	 * @return
 	 */
 	private boolean buildStackOfNodesToColor()
@@ -95,7 +95,7 @@ public class GraphColoring
 	}
 
 	/**
-	 *
+	 * TODO
 	 * @return
 	 */
 	public boolean colorGraph()
@@ -130,7 +130,7 @@ public class GraphColoring
 	}
 
 	/**
-	 *
+	 * TODO
 	 * @param usedRegisters
 	 * @return
 	 */

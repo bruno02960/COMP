@@ -10,12 +10,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
- *
+ * TODO
  */
 public class IfAnalysis extends Analysis
 {
 	/**
-	 *
+	 *TODO
 	 * @param ast
 	 * @param inheritedSymbols
 	 * @param functionNameToFunctionSymbolOfModule
@@ -27,7 +27,7 @@ public class IfAnalysis extends Analysis
 	}
 
 	/**
-	 *
+	 *TODO
 	 */
 	@Override
 	public void parse()
@@ -93,7 +93,7 @@ public class IfAnalysis extends Analysis
 	}
 
 	/**
-	 *
+	 *TODO
 	 * @param symbols
 	 * @param commonDeclaredSymbols
 	 * @return
@@ -119,7 +119,7 @@ public class IfAnalysis extends Analysis
 	}
 
 	/**
-	 *
+	 *TODO
 	 * @param mySymbolsStatesAfterIf
 	 * @param mySymbolsStatesAfterElse
 	 * @return
@@ -145,7 +145,7 @@ public class IfAnalysis extends Analysis
 	}
 
 	/**
-	 *
+	 *TODO
 	 * @param inheritedSymbolsStatesAfterIf
 	 * @param inheritedSymbolsStatesAfterElse
 	 * @return
@@ -167,7 +167,7 @@ public class IfAnalysis extends Analysis
 	}
 
 	/**
-	 *
+	 *TODO
 	 * @param mySymbolsStatesAfterIf
 	 * @param mySymbolsStatesAfterElse
 	 * @return

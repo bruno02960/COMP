@@ -8,7 +8,7 @@ import yal2jvm.Yal2jvm;
 import yal2jvm.hlir.liveness_analysis.IntGraph;
 
 /**
- *
+ * TODO
  */
 public class RegisterAllocator
 {
@@ -16,7 +16,7 @@ public class RegisterAllocator
 	private HashMap<String, HashMap<String, Integer>> allocatedRegisterByMethodName = new HashMap<>();
 
 	/**
-	 *
+	 * TODO
 	 * @param intGraphs
 	 */
 	public RegisterAllocator(HashMap<String, IntGraph> intGraphs)
@@ -25,7 +25,7 @@ public class RegisterAllocator
 	}
 
 	/**
-	 *
+	 * TODO
 	 * @param numberRegisters
 	 * @return
 	 */
@@ -63,7 +63,7 @@ public class RegisterAllocator
 	}
 
 	/**
-	 *
+	 * TODO
 	 * @param graphColoring
 	 * @param currNumberOfRegisters
 	 * @return
@@ -80,7 +80,7 @@ public class RegisterAllocator
 	}
 
 	/**
-	 *
+	 * TODO
 	 * @return
 	 */
 	public HashMap<String, HashMap<String, Integer>> getAllocatedRegisterByMethodName()

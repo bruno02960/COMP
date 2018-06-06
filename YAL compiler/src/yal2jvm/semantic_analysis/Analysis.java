@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 
 /**
- *
+ * TODO
  */
 public abstract class Analysis
 {
@@ -252,7 +252,7 @@ public abstract class Analysis
     }
 
     /**
-     *
+     * TODO
      * @param callTree
      * @return
      */
@@ -332,7 +332,7 @@ public abstract class Analysis
     }
 
     /**
-     *
+     * TODO
      * @param astarguments
      * @return
      */
@@ -378,7 +378,7 @@ public abstract class Analysis
     }
 
     /**
-     *
+     * TODO
      * @param arrayAccessTree
      * @return
      */
@@ -421,7 +421,7 @@ public abstract class Analysis
     }
 
     /**
-     *
+     * TODO
      * @param ast
      * @param symbolId
      * @return
@@ -447,7 +447,7 @@ public abstract class Analysis
     }
 
     /**
-     *
+     * TODO
      * @param scalarAccessTree
      * @return
      */
@@ -491,7 +491,7 @@ public abstract class Analysis
     }
 
     /**
-     *
+     * TODO
      * @param declarationTree
      * @return
      */
@@ -513,7 +513,7 @@ public abstract class Analysis
     }
 
     /**
-     *
+     * TODO
      * @param declarationTree
      * @param astscalarelement
      * @return
@@ -533,7 +533,7 @@ public abstract class Analysis
     }
 
     /**
-     *
+     * TODO
      * @param declarationTree
      * @param astscalarelement
      * @return
@@ -567,7 +567,7 @@ public abstract class Analysis
     }
 
     /**
-     *
+     *TODO
      * @param declarationTree
      * @param astarrayelement
      * @return
@@ -587,7 +587,7 @@ public abstract class Analysis
     }
 
     /**
-     *
+     * TODO
      * @param declarationTree
      * @param astarrayelement
      * @return
@@ -628,7 +628,7 @@ public abstract class Analysis
     }
 
     /**
-     *
+     * TODO
      * @param declarationTree
      * @param symbol
      * @return
@@ -668,7 +668,7 @@ public abstract class Analysis
     }
 
     /**
-     *
+     * TODO
      * @param assignTree
      * @return
      */
@@ -760,7 +760,7 @@ public abstract class Analysis
     }
 
     /**
-     *
+     * TODO
      * @param lhsSymbol
      * @return
      */
@@ -776,7 +776,7 @@ public abstract class Analysis
     }
 
     /**
-     *
+     * TODO
      * @param lhsTree
      * @return
      */
@@ -823,7 +823,7 @@ public abstract class Analysis
     }
 
     /**
-     *
+     * TODO
      * @param astIndex
      * @return
      */
@@ -840,7 +840,7 @@ public abstract class Analysis
     }
 
     /**
-     *
+     * TODO
      * @param astExprtest
      * @return
      */
@@ -882,7 +882,7 @@ public abstract class Analysis
     }
 
     /**
-     *
+     * TODO
      * @param astStatements
      */
     protected void parseStmtLst(ASTSTATEMENTS astStatements)
@@ -918,7 +918,7 @@ public abstract class Analysis
     }
 
     /**
-     *
+     * TODO
      * @param symbols
      * @return
      */

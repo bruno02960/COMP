@@ -9,14 +9,14 @@ import yal2jvm.symbol_tables.VarSymbol;
 import java.util.*;
 
 /**
- *
+ *TODO
  */
 public class ModuleAnalysis extends Analysis
 {
 	public static boolean hasErrors;
 
 	/**
-	 *
+	 *TODO
 	 * @param ast
 	 */
 	public ModuleAnalysis(SimpleNode ast)
@@ -26,7 +26,7 @@ public class ModuleAnalysis extends Analysis
 	}
 
 	/**
-	 *
+	 *TODO
 	 */
 	public void parse()
 	{
@@ -47,7 +47,7 @@ public class ModuleAnalysis extends Analysis
 	}
 
 	/**
-	 *
+	 *TODO
 	 */
 	private void initiateGlobalSymbolTable()
 	{
@@ -60,7 +60,7 @@ public class ModuleAnalysis extends Analysis
 	}
 
 	/**
-	 *
+	 *TODO
 	 */
 	private void setGlobalVariablesAsInitialized()
 	{
@@ -73,7 +73,7 @@ public class ModuleAnalysis extends Analysis
 	}
 
 	/**
-	 *
+	 *TODO
 	 * @param child
 	 */
 	private void addSymbolToSymbolTable(SimpleNode child)
@@ -102,7 +102,7 @@ public class ModuleAnalysis extends Analysis
 	}
 
 	/**
-	 *
+	 *TODO
 	 * @param astfunctionNode
 	 * @param functionSymbol
 	 * @return

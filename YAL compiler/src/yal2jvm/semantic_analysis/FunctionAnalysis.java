@@ -9,13 +9,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
- *
+ * TODO
  */
 public class FunctionAnalysis extends Analysis
 {
 
 	/**
-	 *
+	 * TODO
 	 * @param ast
 	 * @param inheritedSymbols
 	 * @param functionNameToFunctionSymbolOfModule
@@ -27,7 +27,7 @@ public class FunctionAnalysis extends Analysis
 	}
 
 	/**
-	 *
+	 * TODO
 	 */
 	@Override
 	protected void parse()
@@ -56,7 +56,7 @@ public class FunctionAnalysis extends Analysis
 	}
 
 	/**
-	 *
+	 * TODO
 	 * @param astFunction
 	 */
 	private void addArgumentsToMySymbols(FunctionSymbol astFunction)
@@ -67,7 +67,7 @@ public class FunctionAnalysis extends Analysis
 	}
 
 	/**
-	 *
+	 * TODO
 	 * @param astFunction
 	 */
 	private void addReturnValueToMySymbols(FunctionSymbol astFunction)
