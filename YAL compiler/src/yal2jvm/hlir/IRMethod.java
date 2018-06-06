@@ -6,7 +6,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 /**
- * TODO
+ * IRMethod
  */
 public class IRMethod extends IRNode
 {
@@ -33,10 +33,10 @@ public class IRMethod extends IRNode
 		instructionToStackCountValue.put("imul", -1);
 		instructionToStackCountValue.put("ishr", -1);
 		instructionToStackCountValue.put("ishl", -1);
-		instructionToStackCountValue.put("iushl", -1);
+		instructionToStackCountValue.put("iushr", -1);
 		instructionToStackCountValue.put("iand", -1);
 		instructionToStackCountValue.put("ior", -1);
-		instructionToStackCountValue.put("lxor", -1);
+		instructionToStackCountValue.put("ixor", -1);
 		instructionToStackCountValue.put("putstatic", -1);
 		instructionToStackCountValue.put("if_icmpeq", -2);
 		instructionToStackCountValue.put("if_icmpgt", -2);
@@ -64,10 +64,10 @@ public class IRMethod extends IRNode
 	private int registerCount;
 
 	/**
-	 * TODO
-	 * @param name
-	 * @param returnType
-	 * @param args
+	 * IRMethod constructor
+	 * @param name method name
+	 * @param returnType return type
+	 * @param args list of arguments
 	 */
 	public IRMethod(String name, Type returnType, Variable[] args)
 	{
@@ -79,8 +79,8 @@ public class IRMethod extends IRNode
 	}
 
 	/**
-	 * TODO
-	 * @return
+	 * Gets the instructions on code generation
+	 * @return instructions list
 	 */
 	@Override
 	public ArrayList<String> getInstructions()
@@ -98,8 +98,8 @@ public class IRMethod extends IRNode
 	}
 
 	/**
-	 * TODO
-	 * @return
+	 * Gets the method declarations instructions
+	 * @return instruction
 	 */
 	private String getMethodDeclarationInstructions()
 	{

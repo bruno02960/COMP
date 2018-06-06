@@ -9,16 +9,15 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
- * TODO
+ * Responsible for the Function semantic analysis
  */
 public class FunctionAnalysis extends Analysis
 {
-
 	/**
-	 * TODO
-	 * @param ast
-	 * @param inheritedSymbols
-	 * @param functionNameToFunctionSymbolOfModule
+	 * FunctionAnalysis constructor
+	 * @param ast function tree node
+	 * @param inheritedSymbols symbols from module or function
+	 * @param functionNameToFunctionSymbolOfModule TODO
 	 */
 	FunctionAnalysis(SimpleNode ast, HashMap<String, Symbol> inheritedSymbols,
 			HashMap<String, Symbol> functionNameToFunctionSymbolOfModule)
@@ -27,7 +26,7 @@ public class FunctionAnalysis extends Analysis
 	}
 
 	/**
-	 * TODO
+	 * Parses the ast
 	 */
 	@Override
 	protected void parse()
@@ -56,8 +55,8 @@ public class FunctionAnalysis extends Analysis
 	}
 
 	/**
-	 * TODO
-	 * @param astFunction
+	 * Adds the arguments to the function symbols
+	 * @param astFunction TODO
 	 */
 	private void addArgumentsToMySymbols(FunctionSymbol astFunction)
 	{
@@ -67,8 +66,8 @@ public class FunctionAnalysis extends Analysis
 	}
 
 	/**
-	 * TODO
-	 * @param astFunction
+	 * Adds the return value to the function symbols
+	 * @param astFunction TODO
 	 */
 	private void addReturnValueToMySymbols(FunctionSymbol astFunction)
 	{

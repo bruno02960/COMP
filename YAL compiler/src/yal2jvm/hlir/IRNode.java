@@ -5,27 +5,27 @@ import yal2jvm.Yal2jvm;
 import java.util.ArrayList;
 
 /**
- * TODO
+ * IRNode
  */
 public abstract class IRNode
 {
 	protected IRNode parent;
 	protected ArrayList<IRNode> children;
-	protected String nodeType;
+	String nodeType;
 
 	/**
-	 *TODO
-	 * @param irNode
+	 * IRNode constructor
+	 * @param irNode node
 	 */
 	public IRNode(IRNode irNode)
 	{
 		this.children = new ArrayList<>(irNode.getChildren());
 		this.parent = irNode.parent;
-		this.nodeType = new String(irNode.getNodeType());
+		this.nodeType = irNode.getNodeType();
 	}
 
 	/**
-	 *TODO
+	 * IRNode constructor without arguments
 	 */
 	public IRNode()
 	{
@@ -34,7 +34,7 @@ public abstract class IRNode
 
 	/**
 	 * Adds a IRNode to the field children and makes this object its parent
-	 * @param child	TODO
+	 * @param child	node to be added
 	 */
 	public void addChild(IRNode child)
 	{
@@ -79,16 +79,16 @@ public abstract class IRNode
 	}
 
 	/**
-	 * TODO
-	 * @return
+	 * Gets the instructions on code generation
+	 * @return instructions list
 	 */
 	public abstract ArrayList<String> getInstructions();
 
 	/**
-	 * TODO
-	 * @param instruction
-	 * @param registerNumber
-	 * @return
+	 * Gets instructions for loading or storing more efficiently
+	 * @param instruction instruction
+	 * @param registerNumber register number
+	 * @return instruction string
 	 */
 	private String getInstructionLoadOrStoreInstructionMoreEfficient(String instruction, int registerNumber)
 	{
@@ -99,67 +99,65 @@ public abstract class IRNode
 	}
 
 	/**
-	 * TODO
-	 * @param registerNumber
-	 * @return
+	 * Gets instructions for loading int from register to stack
+	 * @param registerNumber register number
+	 * @return instruction string
 	 */
-	protected String getInstructionToLoadIntFromRegisterToStack(int registerNumber)
+	String getInstructionToLoadIntFromRegisterToStack(int registerNumber)
 	{
 		return getInstructionLoadOrStoreInstructionMoreEfficient("iload", registerNumber);
 	}
 
 	/**
-	 * TODO
-	 * @param registerNumber
-	 * @return
+	 * Gets instructions for storing int in register
+	 * @param registerNumber register number
+	 * @return instruction string
 	 */
-	protected String getInstructionToStoreIntInRegister(int registerNumber)
+	String getInstructionToStoreIntInRegister(int registerNumber)
 	{
 		return getInstructionLoadOrStoreInstructionMoreEfficient("istore", registerNumber);
 	}
 
 	/**
-	 * TODO
-	 * @param registerNumber
-	 * @return
+	 * Gets instructions for loading an array from register to stack
+	 * @param registerNumber register number
+	 * @return instruction string
 	 */
-	protected String getInstructionToLoadArrayFromRegisterToStack(int registerNumber)
+	String getInstructionToLoadArrayFromRegisterToStack(int registerNumber)
 	{
 		return getInstructionLoadOrStoreInstructionMoreEfficient("aload", registerNumber);
 	}
 
 	/**
-	 * TODO
-	 * @param registerNumber
-	 * @return
+	 * Gets instructions for storing an array in a register
+	 * @param registerNumber register number
+	 * @return instruction string
 	 */
-	protected String getInstructionToStoreArrayInRegister(int registerNumber)
+	String getInstructionToStoreArrayInRegister(int registerNumber)
 	{
 		return getInstructionLoadOrStoreInstructionMoreEfficient("astore", registerNumber);
 	}
 
 	/**
-	 * TODO
-	 * @param type
-	 * @param name
-	 * @return
+	 * Gets instructions for loading a global to the stack
+	 * @param var global variable
+	 * @return instruction string
 	 */
-	protected String getInstructionToLoadGlobalToStack(Type type, String name)
+	String getInstructionToLoadGlobalToStack(Variable var)
 	{
-		String varType = type == Type.INTEGER ? "I" : "[I";
-		return "getstatic " + Yal2jvm.moduleName + "/" + name + " " + varType;
+		String varType = var.getType() == Type.INTEGER ? "I" : "[I";
+		return "getstatic " + Yal2jvm.moduleName + "/" + var.getVar() + " " + varType;
 	}
 
 	/**
-	 * TODO
-	 * @param type
-	 * @param name
-	 * @return
+	 * Gets instructions for loading a global to the stack
+	 * @param var global variable
+	 * @return instruction string
 	 */
-	protected String getInstructionToStoreGlobal(Type type, String name)
+	String getInstructionToStoreGlobal(Variable var)
 	{
-		String varType = type == Type.INTEGER ? "I" : "[I";
-		return "putstatic " + Yal2jvm.moduleName + "/" + name + " " + varType;
+		String varType = var.getType() == Type.INTEGER ? "I" : "[I";
+		return "putstatic " + Yal2jvm.moduleName + "/" + var.getVar() + " " + varType;
 	}
 
 	/**
@@ -173,9 +171,9 @@ public abstract class IRNode
 	}
 
 	/**
-	 * TODO
-	 * @param nodeType
-	 * @return
+	 * Finds the ancestor with a given type
+	 * @param nodeType ancestor node type
+	 * @return ancestor node
 	 */
 	public IRNode findParent(String nodeType)
 	{
@@ -201,11 +199,11 @@ public abstract class IRNode
 	}
 
 	/**
-	 * TODO
-	 * @param varName
-	 * @return
+	 * Gets a var node if it exists
+	 * @param varName variable name
+	 * @return variable node
 	 */
-	protected IRNode getVarIfExists(String varName)
+	IRNode getVarIfExists(String varName)
 	{
 		IRModule module = (IRModule) findParent("Module");
 		IRGlobal irGlobal = module.getGlobal(varName);
@@ -218,13 +216,10 @@ public abstract class IRNode
 			return new IRArgument(register);
 
 		ArrayList<IRNode> children = method.getChildren();
-		for (int i = 0; i < children.size(); i++)
-		{
-			if (children.get(i).toString().equals("Allocate"))
-			{
-				IRAllocate alloc = (IRAllocate) children.get(i);
-				if (alloc.getName().equals(varName))
-				{
+		for (IRNode aChildren : children) {
+			if (aChildren.toString().equals("Allocate")) {
+				IRAllocate alloc = (IRAllocate) aChildren;
+				if (alloc.getName().equals(varName)) {
 					alloc.getRegister();
 					return alloc;
 				}
@@ -235,41 +230,40 @@ public abstract class IRNode
 	}
 
 	/**
-	 * TODO
-	 * @param index
-	 * @param register
-	 * @param value
-	 * @return
+	 * Sets a local array element by an IRNode
+	 * @param index index node
+	 * @param register register number
+	 * @param value value node
+	 * @return TODO
 	 */
-	protected ArrayList<String> setLocalArrayElementByIRNode(IRNode index, int register, IRNode value)
+	ArrayList<String> setLocalArrayElementByIRNode(IRNode index, int register, IRNode value)
 	{
 		String loadArrayRefInstruction = getInstructionToLoadArrayFromRegisterToStack(register);
 		return setArrayElement(index.getInstructions(), loadArrayRefInstruction, value);
 	}
 
 	/**
-	 * TODO
-	 * @param index
-	 * @param type
-	 * @param name
-	 * @param value
-	 * @return
+	 * Sets a global array element by an IRNode
+	 * @param index index node
+	 * @param var variable
+	 * @param value value
+	 * @return instructions list
 	 */
-	protected ArrayList<String> setGlobalArrayElementByIRNode(IRNode index, Type type, String name, IRNode value)
+	ArrayList<String> setGlobalArrayElementByIRNode(IRNode index, Variable var, IRNode value)
 	{
-		String loadArrayRefInstruction = getInstructionToLoadGlobalToStack(type, name);
+		String loadArrayRefInstruction = getInstructionToLoadGlobalToStack(var);
 		return setArrayElement(index.getInstructions(), loadArrayRefInstruction, value);
 	}
 
 	/**
-	 * TODO
-	 * @param indexInstructions
-	 * @param loadArrayRefInstruction
-	 * @param value
-	 * @return
+	 * Sets an array element
+	 * @param indexInstructions index instructions
+	 * @param loadArrayRefInstruction instruction for loading an array ref
+	 * @param value value node
+	 * @return instructions list
 	 */
-	protected ArrayList<String> setArrayElement(ArrayList<String> indexInstructions, String loadArrayRefInstruction,
-			IRNode value)
+	private ArrayList<String> setArrayElement(ArrayList<String> indexInstructions, String loadArrayRefInstruction,
+											  IRNode value)
 	{
 		ArrayList<String> inst = new ArrayList<>();
 
@@ -283,11 +277,11 @@ public abstract class IRNode
 
 	/**
 	 * TODO
-	 * @param name
-	 * @param module
-	 * @return
+	 * @param name variable name
+	 * @param module module node
+	 * @return TODO
 	 */
-	protected String getGlobalVariableGetCode(String name, IRModule module)
+	String getGlobalVariableGetCode(String name, IRModule module)
 	{
 		IRGlobal global = module.getGlobal(name);
 		if (global == null)
@@ -304,11 +298,11 @@ public abstract class IRNode
 
 	/**
 	 * TODO
-	 * @param name
-	 * @param method
-	 * @return
+	 * @param name variable name
+	 * @param method method node
+	 * @return TODO
 	 */
-	protected String getGlobalVariableGetCodeByIRMethod(String name, IRMethod method)
+	String getGlobalVariableGetCodeByIRMethod(String name, IRMethod method)
 	{
 		IRModule module = ((IRModule) method.getParent());
 		return getGlobalVariableGetCode(name, module);
@@ -316,11 +310,11 @@ public abstract class IRNode
 
 	/**
 	 *TODO
-	 * @param arrayRefJVMCode
-	 * @param valueJVMCode
-	 * @return
+	 * @param arrayRefJVMCode TODO
+	 * @param valueJVMCode TODO
+	 * @return TODO
 	 */
-	protected ArrayList<String> getCodeForSetAllArrayElements(String arrayRefJVMCode, ArrayList<String> valueJVMCode)
+	ArrayList<String> getCodeForSetAllArrayElements(String arrayRefJVMCode, ArrayList<String> valueJVMCode)
 	{
 		ArrayList<String> inst = new ArrayList<>();
 
@@ -362,10 +356,10 @@ public abstract class IRNode
 
 	/**
 	 * TODO
-	 * @param name
-	 * @param index
+	 * @param name TODO
+	 * @param index TODO
 	 */
-	public String getVarNameForConstantName(String name, IRNode index)
+	String getVarNameForConstantName(String name, IRNode index)
 	{
 		String varName = name; // not array access, so integer
 		if (index != null && index instanceof IRConstant) // array access then

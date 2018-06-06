@@ -22,7 +22,7 @@ public class Utils
 	 */
 	public static HashMap<String, Symbol> copyHashMap(HashMap<String, Symbol> original)
 	{
-		HashMap<String, Symbol> copy = new HashMap<String, Symbol>();
+		HashMap<String, Symbol> copy = new HashMap<>();
 		for (Map.Entry<String, Symbol> entry : original.entrySet())
 			copy.put(entry.getKey(), entry.getValue().getCopy());
 
@@ -127,6 +127,7 @@ public class Utils
 	public static int getOperationValue(String var1, String var2, String stringOperator)
 	{
 		Operation operator = Operation.parseOperator(stringOperator);
+		assert operator != null;
 		return getOperationValueByOperator(var1, var2, operator);
 	}
 
@@ -185,9 +186,6 @@ public class Utils
 	 */
 	public static <T> ArrayList<T> setToList(TreeSet<T> set)
 	{
-		ArrayList<T> list = new ArrayList<T>();
-		for (T elem : set)
-			list.add(elem);
-		return list;
+		return new ArrayList<>(set);
 	}
 }

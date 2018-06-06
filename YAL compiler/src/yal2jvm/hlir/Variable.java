@@ -1,7 +1,7 @@
 package yal2jvm.hlir;
 
 /**
- * TODO
+ * Variable
  */
 public class Variable
 {
@@ -10,9 +10,9 @@ public class Variable
 	private Type type;
 
 	/**
-	 * TODO
-	 * @param var
-	 * @param type
+	 * Variable constructor
+	 * @param var variable name
+	 * @param type variable type
 	 */
 	Variable(String var, Type type)
 	{

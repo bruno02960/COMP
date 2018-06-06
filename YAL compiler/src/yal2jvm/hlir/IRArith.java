@@ -119,7 +119,7 @@ public class IRArith extends IRNode
 			opInst = "ishl";
 			break;
 		case USHIFT_R:
-			opInst = "iushl";
+			opInst = "iushr";
 			break;
 		case AND:
 			opInst = "iand";
@@ -128,7 +128,7 @@ public class IRArith extends IRNode
 			opInst = "ior";
 			break;
 		case XOR:
-			opInst = "lxor";
+			opInst = "ixor";
 			break;
 		}
 		return opInst;

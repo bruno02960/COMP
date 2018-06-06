@@ -1,16 +1,16 @@
 package yal2jvm.hlir;
 
 /**
- * TODO
+ * VariableArray
  */
-public class VariableArray extends Variable
+class VariableArray extends Variable
 {
-	Variable at;
+	private Variable at;
 
 	/**
-	 * TODO
-	 * @param var
-	 * @param at
+	 * VariableArray constructor
+	 * @param var variable name
+	 * @param at variable index
 	 */
 	VariableArray(String var, Variable at)
 	{

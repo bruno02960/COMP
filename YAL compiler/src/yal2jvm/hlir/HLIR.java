@@ -24,7 +24,7 @@ public class HLIR
 	/**
 	 * Creates a HLIR
 	 * 
-	 * @param ast
+	 * @param ast ASTMODULE
 	 */
 	public HLIR(SimpleNode ast)
 	{
@@ -1107,8 +1107,8 @@ public class HLIR
 	/**
 	 * Creates an arrayElement intermediate representation declaration for arraySize
 	 * 
-	 * @param astdeclaration
-	 * @return
+	 * @param astdeclaration ASTDECLARATION
+	 * @return arrayElement value
 	 */
 	private Variable createArrayElementDeclarationArraySizeHHIR(ASTDECLARATION astdeclaration)
 	{
@@ -1166,7 +1166,7 @@ public class HLIR
 	}
 
 	/**
-	 * TODO
+	 * Sets global variable to array
 	 * 
 	 * @param variable
 	 *            variable to add
@@ -1174,7 +1174,7 @@ public class HLIR
 	 *            value to add
 	 * @param initialized
 	 *            true if is initialized, false otherwise
-	 * @return TODO
+	 * @return true if is now an array, false otherwise
 	 */
 	private boolean setGlobalVariableToArray(Variable variable, Variable value, boolean initialized)
 	{
@@ -1189,7 +1189,7 @@ public class HLIR
 	}
 
 	/**
-	 * TODO
+	 * Gets an arraySize variable
 	 * 
 	 * @param astdeclaration
 	 *            the tree of the declaration

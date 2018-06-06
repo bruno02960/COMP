@@ -8,6 +8,7 @@ public class VarSymbol extends Symbol
 
 	private String type;
 	private boolean initialized;
+	private boolean arrayAccess;
 
 	/**
 	 * Constructor for the class VarSymbol
@@ -66,6 +67,27 @@ public class VarSymbol extends Symbol
 	public void setInitialized(boolean initialized)
 	{
 		this.initialized = initialized;
+	}
+
+	/**
+	 * Returns the value of the field arrayAccess
+	 *
+	 * @return boolean value of the field arrayAccess
+	 */
+	public boolean isArrayAccess()
+	{
+		return arrayAccess;
+	}
+
+	/**
+	 * Sets the field arrayAccess to the parameter arrayAccess's value
+	 *
+	 * @param arrayAccess
+	 *            new value for field initialized
+	 */
+	public void setArrayAccess(boolean arrayAccess)
+	{
+		this.arrayAccess = arrayAccess;
 	}
 
 	/**

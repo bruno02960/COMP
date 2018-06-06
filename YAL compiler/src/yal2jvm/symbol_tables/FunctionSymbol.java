@@ -152,20 +152,19 @@ public class FunctionSymbol extends Symbol
 	}
 
 	/**
-	 * TODO
-	 * @param child
-	 * @return
+	 * Parses an arrayElement argument
+	 * @param child ASTARRAYELEMNT
+	 * @return VarSymbol of the arrayElement
 	 */
 	private VarSymbol parseArrayElementArgument(ASTARRAYELEMENT child)
 	{
-		ASTARRAYELEMENT astarrayelement = child;
-		String astArrayElementId = astarrayelement.id;
+		String astArrayElementId = child.id;
 		String astArrayElementType = SymbolType.ARRAY.toString();
 		if (returnValue != null && returnValue.getId().equals(astArrayElementId))
 		{
 			if (!returnValue.getType().equals(astArrayElementType))
 			{
-				System.out.println("Line " + astarrayelement.getBeginLine() + ": Argument " + astarrayelement.id
+				System.out.println("Line " + child.getBeginLine() + ": Argument " + child.id
 						+ " already declared as " + returnValue.getType() + ".");
 				return null;
 			} else
@@ -178,20 +177,19 @@ public class FunctionSymbol extends Symbol
 	}
 
 	/**
-	 * TODO
-	 * @param child
-	 * @return
+	 * Parses a scalarElement argument
+	 * @param child ASTSCALARELEMENT
+	 * @return VarSymbol with scalarElement
 	 */
 	private VarSymbol parseScalarElementArgument(ASTSCALARELEMENT child)
 	{
-		ASTSCALARELEMENT astscalarelement = child;
-		String astScalarElementId = astscalarelement.id;
+		String astScalarElementId = child.id;
 		String astScalarElementType = SymbolType.INTEGER.toString();
 		if (returnValue != null && returnValue.getId().equals(astScalarElementId))
 		{
 			if (!returnValue.getType().equals(astScalarElementType))
 			{
-				System.out.println("Line " + astscalarelement.getBeginLine() + ": Argument " + astscalarelement.id
+				System.out.println("Line " + child.getBeginLine() + ": Argument " + child.id
 						+ " already declared as " + returnValue.getType() + ".");
 				return null;
 			} else
@@ -202,8 +200,8 @@ public class FunctionSymbol extends Symbol
 	}
 
 	/**
-	 * TODO
-	 * @param returnValueNode
+	 * Parses a function return value
+	 * @param returnValueNode Node containing the return value
 	 */
 	private void parseFunctionReturnValue(SimpleNode returnValueNode)
 	{

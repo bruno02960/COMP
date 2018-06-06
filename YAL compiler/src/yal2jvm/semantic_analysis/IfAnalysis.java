@@ -10,24 +10,24 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
- * TODO
+ * Responsible for the If semantic analysis
  */
 public class IfAnalysis extends Analysis
 {
 	/**
-	 *TODO
-	 * @param ast
-	 * @param inheritedSymbols
-	 * @param functionNameToFunctionSymbolOfModule
+	 * IfAnalysis constructor
+	 * @param ast if tree node
+	 * @param inheritedSymbols symbols from module or function
+	 * @param functionNameToFunctionSymbolOfModule TODO
 	 */
-	public IfAnalysis(SimpleNode ast, HashMap<String, Symbol> inheritedSymbols,
-			HashMap<String, Symbol> functionNameToFunctionSymbolOfModule)
+	IfAnalysis(SimpleNode ast, HashMap<String, Symbol> inheritedSymbols,
+			   HashMap<String, Symbol> functionNameToFunctionSymbolOfModule)
 	{
 		super(ast, inheritedSymbols, functionNameToFunctionSymbolOfModule);
 	}
 
 	/**
-	 *TODO
+	 * Parses the ast
 	 */
 	@Override
 	public void parse()
@@ -71,8 +71,7 @@ public class IfAnalysis extends Analysis
 					inheritedSymbolsStatesAfterElse);
 			for (HashMap.Entry<String, Symbol> o : originalInheritedSymbols.entrySet())
 			{
-				HashMap.Entry<String, Symbol> pair = o;
-				VarSymbol symbol = (VarSymbol) pair.getValue();
+				VarSymbol symbol = (VarSymbol) o.getValue();
 				if (commonInitializedSymbols.contains(symbol))
 					symbol.setInitialized(true);
 			}
@@ -93,10 +92,10 @@ public class IfAnalysis extends Analysis
 	}
 
 	/**
-	 *TODO
-	 * @param symbols
-	 * @param commonDeclaredSymbols
-	 * @return
+	 * Sets the list of symbols as initialized according to the given listen
+	 * @param symbols list of symbols
+	 * @param commonDeclaredSymbols TODO
+	 * @return new list of symbols
 	 */
 	private HashMap<String, Symbol> setListSymbolsAsInitializedAccordingToOtherList(HashMap<String, Symbol> symbols,
 			ArrayList<Symbol> commonDeclaredSymbols)
@@ -105,11 +104,10 @@ public class IfAnalysis extends Analysis
 
 		for (HashMap.Entry<String, Symbol> o : symbols.entrySet())
 		{
-			HashMap.Entry<String, Symbol> pair = o;
-			VarSymbol symbol = (VarSymbol) pair.getValue();
+			VarSymbol symbol = (VarSymbol) o.getValue();
 			if (commonDeclaredSymbols.contains(symbol))
 			{
-				String symbolName = (String) pair.getKey();
+				String symbolName = o.getKey();
 				symbol.setInitialized(true);
 				symbolsInitialized.put(symbolName, symbol);
 			}
@@ -119,10 +117,10 @@ public class IfAnalysis extends Analysis
 	}
 
 	/**
-	 *TODO
-	 * @param mySymbolsStatesAfterIf
-	 * @param mySymbolsStatesAfterElse
-	 * @return
+	 * Merges the declared symbols
+	 * @param mySymbolsStatesAfterIf TODO
+	 * @param mySymbolsStatesAfterElse TODO
+	 * @return new list of symbols
 	 */
 	private HashMap<String, Symbol> mergeDeclaredSymbols(ArrayList<Symbol> mySymbolsStatesAfterIf,
 			ArrayList<Symbol> mySymbolsStatesAfterElse)
@@ -145,10 +143,10 @@ public class IfAnalysis extends Analysis
 	}
 
 	/**
-	 *TODO
-	 * @param inheritedSymbolsStatesAfterIf
-	 * @param inheritedSymbolsStatesAfterElse
-	 * @return
+	 * Gets the common initialized symbols
+	 * @param inheritedSymbolsStatesAfterIf TODO
+	 * @param inheritedSymbolsStatesAfterElse TODO
+	 * @return TODO
 	 */
 	private ArrayList<Symbol> getCommonInitializedSymbols(ArrayList<Symbol> inheritedSymbolsStatesAfterIf,
 			ArrayList<Symbol> inheritedSymbolsStatesAfterElse)
@@ -167,10 +165,10 @@ public class IfAnalysis extends Analysis
 	}
 
 	/**
-	 *TODO
-	 * @param mySymbolsStatesAfterIf
-	 * @param mySymbolsStatesAfterElse
-	 * @return
+	 * Gets the common declared symbols
+	 * @param mySymbolsStatesAfterIf TODO
+	 * @param mySymbolsStatesAfterElse TODO
+	 * @return TODO
 	 */
 	private ArrayList<Symbol> getCommonDeclaredSymbols(ArrayList<Symbol> mySymbolsStatesAfterIf,
 			ArrayList<Symbol> mySymbolsStatesAfterElse)

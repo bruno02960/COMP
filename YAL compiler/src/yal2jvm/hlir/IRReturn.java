@@ -3,7 +3,7 @@ package yal2jvm.hlir;
 import java.util.ArrayList;
 
 /**
- * TODO
+ * IRReturn
  */
 public class IRReturn extends IRNode
 {
@@ -11,10 +11,10 @@ public class IRReturn extends IRNode
 	private Type type;
 
 	/**
-	 * TODO
-	 * @param returnVar
+	 * IRReturn constructor
+	 * @param returnVar return variable
 	 */
-	public IRReturn(Variable returnVar)
+    IRReturn(Variable returnVar)
 	{
 		this.name = returnVar.getVar();
 		this.type = returnVar.getType();
@@ -22,8 +22,8 @@ public class IRReturn extends IRNode
 	}
 
 	/**
-	 * TODO
-	 * @return
+     * Gets the instructions on code generation
+     * @return instructions list
 	 */
 	@Override
 	public ArrayList<String> getInstructions()
