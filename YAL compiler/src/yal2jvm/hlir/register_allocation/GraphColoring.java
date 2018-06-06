@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 /**
- * TODO
+ *	Class responsible for graph coloring, allowing to allocate registers.
  */
 public class GraphColoring
 {
@@ -19,9 +19,9 @@ public class GraphColoring
 	private HashMap<String, Integer> varNameToRegisterNumber = new HashMap<>();
 
 	/**
-	 * TODO
-	 * @param graph
-	 * @param numRegisters
+	 * Constructor for GraphColoring.
+	 * @param graph interferences graph
+	 * @param numRegisters number of registers that can be allocated
 	 */
 	public GraphColoring(IntGraph graph, int numRegisters)
 	{
@@ -31,8 +31,8 @@ public class GraphColoring
 	}
 
 	/**
-	 * TODO
-	 * @param numRegisters
+	 * set number of registers
+	 * @param numRegisters new number of registers
 	 */
 	public void setNumRegisters(int numRegisters)
 	{
@@ -50,8 +50,8 @@ public class GraphColoring
 	}
 
 	/**
-	 * TODO
-	 * @return
+	 * build the stack of nodes to color from the interferences graph
+	 * @return boolean indicating the success of the operation, false otherwise
 	 */
 	private boolean buildStackOfNodesToColor()
 	{
@@ -95,7 +95,7 @@ public class GraphColoring
 	}
 
 	/**
-	 * TODO
+	 * colors graph using "Heuristics Solution for Graph Coloring” algorithm
 	 * @return
 	 */
 	public boolean colorGraph()
@@ -130,7 +130,7 @@ public class GraphColoring
 	}
 
 	/**
-	 * TODO
+	 * find first unused register that matches the required register (for arguments), or that has not a specific requirement
 	 * @param usedRegisters
 	 * @return
 	 */
