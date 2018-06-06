@@ -95,7 +95,7 @@ public class GraphColoring
 	}
 
 	/**
-	 * colors graph using "Heuristics Solution for Graph Coloring” algorithm
+	 * colors graph using "Heuristics Solution for Graph Coloring" algorithm
 	 * @return
 	 */
 	public boolean colorGraph()
