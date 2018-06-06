@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.TreeSet;
 
 /**
- *
+ * TODO
  */
 public class IRModule extends IRNode
 {
@@ -12,7 +12,7 @@ public class IRModule extends IRNode
 	private int currLabelNumber = 1;
 
 	/**
-	 *
+	 * TODO
 	 * @param name
 	 */
 	public IRModule(String name)
@@ -23,7 +23,7 @@ public class IRModule extends IRNode
 	}
 
 	/**
-	 *
+	 * TODO
 	 * @return
 	 */
 	@Override
@@ -49,8 +49,8 @@ public class IRModule extends IRNode
 	}
 
 	/**
-	 *
-	 * @return
+	 * Returns the value of the field name
+	 * @return	value of the field name
 	 */
 	public String getName()
 	{
@@ -58,8 +58,8 @@ public class IRModule extends IRNode
 	}
 
 	/**
-	 *
-	 * @param name
+	 * Sets the value of the field name to the value of the parameter name
+	 * @param name	new value for the field name
 	 */
 	public void setName(String name)
 	{
@@ -67,8 +67,8 @@ public class IRModule extends IRNode
 	}
 
 	/**
-	 *
-	 * @return
+	 * Returns the value of the field currLabelNumber incremented by one
+	 * @return	the value of the field currLabelNumber plus one
 	 */
 	public int getAndIncrementCurrLabelNumber()
 	{
@@ -76,7 +76,7 @@ public class IRModule extends IRNode
 	}
 
 	/**
-	 *
+	 * TODO
 	 * @param name
 	 * @return
 	 */
@@ -95,7 +95,7 @@ public class IRModule extends IRNode
 	}
 
 	/**
-	 *
+	 * TODO
 	 * @param name
 	 * @return
 	 */
@@ -114,7 +114,7 @@ public class IRModule extends IRNode
 	}
 
 	/**
-	 *
+	 * TODO
 	 * @return
 	 */
 	public TreeSet<String> getAllGlobals()

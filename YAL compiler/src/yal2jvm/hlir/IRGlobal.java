@@ -5,7 +5,7 @@ import yal2jvm.Yal2jvm;
 import java.util.ArrayList;
 
 /**
- *
+ * TODO
  */
 public class IRGlobal extends IRNode
 {
@@ -63,7 +63,7 @@ public class IRGlobal extends IRNode
 	}
 
 	/**
-	 *
+	 * TODO
 	 * @return
 	 */
 	@Override
@@ -97,7 +97,7 @@ public class IRGlobal extends IRNode
 	}
 
 	/**
-	 *
+	 * TODO
 	 * @return
 	 */
 	private ArrayList<String> createGlobalInteger()
@@ -111,7 +111,7 @@ public class IRGlobal extends IRNode
 	}
 
 	/**
-	 *
+	 * TODO
 	 * @param sizeInstructions
 	 * @return
 	 */
@@ -131,7 +131,7 @@ public class IRGlobal extends IRNode
 	}
 
 	/**
-	 *
+	 * TODO
 	 * @return
 	 */
 	private ArrayList<String> createGlobalArrayWithSize0()
@@ -143,7 +143,7 @@ public class IRGlobal extends IRNode
 	}
 
 	/**
-	 *
+	 * TODO
 	 * @param value
 	 * @return
 	 */
@@ -154,7 +154,7 @@ public class IRGlobal extends IRNode
 	}
 
 	/**
-	 *
+	 * TODO
 	 * @param value
 	 * @return
 	 */
@@ -170,7 +170,7 @@ public class IRGlobal extends IRNode
 	}
 
 	/**
-	 *
+	 * TODO
 	 * @param value
 	 */
 	private void assignAllArrayElements(Variable value)
@@ -184,8 +184,8 @@ public class IRGlobal extends IRNode
 	}
 
 	/**
-	 *
-	 * @return
+	 * Returns the value of field name
+	 * @return	value of field name
 	 */
 	public String getName()
 	{
@@ -193,8 +193,8 @@ public class IRGlobal extends IRNode
 	}
 
 	/**
-	 *
-	 * @param name
+	 * Sets the value of field name to the value of the parameter name
+	 * @param name new value of field name
 	 */
 	public void setName(String name)
 	{
@@ -202,8 +202,8 @@ public class IRGlobal extends IRNode
 	}
 
 	/**
-	 *
-	 * @return
+	 * Returns the value of the field type
+	 * @return value of field type
 	 */
 	public Type getType()
 	{
@@ -211,8 +211,8 @@ public class IRGlobal extends IRNode
 	}
 
 	/**
-	 *
-	 * @return
+	 * returns the value of the field staticArraysInstructions
+	 * @return	value of the field staticArraysInstructions
 	 */
 	public ArrayList<String> getStaticArraysInstructions()
 	{

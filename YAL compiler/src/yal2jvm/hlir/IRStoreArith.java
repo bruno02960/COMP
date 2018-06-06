@@ -3,7 +3,7 @@ package yal2jvm.hlir;
 import java.util.ArrayList;
 
 /**
- *
+ * TODO
  */
 public class IRStoreArith extends IRStore
 {
@@ -65,8 +65,8 @@ public class IRStoreArith extends IRStore
 	}
 
 	/**
-	 *
-	 * @return
+	 * Returns the value of the field irArith Rhs field
+	 * @return	value of the field irArith Rhs field
 	 */
 	public IRNode getRhs()
 	{
@@ -74,8 +74,8 @@ public class IRStoreArith extends IRStore
 	}
 
 	/**
-	 *
-	 * @param rhs
+	 * Sets the value of the field irArith Rhs field to the value of the parameter rhs
+	 * @param rhs	new value for the field irArith Rhs field
 	 */
 	public void setRhs(IRNode rhs)
 	{
@@ -83,8 +83,8 @@ public class IRStoreArith extends IRStore
 	}
 
 	/**
-	 *
-	 * @return
+	 * Returns the value of the field irArith Lhs field
+	 * @return alue of the field irArith Lhs field
 	 */
 	public IRNode getLhs()
 	{
@@ -92,8 +92,8 @@ public class IRStoreArith extends IRStore
 	}
 
 	/**
-	 *
-	 * @param lhs
+	 * Sets the value of the field irArith Lhs field to the value of the parameter lhs
+	 * @param lhs new value for the field irArith Lhs field
 	 */
 	public void setLhs(IRNode lhs)
 	{
@@ -101,7 +101,7 @@ public class IRStoreArith extends IRStore
 	}
 
 	/**
-	 *
+	 * TODO
 	 * @return
 	 */
 	@Override
@@ -120,7 +120,7 @@ public class IRStoreArith extends IRStore
 	}
 
 	/**
-	 *
+	 * TODO
 	 * @param inst
 	 * @return
 	 */
@@ -178,7 +178,7 @@ public class IRStoreArith extends IRStore
 	}
 
 	/**
-	 *
+	 * TODO
 	 * @param irConstant
 	 * @return
 	 */
@@ -199,6 +199,11 @@ public class IRStoreArith extends IRStore
 		return instruction;
 	}
 
+	/**
+	 * TODO
+	 * @param method
+	 * @param increment
+	 */
 	private void addNewValueOfVariableNameToConstsHashMap(IRMethod method, String increment)
 	{
 		IRConstant previousValue = method.getConstVarNameToConstValue().remove(name);

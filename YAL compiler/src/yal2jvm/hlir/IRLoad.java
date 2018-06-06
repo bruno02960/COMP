@@ -3,7 +3,7 @@ package yal2jvm.hlir;
 import java.util.ArrayList;
 
 /**
- *
+ * TODO
  */
 public class IRLoad extends IRNode
 {
@@ -15,7 +15,7 @@ public class IRLoad extends IRNode
 	private String loadedConstantValue = null;
 
 	/**
-	 *
+	 * TODO
 	 * @param name
 	 */
 	private IRLoad(String name)
@@ -25,7 +25,7 @@ public class IRLoad extends IRNode
 	}
 
 	/**
-	 *
+	 * TODO
 	 * @param name
 	 * @param type
 	 */
@@ -36,7 +36,7 @@ public class IRLoad extends IRNode
 	}
 
 	/**
-	 *
+	 * TODO
 	 * @param value
 	 */
 	public IRLoad(Variable value)
@@ -51,7 +51,7 @@ public class IRLoad extends IRNode
 	}
 
 	/**
-	 *
+	 * TODO
 	 * @param value
 	 */
 	public IRLoad(VariableArray value)
@@ -69,8 +69,8 @@ public class IRLoad extends IRNode
 	}
 
 	/**
-	 *
-	 * @return
+	 * Returns the value of the field LoadedConstantValue
+	 * @return	value of the field LoadedConstantValue
 	 */
 	public String getLoadedConstantValue()
 	{
@@ -78,8 +78,8 @@ public class IRLoad extends IRNode
 	}
 
 	/**
-	 *
-	 * @return
+	 * Returns the value of the field register
+	 * @return	value of the field register
 	 */
 	public int getRegister()
 	{
@@ -87,8 +87,8 @@ public class IRLoad extends IRNode
 	}
 
 	/**
-	 *
-	 * @param register
+	 * Sets the value of the field register to the value of the parameter register
+	 * @param register	new value for the field register
 	 */
 	public void setRegister(int register)
 	{
@@ -96,8 +96,8 @@ public class IRLoad extends IRNode
 	}
 
 	/**
-	 *
-	 * @return
+	 * Returns the value of the field index
+	 * @return	value of the field index
 	 */
 	public IRNode getIndex()
 	{
@@ -105,7 +105,7 @@ public class IRLoad extends IRNode
 	}
 
 	/**
-	 *
+	 * TODO
 	 * @return
 	 */
 	@Override
@@ -121,7 +121,7 @@ public class IRLoad extends IRNode
 	}
 
 	/**
-	 *
+	 * TODO
 	 * @param method
 	 * @return
 	 */
@@ -168,7 +168,7 @@ public class IRLoad extends IRNode
 	}
 
 	/**
-	 *
+	 * TODO
 	 * @param method
 	 * @return
 	 */
@@ -186,7 +186,7 @@ public class IRLoad extends IRNode
 	}
 
 	/**
-	 *
+	 * TODO
 	 * @param method
 	 * @return
 	 */
@@ -217,8 +217,8 @@ public class IRLoad extends IRNode
 	}
 
 	/**
-	 *
-	 * @return
+	 * Returns the value of the field type
+	 * @return value of the field type
 	 */
 	public Type getType()
 	{
@@ -226,8 +226,8 @@ public class IRLoad extends IRNode
 	}
 
 	/**
-	 *
-	 * @param type
+	 * Sets the value of the field type to the value of the parameter type
+	 * @param type	new value for the field type
 	 */
 	public void setType(Type type)
 	{
@@ -235,8 +235,8 @@ public class IRLoad extends IRNode
 	}
 
 	/**
-	 *
-	 * @return
+	 * Returns the value of the field name
+	 * @return	value of the field name
 	 */
 	public String getName()
 	{
@@ -244,8 +244,8 @@ public class IRLoad extends IRNode
 	}
 
 	/**
-	 *
-	 * @return
+	 * Returns the value of the field arraySizeAccess
+	 * @return	value of the field arraySizeAccess
 	 */
 	public boolean isArraySizeAccess()
 	{

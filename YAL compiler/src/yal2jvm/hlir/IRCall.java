@@ -6,7 +6,7 @@ import yal2jvm.utils.Utils;
 import java.util.ArrayList;
 
 /**
- *
+ * TODO
  */
 public class IRCall extends IRNode
 {
@@ -57,7 +57,7 @@ public class IRCall extends IRNode
 	}
 
 	/**
-	 *
+	 * TODO
 	 * @return
 	 */
 	private ArrayList<String> getArgumentsInstructions()
@@ -123,7 +123,7 @@ public class IRCall extends IRNode
 	}
 
 	/**
-	 *
+	 * TODO
 	 * @param arg
 	 * @param initType
 	 * @return
@@ -164,7 +164,7 @@ public class IRCall extends IRNode
 	}
 
 	/**
-	 *
+	 * TODO
 	 * @return
 	 */
 	private String getCallInstruction()

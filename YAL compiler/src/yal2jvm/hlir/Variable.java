@@ -1,7 +1,7 @@
 package yal2jvm.hlir;
 
 /**
- *
+ * TODO
  */
 public class Variable
 {
@@ -10,7 +10,7 @@ public class Variable
 	private Type type;
 
 	/**
-	 *
+	 * TODO
 	 * @param var
 	 * @param type
 	 */
@@ -32,8 +32,8 @@ public class Variable
 	}
 
 	/**
-	 *
-	 * @param type
+	 * Sets the value of the field type to the value of the parameter type
+	 * @param type new value for the field type
 	 */
 	public void setType(Type type)
 	{
@@ -41,8 +41,8 @@ public class Variable
 	}
 
 	/**
-	 *
-	 * @return
+	 * Returns the value of the field sizeAccess
+	 * @return value of the field sizeAccess
 	 */
 	public boolean isSizeAccess()
 	{
@@ -50,8 +50,8 @@ public class Variable
 	}
 
 	/**
-	 *
-	 * @return
+	 * Returns the value of the field type
+	 * @return value of the field type
 	 */
 	public Type getType()
 	{
@@ -59,8 +59,8 @@ public class Variable
 	}
 
 	/**
-	 *
-	 * @return
+	 * Returns the value of the field var
+	 * @return value of the field var
 	 */
 	public String getVar()
 	{

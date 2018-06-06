@@ -5,7 +5,7 @@ import yal2jvm.Yal2jvm;
 import java.util.ArrayList;
 
 /**
- *
+ * TODO
  */
 public abstract class IRNode
 {
@@ -14,7 +14,7 @@ public abstract class IRNode
 	protected String nodeType;
 
 	/**
-	 *
+	 *TODO
 	 * @param irNode
 	 */
 	public IRNode(IRNode irNode)
@@ -25,7 +25,7 @@ public abstract class IRNode
 	}
 
 	/**
-	 *
+	 *TODO
 	 */
 	public IRNode()
 	{
@@ -33,8 +33,8 @@ public abstract class IRNode
 	}
 
 	/**
-	 *
-	 * @param child
+	 * Adds a IRNode to the field children and makes this object its parent
+	 * @param child	TODO
 	 */
 	public void addChild(IRNode child)
 	{
@@ -43,8 +43,8 @@ public abstract class IRNode
 	}
 
 	/**
-	 *
-	 * @return
+	 * Returns the value of the field parent
+	 * @return value of the field parent
 	 */
 	public IRNode getParent()
 	{
@@ -52,8 +52,8 @@ public abstract class IRNode
 	}
 
 	/**
-	 *
-	 * @param parent
+	 * Sets the value of the field parent to the value of the parameter parent
+	 * @param parent new value for the field parent
 	 */
 	public void setParent(IRNode parent)
 	{
@@ -61,8 +61,8 @@ public abstract class IRNode
 	}
 
 	/**
-	 *
-	 * @return
+	 * Returns the value of the field children
+	 * @return the value of the field children
 	 */
 	public ArrayList<IRNode> getChildren()
 	{
@@ -70,8 +70,8 @@ public abstract class IRNode
 	}
 
 	/**
-	 *
-	 * @param children
+	 * Sets the value of the field children to the value of the parameter children
+	 * @param children	new value for the field children
 	 */
 	public void setChildren(ArrayList<IRNode> children)
 	{
@@ -79,13 +79,13 @@ public abstract class IRNode
 	}
 
 	/**
-	 *
+	 * TODO
 	 * @return
 	 */
 	public abstract ArrayList<String> getInstructions();
 
 	/**
-	 *
+	 * TODO
 	 * @param instruction
 	 * @param registerNumber
 	 * @return
@@ -99,7 +99,7 @@ public abstract class IRNode
 	}
 
 	/**
-	 *
+	 * TODO
 	 * @param registerNumber
 	 * @return
 	 */
@@ -109,7 +109,7 @@ public abstract class IRNode
 	}
 
 	/**
-	 *
+	 * TODO
 	 * @param registerNumber
 	 * @return
 	 */
@@ -119,7 +119,7 @@ public abstract class IRNode
 	}
 
 	/**
-	 *
+	 * TODO
 	 * @param registerNumber
 	 * @return
 	 */
@@ -129,7 +129,7 @@ public abstract class IRNode
 	}
 
 	/**
-	 *
+	 * TODO
 	 * @param registerNumber
 	 * @return
 	 */
@@ -139,7 +139,7 @@ public abstract class IRNode
 	}
 
 	/**
-	 *
+	 * TODO
 	 * @param type
 	 * @param name
 	 * @return
@@ -151,7 +151,7 @@ public abstract class IRNode
 	}
 
 	/**
-	 *
+	 * TODO
 	 * @param type
 	 * @param name
 	 * @return
@@ -163,8 +163,8 @@ public abstract class IRNode
 	}
 
 	/**
-	 *
-	 * @return
+	 * Returns the value of the field nodeType
+	 * @return	value of the field nodeType
 	 */
 	@Override
 	public String toString()
@@ -173,7 +173,7 @@ public abstract class IRNode
 	}
 
 	/**
-	 *
+	 * TODO
 	 * @param nodeType
 	 * @return
 	 */
@@ -201,7 +201,7 @@ public abstract class IRNode
 	}
 
 	/**
-	 *
+	 * TODO
 	 * @param varName
 	 * @return
 	 */
@@ -235,7 +235,7 @@ public abstract class IRNode
 	}
 
 	/**
-	 *
+	 * TODO
 	 * @param index
 	 * @param register
 	 * @param value
@@ -248,7 +248,7 @@ public abstract class IRNode
 	}
 
 	/**
-	 *
+	 * TODO
 	 * @param index
 	 * @param type
 	 * @param name
@@ -262,7 +262,7 @@ public abstract class IRNode
 	}
 
 	/**
-	 *
+	 * TODO
 	 * @param indexInstructions
 	 * @param loadArrayRefInstruction
 	 * @param value
@@ -282,7 +282,7 @@ public abstract class IRNode
 	}
 
 	/**
-	 *
+	 * TODO
 	 * @param name
 	 * @param module
 	 * @return
@@ -303,7 +303,7 @@ public abstract class IRNode
 	}
 
 	/**
-	 *
+	 * TODO
 	 * @param name
 	 * @param method
 	 * @return
@@ -315,7 +315,7 @@ public abstract class IRNode
 	}
 
 	/**
-	 *
+	 *TODO
 	 * @param arrayRefJVMCode
 	 * @param valueJVMCode
 	 * @return
@@ -343,8 +343,8 @@ public abstract class IRNode
 	}
 
 	/**
-	 *
-	 * @return
+	 * Returns the value of the field nodeType
+	 * @return	value of the field nodeType
 	 */
 	public String getNodeType()
 	{
@@ -352,8 +352,8 @@ public abstract class IRNode
 	}
 
 	/**
-	 *
-	 * @param nodeType
+	 * Sets the value of the field nodeType to the value of the parameter nodeType
+	 * @param nodeType new value for the field nodeType
 	 */
 	public void setNodeType(String nodeType)
 	{
@@ -361,7 +361,7 @@ public abstract class IRNode
 	}
 
 	/**
-	 *
+	 * TODO
 	 * @param name
 	 * @param index
 	 */

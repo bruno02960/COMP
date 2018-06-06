@@ -3,7 +3,7 @@ package yal2jvm.hlir;
 import java.util.ArrayList;
 
 /**
- *
+ * TODO
  */
 public abstract class IRStore extends IRNode
 {
@@ -13,7 +13,7 @@ public abstract class IRStore extends IRNode
 	private int register;
 
 	/**
-	 *
+	 * TODO
 	 * @param arrayAccess
 	 * @param index
 	 * @param value
@@ -59,7 +59,7 @@ public abstract class IRStore extends IRNode
 	}
 
 	/**
-	 *
+	 * TODO
 	 * @param value
 	 * @param method
 	 */
@@ -80,7 +80,7 @@ public abstract class IRStore extends IRNode
 	}
 
 	/**
-	 *
+	 * TODO
 	 * @param arrayAccess
 	 * @param index
 	 * @param value
@@ -106,7 +106,7 @@ public abstract class IRStore extends IRNode
 	}
 
 	/**
-	 *
+	 * TODO
 	 * @param index
 	 * @param value
 	 * @param module
@@ -131,8 +131,8 @@ public abstract class IRStore extends IRNode
 	}
 
 	/**
-	 *
-	 * @return
+	 * Returns the value of the field name
+	 * @return value of the field name
 	 */
 	public String getName()
 	{
@@ -140,8 +140,8 @@ public abstract class IRStore extends IRNode
 	}
 
 	/**
-	 *
-	 * @param name
+	 * Sets the name of the field name to the value of the parameter name
+	 * @param name new value for the field name
 	 */
 	public void setName(String name)
 	{

@@ -3,7 +3,7 @@ package yal2jvm.hlir;
 import java.util.ArrayList;
 
 /**
- *
+ * TODO
  */
 public class IRStoreCall extends IRStore
 {
@@ -49,7 +49,7 @@ public class IRStoreCall extends IRStore
 	}
 
 	/**
-	 *
+	 * TODO
 	 * @return
 	 */
 	@Override

@@ -1,14 +1,14 @@
 package yal2jvm.hlir;
 
 /**
- *
+ * TODO
  */
 public class VariableArray extends Variable
 {
 	Variable at;
 
 	/**
-	 *
+	 * TODO
 	 * @param var
 	 * @param at
 	 */
@@ -19,8 +19,8 @@ public class VariableArray extends Variable
 	}
 
 	/**
-	 *
-	 * @return
+	 * Returns the value of the field at
+	 * @return	value of the field at
 	 */
 	Variable getAt()
 	{

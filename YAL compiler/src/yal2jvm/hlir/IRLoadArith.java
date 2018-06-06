@@ -3,14 +3,14 @@ package yal2jvm.hlir;
 import java.util.ArrayList;
 
 /**
- *
+ * TODO
  */
 public class IRLoadArith extends IRNode
 {
 	private IRArith irArith;
 
 	/**
-	 *
+	 * TODO
 	 * @param op
 	 */
 	public IRLoadArith(Operation op)
@@ -21,7 +21,7 @@ public class IRLoadArith extends IRNode
 	}
 
 	/**
-	 *
+	 * TODO
 	 * @return
 	 */
 	public IRNode getRhs()
@@ -30,7 +30,7 @@ public class IRLoadArith extends IRNode
 	}
 
 	/**
-	 *
+	 * TODO
 	 * @param rhs
 	 */
 	public void setRhs(IRNode rhs)
@@ -39,7 +39,7 @@ public class IRLoadArith extends IRNode
 	}
 
 	/**
-	 *
+	 * TODO
 	 * @return
 	 */
 	public IRNode getLhs()
@@ -48,7 +48,7 @@ public class IRLoadArith extends IRNode
 	}
 
 	/**
-	 *
+	 * TODO
 	 * @param lhs
 	 */
 	public void setLhs(IRNode lhs)
@@ -57,7 +57,7 @@ public class IRLoadArith extends IRNode
 	}
 
 	/**
-	 *
+	 * TODO
 	 * @return
 	 */
 	@Override

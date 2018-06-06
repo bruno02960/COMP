@@ -1,14 +1,14 @@
 package yal2jvm.hlir;
 
 /**
- *
+ * TODO
  */
 public class VariableCall extends Variable
 {
 	IRCall irCall;
 
 	/**
-	 *
+	 * TODO
 	 * @param var
 	 * @param type
 	 * @param irCall
@@ -20,8 +20,8 @@ public class VariableCall extends Variable
 	}
 
 	/**
-	 *
-	 * @return
+	 * Returns the value of the field irCall
+	 * @return	value of the field irCall
 	 */
 	IRCall getIrCall()
 	{

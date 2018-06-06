@@ -5,7 +5,7 @@ import yal2jvm.utils.Utils;
 import java.util.ArrayList;
 
 /**
- *
+ * IRArith class that extends IRNode
  */
 public class IRArith extends IRNode
 {
@@ -13,7 +13,7 @@ public class IRArith extends IRNode
 	private IRNode rhs, lhs;
 
 	/**
-	 *
+	 * TODO
 	 * @param op
 	 */
 	public IRArith(Operation op)
@@ -23,7 +23,7 @@ public class IRArith extends IRNode
 	}
 
 	/**
-	 *
+	 * TODO
 	 * @return
 	 */
 	@Override
@@ -222,7 +222,7 @@ public class IRArith extends IRNode
 	}
 
 	/**
-	 *
+	 * TODO
 	 * @param method
 	 * @param node
 	 * @return

@@ -3,7 +3,7 @@ package yal2jvm.hlir;
 import java.util.ArrayList;
 
 /**
- *
+ * TODO
  */
 public class IRConstant extends IRNode
 {
@@ -21,7 +21,7 @@ public class IRConstant extends IRNode
 	}
 
 	/**
-	 *
+	 * TODO
 	 * @param value
 	 */
 	public IRConstant(String value)
@@ -31,7 +31,7 @@ public class IRConstant extends IRNode
 	}
 
 	/**
-	 *
+	 * TODO
 	 * @return
 	 */
 	@Override
@@ -51,7 +51,7 @@ public class IRConstant extends IRNode
 	}
 
 	/**
-	 *
+	 * TODO
 	 * @param value
 	 * @return
 	 */
@@ -85,8 +85,8 @@ public class IRConstant extends IRNode
 	}
 
 	/**
-	 *
-	 * @return
+	 * Returns the value of the field value
+	 * @return	value of the field value
 	 */
 	public String getValue()
 	{
@@ -94,8 +94,8 @@ public class IRConstant extends IRNode
 	}
 
 	/**
-	 *
-	 * @param value
+	 * Sets the value of field value to the value of the parameter value
+	 * @param value new value of the field value
 	 */
 	public void setValue(String value)
 	{
@@ -103,7 +103,7 @@ public class IRConstant extends IRNode
 	}
 
 	/**
-	 *
+	 * TODO
 	 * @return
 	 */
 	public Object clone()

@@ -3,7 +3,7 @@ package yal2jvm.hlir;
 import java.util.ArrayList;
 
 /**
- *
+ * TODO
  */
 public class IRReturn extends IRNode
 {
@@ -11,7 +11,7 @@ public class IRReturn extends IRNode
 	private Type type;
 
 	/**
-	 *
+	 * TODO
 	 * @param returnVar
 	 */
 	public IRReturn(Variable returnVar)
@@ -22,7 +22,7 @@ public class IRReturn extends IRNode
 	}
 
 	/**
-	 *
+	 * TODO
 	 * @return
 	 */
 	@Override
@@ -46,8 +46,8 @@ public class IRReturn extends IRNode
 	}
 
 	/**
-	 *
-	 * @return
+	 * Returns the value of the field name
+	 * @return value of the field name
 	 */
 	public String getName()
 	{
@@ -55,8 +55,8 @@ public class IRReturn extends IRNode
 	}
 
 	/**
-	 *
-	 * @param name
+	 * Sets the value of the field name to the value of the parameter name
+	 * @param name	new value for the field name
 	 */
 	public void setName(String name)
 	{

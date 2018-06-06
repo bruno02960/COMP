@@ -6,7 +6,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 /**
- *
+ * TODO
  */
 public class IRMethod extends IRNode
 {
@@ -64,7 +64,7 @@ public class IRMethod extends IRNode
 	private int registerCount;
 
 	/**
-	 *
+	 * TODO
 	 * @param name
 	 * @param returnType
 	 * @param args
@@ -79,7 +79,7 @@ public class IRMethod extends IRNode
 	}
 
 	/**
-	 *
+	 * TODO
 	 * @return
 	 */
 	@Override
@@ -98,7 +98,7 @@ public class IRMethod extends IRNode
 	}
 
 	/**
-	 *
+	 * TODO
 	 * @return
 	 */
 	private String getMethodDeclarationInstructions()
@@ -153,7 +153,7 @@ public class IRMethod extends IRNode
 	}
 
 	/**
-	 *
+	 * TODO
 	 * @return
 	 */
 	private ArrayList<String> getMethodBody()
@@ -185,7 +185,7 @@ public class IRMethod extends IRNode
 	}
 
 	/**
-	 *
+	 * TODO
 	 * @param irNode
 	 */
 	private void handleWhileOrIfConstantPropagationOptimization(IRNode irNode)
@@ -240,6 +240,9 @@ public class IRMethod extends IRNode
 
 	}
 
+	/**
+	 * TODO
+	 */
 	private void removeEntryFromConstVarNameAndSetAsBefore()
 	{
 		// remove list entry
@@ -270,7 +273,7 @@ public class IRMethod extends IRNode
 	}
 
 	/**
-	 *
+	 *TODO
 	 * @return
 	 */
 	public HashMap<String, IRConstant> getConstVarNameToConstValue()
@@ -279,7 +282,7 @@ public class IRMethod extends IRNode
 	}
 
 	/**
-	 *
+	 *TODO
 	 * @param inst
 	 * @return
 	 */
@@ -301,7 +304,7 @@ public class IRMethod extends IRNode
 	}
 
 	/**
-	 *
+	 *TODO
 	 * @param currInstruction
 	 * @return
 	 */
@@ -329,7 +332,7 @@ public class IRMethod extends IRNode
 	}
 
 	/**
-	 *
+	 *TODO
 	 * @param currInstruction
 	 * @return
 	 */
@@ -349,8 +352,8 @@ public class IRMethod extends IRNode
 	}
 
 	/**
-	 *
-	 * @return
+	 * Returns the value of the field regN
+	 * @return	value of the field regN
 	 */
 	public int getRegN()
 	{
@@ -358,7 +361,7 @@ public class IRMethod extends IRNode
 	}
 
 	/**
-	 *
+	 * Increments the value of the field regN by 1
 	 */
 	public void incrementRegN()
 	{
@@ -366,7 +369,7 @@ public class IRMethod extends IRNode
 	}
 
 	/**
-	 *
+	 * TODO
 	 * @param constVarName
 	 * @return
 	 */
@@ -379,7 +382,7 @@ public class IRMethod extends IRNode
 	}
 
 	/**
-	 *
+	 *TODO
 	 * @param constVarName
 	 * @param constValue
 	 */
@@ -394,7 +397,7 @@ public class IRMethod extends IRNode
 	}
 
 	/**
-	 *
+	 *TODO
 	 * @param name
 	 * @return
 	 */
@@ -409,7 +412,7 @@ public class IRMethod extends IRNode
 	}
 
 	/**
-	 *
+	 *TODO
 	 * @param name
 	 * @return
 	 */
@@ -424,7 +427,7 @@ public class IRMethod extends IRNode
 	}
 
 	/**
-	 *
+	 *TODO
 	 * @param name
 	 * @return
 	 */
@@ -445,7 +448,7 @@ public class IRMethod extends IRNode
 	}
 
 	/**
-	 *
+	 *TODO
 	 * @param name
 	 * @param callerNodeThis
 	 * @return
@@ -470,7 +473,7 @@ public class IRMethod extends IRNode
 	}
 
 	/**
-	 *
+	 *TODO
 	 * @param name
 	 * @return
 	 */
@@ -490,8 +493,8 @@ public class IRMethod extends IRNode
 	}
 
 	/**
-	 *
-	 * @return
+	 * Returns the value of the field name
+	 * @return	value of the field name
 	 */
 	public String getName()
 	{
@@ -499,9 +502,8 @@ public class IRMethod extends IRNode
 	}
 
 	/**
-	 *
-	 *
-	 * @param name
+	 * Sets the value of the field name to the value of the parameter name
+	 * @param name	new value for the field name
 	 */
 	public void setName(String name)
 	{
@@ -509,8 +511,8 @@ public class IRMethod extends IRNode
 	}
 
 	/**
-	 *
-	 * @return
+	 * Returns the value of the field returnType
+	 * @return value of the field returnType
 	 */
 	public Type getReturnType()
 	{
@@ -518,8 +520,8 @@ public class IRMethod extends IRNode
 	}
 
 	/**
-	 *
-	 * @param returnType
+	 * Sets the value of the field returnType to the value of the parameter returnType
+	 * @param returnType new value for the field returnType
 	 */
 	public void setReturnType(Type returnType)
 	{
@@ -527,7 +529,7 @@ public class IRMethod extends IRNode
 	}
 
 	/**
-	 *
+	 * TODO
 	 * @param child
 	 * @param newChild
 	 */
@@ -561,8 +563,8 @@ public class IRMethod extends IRNode
 	}
 
 	/**
-	 *
-	 * @param args
+	 * Sets the value of the field args to the value of the parameter args
+	 * @param args	new valeu for the field args
 	 */
 	public void setArgs(Variable[] args)
 	{
@@ -570,7 +572,7 @@ public class IRMethod extends IRNode
 	}
 
 	/**
-	 *
+	 * TODO
 	 * @param var
 	 * @param register
 	 */
@@ -587,11 +589,19 @@ public class IRMethod extends IRNode
 		}
 	}
 
+	/**
+	 * Returns the value of the field registerCount
+	 * @return	value of the field registerCount
+	 */
 	public int getRegisterCount()
 	{
 		return registerCount;
 	}
 
+	/**
+	 * Sets the value of the argument registerCount to the value of the parameter registerCount
+	 * @param registerCount	new value for the field registerCount
+	 */
 	public void setRegisterCount(int registerCount)
 	{
 		this.registerCount = registerCount;

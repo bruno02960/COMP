@@ -3,14 +3,14 @@ package yal2jvm.hlir;
 import java.util.ArrayList;
 
 /**
- *
+ * TODO
  */
 public class IRLabel extends IRNode
 {
 	private String label;
 
 	/**
-	 *
+	 * TODO
 	 * @param label
 	 */
 	public IRLabel(String label)
@@ -20,7 +20,7 @@ public class IRLabel extends IRNode
 	}
 
 	/**
-	 *
+	 * TODO
 	 * @return
 	 */
 	@Override
@@ -32,8 +32,8 @@ public class IRLabel extends IRNode
 	}
 
 	/**
-	 *
-	 * @return
+	 * Returns the value of the field Label
+	 * @return	value of the field Label
 	 */
 	public String getLabel()
 	{
@@ -41,8 +41,8 @@ public class IRLabel extends IRNode
 	}
 
 	/**
-	 *
-	 * @param label
+	 * Sets the value of the field Label to the value of the parameter label
+	 * @param label	new value for the field Label
 	 */
 	public void setLabel(String label)
 	{

@@ -3,7 +3,7 @@ package yal2jvm.hlir;
 import java.util.ArrayList;
 
 /**
- *
+ * TODO
  */
 public class IRComparison extends IRNode
 {
@@ -15,9 +15,9 @@ public class IRComparison extends IRNode
 	/**
 	 * Constructor for the class IRComparison using String operator
 	 *
-	 * @param operator
-	 * @param label
-	 * @param invert
+	 * @param operator TODO
+	 * @param label TODO
+	 * @param invert TODO
 	 */
 	public IRComparison(String operator, String label, boolean invert)
 	{
@@ -65,7 +65,7 @@ public class IRComparison extends IRNode
 	}
 
 	/**
-	 *
+	 * TODO
 	 * @return
 	 */
 	@Override
@@ -145,7 +145,7 @@ public class IRComparison extends IRNode
 	}
 
 	/**
-	 *
+	 * TODO
 	 * @return
 	 */
 	public String getZeroComparison()
@@ -178,7 +178,7 @@ public class IRComparison extends IRNode
 	}
 
 	/**
-	 *
+	 * TODO
 	 * @return
 	 */
 	public String getArrayComparison()
@@ -199,7 +199,7 @@ public class IRComparison extends IRNode
 	}
 
 	/**
-	 *
+	 * TODO
 	 * @return
 	 */
 	public String getIntegerComparison()
