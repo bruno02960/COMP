@@ -36,7 +36,7 @@ public class IRMethod extends IRNode
 		instructionToStackCountValue.put("iushr", -1);
 		instructionToStackCountValue.put("iand", -1);
 		instructionToStackCountValue.put("ior", -1);
-		instructionToStackCountValue.put("lxor", -1);
+		instructionToStackCountValue.put("ixor", -1);
 		instructionToStackCountValue.put("putstatic", -1);
 		instructionToStackCountValue.put("if_icmpeq", -2);
 		instructionToStackCountValue.put("if_icmpgt", -2);

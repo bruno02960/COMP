@@ -128,7 +128,7 @@ public class IRArith extends IRNode
 			opInst = "ior";
 			break;
 		case XOR:
-			opInst = "lxor";
+			opInst = "ixor";
 			break;
 		}
 		return opInst;
