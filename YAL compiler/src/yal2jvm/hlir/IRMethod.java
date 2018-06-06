@@ -153,8 +153,8 @@ public class IRMethod extends IRNode
 	}
 
 	/**
-	 * TODO
-	 * @return
+	 * get method body instructions
+	 * @return list of method body instructions
 	 */
 	private ArrayList<String> getMethodBody()
 	{
@@ -185,8 +185,8 @@ public class IRMethod extends IRNode
 	}
 
 	/**
-	 * TODO
-	 * @param irNode
+	 * handle While Or If Constant Propagation Optimization
+	 * @param irNode node
 	 */
 	private void handleWhileOrIfConstantPropagationOptimization(IRNode irNode)
 	{
@@ -220,7 +220,7 @@ public class IRMethod extends IRNode
 	}
 
 	/**
-	 * TODO
+	 * remove Entry From Const Var Name And Set As Before
 	 */
 	private void removeEntryFromConstVarNameAndSetAsBefore()
 	{
@@ -246,14 +246,12 @@ public class IRMethod extends IRNode
 				it.remove(); // remove if the entry does not exist anymore, variable is now not constant
 		}
 
-		// set the constVarNameToConstValue as the old except the defined in the
-		// interval
+		// set the constVarNameToConstValue as the old except the defined in the interval
 		constVarNameToConstValue = oldHashMap;
 	}
 
 	/**
-	 *TODO
-	 * @return
+	 * @return ConstVarNameToConstValue hashMap
 	 */
 	public HashMap<String, IRConstant> getConstVarNameToConstValue()
 	{
@@ -261,9 +259,9 @@ public class IRMethod extends IRNode
 	}
 
 	/**
-	 *TODO
-	 * @param inst
-	 * @return
+	 * get stackValueCount
+	 * @param inst instructions from which count the stack count
+	 * @return stackValueCount
 	 */
 	public static int stackValueCount(ArrayList<String> inst)
 	{
@@ -282,9 +280,9 @@ public class IRMethod extends IRNode
 	}
 
 	/**
-	 *TODO
-	 * @param currInstruction
-	 * @return
+	 * calculate the impact of the instruction on stack
+	 * @param currInstruction instruction to calculate stack impact
+	 * @return Instruction Stack Value
 	 */
 	private static Integer getInstructionStackValue(String currInstruction)
 	{
@@ -310,7 +308,7 @@ public class IRMethod extends IRNode
 	}
 
 	/**
-	 *TODO
+	 * get Stack Value for the specific case of invokestatic
 	 * @param currInstruction
 	 * @return
 	 */
@@ -347,8 +345,8 @@ public class IRMethod extends IRNode
 	}
 
 	/**
-	 * TODO
-	 * @param constVarName
+	 * get Const Value By Const VarName
+	 * @param constVarName constVarName to get from the hashMap
 	 * @return
 	 */
 	public IRConstant getConstValueByConstVarName(String constVarName)
@@ -360,24 +358,28 @@ public class IRMethod extends IRNode
 	}
 
 	/**
-	 *TODO
-	 * @param constVarName
-	 * @param constValue
+	 * add to constants hashMap
+	 * @param constVarName constVarName in the hashMap
+	 * @param constValue constValue to put in hashMap
 	 */
 	public void addToConstVarNameToConstValue(String constVarName, IRConstant constValue)
 	{
 		this.constVarNameToConstValue.put(constVarName, constValue);
 	}
 
+	/**
+	 * remove from constants hashMap
+	 * @param constVarName constVarName to get from the hashMap
+	 */
 	public void removeFromConstVarNameToConstValue(String constVarName)
 	{
 		this.constVarNameToConstValue.remove(constVarName);
 	}
 
 	/**
-	 *TODO
-	 * @param name
-	 * @return
+	 * get Argument Register
+	 * @param name name of the argument
+	 * @return the argument type
 	 */
 	public int getArgumentRegister(String name)
 	{
@@ -390,9 +392,9 @@ public class IRMethod extends IRNode
 	}
 
 	/**
-	 *TODO
-	 * @param name
-	 * @return
+	 * get Argument Type
+	 * @param name name of the argument
+	 * @return the argument type
 	 */
 	public Type getArgumentType(String name)
 	{
@@ -405,9 +407,9 @@ public class IRMethod extends IRNode
 	}
 
 	/**
-	 *TODO
-	 * @param name
-	 * @return
+	 * get Var Register
+	 * @param name name of the var to get register
+	 * @return the var register
 	 */
 	public int getVarRegister(String name)
 	{
@@ -426,9 +428,9 @@ public class IRMethod extends IRNode
 	}
 
 	/**
-	 *TODO
-	 * @param name
-	 * @param callerNodeThis
+	 * get Var Declared Until This
+	 * @param name name of the variable
+	 * @param callerNodeThis caller node
 	 * @return
 	 */
 	public IRAllocate getVarDeclaredUntilThis(String name, IRNode callerNodeThis)
@@ -451,9 +453,9 @@ public class IRMethod extends IRNode
 	}
 
 	/**
-	 *TODO
+	 * var type of the variable with name
 	 * @param name
-	 * @return
+	 * @return var type of the variable with name
 	 */
 	public Type getVarType(String name)
 	{
@@ -507,9 +509,9 @@ public class IRMethod extends IRNode
 	}
 
 	/**
-	 * TODO
-	 * @param child
-	 * @param newChild
+	 * add New Child After Child
+	 * @param child child after which add new child
+	 * @param newChild new child to add
 	 */
 	public void addNewChildAfterChild(IRNode child, IRNode newChild)
 	{
@@ -550,9 +552,9 @@ public class IRMethod extends IRNode
 	}
 
 	/**
-	 * TODO
-	 * @param var
-	 * @param register
+	 * assign New Register
+	 * @param var variable to which assign the register
+	 * @param register the register number
 	 */
 	public void assignNewRegister(String var, Integer register)
 	{
