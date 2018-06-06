@@ -5,7 +5,7 @@ import yal2jvm.Yal2jvm;
 import java.util.ArrayList;
 
 /**
- * TODO
+ *	Class responsible for the intermediate representation for globals of module. Class that extend IRNode class.
  */
 public class IRGlobal extends IRNode
 {
@@ -63,8 +63,8 @@ public class IRGlobal extends IRNode
 	}
 
 	/**
-	 * TODO
-	 * @return
+	 * Gets the instructions on code generation
+	 * @return instructions list
 	 */
 	@Override
 	public ArrayList<String> getInstructions()
@@ -97,8 +97,8 @@ public class IRGlobal extends IRNode
 	}
 
 	/**
-	 * TODO
-	 * @return
+	 * gets the list of jvm instructions to create a global integer
+	 * @return list of jvm instructions to create a global integer
 	 */
 	private ArrayList<String> createGlobalInteger()
 	{
@@ -111,9 +111,9 @@ public class IRGlobal extends IRNode
 	}
 
 	/**
-	 * TODO
-	 * @param sizeInstructions
-	 * @return
+	 * gets the list of jvm instructions to create a global array
+	 * @param sizeInstructions jvm instructions to get size of the array to create
+	 * @return list of jvm instructions to create a global array
 	 */
 	private ArrayList<String> createGlobalArray(ArrayList<String> sizeInstructions)
 	{
@@ -131,8 +131,8 @@ public class IRGlobal extends IRNode
 	}
 
 	/**
-	 * TODO
-	 * @return
+	 * gets the list of jvm instructions to create a global array with size 0, uses auxliar createGlobalArray method
+	 * @return list of jvm instructions to create a global array with size 0
 	 */
 	private ArrayList<String> createGlobalArrayWithSize0()
 	{
@@ -143,9 +143,9 @@ public class IRGlobal extends IRNode
 	}
 
 	/**
-	 * TODO
-	 * @param value
-	 * @return
+	 * gets the list of jvm instructions to create a global array with determined size
+	 * @param value Variable with the size of the array
+	 * @return list of jvm instructions to create a global array with determined size
 	 */
 	private ArrayList<String> createGlobalArrayWithSize(Variable value)
 	{
@@ -154,9 +154,9 @@ public class IRGlobal extends IRNode
 	}
 
 	/**
-	 * TODO
-	 * @param value
-	 * @return
+	 * gets the value IRNode of a Variable object
+	 * @param value Variable with teh size value
+	 * @return IRNode with the value
 	 */
 	private IRNode getValueIRNode(Variable value)
 	{
@@ -170,8 +170,8 @@ public class IRGlobal extends IRNode
 	}
 
 	/**
-	 * TODO
-	 * @param value
+	 * create instructions to set the value to all elements of an array
+	 * @param value value to assign to all elements of the array
 	 */
 	private void assignAllArrayElements(Variable value)
 	{
