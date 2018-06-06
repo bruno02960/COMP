@@ -483,8 +483,7 @@ public class SetBuilder
 		ArrayList<BitSet> outsOld;
 
 		doIteration();
-		int iterN = 1;
-
+		
 		insOld = getAllInSets();
 		outsOld = getAllOutSets();
 
@@ -493,7 +492,6 @@ public class SetBuilder
 		while (!isEqual)
 		{
 			doIteration();
-			iterN++;
 
 			ArrayList<BitSet> insNew = getAllInSets();
 			ArrayList<BitSet> outsNew = getAllOutSets();
@@ -664,12 +662,12 @@ public class SetBuilder
 
 		ArrayList<BitSet> outs = getAllOutSets();
 		ArrayList<BitSet> defs = getAllDefSets();
+		
 		for (int i = 0; i < outs.size(); i++)
 		{
 			outs.get(i).or(defs.get(i));
 			pairs.addAll(getInterferences(outs.get(i)));
 		}
-
 		return pairs;
 	}
 

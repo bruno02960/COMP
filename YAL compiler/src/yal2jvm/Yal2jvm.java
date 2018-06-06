@@ -94,6 +94,8 @@ public class Yal2jvm
 		{
 			String localVarsString = args[registersValueIndex].split("=")[1];
 			localVars = Integer.parseInt(localVarsString);
+			if (localVars == 0)
+				localVars = MAX_LOCAL_VARS;
 		}
 
 		String regexForFlag = "-r=" + regexForNumberBetween0And255 + "|-o|-S|-v";
@@ -286,13 +288,13 @@ public class Yal2jvm
 	 */
 	private static void printUsage()
 	{
-		System.out.println("\nUsage:\tjava -jar Yal2jvm [-r=<0..255>] [-o] [-S] [-v] [-help] <input_file.yal>\n");
+		System.out.println("\nUsage:\tjava -jar yal2jvm.jar [-r=<0..255>] [-o] [-S] [-v] [-help] <input_file.yal>\n");
 		System.out.println("\t-r=<0..255>       number of JVM local vars per function (default 255)  (optional)");
 		System.out.println("\t-o                run three additional code optimizations              (optional)");
 		System.out.println("\t-S                keep the intermediate Jasmin file (.j) on the CWD    (optional)");
 		System.out.println("\t-v                allow verbose output of all compilation stages       (optional)");
 		System.out.println("\t-help             prints this help and ignores all other options       (optional)");
-		System.out.println("\t<input_file>.yal  path to the .yal file to compile.                    (mandatory)");
+		System.out.println("\t<input_file>.yal  path to the .yal file to compile                     (mandatory)");
 	}
 
 	/**
