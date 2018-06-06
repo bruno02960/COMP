@@ -1,4 +1,4 @@
-module miniArithTest
+module testConstantFolding
 {
     function main()
     {

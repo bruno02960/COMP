@@ -1,4 +1,4 @@
-module constantPropagation {
+module testConstantPropagation {
     b=10;
 	c= [95];
 	c= 95;
