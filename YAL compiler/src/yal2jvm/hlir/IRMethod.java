@@ -33,7 +33,7 @@ public class IRMethod extends IRNode
 		instructionToStackCountValue.put("imul", -1);
 		instructionToStackCountValue.put("ishr", -1);
 		instructionToStackCountValue.put("ishl", -1);
-		instructionToStackCountValue.put("iushl", -1);
+		instructionToStackCountValue.put("iushr", -1);
 		instructionToStackCountValue.put("iand", -1);
 		instructionToStackCountValue.put("ior", -1);
 		instructionToStackCountValue.put("lxor", -1);
