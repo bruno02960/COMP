@@ -75,7 +75,7 @@ public class HLIR
 	 */
 	public void dumpIR()
 	{
-		System.out.println("\nHLIR of module " + this.root.getName() + ":");
+		System.out.println("\nHLIR of module " + this.root.getName() + ":\n");
 		dumpIR(this.root, 0);
 		System.out.println("");
 	}

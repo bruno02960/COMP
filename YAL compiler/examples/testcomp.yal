@@ -2,11 +2,7 @@ module Test
 {
 	function f1()
 	{
-		a[0] = 4;
-		a[1] = b;
-		c = b.size;
-		b[0] = b.size;
-		e = [c];
+
 	}
 	
 	function x = f2(a, b)
@@ -49,7 +45,7 @@ module Test
 		f1();
 		x = f2(5, 0);
 		io.println("x = ", x);
-		x = f3(5, 1);
+		x = f3(2, 1);
 		io.println("x = ", x);
 		f4(5, 1);
 	}

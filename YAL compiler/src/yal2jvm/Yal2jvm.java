@@ -14,7 +14,7 @@ import yal2jvm.semantic_analysis.ModuleAnalysis;
 import yal2jvm.utils.Utils;
 
 /**
- * Yal2jvm class that reads the console's arguments and calls the project's main
+ * Yal2jvm class that reads the console's arguments and calls the compiler's main
  * functions
  */
 public class Yal2jvm
@@ -40,10 +40,10 @@ public class Yal2jvm
 	 * @param keepJFile
 	 *            boolean indicating if it is to keep .j generated file
 	 * @param verbose
-	 *            boolean indicating if it is to show program logs, compiler steps
+	 *            boolean indicating if it is to show program logs and compiler steps
 	 *            information
 	 * @param inputFile
-	 *            filepath to the file to be compiled
+	 *            path to the file to be compiled
 	 */
 	public Yal2jvm(int localVars, boolean optimize, boolean keepJFile, boolean verbose, String inputFile)
 	{
@@ -55,8 +55,8 @@ public class Yal2jvm
 	}
 
 	/**
-	 * Reads the console's arguments and the flags set, keeping this values for the
-	 * constructor
+	 * Parses the program's arguments. Creates and runs an instance of the compiler using
+	 * those arguments.
 	 * 
 	 * @param args
 	 *            list of arguments
@@ -117,8 +117,8 @@ public class Yal2jvm
 	}
 
 	/**
-	 * This method run all the necessary steps to compile the file, convert yal code
-	 * into jvm code
+	 * This method runs all the necessary steps to compile the file, converting Yal code
+	 * into JVM bytecode
 	 *
 	 */
 	public void run()
@@ -141,12 +141,12 @@ public class Yal2jvm
 	}
 
 	/**
-	 * This method run all the necessary steps to compile the file, convert yal code
-	 * into jvm code. It runs with logging to inform of compiling process.
+	 * This method runs all the necessary steps to compile the file, converting Yal code
+	 * into JVM bytecode. Same as the run() method, but it outputs logging info about the compilation process.
 	 */
 	private void runWithLogging()
 	{
-		log("--------------------------------------------------");
+		log("-----------------------------------------------------------------");
 		log("Starting compilation of Yal file " + inputFile + " with the following options:");
 		log("Max number of regs: " + localVars);
 		log("Optimizations:      " + optimize);
@@ -154,7 +154,7 @@ public class Yal2jvm
 		log("Verbose output:     " + VERBOSE + "\n");
 
 		FileInputStream inputStream = getFileStream();
-		log("--------------------------------------------------");
+		log("-----------------------------------------------------------------");
 
 		log("Initiating lexical and syntactic analysis\n");
 		syntacticAnalysis(inputStream);
@@ -168,37 +168,37 @@ public class Yal2jvm
 
 		log("Completed lexical and syntactic analysis");
 
-		log("--------------------------------------------------");
+		log("-----------------------------------------------------------------");
 
 		log("Initiating semantic analysis");
 		semanticAnalysis();
 		log("Completed semantic analysis");
 
-		log("--------------------------------------------------");
+		log("-----------------------------------------------------------------");
 
 		log("Initiating HLIR generation");
 		HLIR hlir = createHLIR();
 		log("Completed HLIR generation");
 
-		log("--------------------------------------------------");
+		log("-----------------------------------------------------------------");
 
 		log("Initiating register allocation");
 		registerAllocation(hlir);
 		log("Completed register allocation");
 
-		log("--------------------------------------------------");
+		log("-----------------------------------------------------------------");
 
 		log("Initiating instruction selection" + (this.optimize ? " with HLIR optimizations" : ""));
 		String moduleName = instructionSelection(hlir);
 		log("Completed instruction selection" + (this.optimize ? " with HLIR optimizations" : ""));
 
-		log("--------------------------------------------------");
+		log("-----------------------------------------------------------------");
 
 		log("Initiating compilation of instructions into JVM bytecode");
 		compileToBytecode(moduleName + ".j");
 		log("Completed compilation of instructions into JVM bytecode");
 
-		log("--------------------------------------------------");
+		log("-----------------------------------------------------------------");
 
 		System.exit(0);
 	}
