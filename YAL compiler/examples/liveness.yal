@@ -61,12 +61,12 @@ module liveness
 		{
 			b = arg1;
 			arg1 = b + arg2; 
-		}/*
+		}
 		else
 		{
 			c = arg2;
 			arg2 = c + arg1;
-		}*/
+		}
 		ret = a;
 	}
 	
