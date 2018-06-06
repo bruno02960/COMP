@@ -41,8 +41,8 @@ public class GraphColoring
 	}
 
 	/**
-	 * TODO
-	 * @return
+	 * Returns the value of the field varNameToRegisterNumber
+	 * @return	value of the field varnameToRegisterNumber
 	 */
 	public HashMap<String, Integer> getVarNameToRegisterNumber()
 	{

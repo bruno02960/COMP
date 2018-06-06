@@ -80,8 +80,8 @@ public class RegisterAllocator
 	}
 
 	/**
-	 * TODO
-	 * @return
+	 * Returns the value of the field allocatedRegisterByMethodName
+	 * @return value of the field allocatedRegisterByMethodName
 	 */
 	public HashMap<String, HashMap<String, Integer>> getAllocatedRegisterByMethodName()
 	{
