@@ -1,17 +1,17 @@
 package yal2jvm.hlir;
 
 /**
- * TODO
+ * Variable Call
  */
 public class VariableCall extends Variable
 {
-	IRCall irCall;
+	private IRCall irCall;
 
 	/**
-	 * TODO
-	 * @param var
-	 * @param type
-	 * @param irCall
+	 * VariableCall constructor
+	 * @param var variable name
+	 * @param type variable type
+	 * @param irCall IRCall
 	 */
 	VariableCall(String var, Type type, IRCall irCall)
 	{

@@ -3,7 +3,7 @@ package yal2jvm.hlir;
 import java.util.ArrayList;
 
 /**
- * TODO
+ * IRStoreCall
  */
 public class IRStoreCall extends IRStore
 {
@@ -11,7 +11,7 @@ public class IRStoreCall extends IRStore
 	 * Default constructor of IRStoreCall used by other constructors of the class
 	 * that has basic and common action, setNodeType.
 	 */
-	public IRStoreCall()
+	private IRStoreCall()
 	{
 		this.setNodeType("StoreCall");
 	}
@@ -23,7 +23,7 @@ public class IRStoreCall extends IRStore
 	 * @param name
 	 *            name of the variable where call will be stored
 	 */
-	public IRStoreCall(String name)
+	IRStoreCall(String name)
 	{
 		this();
 		this.name = name;
@@ -36,7 +36,7 @@ public class IRStoreCall extends IRStore
 	 * @param name
 	 *            name of the variable where call will be stored
 	 */
-	public IRStoreCall(VariableArray name)
+	IRStoreCall(VariableArray name)
 	{
 		this();
 		this.name = name.getVar();
@@ -49,8 +49,8 @@ public class IRStoreCall extends IRStore
 	}
 
 	/**
-	 * TODO
-	 * @return
+	 * Gets the instructions on code generation
+	 * @return instructions list
 	 */
 	@Override
 	public ArrayList<String> getInstructions()

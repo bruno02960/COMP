@@ -6,7 +6,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 /**
- * TODO
+ * IRMethod
  */
 public class IRMethod extends IRNode
 {
@@ -64,10 +64,10 @@ public class IRMethod extends IRNode
 	private int registerCount;
 
 	/**
-	 * TODO
-	 * @param name
-	 * @param returnType
-	 * @param args
+	 * IRMethod constructor
+	 * @param name method name
+	 * @param returnType return type
+	 * @param args list of arguments
 	 */
 	public IRMethod(String name, Type returnType, Variable[] args)
 	{
@@ -79,8 +79,8 @@ public class IRMethod extends IRNode
 	}
 
 	/**
-	 * TODO
-	 * @return
+	 * Gets the instructions on code generation
+	 * @return instructions list
 	 */
 	@Override
 	public ArrayList<String> getInstructions()
@@ -98,8 +98,8 @@ public class IRMethod extends IRNode
 	}
 
 	/**
-	 * TODO
-	 * @return
+	 * Gets the method declarations instructions
+	 * @return instruction
 	 */
 	private String getMethodDeclarationInstructions()
 	{

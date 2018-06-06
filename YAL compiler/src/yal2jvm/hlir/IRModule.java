@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.TreeSet;
 
 /**
- * TODO
+ * IRModule
  */
 public class IRModule extends IRNode
 {
@@ -12,10 +12,10 @@ public class IRModule extends IRNode
 	private int currLabelNumber = 1;
 
 	/**
-	 * TODO
-	 * @param name
+	 * IRModule constructor
+	 * @param name module name
 	 */
-	public IRModule(String name)
+	IRModule(String name)
 	{
 		super();
 		this.setName(name);
@@ -23,8 +23,8 @@ public class IRModule extends IRNode
 	}
 
 	/**
-	 * TODO
-	 * @return
+	 * Gets the instructions on code generation
+	 * @return instructions list
 	 */
 	@Override
 	public ArrayList<String> getInstructions()
@@ -76,17 +76,15 @@ public class IRModule extends IRNode
 	}
 
 	/**
-	 * TODO
-	 * @param name
-	 * @return
+	 * Gets global variable
+	 * @param name variable name
+	 * @return global node
 	 */
 	public IRGlobal getGlobal(String name)
 	{
-		for (int i = 0; i < children.size(); i++)
-		{
-			if (children.get(i).toString().equals("Global"))
-			{
-				IRGlobal global = ((IRGlobal) children.get(i));
+		for (IRNode aChildren : children) {
+			if (aChildren.toString().equals("Global")) {
+				IRGlobal global = ((IRGlobal) aChildren);
 				if (global.getName().equals(name))
 					return global;
 			}
@@ -95,17 +93,14 @@ public class IRModule extends IRNode
 	}
 
 	/**
-	 * TODO
-	 * @param name
-	 * @return
+	 * Gets a child method
+	 * @param name method name
+	 * @return method node
 	 */
 	public IRMethod getChildMethod(String name)
 	{
-		for (int i = 0; i < children.size(); i++)
-		{
-			IRNode child = children.get(i);
-			if (child instanceof IRMethod)
-			{
+		for (IRNode child : children) {
+			if (child instanceof IRMethod) {
 				if (((IRMethod) child).getName().equals(name))
 					return ((IRMethod) child);
 			}
@@ -114,8 +109,8 @@ public class IRModule extends IRNode
 	}
 
 	/**
-	 * TODO
-	 * @return
+	 * Gets all globals
+	 * @return list of globals names
 	 */
 	public TreeSet<String> getAllGlobals()
 	{

@@ -3,23 +3,23 @@ package yal2jvm.hlir;
 import java.util.ArrayList;
 
 /**
- * TODO
+ * IRStore
  */
 public abstract class IRStore extends IRNode
 {
 	protected String name;
-	protected boolean arrayAccess = false;
+	boolean arrayAccess = false;
 	protected IRNode index = null;
 	private int register;
 
 	/**
-	 * TODO
-	 * @param arrayAccess
-	 * @param index
-	 * @param value
-	 * @return
+	 * Gets instruction for storing
+	 * @param arrayAccess true if it is an array access
+	 * @param index index node
+	 * @param value value node
+	 * @return instructions list
 	 */
-	protected ArrayList<String> getInstForStoring(boolean arrayAccess, IRNode index, IRNode value)
+	ArrayList<String> getInstForStoring(boolean arrayAccess, IRNode index, IRNode value)
 	{
 		IRMethod method = (IRMethod) parent;
 
@@ -59,9 +59,9 @@ public abstract class IRStore extends IRNode
 	}
 
 	/**
-	 * TODO
-	 * @param value
-	 * @param method
+	 * Adds a varaible to const if is appropriated
+	 * @param value value node
+	 * @param method method node
 	 */
 	private void addVariableToConstIfAppropriated(IRNode value, IRMethod method)
 	{
@@ -80,11 +80,11 @@ public abstract class IRStore extends IRNode
 	}
 
 	/**
-	 * TODO
-	 * @param arrayAccess
-	 * @param index
-	 * @param value
-	 * @return
+	 * Gets the instructions for storing a local variable
+	 * @param arrayAccess true if it is an array access
+	 * @param index index node
+	 * @param value value node
+	 * @return instructions list
 	 */
 	private ArrayList<String> getInstForStoringLocalVariable(boolean arrayAccess, IRNode index, IRNode value)
 	{
@@ -106,19 +106,19 @@ public abstract class IRStore extends IRNode
 	}
 
 	/**
-	 * TODO
-	 * @param index
-	 * @param value
-	 * @param module
-	 * @param global
-	 * @return
+	 * Gets instructions for storing a global variable
+	 * @param index index node
+	 * @param value value node
+	 * @param module module node
+	 * @param global global node
+	 * @return instructions list
 	 */
 	private ArrayList<String> getInstForStoringGlobalVariable(IRNode index, IRNode value, IRModule module,
 			IRGlobal global)
 	{
 		ArrayList<String> inst = new ArrayList<>();
 		if (global.getType() == Type.ARRAY)
-			inst.addAll(setGlobalArrayElementByIRNode(index, Type.ARRAY, name, value));
+			inst.addAll(setGlobalArrayElementByIRNode(index, new Variable(name, Type.ARRAY), value));
 		else
 		{
 			// type = integer or type = variable

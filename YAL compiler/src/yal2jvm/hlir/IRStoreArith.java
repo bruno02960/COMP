@@ -3,7 +3,7 @@ package yal2jvm.hlir;
 import java.util.ArrayList;
 
 /**
- * TODO
+ * IRStoreArith
  */
 public class IRStoreArith extends IRStore
 {
@@ -16,7 +16,7 @@ public class IRStoreArith extends IRStore
 	 * @param op
 	 *            the arith operation operator
 	 */
-	public IRStoreArith(Operation op)
+	private IRStoreArith(Operation op)
 	{
 		this.setNodeType("StoreArith");
 		irArith = new IRArith(op);
@@ -34,7 +34,7 @@ public class IRStoreArith extends IRStore
 	 *            the arith operation operator
 	 */
 	// a = b + c
-	public IRStoreArith(String name, Operation op)
+	IRStoreArith(String name, Operation op)
 	{
 		this(op);
 		this.name = name;
@@ -51,7 +51,7 @@ public class IRStoreArith extends IRStore
 	 *            the arith operation operator
 	 */
 	// a[i] = b + c;
-	public IRStoreArith(VariableArray name, Operation op)
+	IRStoreArith(VariableArray name, Operation op)
 	{
 		this(op);
 		this.name = name.getVar();
@@ -101,8 +101,8 @@ public class IRStoreArith extends IRStore
 	}
 
 	/**
-	 * TODO
-	 * @return
+	 * Gets the instructions on code generation
+	 * @return instructions list
 	 */
 	@Override
 	public ArrayList<String> getInstructions()
@@ -120,9 +120,9 @@ public class IRStoreArith extends IRStore
 	}
 
 	/**
-	 * TODO
-	 * @param inst
-	 * @return
+	 * Checks if it is an iinc
+	 * @param inst instructions list
+	 * @return true if is an iinc, false otherwise
 	 */
 	private boolean checkIfIsIinc(ArrayList<String> inst)
 	{
