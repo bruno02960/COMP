@@ -111,8 +111,7 @@ public class IRComparison extends IRNode
 		if (node.getNodeType().equals("Constant"))
 		{
 			IRConstant constant = (IRConstant) node;
-			if (constant.getValue().equals("0"))
-				return true;
+            return constant.getValue().equals("0");
 		}
 		return false;
 	}
@@ -136,8 +135,7 @@ public class IRComparison extends IRNode
 			if (lhs.getNodeType().equals("Load"))
 			{
 				load = (IRLoad) lhs;
-				if (load.getType() == Type.ARRAY && load.isArraySizeAccess() == false)
-					return true;
+                return load.getType() == Type.ARRAY && load.isArraySizeAccess() == false;
 			}
 		}
 

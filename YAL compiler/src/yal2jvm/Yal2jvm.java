@@ -165,7 +165,7 @@ public class Yal2jvm
 		if (VERBOSE)
 		{
 			ast.dump("");
-			System.out.println("");
+			System.out.println();
 		}
 
 		log("Completed lexical and syntactic analysis");

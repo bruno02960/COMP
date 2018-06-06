@@ -221,10 +221,7 @@ public class IRAllocate extends IRNode
     private boolean isRhsArrayAndLhsInteger(IRMethod method)
     {
         String varType = getVarType(method);
-        if(varType.equals(Type.ARRAY.name()) && type == Type.INTEGER)
-            return true;
-        else
-            return false;
+        return varType.equals(Type.ARRAY.name()) && type == Type.INTEGER;
     }
 
     /**
