@@ -24,8 +24,8 @@ public abstract class Analysis
      * Constructor for the class analysis
      *
      * @param ast analysis tree
-     * @param inheritedSymbols symbols
-     * @param functionNameToFunctionSymbol TODO
+     * @param inheritedSymbols inherited symbols from previous scope
+     * @param functionNameToFunctionSymbol methods of the module, names to FunctionSymbol Object
      */
     Analysis(SimpleNode ast, HashMap<String, Symbol> inheritedSymbols,
              HashMap<String, Symbol> functionNameToFunctionSymbol)
@@ -254,7 +254,7 @@ public abstract class Analysis
     /**
      * Parses a given ASTCALL
      * @param callTree ASTCALL
-     * @return TODO
+     * @return FunctionSymbol of the function to which call is made, null otherwise
      */
     private VarSymbol parseCall(ASTCALL callTree)
     {
