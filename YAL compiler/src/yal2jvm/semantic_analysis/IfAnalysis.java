@@ -17,17 +17,18 @@ public class IfAnalysis extends Analysis
 	/**
 	 * IfAnalysis constructor
 	 * @param ast if tree node
-	 * @param inheritedSymbols symbols from module or function
-	 * @param functionNameToFunctionSymbolOfModule TODO
+	 * @param inheritedSymbols inherited symbols from previous scope, method, while or another if
+	 * @param functionNameToFunctionSymbolOfModule methods of the module, names to FunctionSymbol Object
 	 */
-	IfAnalysis(SimpleNode ast, HashMap<String, Symbol> inheritedSymbols,
+	public IfAnalysis(SimpleNode ast, HashMap<String, Symbol> inheritedSymbols,
 			   HashMap<String, Symbol> functionNameToFunctionSymbolOfModule)
 	{
 		super(ast, inheritedSymbols, functionNameToFunctionSymbolOfModule);
 	}
 
 	/**
-	 * Parses the ast
+	 * Parses the ASTIF, taking into account the different scope of the if.
+	 * Uses some auxiliar class methods to check for common declarations and merge symbols.
 	 */
 	@Override
 	public void parse()
@@ -85,7 +86,7 @@ public class IfAnalysis extends Analysis
 			mySymbols = setListSymbolsAsInitializedAccordingToOtherList(newMySymbols, commonDeclaredSymbols);
 		} else
 		{
-			// symbols created inside while are added to symbol table, but as not
+			// symbols created inside if are added to symbol table, but as not
 			// initialized, because while statements can not be executed
 			mySymbols = setAllSymbolsAsNotInitialized(mySymbols);
 		}
@@ -94,8 +95,8 @@ public class IfAnalysis extends Analysis
 	/**
 	 * Sets the list of symbols as initialized according to the given listen
 	 * @param symbols list of symbols
-	 * @param commonDeclaredSymbols TODO
-	 * @return new list of symbols
+	 * @param commonDeclaredSymbols list of symbols declared inside true body and false body of the if statement
+	 * @return new list of symbols, with symbols initialized
 	 */
 	private HashMap<String, Symbol> setListSymbolsAsInitializedAccordingToOtherList(HashMap<String, Symbol> symbols,
 			ArrayList<Symbol> commonDeclaredSymbols)
@@ -118,9 +119,9 @@ public class IfAnalysis extends Analysis
 
 	/**
 	 * Merges the declared symbols
-	 * @param mySymbolsStatesAfterIf TODO
-	 * @param mySymbolsStatesAfterElse TODO
-	 * @return new list of symbols
+	 * @param mySymbolsStatesAfterIf list of symbols declared inside true body of the if statement
+	 * @param mySymbolsStatesAfterElse list of symbols declared inside false body of the if statement
+	 * @return merged list of symbols
 	 */
 	private HashMap<String, Symbol> mergeDeclaredSymbols(ArrayList<Symbol> mySymbolsStatesAfterIf,
 			ArrayList<Symbol> mySymbolsStatesAfterElse)
@@ -144,9 +145,9 @@ public class IfAnalysis extends Analysis
 
 	/**
 	 * Gets the common initialized symbols
-	 * @param inheritedSymbolsStatesAfterIf TODO
-	 * @param inheritedSymbolsStatesAfterElse TODO
-	 * @return TODO
+	 * @param inheritedSymbolsStatesAfterIf list of symbols declared before if but altered inside true body of the if statement
+	 * @param inheritedSymbolsStatesAfterElse list of symbols declared before if but altered inside false body of the if statement
+	 * @return common initialized symbols, both in true and false bodies
 	 */
 	private ArrayList<Symbol> getCommonInitializedSymbols(ArrayList<Symbol> inheritedSymbolsStatesAfterIf,
 			ArrayList<Symbol> inheritedSymbolsStatesAfterElse)
@@ -166,9 +167,9 @@ public class IfAnalysis extends Analysis
 
 	/**
 	 * Gets the common declared symbols
-	 * @param mySymbolsStatesAfterIf TODO
-	 * @param mySymbolsStatesAfterElse TODO
-	 * @return TODO
+	 * @param mySymbolsStatesAfterIf list of symbols declared inside true body of the if statement
+	 * @param mySymbolsStatesAfterElse list of symbols declared inside false body of the if statement
+	 * @return common declared symbols, both in true and false bodies
 	 */
 	private ArrayList<Symbol> getCommonDeclaredSymbols(ArrayList<Symbol> mySymbolsStatesAfterIf,
 			ArrayList<Symbol> mySymbolsStatesAfterElse)

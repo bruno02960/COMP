@@ -3,7 +3,7 @@ package yal2jvm.hlir;
 import java.util.ArrayList;
 
 /**
- * TODO
+ *	Class responsible for the intermediate representation for constants. Class that extend IRNode class.
  */
 public class IRConstant extends IRNode
 {
@@ -21,8 +21,8 @@ public class IRConstant extends IRNode
 	}
 
 	/**
-	 * TODO
-	 * @param value
+	 * Constructor for IRConstant
+	 * @param value the value of the constant
 	 */
 	public IRConstant(String value)
 	{
@@ -31,8 +31,8 @@ public class IRConstant extends IRNode
 	}
 
 	/**
-	 * TODO
-	 * @return
+	 * Gets the instructions for code generation
+	 * @return instructions list
 	 */
 	@Override
 	public ArrayList<String> getInstructions()
@@ -51,9 +51,9 @@ public class IRConstant extends IRNode
 	}
 
 	/**
-	 * TODO
-	 * @param value
-	 * @return
+	 * gets the most efficient jvm code for the constant load
+	 * @param value  value of the constant
+	 * @return the most efficient jvm code for the constant load
 	 */
 	public static String getLoadConstantInstruction(int value)
 	{
@@ -103,8 +103,8 @@ public class IRConstant extends IRNode
 	}
 
 	/**
-	 * TODO
-	 * @return
+	 * clone the object
+	 * @return IRConstant instance clone
 	 */
 	public Object clone()
 	{

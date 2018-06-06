@@ -144,8 +144,8 @@ public class IRAllocate extends IRNode
     }
 
     /**
-     * TODO
-     * @return
+     * Gets the instructions for code generation
+     * @return instructions list
      */
     @Override
     public ArrayList<String> getInstructions()
@@ -182,7 +182,7 @@ public class IRAllocate extends IRNode
     }
 
     /**
-     * TODO
+     * handles right hand side constant for constant propagation optimization
      */
     private void handleConstantRhsForConstantPropagationOptimisation()
     {
@@ -214,22 +214,19 @@ public class IRAllocate extends IRNode
     }
 
     /**
-     * Checks if rhs and lhs is an Integer.
-     * @param method    TODO
+     * Checks if Rhs is Array And Lhs is Integer
+     * @param method    method of the var to check
      * @return          True if the validation is confirmed. False if not.
      */
     private boolean isRhsArrayAndLhsInteger(IRMethod method)
     {
         String varType = getVarType(method);
-        if(varType.equals(Type.ARRAY.name()) && type == Type.INTEGER)
-            return true;
-        else
-            return false;
+        return varType.equals(Type.ARRAY.name()) && type == Type.INTEGER;
     }
 
     /**
-     * TODO
-     * @return
+     * get the instructions to store the variable allocated
+     * @return list instructions to store
      */
     private ArrayList<String> getStoreInst()
 	{
@@ -324,9 +321,9 @@ public class IRAllocate extends IRNode
 	}
 
     /**
-     * TODO
-     * @param method
-     * @return
+     * get var with name (attribute) type
+     * @param method method of the var to check
+     * @return string with var type
      */
     private String getVarType(IRMethod method)
     {
@@ -343,8 +340,8 @@ public class IRAllocate extends IRNode
     }
 
     /**
-     * TODO
-     * @return
+     * set all array elements
+     * @return list instructions to set all array elements
      */
     private ArrayList<String> setAllArrayElements()
     {
@@ -375,7 +372,7 @@ public class IRAllocate extends IRNode
     }
 
     /**
-     * TODO
+     * init register for variable
      */
     private void initRegister()
     {
@@ -387,8 +384,8 @@ public class IRAllocate extends IRNode
     }
 
     /**
-     * TODO
-     * @return
+     * get register of the variable
+     * @return the register number
      */
     public int getRegister()
     {
@@ -402,7 +399,7 @@ public class IRAllocate extends IRNode
 
     /**
      * Sets the value of the field register to the value of the parameter register
-     * @param register  TODO
+     * @param register  register number
      */
     public void setRegister(int register)
     {

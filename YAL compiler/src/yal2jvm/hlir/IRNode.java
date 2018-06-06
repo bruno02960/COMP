@@ -234,7 +234,7 @@ public abstract class IRNode
 	 * @param index index node
 	 * @param register register number
 	 * @param value value node
-	 * @return TODO
+	 * @return the list of instructions to set Array Element
 	 */
 	ArrayList<String> setLocalArrayElementByIRNode(IRNode index, int register, IRNode value)
 	{
@@ -276,10 +276,10 @@ public abstract class IRNode
 	}
 
 	/**
-	 * TODO
+	 * get the global variable jvm code
 	 * @param name variable name
 	 * @param module module node
-	 * @return TODO
+	 * @return the global variable jvm code
 	 */
 	String getGlobalVariableGetCode(String name, IRModule module)
 	{
@@ -297,10 +297,10 @@ public abstract class IRNode
 	}
 
 	/**
-	 * TODO
+	 * get the global variable jvm code
 	 * @param name variable name
 	 * @param method method node
-	 * @return TODO
+	 * @return the global variable jvm code
 	 */
 	String getGlobalVariableGetCodeByIRMethod(String name, IRMethod method)
 	{
@@ -309,10 +309,10 @@ public abstract class IRNode
 	}
 
 	/**
-	 *TODO
-	 * @param arrayRefJVMCode TODO
-	 * @param valueJVMCode TODO
-	 * @return TODO
+	 * gets the list of instructions to Set All Array Elements
+	 * @param arrayRefJVMCode reference to the array
+	 * @param valueJVMCode value to set to set in the array element
+	 * @return list of instructions to Set All Array Elements
 	 */
 	ArrayList<String> getCodeForSetAllArrayElements(String arrayRefJVMCode, ArrayList<String> valueJVMCode)
 	{
@@ -355,11 +355,12 @@ public abstract class IRNode
 	}
 
 	/**
-	 * TODO
-	 * @param name TODO
-	 * @param index TODO
+	 * get the value of a const variable by name and index (if applicable)
+	 * @param name name of the variable to get value
+	 * @param index index of array access
+	 * @return the value of the variable if constant
 	 */
-	String getVarNameForConstantName(String name, IRNode index)
+	public String getVarNameForConstantName(String name, IRNode index)
 	{
 		String varName = name; // not array access, so integer
 		if (index != null && index instanceof IRConstant) // array access then

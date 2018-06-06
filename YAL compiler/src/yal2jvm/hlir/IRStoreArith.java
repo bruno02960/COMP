@@ -3,7 +3,7 @@ package yal2jvm.hlir;
 import java.util.ArrayList;
 
 /**
- * IRStoreArith
+ *	Class responsible for the intermediate representation for store of the result of an arith operations. Class that extend IRNode class
  */
 public class IRStoreArith extends IRStore
 {
@@ -178,9 +178,10 @@ public class IRStoreArith extends IRStore
 	}
 
 	/**
-	 * TODO
-	 * @param irConstant
-	 * @return
+	 * gets the iinc instruction for the arith operation.
+	 * Use only when already checked it can be done.
+	 * @param irConstant constant with the increment value
+	 * @return iinc instruction for the arith operation
 	 */
 	private String getIincInstruction(IRConstant irConstant)
 	{
@@ -200,9 +201,9 @@ public class IRStoreArith extends IRStore
 	}
 
 	/**
-	 * TODO
-	 * @param method
-	 * @param increment
+	 * Increments the value of a const value if already exists in consts hashMap of the method parent of this IRStoreArith object
+	 * @param method method parent of this IRStoreArith object
+	 * @param increment the increment to the previous value of the constant value
 	 */
 	private void addNewValueOfVariableNameToConstsHashMap(IRMethod method, String increment)
 	{

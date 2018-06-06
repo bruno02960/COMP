@@ -6,7 +6,7 @@ import yal2jvm.utils.Utils;
 import java.util.ArrayList;
 
 /**
- * TODO
+ *	Class responsible for the intermediate representation for call to methods. Class that extend IRNode class.
  */
 public class IRCall extends IRNode
 {
@@ -57,8 +57,8 @@ public class IRCall extends IRNode
 	}
 
 	/**
-	 * TODO
-	 * @return
+	 * Gets the instructions for code generation
+	 * @return instructions list
 	 */
 	private ArrayList<String> getArgumentsInstructions()
 	{
@@ -123,10 +123,10 @@ public class IRCall extends IRNode
 	}
 
 	/**
-	 * TODO
-	 * @param arg
-	 * @param initType
-	 * @return
+	 * get arguments types
+	 * @param arg argument
+	 * @param initType initial type for the argument
+	 * @return the type
 	 */
 	private Type getArgumentsType(Variable arg, Type initType)
 	{
@@ -164,8 +164,8 @@ public class IRCall extends IRNode
 	}
 
 	/**
-	 * TODO
-	 * @return
+	 * Gets the instructions of method call for code generation
+	 * @return instructions list
 	 */
 	private String getCallInstruction()
 	{

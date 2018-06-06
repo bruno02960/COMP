@@ -6,7 +6,7 @@ import yal2jvm.ast.ASTRHS;
 import java.util.ArrayList;
 
 /**
- * TODO
+ *	Class responsible for the intermediate representation for assign in a method of the module. Class that extend IRNode class.
  */
 public class IRAssign
 {

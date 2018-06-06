@@ -17,7 +17,7 @@ public class WhileAnalysis extends Analysis
 	 * WhileAnalysis constructor
 	 * @param ast while tree node
 	 * @param inheritedSymbols symbols from module or function
-	 * @param functionNameToFunctionSymbolOfModule TODO
+	 * @param functionNameToFunctionSymbolOfModule methods of the module, names to FunctionSymbol Object
 	 */
 	WhileAnalysis(SimpleNode ast, HashMap<String, Symbol> inheritedSymbols,
 				  HashMap<String, Symbol> functionNameToFunctionSymbolOfModule)
@@ -26,7 +26,7 @@ public class WhileAnalysis extends Analysis
 	}
 
 	/**
-	 * Parses the ast
+	 * Parses the ASTWHILE, taking into account the different scope of the while, and that variables declared inside are assumed to be uninitialized because while can not be executed
 	 */
 	@Override
 	public void parse()

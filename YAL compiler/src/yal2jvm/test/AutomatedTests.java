@@ -85,7 +85,7 @@ public class AutomatedTests
 
 		for (int i = 0; i < log.size(); i++)
 			System.out.print(log.get(i));
-		System.out.println("");
+		System.out.println();
 
 		return log;
 	}

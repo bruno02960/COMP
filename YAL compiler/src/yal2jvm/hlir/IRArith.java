@@ -5,7 +5,7 @@ import yal2jvm.utils.Utils;
 import java.util.ArrayList;
 
 /**
- * IRArith class that extends IRNode
+ *	Class responsible for the intermediate representation for arith operations. Class that extend IRNode class.
  */
 public class IRArith extends IRNode
 {
@@ -13,8 +13,8 @@ public class IRArith extends IRNode
 	private IRNode rhs, lhs;
 
 	/**
-	 * TODO
-	 * @param op
+	 * Constructor for IRArith
+	 * @param op the operator used in the operation
 	 */
 	public IRArith(Operation op)
 	{
@@ -23,8 +23,8 @@ public class IRArith extends IRNode
 	}
 
 	/**
-	 * TODO
-	 * @return
+	 * Gets the instructions for code generation
+	 * @return instructions list
 	 */
 	@Override
 	public ArrayList<String> getInstructions()
@@ -214,10 +214,10 @@ public class IRArith extends IRNode
 	}
 
 	/**
-	 * TODO
-	 * @param method
-	 * @param node
-	 * @return
+	 * gets value as string if constant
+	 * @param method method parent of this object
+	 * @param node node which trying to get const value
+	 * @return value as string, null otherwise
 	 */
 	private String getValueIfConstant(IRMethod method, IRNode node)
 	{

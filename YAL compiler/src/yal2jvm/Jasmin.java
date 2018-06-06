@@ -3,13 +3,13 @@ package yal2jvm;
 import jasmin.Main;
 
 /**
- * TODO
+ * Class used just to invoke Jasmin in order to generate the .class Bytecode file from the .j jvm code
  */
 public class Jasmin
 {
 	/**
-	 * TODO
-	 * @param args
+	 * invoke jasmin
+	 * @param args default main args
 	 */
 	public static void main(String args[])
 	{

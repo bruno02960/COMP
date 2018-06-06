@@ -1,6 +1,8 @@
 package yal2jvm.semantic_analysis;
 
-import yal2jvm.ast.*;
+import yal2jvm.ast.ASTFUNCTION;
+import yal2jvm.ast.ASTSTATEMENTS;
+import yal2jvm.ast.SimpleNode;
 import yal2jvm.symbol_tables.FunctionSymbol;
 import yal2jvm.symbol_tables.Symbol;
 import yal2jvm.symbol_tables.VarSymbol;
@@ -17,7 +19,7 @@ public class FunctionAnalysis extends Analysis
 	 * FunctionAnalysis constructor
 	 * @param ast function tree node
 	 * @param inheritedSymbols symbols from module or function
-	 * @param functionNameToFunctionSymbolOfModule TODO
+	 * @param functionNameToFunctionSymbolOfModule methods of the module, names to FunctionSymbol Object
 	 */
 	FunctionAnalysis(SimpleNode ast, HashMap<String, Symbol> inheritedSymbols,
 			HashMap<String, Symbol> functionNameToFunctionSymbolOfModule)
@@ -56,22 +58,22 @@ public class FunctionAnalysis extends Analysis
 
 	/**
 	 * Adds the arguments to the function symbols
-	 * @param astFunction TODO
+	 * @param functionSymbol the instance of the FunctionSymbol class from which the arguments must be added to symbols
 	 */
-	private void addArgumentsToMySymbols(FunctionSymbol astFunction)
+	private void addArgumentsToMySymbols(FunctionSymbol functionSymbol)
 	{
-		ArrayList<VarSymbol> arguments = astFunction.getArguments();
+		ArrayList<VarSymbol> arguments = functionSymbol.getArguments();
 		for (VarSymbol argument : arguments)
 			mySymbols.put(argument.getId(), argument);
 	}
 
 	/**
 	 * Adds the return value to the function symbols
-	 * @param astFunction TODO
+	 * @param functionSymbol the instance of the FunctionSymbol class from which the arguments must be added to symbols
 	 */
-	private void addReturnValueToMySymbols(FunctionSymbol astFunction)
+	private void addReturnValueToMySymbols(FunctionSymbol functionSymbol)
 	{
-		VarSymbol returnValue = astFunction.getReturnValue();
+		VarSymbol returnValue = functionSymbol.getReturnValue();
 		if (returnValue != null)
 			mySymbols.put(returnValue.getId(), returnValue);
 	}

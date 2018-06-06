@@ -3,7 +3,7 @@ package yal2jvm.hlir;
 import java.util.ArrayList;
 
 /**
- * TODO
+ *	Class responsible for the intermediate representation for comparisons. Class that extend IRNode class.
  */
 public class IRComparison extends IRNode
 {
@@ -15,9 +15,9 @@ public class IRComparison extends IRNode
 	/**
 	 * Constructor for the class IRComparison using String operator
 	 *
-	 * @param operator TODO
-	 * @param label TODO
-	 * @param invert TODO
+	 * @param operator operator used in comparison
+	 * @param label label name to where jump in affirmative case
+	 * @param invert boolean indication if is to invert condition
 	 */
 	public IRComparison(String operator, String label, boolean invert)
 	{
@@ -64,10 +64,10 @@ public class IRComparison extends IRNode
 		return null; // unreachable
 	}
 
-	/**
-	 * TODO
-	 * @return
-	 */
+    /**
+     * Gets the instructions for code generation
+     * @return instructions list
+     */
 	@Override
 	public ArrayList<String> getInstructions()
 	{
@@ -111,8 +111,7 @@ public class IRComparison extends IRNode
 		if (node.getNodeType().equals("Constant"))
 		{
 			IRConstant constant = (IRConstant) node;
-			if (constant.getValue().equals("0"))
-				return true;
+            return constant.getValue().equals("0");
 		}
 		return false;
 	}
@@ -136,8 +135,7 @@ public class IRComparison extends IRNode
 			if (lhs.getNodeType().equals("Load"))
 			{
 				load = (IRLoad) lhs;
-				if (load.getType() == Type.ARRAY && load.isArraySizeAccess() == false)
-					return true;
+                return load.getType() == Type.ARRAY && load.isArraySizeAccess() == false;
 			}
 		}
 
@@ -145,8 +143,8 @@ public class IRComparison extends IRNode
 	}
 
 	/**
-	 * TODO
-	 * @return
+	 * get instruction to compare with 0, using the operator set in the constructor
+	 * @return the instruction
 	 */
 	public String getZeroComparison()
 	{
@@ -178,8 +176,8 @@ public class IRComparison extends IRNode
 	}
 
 	/**
-	 * TODO
-	 * @return
+     * get instruction to compare arrays, using the operator set in the constructor
+     * @return the instruction
 	 */
 	public String getArrayComparison()
 	{
@@ -198,10 +196,10 @@ public class IRComparison extends IRNode
 		return branchInst;
 	}
 
-	/**
-	 * TODO
-	 * @return
-	 */
+    /**
+     * get instruction to compare integers, using the operator set in the constructor
+     * @return the instruction
+     */
 	public String getIntegerComparison()
 	{
 		String branchInst = "";

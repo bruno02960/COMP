@@ -3,15 +3,15 @@ package yal2jvm.hlir;
 import java.util.ArrayList;
 
 /**
- *	IRArgument class that extend IRNode class
+ *	Class responsible for the intermediate representation for method arguments. Class that extend IRNode class
  */
 public class IRArgument extends IRNode
 {
 	private int register;
 
 	/**
-	 * TODO
-	 * @param register
+	 * Constructor for IRArgument
+	 * @param register the register where argument is placed
 	 */
 	public IRArgument(int register)
 	{
@@ -19,8 +19,8 @@ public class IRArgument extends IRNode
 	}
 
 	/**
-	 * TODO
-	 * @return
+	 * Gets the instructions for code generation
+	 * @return instructions list
 	 */
 	@Override
 	public ArrayList<String> getInstructions()
