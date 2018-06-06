@@ -1,8 +1,0 @@
-module iastore
-{
-    function main()
-    {
-        a = [3];
-        i = 0;
-    }
-}
