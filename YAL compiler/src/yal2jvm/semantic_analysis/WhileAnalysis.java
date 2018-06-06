@@ -9,24 +9,24 @@ import yal2jvm.utils.Utils;
 import java.util.HashMap;
 
 /**
- *TODO
+ * Responsible for the While semantic analysis
  */
 public class WhileAnalysis extends Analysis
 {
 	/**
-	 *TODO
-	 * @param ast
-	 * @param inheritedSymbols
-	 * @param functionNameToFunctionSymbolOfModule
+	 * WhileAnalysis constructor
+	 * @param ast while tree node
+	 * @param inheritedSymbols symbols from module or function
+	 * @param functionNameToFunctionSymbolOfModule TODO
 	 */
-	public WhileAnalysis(SimpleNode ast, HashMap<String, Symbol> inheritedSymbols,
-			HashMap<String, Symbol> functionNameToFunctionSymbolOfModule)
+	WhileAnalysis(SimpleNode ast, HashMap<String, Symbol> inheritedSymbols,
+				  HashMap<String, Symbol> functionNameToFunctionSymbolOfModule)
 	{
 		super(ast, inheritedSymbols, functionNameToFunctionSymbolOfModule);
 	}
 
 	/**
-	 *TODO
+	 * Parses the ast
 	 */
 	@Override
 	public void parse()
@@ -38,8 +38,7 @@ public class WhileAnalysis extends Analysis
 		// values.
 		// Changes made inside while mus not be visible outside, because while can not
 		// be executed
-		HashMap<String, Symbol> inheritedSymbolsHashMapBeforeWhile = Utils.copyHashMap(inheritedSymbols);
-		inheritedSymbols = inheritedSymbolsHashMapBeforeWhile;
+		inheritedSymbols = Utils.copyHashMap(inheritedSymbols);
 
 		ASTSTATEMENTS stmtlst = ((ASTSTATEMENTS) ast.jjtGetChild(1));
 		parseStmtLst(stmtlst);
