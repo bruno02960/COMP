@@ -10,7 +10,7 @@ public class IRLoadArith extends IRNode
 	private IRArith irArith;
 
 	/**
-	 * TODO
+	 * Contructor for IRLoadArith
 	 * @param op the operator used in the operation
 	 */
 	public IRLoadArith(Operation op)
