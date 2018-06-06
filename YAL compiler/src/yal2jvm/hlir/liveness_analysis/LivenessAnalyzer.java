@@ -8,17 +8,19 @@ import yal2jvm.hlir.IRModule;
 import yal2jvm.hlir.IRNode;
 
 /**
- * Class to perform liveness analysis of an entire module, producing an interference
- * graph for each of the module's methods as a result
+ * Class to perform liveness analysis of an entire module, producing an
+ * interference graph for each of the module's methods as a result
  */
-public class LivenessAnalyzer 
+public class LivenessAnalyzer
 {
 	private IRModule ir;
-	private HashMap<String,IntGraph> intGraphs;
+	private HashMap<String, IntGraph> intGraphs;
 
 	/**
 	 * Constructor
-	 * @param ir root node of the HLIR
+	 * 
+	 * @param ir
+	 *            root node of the HLIR
 	 */
 	public LivenessAnalyzer(IRModule ir)
 	{
@@ -36,7 +38,7 @@ public class LivenessAnalyzer
 		{
 			if (n.getNodeType().equals("Method"))
 			{
-				IRMethod method = (IRMethod)n;
+				IRMethod method = (IRMethod) n;
 				SetBuilder met = new SetBuilder(method);
 				MethodAnalyzer analyzer = new MethodAnalyzer(met);
 				analyzer.analyze();
@@ -46,11 +48,13 @@ public class LivenessAnalyzer
 	}
 
 	/**
-	 * Retrieves an HashMap containing, for each method, the interference graph of its variables
+	 * Retrieves an HashMap containing, for each method, the interference graph of
+	 * its variables
+	 * 
 	 * @return the HashMap with the interference graphs
 	 */
-	public HashMap<String,IntGraph> getInterferenceGraphs()
+	public HashMap<String, IntGraph> getInterferenceGraphs()
 	{
-		return intGraphs;	
+		return intGraphs;
 	}
 }

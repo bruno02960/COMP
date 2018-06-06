@@ -14,32 +14,42 @@ import java.util.*;
 
 public class ExceptAttr
 {
-  static final CP attr = new AsciiCP("Exceptions");
+	static final CP attr = new AsciiCP("Exceptions");
 
-  Vector cps;
+	Vector cps;
 
-  public ExceptAttr() { cps = new Vector(); }
-  /**
-   * @param cp Exception class to be added to attribute. This is
-   * typically a ClassCP
-   */
-  public void addException(CP cp)
-  { cps.addElement(cp); }
+	public ExceptAttr()
+	{
+		cps = new Vector();
+	}
 
-  void resolve(ClassEnv e)
-  {
-    e.addCPItem(attr);
-    for (Enumeration en = cps.elements(); en.hasMoreElements();)
-      { e.addCPItem((CP)(en.nextElement())); }
-  }
+	/**
+	 * @param cp
+	 *            Exception class to be added to attribute. This is typically a
+	 *            ClassCP
+	 */
+	public void addException(CP cp)
+	{
+		cps.addElement(cp);
+	}
 
-  void write(ClassEnv e, DataOutputStream out)
-    throws IOException, jasError
-  {
-    out.writeShort(e.getCPIndex(attr));
-    out.writeInt(cps.size()*2 + 2);
-    out.writeShort(cps.size());
-    for (Enumeration en = cps.elements(); en.hasMoreElements();)
-      { out.writeShort(e.getCPIndex((CP)(en.nextElement()))); }
-  }
+	void resolve(ClassEnv e)
+	{
+		e.addCPItem(attr);
+		for (Enumeration en = cps.elements(); en.hasMoreElements();)
+		{
+			e.addCPItem((CP) (en.nextElement()));
+		}
+	}
+
+	void write(ClassEnv e, DataOutputStream out) throws IOException, jasError
+	{
+		out.writeShort(e.getCPIndex(attr));
+		out.writeInt(cps.size() * 2 + 2);
+		out.writeShort(cps.size());
+		for (Enumeration en = cps.elements(); en.hasMoreElements();)
+		{
+			out.writeShort(e.getCPIndex((CP) (en.nextElement())));
+		}
+	}
 }

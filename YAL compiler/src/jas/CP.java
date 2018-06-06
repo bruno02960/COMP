@@ -18,20 +18,21 @@
  * @version $Revision: 1.1 $
  */
 
-
 package jas;
-                                // one class to ring them all...
+// one class to ring them all...
 
 import java.io.*;
 
 public abstract class CP
 {
-  String uniq;
+	String uniq;
 
-  String getUniq() { return uniq; }
+	String getUniq()
+	{
+		return uniq;
+	}
 
-  abstract void resolve(ClassEnv e);
+	abstract void resolve(ClassEnv e);
 
-  abstract void write(ClassEnv e, DataOutputStream out)
-   throws IOException, jasError;
+	abstract void write(ClassEnv e, DataOutputStream out) throws IOException, jasError;
 }

@@ -12,32 +12,33 @@ import java.io.*;
 
 public class ConstAttr
 {
-  static final CP attr = new AsciiCP("ConstantValue");
-  CP val;
+	static final CP attr = new AsciiCP("ConstantValue");
+	CP val;
 
-  /**
-   * Create a new constant attribute whose constant value
-   * is picked up from constant pool with the given entry.
-   * @param val Constant pool item whose value is associated
-   * with the constant value attribute
-   */
+	/**
+	 * Create a new constant attribute whose constant value is picked up from
+	 * constant pool with the given entry.
+	 * 
+	 * @param val
+	 *            Constant pool item whose value is associated with the constant
+	 *            value attribute
+	 */
 
-  public ConstAttr(CP val)
-  { this.val = val; }
+	public ConstAttr(CP val)
+	{
+		this.val = val;
+	}
 
-  void resolve(ClassEnv e)
-  {
-    e.addCPItem(val);
-    e.addCPItem(attr);
-  }
+	void resolve(ClassEnv e)
+	{
+		e.addCPItem(val);
+		e.addCPItem(attr);
+	}
 
-  void write(ClassEnv e, DataOutputStream out)
-    throws IOException, jasError
-  {
-    out.writeShort(e.getCPIndex(attr));
-    out.writeInt(2);
-    out.writeShort(e.getCPIndex(val));
-  }
+	void write(ClassEnv e, DataOutputStream out) throws IOException, jasError
+	{
+		out.writeShort(e.getCPIndex(attr));
+		out.writeInt(2);
+		out.writeShort(e.getCPIndex(val));
+	}
 }
-
-  

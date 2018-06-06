@@ -10,8 +10,11 @@ public class IntPair
 
 	/**
 	 * Constructor
-	 * @param var1 name of the first variable
-	 * @param var2 name of the second variable
+	 * 
+	 * @param var1
+	 *            name of the first variable
+	 * @param var2
+	 *            name of the second variable
 	 */
 	public IntPair(String var1, String var2)
 	{
@@ -21,6 +24,7 @@ public class IntPair
 
 	/**
 	 * Gets the first variabe
+	 * 
 	 * @return first variable
 	 */
 	public String getVar1()
@@ -30,7 +34,9 @@ public class IntPair
 
 	/**
 	 * Sets the first variable
-	 * @param var1 first variable
+	 * 
+	 * @param var1
+	 *            first variable
 	 */
 	public void setVar1(String var1)
 	{
@@ -39,6 +45,7 @@ public class IntPair
 
 	/**
 	 * Gets the second variabe
+	 * 
 	 * @return second variable
 	 */
 	public String getVar2()
@@ -48,7 +55,9 @@ public class IntPair
 
 	/**
 	 * Sets the second variable
-	 * @param var1 second variable
+	 * 
+	 * @param var1
+	 *            second variable
 	 */
 	public void setVar2(String var2)
 	{

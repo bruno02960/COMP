@@ -3,22 +3,22 @@ package yal2jvm.ast;
 public class ErrorCounter
 {
 
-    private int noErrors = 0;
+	private int noErrors = 0;
 
-    public ErrorCounter()
-    {
+	public ErrorCounter()
+	{
 
-    }
+	}
 
-    public boolean errorControl()
-    {
-        noErrors++;
+	public boolean errorControl()
+	{
+		noErrors++;
 
-        return noErrors == 10;
-    }
+		return noErrors == 10;
+	}
 
-    public int getNoErrors()
-    {
-        return noErrors;
-    }
+	public int getNoErrors()
+	{
+		return noErrors;
+	}
 }

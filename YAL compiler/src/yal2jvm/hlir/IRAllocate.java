@@ -3,7 +3,7 @@ package yal2jvm.hlir;
 import java.util.ArrayList;
 
 /**
- *
+ * IRAllocate class that extends the IRNode class
  */
 public class IRAllocate extends IRNode
 {
@@ -195,7 +195,7 @@ public class IRAllocate extends IRNode
         String varName = getVarNameForConstantName(name, lhsIndex);
         if(rhs instanceof IRConstant)
         {
-            ///TODO ver se nao dá porblema usar o mesmo rhs, secalhar copia pode ser mehor
+            ///TODO ver se nao d� porblema usar o mesmo rhs, secalhar copia pode ser mehor
             if(type == Type.INTEGER || type == Type.ARRAY)
                 method.addToConstVarNameToConstValue(varName, (IRConstant) rhs);
         }

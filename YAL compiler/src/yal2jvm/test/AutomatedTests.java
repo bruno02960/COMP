@@ -15,7 +15,7 @@ import org.junit.Test;
 //-4  File not found error
 //-5  Invalid arguments error
 
-public class Tests
+public class AutomatedTests
 {
 	public ArrayList<String> testAllFilesInFolder(String path)
 	{
@@ -23,36 +23,33 @@ public class Tests
 		File[] listOfFiles = folder.listFiles();
 
 		ArrayList<String> log = new ArrayList<>();
-			
+
 		for (int i = 0; i < listOfFiles.length; i++)
 		{
 			String file = listOfFiles[i].toString();
-			
+
 			if (!file.endsWith(".yal"))
 				continue;
-			
+
 			int retVal = -1;
-			try 
+			try
 			{
 				retVal = Runtime.getRuntime().exec("java -cp ./bin yal2jvm.Yal2jvm " + file).waitFor();
-			} 
-			catch (InterruptedException | IOException e) 
+			} catch (InterruptedException | IOException e)
 			{
 				log.add(file + ": error calling compiler\n");
 				continue;
 			}
-			
+
 			if (retVal == -2)
 			{
 				log.add(file + ": syntactic error(s)\n");
 				continue;
-			}
-			else if (retVal == -3)
+			} else if (retVal == -3)
 			{
 				log.add(file + ": semantic error(s)\n");
 				continue;
-			}
-			else
+			} else
 			{
 				if (path.contains("semantic"))
 				{
@@ -60,25 +57,24 @@ public class Tests
 					continue;
 				}
 			}
-			
+
 			retVal = -1;
-			
-			try 
+
+			try
 			{
 				String classfile = file.replace(".yal", "");
 				classfile = classfile.substring(classfile.lastIndexOf('\\') + 1, classfile.length());
 				System.out.println("Running class file " + classfile);
 				retVal = Runtime.getRuntime().exec("java -cp . " + classfile).waitFor();
-				
+
 				File del = new File(classfile);
 				del.delete();
-			} 
-			catch (InterruptedException | IOException e) 
+			} catch (InterruptedException | IOException e)
 			{
 				log.add(file + ": error calling JVM\n");
 				continue;
 			}
-			
+
 			if (retVal != 0)
 			{
 				log.add(file + ": error during .class execution " + retVal + " \n");
@@ -86,37 +82,37 @@ public class Tests
 			}
 			log.add(file + ": successful compilation and execution\n");
 		}
-			
+
 		for (int i = 0; i < log.size(); i++)
 			System.out.print(log.get(i));
 		System.out.println("");
-		
+
 		return log;
 	}
-	
+
 	@Test
 	public void semanticNoErrors()
 	{
 		ArrayList<String> log = testAllFilesInFolder("examples/semantic_no_errors");
-			
+
 		for (int i = 0; i < log.size(); i++)
 			assertEquals(true, log.get(i).contains("semantic analysis successful"));
 	}
-	
+
 	@Test
 	public void semanticWithErrors()
 	{
 		ArrayList<String> log = testAllFilesInFolder("examples/semantic_errors");
-		
+
 		for (int i = 0; i < log.size(); i++)
 			assertEquals(true, log.get(i).contains("error"));
 	}
-	
+
 	@Test
 	public void compileAndRunNoErrors()
 	{
 		ArrayList<String> log = testAllFilesInFolder("examples/code_generation");
-		
+
 		for (int i = 0; i < log.size(); i++)
 			assertEquals(true, log.get(i).contains("successful compilation and execution"));
 	}
