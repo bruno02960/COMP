@@ -1,6 +1,8 @@
 package yal2jvm.semantic_analysis;
 
-import yal2jvm.ast.*;
+import yal2jvm.ast.ASTFUNCTION;
+import yal2jvm.ast.ASTSTATEMENTS;
+import yal2jvm.ast.SimpleNode;
 import yal2jvm.symbol_tables.FunctionSymbol;
 import yal2jvm.symbol_tables.Symbol;
 import yal2jvm.symbol_tables.VarSymbol;
