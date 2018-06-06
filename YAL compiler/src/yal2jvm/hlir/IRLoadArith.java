@@ -3,7 +3,7 @@ package yal2jvm.hlir;
 import java.util.ArrayList;
 
 /**
- * TODO
+ * Class responsible for the intermediate representation fro load of arith operation.
  */
 public class IRLoadArith extends IRNode
 {
@@ -11,7 +11,7 @@ public class IRLoadArith extends IRNode
 
 	/**
 	 * TODO
-	 * @param op
+	 * @param op the operator used in the operation
 	 */
 	public IRLoadArith(Operation op)
 	{
@@ -21,8 +21,8 @@ public class IRLoadArith extends IRNode
 	}
 
 	/**
-	 * TODO
-	 * @return
+	 * gets the right hand side of the operation
+	 * @return the right hand side of the operation
 	 */
 	public IRNode getRhs()
 	{
@@ -30,35 +30,35 @@ public class IRLoadArith extends IRNode
 	}
 
 	/**
-	 * TODO
-	 * @param rhs
+	 * sets the right hand side of the operation
+	 * @param rhs the right hand side of the operation
 	 */
 	public void setRhs(IRNode rhs)
 	{
 		this.irArith.setRhs(rhs);
 	}
 
-	/**
-	 * TODO
-	 * @return
-	 */
+    /**
+     * gets the left hand side of the operation
+     * @return the left hand side of the operation
+     */
 	public IRNode getLhs()
 	{
 		return irArith.getLhs();
 	}
 
-	/**
-	 * TODO
-	 * @param lhs
-	 */
+    /**
+     * sets the left hand side of the operation
+     * @param lhs the left hand side of the operation
+     */
 	public void setLhs(IRNode lhs)
 	{
 		this.irArith.setLhs(lhs);
 	}
 
 	/**
-	 * TODO
-	 * @return
+	 * Gets the instructions for code generation
+	 * @return instructions list
 	 */
 	@Override
 	public ArrayList<String> getInstructions()
