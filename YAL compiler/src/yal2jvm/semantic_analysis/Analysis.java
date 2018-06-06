@@ -721,7 +721,7 @@ public abstract class Analysis
         String lhsSymbolType = lhsSymbol.getType();
         String rhsSymbolType = rhsSymbol.getType();
 
-        if (lhsSymbolType.equals(rhsSymbolType) && !(rhsSymbol instanceof ImmediateSymbol)) //if both lhs and rhs have same type
+        if (lhsSymbolType.equals(rhsSymbolType) && !lhsSymbol.isArrayAccess() && !(rhsSymbol instanceof ImmediateSymbol)) //if both lhs and rhs have same type
         {
             lhsSymbol.setInitialized(rhsSymbol.isInitialized());
             return addToSymbolTable(lhsSymbol);
@@ -746,10 +746,19 @@ public abstract class Analysis
 
         if (!(lhsSymbolType.equals(SymbolType.ARRAY.toString()) && rhsSymbolType.equals(SymbolType.INTEGER.toString()))) //for A=5; in which A is an array and all its elements are set to 5
             if (!rhsSymbolType.equals(SymbolType.UNDEFINED.toString())) //for A=m.f(); in which m.f() function is from another module that we not know the return value, so it can be INTEGER or ARRAY
-                if (!lhsSymbolType.equals(rhsSymbolType)) //checks both have types that match
+                if (!lhsSymbolType.equals(rhsSymbolType) || (rhsSymbolType.equals(SymbolType.ARRAY.name()) && lhsSymbol.isArrayAccess())) //checks both have types that match
                 {
-                    System.out.println("Line " + lhsTree.getBeginLine() + ": Variable " + lhsSymbol.getId()
-                            + " has been declared as " + lhsSymbolType + ". Cannot redeclare it as " + rhsSymbolType + ".");
+                    if(lhsSymbol.isArrayAccess())
+                    {
+                        System.out.println("Line " + lhsTree.getBeginLine() + ": Variable " + lhsSymbol.getId()
+                                + " of type ARRAY of INTEGERS, accessed at an index, so type INTEGER. " +
+                                "Cannot redeclare it as " + rhsSymbolType + ".");
+                    }
+                    else
+                    {
+                        System.out.println("Line " + lhsTree.getBeginLine() + ": Variable " + lhsSymbol.getId()
+                                + " has been declared as " + lhsSymbolType + ". Cannot redeclare it as " + rhsSymbolType + ".");
+                    }
                     ModuleAnalysis.hasErrors = true;
                     return false;
                 }
@@ -805,8 +814,15 @@ public abstract class Analysis
                 }
 
                 ASTINDEX astindex = (ASTINDEX) child.jjtGetChild(0);
-                if (!parseIndex(astindex))
+                VarSymbol index = parseIndex(astindex);
+                if (index == null)
                     return null;
+                else if(index.isArrayAccess())
+                {
+                    VarSymbol newSymbol = symbol.getCopy();
+                    newSymbol.setArrayAccess(true);
+                    return newSymbol;
+                }
                 break;
 
             case "SCALARACCESS":
@@ -827,16 +843,23 @@ public abstract class Analysis
      * @param astIndex
      * @return
      */
-    private boolean parseIndex(ASTINDEX astIndex)
+    private VarSymbol parseIndex(ASTINDEX astIndex)
     {
         String indexSymbolId = astIndex.indexID;
         if (indexSymbolId != null)
         {
             VarSymbol indexSymbol = (VarSymbol) checkSymbolExistsAndIsInitialized(astIndex, indexSymbolId);
-            return indexSymbol != null;
+            return indexSymbol;
+        }
+        else if(astIndex.indexValue != null)
+        {
+            VarSymbol symbol = new VarSymbol(astIndex.indexValue.toString(), Type.ARRAY.name(), true);
+            symbol.setArrayAccess(true);
+            return symbol;
+
         }
 
-        return true;
+        return null;
     }
 
     /**
